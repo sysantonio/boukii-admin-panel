@@ -27,6 +27,16 @@ $border-color: rgba(
   }
 }
 
+angular-editor {
+  min-height: 300px; /* Ajusta la altura mínima */
+  height: 100%; /* Hace que crezca si es necesario */
+  max-height: 500px; /* Limita el crecimiento */
+}
+
+.editor-container {
+  height: 400px; /* Ajusta el tamaño según necesidad */
+}
+
 .vex-mail-compose-attachment {
   border-color: $border-color;
 }

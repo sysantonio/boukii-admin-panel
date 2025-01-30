@@ -35,7 +35,7 @@
   </button>
 </div>
 
-<div class="flex-auto grid grid-cols-1 sm:grid-cols-2 overflow-hidden" style="height: 610px !important;">
+<div class="flex-auto grid grid-cols-1 sm:grid-cols-2 overflow-hidden" >
   <ng-container *ngIf="gtSm$ | async">
     <vex-scrollbar @stagger class="flex-1 py-3" style="height: 100% !important;">
       <ng-container *ngFor="let mail of mails | async; trackBy: trackById">

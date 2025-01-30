@@ -9,9 +9,8 @@
 		<mat-icon svgIcon="mat:close"></mat-icon>
 	</button>
 </div>
-<mat-tab-group *ngIf="!loading">
-	<mat-tab label="{{'observation_general' | translate}}">
-		<mat-dialog-content>
+
+		<mat-dialog-content *ngIf="!loading">
 			<div class="block w-full">
 				<mat-label>
 					{{'mails.type' | translate }}
@@ -180,7 +179,7 @@
 				<p>
 					{{ 'message' | translate }}
 				</p>
-				<angular-editor [(ngModel)]="generalBody"
+				<angular-editor [(ngModel)]="generalBody" [config]="editorConfig"
 					placeholder="{{'enter_text' | translate}}"></angular-editor>
 			</div>
 			<!-- <div class="vex-mail-compose-attachment mt-4 mb-2 rounded-full border px-4 py-1 flex items-center hover:bg-hover transition duration-200 ease-in-out cursor-pointer relative"
@@ -228,174 +227,4 @@
 					svgIcon="mat:send"></mat-icon>
 			</button>
 		</mat-dialog-actions>
-	</mat-tab>
-	<!-- <mat-tab label="Automático">
-    <mat-dialog-content>
-      <div class="block w-full">
-        <mat-form-field appearance="outline" style="width: 100%">
-          <mat-select placeholder="Tipo de email" [(ngModel)]="mailType" (selectionChange)="setCurrentMailType()">
-            <mat-option value="booking_confirm">{{'mails.type1' | translate}}</mat-option>
-            <mat-option value="booking_cancel">{{'mails.type2' | translate}}</mat-option>
-            <mat-option value="booking_update">{{'mails.type3' | translate}}</mat-option>
-            <mat-option value="payment_link">{{'mails.type4' | translate}}</mat-option>
-            <mat-option value="payment_confirm">{{'mails.type5' | translate}}</mat-option>
-            <mat-option value="payment_reminder">{{'mails.type9' | translate}}</mat-option>
-            <mat-option value="voucher_confirm">{{'mails.type6' | translate}}</mat-option>
-            <mat-option value="voucher_create">{{'mails.type7' | translate}}</mat-option>
-            <mat-option value="course_reminder">{{'mails.type8' | translate}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        &lt;!&ndash;<input cdkFocusInitial matInput type="text"/>
 
-        <button (click)="toggleDropdown()" color="primary" mat-button matSuffix type="button">CC/BCC</button>&ndash;&gt;
-      </div>
-
-      &lt;!&ndash;<div [@dropdown]="dropdownOpen" class="overflow-hidden">
-        <mat-form-field appearance="outline" class="block w-full">
-          <mat-label>Cc</mat-label>
-          <input matInput type="text"/>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="block w-full">
-          <mat-label>Bcc</mat-label>
-          <input matInput type="text"/>
-        </mat-form-field>
-      </div>&ndash;&gt;
-
-      <mat-tab-group [selectedIndex]="selectedIndex" (selectedTabChange)="onTabChange($event)">
-        <mat-tab label="{{'France' | translate }}">
-          <mat-form-field appearance="outline" class="block w-full">
-            <mat-label>{{'subject' | translate}}</mat-label>
-            <input matInput type="text" [(ngModel)]="subjectFr" [value]="subjectFr"/>
-          </mat-form-field>
-
-          <div class="vex-mail-compose-editor flex flex-col">
-            <p>Título</p>
-            <angular-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                          class="flex-auto flex flex-col" [(ngModel)]="titleFr"></angular-editor >
-          </div>
-
-          <div class="vex-mail-compose-editor flex flex-col">
-            <p>Mensaje</p>
-            <angular-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                          class="flex-auto flex flex-col" [(ngModel)]="bodyFr"></angular-editor >
-          </div>
-
-        </mat-tab>
-        <mat-tab label="{{'English' | translate }}">
-          <mat-form-field appearance="outline" class="block w-full">
-            <mat-label>{{'subject' | translate}}</mat-label>
-            <input matInput type="text" [(ngModel)]="subjectEn" [value]="subjectEn"/>
-          </mat-form-field>
-
-          <div class="vex-mail-compose-editor flex flex-col">
-            <p>Título</p>
-            <angular-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                          class="flex-auto flex flex-col" [(ngModel)]="titleEn"></angular-editor >
-          </div>
-
-
-          <div class="vex-mail-compose-editor flex flex-col">
-            <angular-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                          class="flex-auto flex flex-col" [(ngModel)]="bodyEn"></angular-editor >
-          </div>
-        </mat-tab>
-        <mat-tab label="{{'Spanish' | translate }}" >
-          <mat-form-field appearance="outline" class="block w-full">
-            <mat-label>{{'subject' | translate}}</mat-label>
-            <input matInput type="text" [(ngModel)]="subjectEs" [value]="subjectEs"/>
-          </mat-form-field>
-
-          <div class="vex-mail-compose-editor flex flex-col">
-            <p>Título</p>
-            <angular-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                          class="flex-auto flex flex-col" [(ngModel)]="titleEs"></angular-editor >
-          </div>
-
-
-          <div class="vex-mail-compose-editor flex flex-col">
-            <angular-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                          class="flex-auto flex flex-col" [(ngModel)]="bodyEs"></angular-editor >
-          </div>
-        </mat-tab>
-        <mat-tab label="{{'Germany' | translate }}">
-          <mat-form-field appearance="outline" class="block w-full">
-            <mat-label>{{'subject' | translate}}</mat-label>
-            <input matInput type="text" [(ngModel)]="subjectIt" [value]="subjectIt"/>
-          </mat-form-field>
-
-          <div class="vex-mail-compose-editor flex flex-col">
-            <p>Título</p>
-            <angular-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                          class="flex-auto flex flex-col" [(ngModel)]="titleIt"></angular-editor >
-          </div>
-
-
-          <div class="vex-mail-compose-editor flex flex-col">
-            <angular-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                          class="flex-auto flex flex-col" [(ngModel)]="bodyIt"></angular-editor >
-          </div>
-        </mat-tab>
-        <mat-tab label="{{'Italian' | translate }}">
-          <mat-form-field appearance="outline" class="block w-full">
-            <mat-label>{{'subject' | translate}}</mat-label>
-            <input matInput type="text" [(ngModel)]="subjectDe" [value]="subjectDe"/>
-          </mat-form-field>
-
-          <div class="vex-mail-compose-editor flex flex-col">
-            <p>Título</p>
-            <angular-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                          class="flex-auto flex flex-col" [(ngModel)]="titleDe"></angular-editor >
-          </div>
-
-
-          <div class="vex-mail-compose-editor flex flex-col">
-            <angular-editor [styles]="{ flex: '1 1 auto', display: 'flex', 'flex-direction': 'column' }"
-                          class="flex-auto flex flex-col" [(ngModel)]="bodyDe"></angular-editor >
-          </div>
-        </mat-tab>
-      </mat-tab-group>
-
-      &lt;!&ndash;<div class="vex-mail-compose-attachment mt-4 mb-2 rounded-full border px-4 py-1 flex items-center hover:bg-hover transition duration-200 ease-in-out cursor-pointer relative"
-           matRipple>
-        <mat-icon class="flex-none text-primary icon-sm" svgIcon="mat:picture_as_pdf"></mat-icon>
-        <p class="flex-auto ml-4 text-sm">super-secret-design-document.pdf</p>
-
-        <p class="text-sm text-secondary mr-2 flex-none">54kb</p>
-        <button (click)="$event?.stopPropagation()" class="flex-none w-8 h-8 leading-none" mat-icon-button type="button">
-          <mat-icon class="icon-sm" svgIcon="mat:close"></mat-icon>
-        </button>
-      </div>
-
-      <div class="vex-mail-compose-attachment my-2 rounded-full border px-4 py-1 flex items-center hover:bg-hover transition duration-200 ease-in-out cursor-pointer relative"
-           matRipple>
-        <mat-icon class="flex-none text-primary icon-sm" svgIcon="mat:image"></mat-icon>
-        <p class="flex-auto ml-4 text-sm">cute-cat-picture.jpg</p>
-
-        <p class="text-sm text-secondary mr-2 flex-none">16kb</p>
-        <button (click)="$event?.stopPropagation()" class="flex-none w-8 h-8 leading-none" mat-icon-button type="button">
-          <mat-icon class="icon-sm" svgIcon="mat:close"></mat-icon>
-        </button>
-      </div>&ndash;&gt;
-    </mat-dialog-content>
-
-    <mat-dialog-actions>
-      <button color="warn" mat-dialog-close mat-icon-button matTooltip="Discard Draft" type="button">
-        <mat-icon svgIcon="mat:delete"></mat-icon>
-      </button>
-
-      <span class="flex-1"></span>
-
-      &lt;!&ndash;<button mat-icon-button matTooltip="Attach File" type="button">
-        <mat-icon svgIcon="mat:attach_file"></mat-icon>
-      </button>&ndash;&gt;
-
-      <button (click)="saveDefaultMail()" color="primary" mat-flat-button type="button">
-        <span>{{'save' | translate}}</span>
-        <mat-icon class="ml-2 icon-sm" svgIcon="mat:send"></mat-icon>
-      </button>
-    </mat-dialog-actions>
-
-
-  </mat-tab> -->
-</mat-tab-group>

@@ -61,7 +61,8 @@ export class MailListEntryComponent implements OnInit {
   openCompose() {
     const dialog = this.dialog.open(MailComposeComponent, {
       width: '100%',
-      maxWidth: 600
+      maxWidth: 1800,
+
     });
 
     dialog.afterClosed().subscribe((data) => {

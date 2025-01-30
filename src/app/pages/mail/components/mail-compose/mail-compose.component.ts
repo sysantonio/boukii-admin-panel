@@ -21,7 +21,17 @@ export class MailComposeComponent implements OnInit {
 
   currentPage = 1;
   pageSize = 5;
-
+  editorConfig = {
+    editable: true, // Asegura que se pueda escribir
+    spellcheck: true,
+    height: '300px', // Ajusta la altura
+    minHeight: '300px',
+    width: '100%',
+    placeholder: 'Escribe aquí...',
+    translate: 'no',
+    defaultParagraphSeparator: 'p',
+    sanitize: false, // Si tienes problemas con contenido HTML
+  };
   coursesToSend: any = [];
   dropdownOpen = false;
   emailType: number = 1;
