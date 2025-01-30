@@ -68,14 +68,14 @@
                   <li>{{course.course_dates[0].date|date:'yyyy-MM-dd'}},
                     <i
                       style="text-align: right; float: right;">
-                      {{course.course_dates[0].hour_start|date:'HH:mm'}}h -
-                      {{course.course_dates[0].hour_end|date:'HH:mm'}}h</i>
+                      {{course.course_dates[0].hour_start}}h -
+                      {{course.course_dates[0].hour_end}}h</i>
                   </li>
                   <li>{{course.course_dates[course.course_dates.length-1].date|date:'yyyy-MM-dd'}},
                     <i
                       style="text-align: right; float: right;">
-                      {{course.course_dates[course.course_dates.length-1].hour_start|date:'HH:mm'}}h -
-                      {{course.course_dates[course.course_dates.length-1].hour_end|date:'HH:mm'}}h</i>
+                      {{course.course_dates[course.course_dates.length-1].hour_start}}h -
+                      {{course.course_dates[course.course_dates.length-1].hour_end}}h</i>
                   </li>
                 </ul>
                 <ul style="margin: 2% 0 0 0;" *ngIf="course.course_type === 1">

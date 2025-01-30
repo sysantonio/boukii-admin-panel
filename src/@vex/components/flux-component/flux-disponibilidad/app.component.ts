@@ -58,9 +58,12 @@ export class FluxDisponibilidadComponent implements OnInit {
     const monitor = await this.getAvailable({ date: item.date, endTime: item.hour_end, minimumDegreeId: this.level.id, sportId: this.courseFormGroup.controls['sport_id'].value, startTime: item.hour_start })
     this.monitors = monitor.data
   }
-
+  booking_users: any
   ngOnInit(): void {
     this.getAvail(this.courseFormGroup.controls['course_dates'].value[0])
+    this.booking_users = this.courseFormGroup.controls['booking_users'].value.filter((user: any, index: any, self: any) =>
+      index === self.findIndex((u: any) => u.client_id === user.client_id)
+    );
   }
 
   changeMonitor(event: any) {
@@ -104,7 +107,7 @@ export class FluxDisponibilidadComponent implements OnInit {
             .then((data) => {
               if (data.data.find((a: any) => a.id === event.option.value.id)) {
                 this.monitorSelect.emit({ monitor: event.option.value, i: date });
-                this.modified[date] = false
+                this.modified[date] = true
               }
             }
             )

@@ -14,13 +14,15 @@ export class ComponenteComponent implements OnInit {
   @Input() form!: FormGroup
   @Input() required: boolean = false
   @Input() startAt: Date = new Date()
-  @Input() min: Date = new Date(2000, 1, 1)
+  @Input() min: Date = new Date(1900, 1, 1)
   @Input() max: Date = new Date(2099, 12, 31);
   @Output() do = new EventEmitter()
 
   get c(): { [key: string]: AbstractControl } { return this.form.controls; }
 
   ngOnInit(): void {
+    const offset = new Date(this.value).getTimezoneOffset();
+    this.value = new Date(new Date(this.value).getTime() - offset * 60 * 1000);
     if (this.form && this.control) {
       this.required = this.form.get(this.control)?.hasValidator(Validators.required) || false
     }
@@ -39,5 +41,11 @@ export class ComponenteComponent implements OnInit {
     }
     return '';
   }
-
+  getLocalISOString(event: any) {
+    let date = event
+    const offset = date.value.getTimezoneOffset();
+    date.value = new Date(date.value.getTime() - offset * 60 * 1000);
+    this.value = date.value;
+    this.do.emit(date);
+  }
 }
