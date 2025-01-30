@@ -28,7 +28,7 @@
             <mat-select formControlName="startHour">
               <mat-option *ngFor="let hour of possibleHours"
                 [value]="hour"
-                [disabled]="utilService.calculateAvailableHours( dateGroup.get('date').value, hour, course)">
+                [disabled]="utilService.calculateAvailableHours( dateGroup.get('date').value, hour, course, activitiesBooked, utilizers)">
                 {{ hour }}
               </mat-option>
             </mat-select>

@@ -96,7 +96,15 @@ export class UtilsService {
   }
 
 
-  generateCourseHours(startTime: string, endTime: string, mainDuration: string, interval: string): string[] {
+  generateCourseHours(
+    startTime: string,
+    endTime: string,
+    mainDuration: string,
+    interval: string,
+    activitiesBooked: any[] = [],
+    selectedDate: any = null,
+    utilizers: any[] = []
+  ): string[] {
     const [startHours, startMinutes] = startTime.split(':').map(Number);
     const [endHours, endMinutes] = endTime.split(':').map(Number);
     const intervalParts = interval.split(' ');
@@ -127,6 +135,20 @@ export class UtilsService {
     let currentMinutes = startMinutes;
     const result = [];
 
+    // 📌 Filtrar actividades ocupadas según `selectedDate` y `utilizers`
+    const conflictingActivities = activitiesBooked.flatMap(activity =>
+      activity.dates.filter(dateObj =>
+        moment(dateObj.date).format('YYYY-MM-DD') === selectedDate &&
+        activity.utilizers.some(activityUtilizer => utilizers.some(u => u.id === activityUtilizer.id))
+      )
+    );
+
+    // 📌 Extraer intervalos ocupados
+    const occupiedIntervals = conflictingActivities.map(dateObj => ({
+      start: this.timeToMinutes(dateObj.startHour),
+      end: this.timeToMinutes(dateObj.endHour)
+    }));
+
     while (true) {
       let nextIntervalEndHours = currentHours + mainDurationHours;
       let nextIntervalEndMinutes = currentMinutes + mainDurationMinutes;
@@ -134,11 +156,13 @@ export class UtilsService {
       nextIntervalEndHours += Math.floor(nextIntervalEndMinutes / 60);
       nextIntervalEndMinutes %= 60;
 
-      if (nextIntervalEndHours > endHours || (nextIntervalEndHours === endHours && nextIntervalEndMinutes > endMinutes)) {
-        break;
-      }
+      const currentMinutesTime = this.timeToMinutes(`${currentHours}:${currentMinutes}`);
+      const nextMinutesTime = this.timeToMinutes(`${nextIntervalEndHours}:${nextIntervalEndMinutes}`);
 
-      result.push(`${currentHours.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}`);
+      // 📌 Evitar agregar horarios ocupados
+      if (!this.isTimeOccupied(currentMinutesTime, nextMinutesTime, occupiedIntervals)) {
+        result.push(`${currentHours.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}`);
+      }
 
       currentMinutes += intervalMinutes;
       currentHours += intervalHours + Math.floor(currentMinutes / 60);
@@ -152,43 +176,54 @@ export class UtilsService {
     return result;
   }
 
-  calculateAvailableHours(date: any, hour: string, course: any): boolean {
-    // Obtén la fecha seleccionada y el rango de horas disponibles
+  timeToMinutes(time: string): number {
+    const [hours, minutes] = time.split(':').map(Number);
+    return hours * 60 + minutes;
+  }
+
+  calculateAvailableHours(
+    date: any,
+    hour: string,
+    course: any,
+    activitiesBooked: any[] = [],
+    utilizers: any[] = []
+  ): boolean {
     const selectedDate = moment(date).format('YYYY-MM-DD');
-    const startHour = course.hour_min;
-    const endHour = course.hour_max;
-
-    // Verificar si startHour y endHour son válidos
-    if (!startHour || !endHour) {
-      return false; // Si no hay horas de inicio o fin, no desactiva ninguna opción
-    }
-
-    // Obtener la hora en formato HH:mm
     const selectedHour = moment(`${selectedDate} ${hour}`, 'YYYY-MM-DD HH:mm');
+    const start = moment(`${selectedDate} ${course.hour_min}`, 'YYYY-MM-DD HH:mm');
+    const end = moment(`${selectedDate} ${course.hour_max}`, 'YYYY-MM-DD HH:mm');
 
-    // Combinar la fecha seleccionada con startHour y endHour para formar fechas completas
-    const start = moment(`${selectedDate} ${startHour}`, 'YYYY-MM-DD HH:mm');
-    const end = moment(`${selectedDate} ${endHour}`, 'YYYY-MM-DD HH:mm');
-
-    // Verificar si la fecha seleccionada es hoy
+    // Si es hoy, deshabilitar horas pasadas
     if (moment(selectedDate).isSame(moment(), 'day')) {
-      // Si la fecha seleccionada es hoy, desactiva horas pasadas
-      const now = moment().format('HH:mm');
-      const nowMoment = moment(`${selectedDate} ${now}`, 'YYYY-MM-DD HH:mm');
-      if (selectedHour.isBefore(nowMoment, 'minute')) {
-        return true; // Desactivar la opción si la hora es anterior al momento actual
+      if (selectedHour.isBefore(moment(), 'minute')) {
+        return true;
       }
     }
 
     // Verificar si la hora está dentro del rango permitido
     if (selectedHour.isBefore(start) || selectedHour.isAfter(end)) {
-      return true; // Desactivar la opción si la hora está fuera del rango
+      return true;
     }
 
-    // Aquí puedes agregar más validaciones específicas si es necesario
+    // Filtrar actividades con fechas que coincidan y con utilizadores en común
+    const conflictingDates = activitiesBooked.flatMap(activity =>
+      activity.dates.filter(dateObj =>
+        moment(dateObj.date).format('YYYY-MM-DD') === selectedDate &&
+        activity.utilizers.some(activityUtilizer => utilizers.some(u => u.id === activityUtilizer.id))
+      )
+    );
 
-    return false; // La hora es válida si no se desactiva
+    // Obtener intervalos ocupados
+    const occupiedIntervals = conflictingDates.map(dateObj => ({
+      start: moment(`${selectedDate} ${dateObj.startHour}`, 'YYYY-MM-DD HH:mm'),
+      end: moment(`${selectedDate} ${dateObj.endHour}`, 'YYYY-MM-DD HH:mm')
+    }));
+
+    // Verificar si la hora está ocupada
+    return occupiedIntervals.some(interval => selectedHour.isBetween(interval.start, interval.end, 'minute', '[)'));
   }
+
+
   dateClass(color: string, course: any, minDate:any) {
     return (date: Date): MatCalendarCellCssClasses => {
       const currentDate = moment(date, "YYYY-MM-DD").format("YYYY-MM-DD");
@@ -226,8 +261,15 @@ export class UtilsService {
     return !isHoliday && isActive && !isPastDate;
   }
 
-  generateCourseDurations(startTime: any, endTime: any, course: any, interval: string = '15min') {
-
+  generateCourseDurations(
+    startTime: string,
+    endTime: string,
+    course: any,
+    activitiesBooked: any[] = [],
+    selectedDate: any = null,
+    utilizers: any[] = [],
+    interval: string = '15min',
+  ) {
     const timeToMinutes = (time) => {
       const [hours, minutes] = time.split(':').map(Number);
       return hours * 60 + minutes;
@@ -242,6 +284,7 @@ export class UtilsService {
     const startMinutes = timeToMinutes(startTime);
     const endMinutes = timeToMinutes(endTime);
 
+    // 📌 Convertir intervalos a minutos
     const intervalMatch = interval.match(/(\d+)(h|min)/g);
     let intervalTotalMinutes = 0;
 
@@ -258,40 +301,60 @@ export class UtilsService {
       return [];
     }
 
+    // 📌 Filtrar actividades que coincidan con la fecha y `utilizers`
+    const conflictingActivities = activitiesBooked.flatMap(activity =>
+      activity.dates.filter(dateObj =>
+        moment(dateObj.date).format('YYYY-MM-DD') === selectedDate &&
+        activity.utilizers.some(activityUtilizer => utilizers.some(u => u.id === activityUtilizer.id))
+      )
+    );
+
+    // 📌 Extraer intervalos ocupados
+    const occupiedIntervals = conflictingActivities.map(dateObj => ({
+      start: timeToMinutes(dateObj.startHour),
+      end: timeToMinutes(dateObj.endHour)
+    }));
+
+    // 📌 Calcular intervalos de duración excluyendo los ocupados
     const durations = [];
     for (let minutes = startMinutes + intervalTotalMinutes; minutes <= endMinutes; minutes += 5) {
-      durations.push(formatMinutes(minutes - startMinutes));
+      if (!this.isTimeOccupied(minutes, minutes + intervalTotalMinutes, occupiedIntervals)) {
+        durations.push(formatMinutes(minutes - startMinutes));
+      }
     }
 
+    // 📌 Filtrar duraciones con `price_range`
     const tableDurations = [];
     const tablePaxes = [];
 
-    const priceRangeCourse = typeof course.price_range === 'string' ? JSON.parse(course.price_range) :
-      course.price_range;
+    const priceRangeCourse = typeof course.price_range === 'string' ? JSON.parse(course.price_range) : course.price_range;
     durations.forEach(element => {
       const priceRange = priceRangeCourse ? priceRangeCourse.find((p) => p.intervalo === element) : null;
       if (priceRange && priceRange.intervalo === element) {
-
         if (this.extractValues(priceRange)[0] && (+this.extractValues(priceRange)[0].key) <= course.max_participants) {
           tableDurations.push(this.extractValues(priceRange)[0].interval);
 
-
-
           this.extractValues(priceRange).forEach(element => {
             const pax = element.key;
-
-            if (pax && tablePaxes.length === 0 || pax && tablePaxes.length > 0 && !tablePaxes.find((p) => p === pax)) {
+            if (pax && tablePaxes.length === 0 || pax && tablePaxes.length > 0 && !tablePaxes.includes(pax)) {
               tablePaxes.push(element.key);
             }
           });
         }
-
       }
     });
 
     return tableDurations;
-
   }
+
+   isTimeOccupied(startTime: number, endTime: number, occupiedIntervals: { start: number, end: number }[]) {
+    return occupiedIntervals.some(interval =>
+      (startTime >= interval.start && startTime < interval.end) ||  // Inicio dentro del rango ocupado
+      (endTime > interval.start && endTime <= interval.end) ||      // Fin dentro del rango ocupado
+      (startTime <= interval.start && endTime >= interval.end)      // Intervalo completamente cubierto
+    );
+  }
+
 
   calculateEndHour(hour: any, duration: any) {
     if(duration.includes('h') && (duration.includes('min') || duration.includes('m'))) {

@@ -66,7 +66,8 @@ export class FormDetailsPrivateComponent implements OnInit {
     this.initializeForm();
     this.setupExtrasValueChanges();
     this.possibleHours = this.utilService.generateCourseHours(this.course.hour_min, this.course.hour_max, this.course.minDuration, '5min');
-    this.possibleDurations = this.utilService.generateCourseDurations(this.course.hour_min, this.course.hour_max, this.course);
+    this.possibleDurations = this.utilService.generateCourseDurations(this.course.hour_min, this.course.hour_max,
+      this.course, this.activitiesBooked, this.date, this.utilizers);
     this.courseDates.controls.forEach((dateGroup, index) => {
       const monitorControl = dateGroup.get('monitor');
       const changeMonitorControl = dateGroup.get('changeMonitorOption');
@@ -126,7 +127,7 @@ export class FormDetailsPrivateComponent implements OnInit {
       )
     );
 
-    let formattedDate = moment().format('YYYY-MM-DD'); // Fecha por defecto: hoy
+    let formattedDate = this.date.format('YYYY-MM-DD') ?? moment().format('YYYY-MM-DD'); // Fecha por defecto: hoy
 
     if (this.courseDates.length > 0) {
       const lastDateGroup = this.courseDates.at(this.courseDates.length - 1);
@@ -275,7 +276,8 @@ export class FormDetailsPrivateComponent implements OnInit {
 
       if (this.course.is_flexible) {
         // Generar duraciones posibles basadas en la nueva 'startHour'
-        this.possibleDurations = this.utilService.generateCourseDurations(courseDateGroup.get('startHour').value, this.course.hour_max, this.course);
+        this.possibleDurations = this.utilService.generateCourseDurations(courseDateGroup.get('startHour').value,
+          this.course.hour_max, this.course, this.activitiesBooked, courseDateGroup.get('date').value, this.utilizers);
 
         // Verificar si la duración actual está dentro de las posibles duraciones
         const currentDuration = courseDateGroup.get('duration').value;
@@ -444,4 +446,6 @@ export class FormDetailsPrivateComponent implements OnInit {
       }
     });
   }
+
+
 }

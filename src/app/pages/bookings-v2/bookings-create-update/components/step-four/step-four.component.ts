@@ -27,6 +27,7 @@ export class StepFourComponent {
   @Input() utilizers: any;
   @Input() activitiesBooked: any;
   @Input() sportLevel: any;
+  @Input() selectedForm: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
   @ViewChild("secondCalendar") secondCalendar: MatCalendar<Date>;
@@ -266,11 +267,28 @@ export class StepFourComponent {
     this.crudService.post("/availability", rq).subscribe((data) => {
       this.courses = data.data;
       this.courses = this.courses.filter(course => {
-        const isCourseBooked = this.activitiesBooked.some(activity =>
-          activity.course_type === 1 && activity.id === course.id
-        );
-        return !isCourseBooked;  // Retorna solo si no está reservado
+        const isCourseBooked = this.activitiesBooked.some(activity => {
+          const sameCourse = activity.course.course_type === 1 && activity.course.id === course.id;
+          const hasCommonUtilizer = activity.utilizers.some(utilizer =>
+            this.utilizers.some(selectedUtilizer => selectedUtilizer.id === utilizer.id)
+          );
+          const sameDegree = this.selectedForm?.value?.step3?.sportLevel?.id === activity.sportLevel?.id;
+
+          // Verificamos si step5 está definido antes de acceder a course_dates
+          const selectedFormDates = this.selectedForm?.value?.step5?.course_dates?.map(d => d.date) || [];
+          const activityDates = activity.dates?.map(d => d.date) || [];
+          const sameDates = JSON.stringify(selectedFormDates) === JSON.stringify(activityDates);
+
+          // Si estamos editando, excluir esta actividad del filtrado
+          const isEditing = !!this.selectedForm && sameCourse && hasCommonUtilizer && sameDegree && sameDates;
+
+          return !isEditing && sameCourse && hasCommonUtilizer;
+        });
+
+        return !isCourseBooked;
       });
+
+
       if(this.courseTypeId == 1) {
         this.filterCoursesCollective();
       }

@@ -37,7 +37,7 @@ export class StepDetailsComponent {
     }
   }
 
-  isFormValid() {
+  get isFormValid() {
     if(this.stepForm) {
       return this.stepForm.valid;
     }
@@ -57,8 +57,10 @@ export class StepDetailsComponent {
   }
 
   completeStep() {
-    if (this.isFormValid()) {
+    if (this.isFormValid) {
       this.stepCompleted.emit(this.stepForm);
     }
   }
+
+
 }

@@ -37,6 +37,7 @@
       [sportLevel]="stepperForm.get('step3')?.value?.sportLevel"
       [utilizers]="stepperForm.get('step2')?.value?.utilizers"
       [activitiesBooked]="activitiesBooked"
+      [selectedForm]="selectedForm"
       (stepCompleted)="handleStepCompletion(4, $event)"
       (prevStep)="previousStep()"
     >

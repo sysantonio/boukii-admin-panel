@@ -122,6 +122,7 @@ export class BookingsCreateUpdateV2Component {
     this.clientObs = null;
     this.schoolObs = null;
     this.forceStep = 1;
+    this.calculateTotal();
     this.cdr.detectChanges();
   }
 
@@ -134,24 +135,53 @@ export class BookingsCreateUpdateV2Component {
 
   calculateTotal() {
     let total = 0;
-    if (this.course.course_type === 1) total = this.calculateColectivePrice();
-    else if (this.course.course_type === 2) total = this.calculatePrivatePrice();
-    const extrasTotal = this.dates.reduce((acc: any, date: any) => {
-      if (date.extras && date.extras.length) {
-        const extrasPrice = date.extras.reduce((extraAcc: any, extra: any) => {
-          const price = parseFloat(extra.price) || 0;
-          return extraAcc + price * extra.quantity;
-        }, 0);
-        return acc + extrasPrice;
+    if(!this.course) {
+      this.total = null
+      this.subtotal = null
+      this.extraPrice = null
+    } else {
+      if (this.course.course_type === 1) {
+        total = this.calculateColectivePrice();
+      } else if (this.course.course_type === 2) {
+        total = this.calculatePrivatePrice();
       }
-      return acc;
-    }, 0);
-    const totalSinExtras = total;
-    total += extrasTotal;
-    this.total = `${total.toFixed(2)} ${this.course.currency}`;
-    this.subtotal = `${totalSinExtras.toFixed(2)}`;
-    this.extraPrice = `${extrasTotal.toFixed(2)}`;
+
+      // Asegurarse de que el precio base no sea NaN
+      if (isNaN(total) || total === undefined || total === null) {
+        total = 0;
+      }
+
+      // Calcular el total de los extras
+      const extrasTotal = this.dates.reduce((acc: number, date: any) => {
+        if (date.extras && Array.isArray(date.extras) && date.extras.length > 0) {
+          const extrasPrice = date.extras.reduce((extraAcc: number, extra: any) => {
+            const price = parseFloat(extra.price) || 0;
+            const quantity = parseFloat(extra.quantity) || 1;
+            return extraAcc + price * quantity;
+          }, 0);
+          return acc + extrasPrice;
+        }
+        return acc;
+      }, 0);
+
+      // Asegurarse de que el total de extras sea un número válido
+      const validExtrasTotal = isNaN(extrasTotal) ? 0 : extrasTotal;
+
+      // Calcular el total final y asegurarse de que no sea NaN
+      const totalSinExtras = total;
+      total += validExtrasTotal;
+
+      if (isNaN(total)) {
+        total = 0;
+      }
+
+      // Formatear los resultados
+      this.total = `${total.toFixed(2)} ${this.course.currency}`;
+      this.subtotal = `${totalSinExtras.toFixed(2)}`;
+      this.extraPrice = `${validExtrasTotal.toFixed(2)}`;
+    }
   }
+
 
   deleteActivity(index: any) {
     this.forms.splice(index, 1);
@@ -464,6 +494,12 @@ export class BookingsCreateUpdateV2Component {
   }
 
   forceChange(newStep: any) {
+    this.forceStep = newStep;
+    this.cdr.detectChanges();
+
+  }
+
+  changeStep(newStep: any) {
     this.forceStep = newStep;
     this.cdr.detectChanges();
 

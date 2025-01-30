@@ -25,6 +25,21 @@
     <ng-container *ngIf="course">
       <div class="flex flex-col">
         <h4 class="courseTitle">{{ course.name }}</h4>
+        <div
+          [style.background]="sportLevel?.color"
+          style="
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      color: #fff;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 10px;
+      width: 3rem;
+      overflow: inherit;
+    "
+        >
+          {{ sportLevel?.league }}
+        </div>
         <span class="courseSubtitle">
           {{course.typeString | translate}} {{course.is_flexible ? 'Flex' : 'Fix' | translate}} {{course.sport.name}}
         </span>

@@ -17,26 +17,31 @@
 			</button>
 			<button [ngClass]="{ active: currentStep === 1, prev: currentStep > 1 }"
 				(click)="forceChange(1)"
+              [disabled]="currentStep <= 1 && selectedIndexForm == null "
 				class="crumb">
 				{{ "bookings_page.crumbs.utilizers" | translate }}
 			</button>
 			<button [ngClass]="{ active: currentStep === 2, prev: currentStep > 2 }"
 				(click)="forceChange(2)"
+              [disabled]="currentStep <= 2 && selectedIndexForm == null && utilizers == null"
 				class="crumb">
 				{{ "bookings_page.crumbs.sport" | translate }}
 			</button>
 			<button [ngClass]="{ active: currentStep === 3, prev: currentStep > 3 }"
 				(click)="forceChange(3)"
+              [disabled]="currentStep <= 3 && selectedIndexForm == null &&  sport == null "
 				class="crumb">
 				{{ "bookings_page.crumbs.course" | translate }}
 			</button>
 			<button [ngClass]="{ active: currentStep === 4, prev: currentStep > 4 }"
 				(click)="forceChange(4)"
+              [disabled]="currentStep <= 4 && selectedIndexForm == null && course == null "
 				class="crumb">
 				{{ "bookings_page.crumbs.details" | translate }}
 			</button>
 			<button [ngClass]="{ active: currentStep === 5, prev: currentStep > 5 }"
 				(click)="forceChange(5)"
+              [disabled]="currentStep <= 5 && selectedIndexForm == null && dates == null"
 				class="crumb last">
 				{{ "bookings_page.crumbs.observations" | translate }}
 			</button>
@@ -106,6 +111,7 @@
 				<booking-description-card *ngFor="let activity of normalizedDates; let i = index"
 					[index]="i"
 					[utilizers]="activity.utilizers"
+					[allLevels]="allLevels"
 					[sport]="activity.sport"
 					[sportLevel]="activity.sportLevel"
 					[course]="activity.course"
