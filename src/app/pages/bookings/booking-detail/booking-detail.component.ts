@@ -2171,13 +2171,7 @@ export class BookingDetailComponent implements OnInit {
               reason: data.reason,
             })
             .subscribe(() => {
-              this.crudService
-                .update(
-                  "/bookings",
-                  { paid_total: this.booking.price_total - priceToRefund, price_total: 0 },
-                  this.booking.id
-                )
-                .subscribe(() => {
+
                   if (this.booking.paid) {
                     this.crudService
                       .post("/admin/bookings/refunds/" + this.id, {
@@ -2186,7 +2180,7 @@ export class BookingDetailComponent implements OnInit {
                       })
                       .subscribe(() => {
                         this.crudService
-                          .update("/bookings", { status: 2 }, this.booking.id)
+                          .update("/bookings", { status: 2, paid_total: this.booking.price_total - priceToRefund, price_total: 0 }, this.booking.id)
                           .subscribe(() => {
                             this.crudService
                               .post("/admin/bookings/cancel", {
@@ -2217,7 +2211,6 @@ export class BookingDetailComponent implements OnInit {
                     this.getData();
                   }
                 });
-            });
         } else if (data.type === "refund") {
           this.crudService
             .create("/booking-logs", {
