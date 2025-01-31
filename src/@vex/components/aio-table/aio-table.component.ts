@@ -1117,7 +1117,8 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         school_id: this.user.schools[0].id, //sacar del global
         station_id: item.station_id,
         max_participants: item.max_participants,
-        course_dates: item.course_dates
+        course_dates: item.course_dates,
+        user_id: item.user_id
       }
 
       delete data.course_dates;
@@ -1167,7 +1168,8 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         school_id: this.user.schools[0].id, //sacar del global
         station_id: item.station_id,
         max_participants: item.max_participants,
-        course_dates: item.course_dates
+        course_dates: item.course_dates,
+        user_id: item.user_id
       }
 
       delete data.course_dates;
@@ -1227,6 +1229,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         unique: item.unique,
         hour_min: item.hour_min,
         hour_max: item.hour_max,
+        user_id: item.user_id
       };
     } else if (item.course_type === 2 && !item.is_flexible) {
 
@@ -1259,7 +1262,8 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         course_dates: item.course_dates,
         hour_min: item.hour_min,
         hour_max: item.hour_max,
-        settings: item.settings
+        settings: item.settings,
+        user_id: item.user_id
       };
     }
 
