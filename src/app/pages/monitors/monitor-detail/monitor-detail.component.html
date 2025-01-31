@@ -708,7 +708,11 @@
                   <div *ngFor="let client of detailData?.booking?.booking_users"
                     class="box-detail-user-block">
                     <ng-container *ngIf="client.monitor_id == id">
-                      <app-level-user *ngIf="detailData.sport"
+                      <div class="image" *ngIf="!client.client.client_sports?.length">
+                        <img
+                          [src]="client.client.image !== null && client.client.image !== '' ? client.client.image : 'assets/img/avatar.png'" />
+                      </div>
+                      <app-level-user *ngIf="client.client.client_sports?.length" style="max-width: 60px;"
                         [allLevels]="getAllLevelsBySport()"
                         [selectLevel]="getClientDegree(detailData?.sport.id, client.client.client_sports)"
                         [size]="60"
@@ -788,7 +792,11 @@
                   <div *ngFor="let client of detailData?.booking?.booking_users"
                     class="box-detail-user-block">
                     <ng-container *ngIf="client.monitor_id == id">
-                      <app-level-user *ngIf="detailData.sport"
+                      <div class="image" *ngIf="!client.client.client_sports?.length">
+                        <img
+                          [src]="client.client.image !== null && client.client.image !== '' ? client.client.image : 'assets/img/avatar.png'" />
+                      </div>
+                      <app-level-user *ngIf="client.client.client_sports?.length" style="max-width: 60px;"
                         [allLevels]="getAllLevelsBySport()"
                         [selectLevel]="getClientDegree(detailData?.sport.id,  client.client.client_sports)"
                         [size]="60"
@@ -1240,8 +1248,11 @@
                   style="display:flex;width:100%;flex-direction:column;gap:8px;">
                   <div *ngFor="let client of taskDetailTimeline.all_clients"
                     class="box-detail-user-block">
-                    <app-level-user
-                      *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length"
+                    <div class="image" *ngIf="!client.client.client_sports?.length">
+                      <img
+                        [src]="client.client.image !== null && client.client.image !== '' ? client.client.image : 'assets/img/avatar.png'" />
+                    </div>
+                    <app-level-user *ngIf="client.client.client_sports?.length" style="max-width: 60px;"
                       [allLevels]="taskDetailTimeline.degrees_sport"
                       [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.client_sports)"
                       [size]="60"
@@ -1326,8 +1337,11 @@
                   style="display:flex;width:100%;flex-direction:column;gap:8px;">
                   <div *ngFor="let client of taskDetailTimeline.all_clients"
                     class="box-detail-user-block">
-                    <app-level-user
-                      *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length"
+                    <div class="image" *ngIf="!client.client.client_sports?.length">
+                      <img
+                        [src]="client.client.image !== null && client.client.image !== '' ? client.client.image : 'assets/img/avatar.png'" />
+                    </div>
+                    <app-level-user *ngIf="client.client.client_sports?.length" style="max-width: 60px;"
                       [allLevels]="taskDetailTimeline.degrees_sport"
                       [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.client_sports)"
                       [size]="60"
@@ -2596,7 +2610,11 @@
                   <div *ngFor="let client of detailData?.booking?.booking_users"
                     class="box-detail-user-block">
                     <ng-container *ngIf="client.monitor_id == id">
-                      <app-level-user *ngIf="detailData.sport"
+                      <div class="image" *ngIf="!client.client.client_sports?.length">
+                        <img
+                          [src]="client.client.image !== null && client.client.image !== '' ? client.client.image : 'assets/img/avatar.png'" />
+                      </div>
+                      <app-level-user *ngIf="client.client.client_sports?.length" style="max-width: 60px;"
                         [allLevels]="getAllLevelsBySport()"
                         [selectLevel]="getClientDegree(detailData?.sport.id,  client.client.client_sports)"
                         [size]="60"
@@ -2676,11 +2694,15 @@
                   <div *ngFor="let client of detailData?.booking?.booking_users"
                     class="box-detail-user-block">
                     <ng-container *ngIf="client.monitor_id == id">
-                      <app-level-user *ngIf="detailData.sport"
-                        [allLevels]="getAllLevelsBySport()"
-                        [selectLevel]="getClientDegree(detailData?.sport.id,  client.client.client_sports)"
-                        [size]="60"
-                        [userImage]=" client.client.image ?  client.client.image : 'assets/img/avatar.png'"></app-level-user>
+                      <div class="image" *ngIf="!client.client.client_sports?.length">
+                        <img
+                          [src]="client.client.image !== null && client.client.image !== '' ? client.client.image : 'assets/img/avatar.png'" />
+                      </div>
+                      <app-level-user *ngIf="client.client.client_sports?.length" style="max-width: 60px;"
+                                      [allLevels]="getAllLevelsBySport()"
+                                      [selectLevel]="getClientDegree(detailData?.sport.id,  client.client.client_sports)"
+                                      [size]="60"
+                                      [userImage]=" client.client.image ?  client.client.image : 'assets/img/avatar.png'"></app-level-user>
                       <div class="box-detail-user-block-text">
                         <div>{{ client.client?.first_name }} {{
                           client.client?.last_name }}</div>
@@ -3064,8 +3086,12 @@
                   style="display:flex;width:100%;flex-direction:column;gap:8px;">
                   <div *ngFor="let client of taskDetailTimeline.all_clients"
                     class="box-detail-user-block">
-                    <app-level-user
-                      *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length"
+                    <div class="image" *ngIf="!client.client.client_sports?.length">
+                      <img
+                        [src]="client.client.image !== null && client.client.image !== '' ? client.client.image : 'assets/img/avatar.png'" />
+                    </div>
+                    <app-level-user style="max-width: 60px;"
+                      *ngIf="client.client.client_sports?.length"
                       [allLevels]="taskDetailTimeline.degrees_sport"
                       [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.client_sports)"
                       [size]="60"
@@ -3150,8 +3176,12 @@
                   style="display:flex;width:100%;flex-direction:column;gap:8px;">
                   <div *ngFor="let client of taskDetailTimeline.all_clients"
                     class="box-detail-user-block">
-                    <app-level-user
-                      *ngIf="taskDetailTimeline.degrees_sport && taskDetailTimeline.degrees_sport.length"
+                    <div class="image" *ngIf="!client.client.client_sports?.length">
+                      <img
+                        [src]="client.client.image !== null && client.client.image !== '' ? client.client.image : 'assets/img/avatar.png'" />
+                    </div>
+                    <app-level-user style="max-width: 60px;"
+                      *ngIf="client.client.client_sports?.length"
                       [allLevels]="taskDetailTimeline.degrees_sport"
                       [selectLevel]="getClientDegree(taskDetailTimeline.sport_id,client.client.client_sports)"
                       [size]="60"

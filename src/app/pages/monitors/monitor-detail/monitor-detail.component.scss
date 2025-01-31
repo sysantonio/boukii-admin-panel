@@ -8,6 +8,17 @@
   border: 2px solid #ff3085;
   background-color: rgba(255, 48, 133, 0.1);
 }
+.image {
+  margin-bottom: 10px;
+
+  img {
+    width: 70px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+}
+
 
 img {
   object-fit: cover;
@@ -549,7 +560,7 @@ img {
   border-radius: 100%;
 }
 .box-detail-user-block-text {
-  display: fex;
+  display: flex;
   width: 100%;
   gap: 4px;
   flex-direction: column;
