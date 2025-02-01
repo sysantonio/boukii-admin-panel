@@ -3,31 +3,22 @@
   <form [formGroup]="stepForm">
     <div class="cards-wrapper">
       <label class="utilizerCard" *ngFor="let item of utilizers">
-        <mat-checkbox
-          [value]="item"
-          [checked]="isChecked(item)"
-          (change)="onCheckboxChange($event)"
-        ></mat-checkbox>
+        <mat-checkbox [value]="item" [checked]="isChecked(item)" (change)="onCheckboxChange($event)"></mat-checkbox>
         <div class="image" *ngIf="!item.client_sports || !item.client_sports.length">
-          <img
-            [src]="item.image !== null && item.image !== '' ? item.image : userAvatar" />
+          <img [src]="item.image !== null && item.image !== '' ? item.image : userAvatar" />
         </div>
-        <app-level-user *ngIf="item.client_sports && item.client_sports.length "
-                        mat-card-avatar style="margin-right: 5px"
-                        [allLevels]="utilsService.getSportLevels(item.client_sports[0].sport_id, allLevels)"
-                        [selectLevel]="item.client_sports[0]?.degree_id"
-                        [size]="60"
-                        [userImage]="item.image !== null && item.image !== '' ? item.image : userAvatar">
+        <app-level-user *ngIf="item.client_sports && item.client_sports.length " mat-card-avatar
+          style="margin-right: 5px" [allLevels]="utilsService.getSportLevels(item.client_sports[0].sport_id, allLevels)"
+          [selectLevel]="item.client_sports[0]?.degree_id" [size]="60"
+          [userImage]="item.image !== null && item.image !== '' ? item.image : userAvatar">
         </app-level-user>
         <div class="utilizerCard__description">
           <h4>{{ item.first_name }} {{ item.last_name }}</h4>
-          <span
-            >{{ langService.getLanguage(item.language1_id) }} ·
+          <span>{{ langService.getLanguage(item.language1_id) }} ·
             {{ utilsService.calculateYears(item.birth_date) }} &ensp;{{
-              "years" | translate
+            "years" | translate
             }}
-            · {{ utilsService.getCountry(item.country) }}</span
-          >
+            · {{ utilsService.getCountry(item.country) }}</span>
         </div>
       </label>
     </div>
@@ -36,28 +27,21 @@
   <mat-card class="info-message">
     <mat-card-content>
       <mat-icon color="secondary" style="margin-right: 8px;">info</mat-icon>
-      <span>{{ "Seleccionando más de un participante solo tendrás acceso a cursos privados" | translate }}</span>
+      <span>{{ "multiple_participants_private_courses" | translate }}</span>
     </mat-card-content>
   </mat-card>
 
   <div class="stepButtonsWrapper">
-    <button mat-button type="button" (click)="handlePrevStep()">
-      <mat-icon class="icon-sm" svgIcon="mat:arrow_back"></mat-icon>
-      {{ "back" | translate }}
-    </button>
-    <div>
-      <button mat-stroked-button type="button" (click)="openBookingDialog()">
-        {{ "add_participant" | translate }}
-      </button>
+    <app-form-button (click)="handlePrevStep()" form="back" name="back" icon="mat:arrow_back">
+    </app-form-button>
 
-      <button
-        mat-flat-button
-        type="button"
-        (click)="completeStep()"
-        [disabled]="!isFormValid()"
-      >
-        {{ "confirm" | translate }}
-      </button>
+    <div>
+      <app-form-button (click)="openBookingDialog()" form="stroked" name="add_participant">
+      </app-form-button>
+
+      <app-form-button (click)="completeStep()" form="flat" name="confirm" [disabled]="!isFormValid()">
+      </app-form-button>
+
     </div>
   </div>
 </mat-card-content>

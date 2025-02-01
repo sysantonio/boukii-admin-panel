@@ -3,17 +3,8 @@
     <div>
       <mat-form-field appearance="outline">
         <mat-label>{{ "participant" | translate }} {{ 1 }}</mat-label>
-        <input
-          matInput
-          disabled
-          [value]="utilizer.first_name + ' ' + utilizer.last_name"
-        />
-        <mat-icon
-          class="disabled-icon"
-          matPrefix
-          fontSet="material-icons-outlined"
-        >people</mat-icon
-        >
+        <input matInput disabled [value]="utilizer.first_name + ' ' + utilizer.last_name" />
+        <mat-icon class="disabled-icon" matPrefix fontSet="material-icons-outlined">people</mat-icon>
       </mat-form-field>
     </div>
     <div>
@@ -21,12 +12,8 @@
         <mat-form-field appearance="outline" class="extras-field">
           <mat-label>{{ "extras" | translate }} </mat-label>
           <mat-select multiple (selectionChange)="onExtraChange($event)" [value]="selectedExtras"
-          [disabled]="!this.possibleExtras || !this.possibleExtras.length">
-            <mat-option
-              class="extra-field-option"
-              *ngFor="let extra of possibleExtras"
-              [value]="extra"
-            >
+            [disabled]="!this.possibleExtras || !this.possibleExtras.length">
+            <mat-option class="extra-field-option" *ngFor="let extra of possibleExtras" [value]="extra">
               <span>{{ extra.description }} </span>
               <span> {{ extra.price }} </span>
             </mat-option>

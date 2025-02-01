@@ -54,7 +54,7 @@
   text-transform: uppercase;
   margin-right: 1.25rem;
   position: relative;
-  color: var(--color-grey1);
+  color: var(--color-grey1) var(--is-dark-theme, #dee6ea);
   &.active {
     color: var(--color-primary-red);
     font-weight: 400;

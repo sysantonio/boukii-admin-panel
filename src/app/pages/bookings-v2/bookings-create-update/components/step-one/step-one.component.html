@@ -2,35 +2,27 @@
   <form [formGroup]="stepOneForm">
     <mat-form-field appearance="outline" class="stepOneSearchInput">
       <mat-label>{{ "client" | translate }}</mat-label>
-      <input
-        type="text"
-        placeholder="{{ 'choose_client' | translate }}"
-        matInput
-        [matAutocomplete]="auto"
+      <input type="text" placeholder="{{ 'choose_client' | translate }}" matInput [matAutocomplete]="auto"
         formControlName="client" />
 
       <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
         <cdk-virtual-scroll-viewport itemSize="50" class="viewport" minBufferPx="200" maxBufferPx="400">
-          <mat-option
-            *cdkVirtualFor="let filteredClient of filteredOptions | async"
-            [value]="filteredClient"
+          <mat-option *cdkVirtualFor="let filteredClient of filteredOptions | async" [value]="filteredClient"
             (click)="setClient(filteredClient)">
             <div class="client-item">
               <div class="image" *ngIf="!filteredClient.client_sports || !filteredClient.client_sports.length">
                 <img
                   [src]="filteredClient.image !== null && filteredClient.image !== '' ? filteredClient.image : userAvatar" />
               </div>
-              <app-level-user
-                *ngIf="filteredClient.client_sports && filteredClient.client_sports.length"
+              <app-level-user *ngIf="filteredClient.client_sports && filteredClient.client_sports.length"
                 mat-card-avatar
                 [allLevels]="utilsService.getSportLevels(filteredClient.client_sports[0].sport_id, allLevels)"
-                [selectLevel]="filteredClient.client_sports[0]?.degree_id"
-                [size]="40"
+                [selectLevel]="filteredClient.client_sports[0]?.degree_id" [size]="40"
                 [userImage]="filteredClient.image !== null && filteredClient.image !== '' ? filteredClient.image : userAvatar">
               </app-level-user>
               <span class="client-details">
-      {{ filteredClient.first_name }} {{ filteredClient.last_name }}
-    </span>
+                {{ filteredClient.first_name }} {{ filteredClient.last_name }}
+              </span>
             </div>
           </mat-option>
         </cdk-virtual-scroll-viewport>
@@ -38,20 +30,10 @@
     </mat-form-field>
 
     <div class="stepOneButtonsWrapper">
-      <button mat-stroked-button type="button"
-              (click)="addClient()">
-        <mat-icon class="icon-sm" svgIcon="mat:add"></mat-icon>
-        {{ "create_new_client" | translate }}
-      </button>
-
-      <button
-        mat-flat-button
-        type="button"
-        color="primary"
-        (click)="completeStep()"
-        [disabled]="!isFormValid()">
-        {{ "confirm" | translate }}
-      </button>
+      <app-form-button (click)="addClient()" form="stroked" icon="mat:add" name="create_new_client">
+      </app-form-button>
+      <app-form-button (click)="completeStep()" [disabled]="!isFormValid()" form="flat" icon="mat:add" name="confirm">
+      </app-form-button>
     </div>
   </form>
 </mat-card-content>

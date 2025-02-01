@@ -782,7 +782,8 @@ span {
 .mat-mdc-menu-content,
 .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text,
 .cdk-overlay-pane:not(.mat-mdc-autocomplete-panel-above)
-  div.mat-mdc-autocomplete-panel {
+  div.mat-mdc-autocomplete-panel,
+.apexcharts-tooltip.apexcharts-theme-light {
   background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);
 }
 .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper,

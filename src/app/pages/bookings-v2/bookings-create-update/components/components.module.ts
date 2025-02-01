@@ -39,6 +39,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import {ComponentsCustomModule} from '../../../../components/components-custom.module';
 import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
 import {IconComponent} from '../../../../../@vex/components/icon/app.component';
+import { ComponenteButtonModule } from "../../../../../@vex/components/form/button/app.module";
 
 @NgModule({
   imports: [
@@ -63,7 +64,8 @@ import {IconComponent} from '../../../../../@vex/components/icon/app.component';
     CdkFixedSizeVirtualScroll,
     CdkVirtualForOf,
     IconComponent,
-  ],
+    ComponenteButtonModule
+],
     declarations: [
         BookingFormStepper,
         StepOneComponent,

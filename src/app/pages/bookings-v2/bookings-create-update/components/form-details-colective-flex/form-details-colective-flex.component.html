@@ -7,7 +7,8 @@
           <div class="row-1">
             <!-- Aquí usamos courseDatesArray en lugar de course.course_dates -->
             <span class="date">{{ formatDate(courseDatesArray.at(i).get('date').value) }}</span>
-            <span class="hour">{{ courseDatesArray.at(i).get('startHour').value }}h - {{ courseDatesArray.at(i).get('endHour').value }}h</span>
+            <span class="hour">{{ courseDatesArray.at(i).get('startHour').value }}h - {{
+              courseDatesArray.at(i).get('endHour').value }}h</span>
             <span class="price">{{ course.price }} {{ course.currency }} </span>
           </div>
           <div class="row-2">
@@ -23,7 +24,7 @@
                 <mat-form-field appearance="outline" class="extras-field">
                   <mat-label>{{ "extras" | translate }} </mat-label>
                   <mat-select multiple formControlName="extras" (selectionChange)="onExtraChange(i)"
-                              [disabled]="!(courseDatesArray.at(i)).get('selected').value || !this.posibleExtras || !this.posibleExtras.length">
+                    [disabled]="!(courseDatesArray.at(i)).get('selected').value || !this.posibleExtras || !this.posibleExtras.length">
                     <mat-option *ngFor="let extra of posibleExtras" [value]="extra">
                       <span>{{ extra.name }} - {{ extra.description }}</span>
                       <span>{{ extra.price }}</span>

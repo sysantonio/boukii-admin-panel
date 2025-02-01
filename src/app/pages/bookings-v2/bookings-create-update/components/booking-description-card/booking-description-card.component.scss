@@ -2,9 +2,8 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: white;
   border-radius: 8px;
-  border: 1px solid #dee6ea;
+  border: 1px solid var(--color-grey3);
 }
 .headerWrapper {
   border-top-left-radius: 8px;
@@ -16,18 +15,20 @@
   gap: 0.5rem;
 }
 
-
-.header1:hover {  cursor: pointer;
+.header1:hover {
+  cursor: pointer;
 
   background-color: #fee0b9;
   animation: fadeOut1 1s;
 }
-.header2:hover {  cursor: pointer;
+.header2:hover {
+  cursor: pointer;
 
   background-color: #c2eac8;
   animation: fadeOut2 1s;
 }
-.header3:hover {  cursor: pointer;
+.header3:hover {
+  cursor: pointer;
 
   background-color: #acf4f8;
   animation: fadeOut3 1s;

@@ -1,25 +1,14 @@
 <mat-card-content class="cardWrapper">
   <form [formGroup]="stepForm" class="wrapper">
     <mat-form-field appearance="outline">
-      <textarea
-        #clientObsField
-        class="textarea"
-        type="text"
-        placeholder="{{ 'observation_client' | translate }}"
-        matInput
-        formControlName="clientObs"
-      >
+      <textarea #clientObsField class="textarea" type="text" placeholder="{{ 'observation_client' | translate }}"
+        matInput formControlName="clientObs">
       </textarea>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <textarea
-        class="textarea"
-        type="text"
-        placeholder="{{ 'observation_school' | translate }}"
-        matInput
-        formControlName="schoolObs"
-      >
+      <textarea class="textarea" type="text" placeholder="{{ 'observation_school' | translate }}" matInput
+        formControlName="schoolObs">
       </textarea>
     </mat-form-field>
   </form>
@@ -34,12 +23,7 @@
         {{ "bookings_page.buttons.save&CreateBooking" | translate }}
       </button>
 
-      <button
-        mat-flat-button
-        type="button"
-        (click)="completeStep()"
-        [disabled]="!isFormValid()"
-      >
+      <button mat-flat-button type="button" (click)="completeStep()" [disabled]="!isFormValid()">
         {{ "confirm" | translate }}
       </button>
     </div>

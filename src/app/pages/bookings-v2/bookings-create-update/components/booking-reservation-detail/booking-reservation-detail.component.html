@@ -11,9 +11,7 @@
         {{'client' | translate}}
       </div>
       <div class="utilizersWrapper">
-        <img
-          class="avatarImg"
-          [src]="
+        <img class="avatarImg" [src]="
               client.image !== null && client.image !== ''
                 ? client.image
                 : 'assets/img/avatar.png'
@@ -27,16 +25,10 @@
             }}
             · {{ utilsService.getCountry(client.country) }}</span>
           <div style="display: flex;gap: 8px;">
-           <!-- <vex-icon src="chat"></vex-icon>-->
-            <vex-icon src="mail"
-                      href="mailto:{{client.email}}"
-                      style="cursor:pointer"
-                      title="{{client.email}}">
+            <!-- <vex-icon src="chat"></vex-icon>-->
+            <vex-icon src="mail" href="mailto:{{client.email}}" style="cursor:pointer" title="{{client.email}}">
             </vex-icon>
-            <vex-icon src="phone"
-                      href="tel:{{client.phone}}"
-                      style="cursor:pointer"
-                      title="{{client.phone}}">
+            <vex-icon src="phone" href="tel:{{client.phone}}" style="cursor:pointer" title="{{client.phone}}">
             </vex-icon>
           </div>
 
@@ -60,7 +52,7 @@
     <div class="section" style="margin: 20px;">
       <div class="dateRow">
         <div>
-          <span class="hour">{{ "Subtotal" | translate
+          <span class="hour">{{ "text_subtotal" | translate
             }}</span>
           <span class="price">
             <span class="discounted-price">
@@ -75,8 +67,8 @@
     <div class="section" style="margin-bottom: 0;border: none;">
       <div class="dateRow">
         <div>
-          <span class="hour" (click)="addReduction()"  *ngIf="bookingData.reduction === null && this.calculateTotalVoucherPrice() < bookingData.price_total"
-            style="
+          <span class="hour" (click)="addReduction()"
+            *ngIf="bookingData.reduction === null && this.calculateTotalVoucherPrice() < bookingData.price_total" style="
             color: #E91E63;
              font-size: 14px;
              font-family: DM Sans;
@@ -87,11 +79,8 @@
             <mat-icon style="margin: 0 8px;">add</mat-icon>
             {{ "apply_reduction" | translate }}
           </span>
-          <span style="width: 100%; float:left"
-            *ngIf="bookingData.reduction !== null;">
-            <mat-icon
-              svgIcon="mat:delete"
-              style="float: left;color: red; cursor:pointer"
+          <span style="width: 100%; float:left" *ngIf="bookingData.reduction !== null;">
+            <mat-icon svgIcon="mat:delete" style="float: left;color: red; cursor:pointer"
               (click)="deleteReduction()"></mat-icon>
             <p style="float:left">{{'reduction' |translate}}</p>
             <p style="float:right">
@@ -101,11 +90,9 @@
           </span>
         </div>
       </div>
-      <div class="dateRow"
-       >
+      <div class="dateRow">
         <div>
-          <span class="hour"  *ngIf="this.calculateTotalVoucherPrice() < bookingData.price_total"
-            (click)="addBonus()"
+          <span class="hour" *ngIf="this.calculateTotalVoucherPrice() < bookingData.price_total" (click)="addBonus()"
             style="
           color: #E91E63;
            font-size: 14px;
@@ -118,11 +105,8 @@
             {{ "apply_bonus" | translate }}
           </span>
           <ng-container *ngIf="bookingData.vouchers?.length">
-            <span style="width: 100%; float:left"
-              *ngFor="let item of bookingData.vouchers; let i = index">
-              <mat-icon
-                svgIcon="mat:delete"
-                style="float: left;color: red; cursor:pointer"
+            <span style="width: 100%; float:left" *ngFor="let item of bookingData.vouchers; let i = index">
+              <mat-icon svgIcon="mat:delete" style="float: left;color: red; cursor:pointer"
                 (click)="deleteBonus(i);"></mat-icon>
               <p style="float:left">{{'bonus' |translate}}
                 {{item.bonus.code}}</p>
@@ -136,11 +120,8 @@
       </div>
       <div class="dateRow">
         <div>
-          <mat-checkbox
-            color="primary"
-            [(ngModel)]="bookingData.has_cancellation_insurance"
-            (change)="calculateRem($event)"
-            [disabled]="isNaN(this.cancellationInsurancePercent)"
+          <mat-checkbox color="primary" [(ngModel)]="bookingData.has_cancellation_insurance"
+            (change)="calculateRem($event)" [disabled]="isNaN(this.cancellationInsurancePercent)"
             style="float: left;"></mat-checkbox>
           <span class="hour">{{ "op_rem" | translate }}</span>
           <p style="float:right">
@@ -168,18 +149,11 @@
     </ng-container>
   </div>
 </div>
-<button *ngIf="!hideBotton"
-  style="height: 56px; width: 400px;border-radius: 3px;margin-top: 16px;"
-  color="primary"
-  mat-raised-button
-  type="button"
-  class="client-button" (click)="payClick.emit()">
+<button *ngIf="!hideBotton" style="height: 56px; width: 400px;border-radius: 3px;margin-top: 16px;" color="primary"
+  mat-raised-button type="button" class="client-button" (click)="payClick.emit()">
   {{ "end_reserve_pay" | translate }}
 </button>
-<button *ngIf="!hideBotton"
-  style="height: 38px; width: 400px;border-radius: 3px;margin-top: 16px;"
-  mat-raised-button
-  type="button"
-  class="client-button" (click)="addClick.emit()">
+<button *ngIf="!hideBotton" style="height: 38px; width: 400px;border-radius: 3px;margin-top: 16px;" mat-raised-button
+  type="button" class="client-button" (click)="addClick.emit()">
   {{ "add_activity" | translate }}
 </button>

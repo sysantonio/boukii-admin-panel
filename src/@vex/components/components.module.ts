@@ -31,6 +31,7 @@ import { PrivateDatesDialogComponent } from './private-dates-dialog/private-date
 import { TranslateModule } from '@ngx-translate/core';
 import { DateTimeDialogEditComponent } from './date-time-dialog-edit/date-time-dialog-edit.component';
 import { MatListModule } from '@angular/material/list';
+import { ComponenteButtonModule } from './form/button/app.module';
 
 
 @NgModule({
@@ -60,7 +61,9 @@ import { MatListModule } from '@angular/material/list';
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
-    TranslateModule, MatListModule
+    TranslateModule, MatListModule,
+    ComponenteButtonModule,
+
   ],
   declarations: [AioTableComponent, DateTimeDialogComponent, ReductionDialogComponent, PrivateDatesDialogComponent, DateTimeDialogEditComponent],
   exports: [AioTableComponent]

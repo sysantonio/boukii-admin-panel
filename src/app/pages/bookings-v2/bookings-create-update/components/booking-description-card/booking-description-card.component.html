@@ -2,7 +2,7 @@
   <div class="headerWrapper" [ngClass]="{'header1': course && course.course_type===1,
       'header2': course && course.course_type===2,
       'header3': course && course.course_type===3}" (click)="isDetail ? summaryMode = !summaryMode : null">
-    <span class="sportTitle">{{("00"+index+1).slice(-2)}}.</span>
+    <span class="sportTitle">{{("00"+index).slice(-2)}}.</span>
     <div *ngIf="sport || course">
       <img class="icon40" [class]="{ sportImg: !course, courseImg: course }" [src]="course?.icon || sport.icon_selected"
         [alt]="sport.name" />
@@ -21,9 +21,7 @@
     <ng-container *ngIf="course">
       <div class="flex flex-col">
         <h4 class="courseTitle">{{ course.name }}</h4>
-        <div
-          [style.background]="sportLevel?.color"
-          style="
+        <div [style.background]="sportLevel?.color" style="
       display: inline-block;
       padding: 0.2rem 0.5rem;
       color: #fff;
@@ -32,8 +30,7 @@
       font-size: 10px;
       width: 3rem;
       overflow: inherit;
-    "
-        >
+    ">
           {{ sportLevel?.league }}
         </div>
         <span class="courseSubtitle">
@@ -263,12 +260,12 @@
       </ng-container>
       <ng-template #noMonitor>
         <div class="utilizersWrapper">
-          <p>{{ "No monitor assigned" | translate }}</p>
+          <p>{{ "text_nomonitorset" | translate }}</p>
         </div>
       </ng-template>
       <ng-template #noDates>
         <div class="utilizersWrapper">
-          <p>{{ "No dates available" | translate }}</p>
+          <p>{{ "text_no_dates_month" | translate }}</p>
         </div>
       </ng-template>
     </div>

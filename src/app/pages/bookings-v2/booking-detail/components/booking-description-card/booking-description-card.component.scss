@@ -2,13 +2,14 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: white;
   border-radius: 8px;
-  border: 1px solid #dee6ea;
+  border: 1px solid var(--color-grey3);
 }
+
 .disabled {
-  background-color: lightgrey;
+  background-color: var(--color-grey1);
 }
+
 .headerWrapper {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
@@ -22,7 +23,6 @@
 .headerHover:hover {
   animation: fadeOut 1s;
   cursor: pointer;
-  background-color: white;
   border: 1px solid var(--color-grey3);
   border-radius: 8px;
   transform: scale(1.15);

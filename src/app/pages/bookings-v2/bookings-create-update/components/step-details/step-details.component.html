@@ -1,55 +1,28 @@
-
 <ng-container *ngIf="course.course_type === 2">
-  <booking-form-details-private
-    [course]="course"
-    [date]="date"
-    [utilizers]="utilizers"
-    [sportLevel]="sportLevel"
-    [initialData]="initialData"
-    [stepForm]="stepForm"
-    [selectedForm]="selectedForm"
-    [activitiesBooked]="activitiesBooked"
-    [addDateEvent]="addDateEvent"
-  ></booking-form-details-private>
+  <booking-form-details-private [course]="course" [date]="date" [utilizers]="utilizers" [sportLevel]="sportLevel"
+    [initialData]="initialData" [stepForm]="stepForm" [selectedForm]="selectedForm"
+    [activitiesBooked]="activitiesBooked" [addDateEvent]="addDateEvent"></booking-form-details-private>
 </ng-container>
 
 <ng-container *ngIf="course.course_type === 3">
-  <booking-form-details-activity
-    [course]="course"
-    [date]="date"
-    [utilizers]="utilizers"
-    [sportLevel]="sportLevel"
-    [initialData]="initialData"
-    [stepForm]="stepForm"
-    [addParticipantEvent]="addParticipantEvent"
-  ></booking-form-details-activity>
+  <booking-form-details-activity [course]="course" [date]="date" [utilizers]="utilizers" [sportLevel]="sportLevel"
+    [initialData]="initialData" [stepForm]="stepForm"
+    [addParticipantEvent]="addParticipantEvent"></booking-form-details-activity>
 </ng-container>
 
 <ng-container *ngIf="course.course_type === 1">
   <ng-container *ngIf="course.is_flexible">
     <mat-card-content class="card__content">
-      <booking-form-details-colective-flex
-        [course]="course"
-        [sportLevel]="sportLevel"
-        [utilizer]="utilizer"
-        [initialData]="initialData"
-        [activitiesBooked]="activitiesBooked"
-        [stepForm]="stepForm"
-        [selectedForm]="selectedForm"
-      ></booking-form-details-colective-flex>
+      <booking-form-details-colective-flex [course]="course" [sportLevel]="sportLevel" [utilizer]="utilizer"
+        [initialData]="initialData" [activitiesBooked]="activitiesBooked" [stepForm]="stepForm"
+        [selectedForm]="selectedForm"></booking-form-details-colective-flex>
     </mat-card-content>
   </ng-container>
   <ng-container *ngIf="!course.is_flexible">
     <mat-card-content class="card__content">
-      <booking-form-details-colective-fix
-        [course]="course"
-        [sportLevel]="sportLevel"
-        [utilizer]="utilizer"
-        [initialData]="initialData"
-        [stepForm]="stepForm"
-        [selectedForm]="selectedForm"
-      ></booking-form-details-colective-fix
-      ></mat-card-content>
+      <booking-form-details-colective-fix [course]="course" [sportLevel]="sportLevel" [utilizer]="utilizer"
+        [initialData]="initialData" [stepForm]="stepForm"
+        [selectedForm]="selectedForm"></booking-form-details-colective-fix></mat-card-content>
   </ng-container>
 </ng-container>
 
@@ -59,20 +32,13 @@
     {{ "back" | translate }}
   </button>
   <div>
-    <button mat-stroked-button type="button" *ngIf="course.course_type === 2"
-            (click)="addPrivateDate()">
+    <button mat-stroked-button type="button" *ngIf="course.course_type === 2" (click)="addPrivateDate()">
       {{ "add_date" | translate }}
     </button>
-    <button mat-stroked-button type="button" *ngIf="course.course_type === 3"
-            (click)="addParticipant()">
+    <button mat-stroked-button type="button" *ngIf="course.course_type === 3" (click)="addParticipant()">
       {{ "add_participant" | translate }}
     </button>
-    <button
-      mat-flat-button
-      type="button"
-      (click)="completeStep()"
-      [disabled]="!isFormValid"
-    >
+    <button mat-flat-button type="button" (click)="completeStep()" [disabled]="!isFormValid">
       {{ "confirm" | translate }}
     </button>
   </div>
