@@ -21,6 +21,16 @@
   margin-bottom: 16px;
   margin-top: 16px;
   color: #0d47a1;
+  span {
+    color: black;
+  }
+  mat-icon {
+    color: black;
+  }
+  mat-card-content {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .utilizerCard {

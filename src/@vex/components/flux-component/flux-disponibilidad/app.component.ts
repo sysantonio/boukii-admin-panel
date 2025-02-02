@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { ApiCrudService } from 'src/service/crud.service';
@@ -27,7 +29,7 @@ export class FluxDisponibilidadComponent implements OnInit {
 
   displayFn = (value: any): string => value
   selectDate: number = 0
-  constructor(private crudService: ApiCrudService) { }
+  constructor(private crudService: ApiCrudService, private snackbar: MatSnackBar, private translateService: TranslateService) { }
   getLanguages = () => this.crudService.list('/languages', 1, 1000).subscribe((data) => this.languages = data.data.reverse())
   getLanguage(id: any) {
     const lang: any = this.languages.find((c: any) => c.id == +id);
@@ -67,24 +69,39 @@ export class FluxDisponibilidadComponent implements OnInit {
   }
 
   changeMonitor(event: any) {
-    const bookingUsers = this.courseFormGroup.controls['booking_users'].value;
-    for (const selectedUser of this.selectUser) {
-      const userToModify = bookingUsers.find((user: any) => user.id === selectedUser.id);
-      if (userToModify) {
-        userToModify.course_group_id = event.course_group_id;
-        userToModify.course_subgroup_id = event.id;
-        userToModify.degree_id = event.degree_id;
-        userToModify.monitor_id = event.monitor_id;
+    const subIndex = event.date[0].course_subgroups.findIndex((a: any) => a.id === event.subgroup.id)
+    for (const [index, date] of event.date.entries()) {
+      if (date.course_subgroups[subIndex]?.id) {
+        for (const selectedUser of this.selectUser) {
+          const userToModify = this.courseFormGroup.controls['booking_users'].value.filter((user: any) => user.client.id === selectedUser.client.id && user.course_date_id === date.id);
+          if (userToModify.length > 0) {
+            for (const user of userToModify) {
+              const data = {
+                initialSubgroupId: user.course_subgroup_id,
+                targetSubgroupId: date.course_subgroups[subIndex].id,
+                clientIds: this.selectUser.map((a: any) => a.client_id),
+                moveAllDays: true
+              }
+              this.crudService.post('/clients/transfer', data).subscribe(() => {
+                user.course_group_id = date.course_subgroups[subIndex].course_group_id;
+                user.course_subgroup_id = date.course_subgroups[subIndex].id;
+                user.degree_id = date.course_subgroups[subIndex].degree_id;
+                user.monitor_id = date.course_subgroups[subIndex].monitor_id;
+                const course_groupsIndex = this.courseFormGroup.controls['course_dates'].value[index].course_groups.findIndex((a: any) => a.id === user.course_group_id)
+                const course_subgroupsIndex = this.courseFormGroup.controls['course_dates'].value[index].course_groups[course_groupsIndex].course_subgroups.findIndex((a: any) => a.id === user.course_subgroup_id)
+                this.courseFormGroup.controls['course_dates'].value[index].course_groups[course_groupsIndex].course_subgroups[course_subgroupsIndex].booking_users.push(user)
+              })
+            }
+          }
+        }
+      } else {
+        this.snackbar.open(
+          this.translateService.instant("user_transfer_not_allowed"), "OK",
+          //{ duration: 2000 }
+        );
       }
-      const data = {
-        initialSubgroupId: selectedUser.course_subgroup_id,
-        targetSubgroupId: event.id,
-        clientIds: this.selectUser.map((a: any) => a.client_id),
-        moveAllDays: true
-      }
-      this.crudService.post('/clients/transfer', data).subscribe()
     }
-    this.courseFormGroup.controls['booking_users'].setValue(bookingUsers);
+    console.log(this.courseFormGroup.controls['course_dates'].value)
     this.cambiarModal = false
   }
 

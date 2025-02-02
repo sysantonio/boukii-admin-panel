@@ -792,5 +792,7 @@
   "direct_payment": "Pago directo",
   "select_payment_method": "Selecciona la forma de pago",
   "online_payment": "Pago online",
-  "confirmation_without_payment": "Confirmación sin pago"
+  "confirmation_without_payment": "Confirmación sin pago",
+  "user_transfer_not_allowed": "No se permite trasladar usuario a subgrupo creado sin guardar previamente"
+
 }

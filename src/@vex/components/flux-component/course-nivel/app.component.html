@@ -53,8 +53,10 @@ flex-direction: column;">
 								{{item.annotation}}
 								{{item.level}} {{i+1}}
 							</span>
-							<button (click)="changeMonitor.emit(ix)" *ngIf="checkbox"
-								style="height: 20px; width: 100px;" color="primary" mat-raised-button type="button">
+							<button
+								(click)="changeMonitor.emit({date: courseFormGroup.controls['course_dates'].value, subgroup: ix})"
+								*ngIf="checkbox" style="height: 20px; width: 100px;" color="primary" mat-raised-button
+								type="button">
 								{{'add' | translate }}
 							</button>
 						</div>

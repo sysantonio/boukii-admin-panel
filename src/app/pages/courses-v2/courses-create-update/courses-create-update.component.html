@@ -313,41 +313,35 @@
 				<div class="level"
 					style="display: flex;flex-direction: column;padding: 20px; border-radius: 8px; gap: 10px;">
 					<ng-container *ngFor="let level of courses.courseFormGroup.controls['levelGrop'].value;index as i">
-						<div style="display: flex;gap: 16px;">
-							<mat-checkbox
-								[disabled]="mode==='update'&&courses.courseFormGroup.controls['levelGrop'].value[i].active"
-								[style.backgroundColor]="courses.courseFormGroup.controls['levelGrop'].value[i].active?level.color:level.color+'33'"
+						<div style="display: flex;gap: 16px;align-items: center;">
+							<mat-checkbox [disabled]="mode==='update'&&level.active"
+								[style.backgroundColor]="level.active?level.color:level.color+'33'"
 								[style.color]="level.color" [style.border]="'1px solid '+level.color"
-								[(ngModel)]="courses.courseFormGroup.controls['levelGrop'].value[i].active"
-								(click)="selectLevel($event,i)"
+								[(ngModel)]="level.active" (click)="selectLevel($event,i)"
 								style="height: 46px; border-radius: 3px; min-width: 225px;font-size: 12px;align-content: space-evenly;">
 								{{level.annotation}} {{level.level}}
 							</mat-checkbox>
-						</div>
-						<div *ngIf="courses.courseFormGroup.controls['levelGrop'].value[i].active"
-							style="display: flex;gap: 16px;">
-							<app-form-input [required]="true"
-								[value]="courses.courseFormGroup.controls['levelGrop'].value[i].age_min"
-								[max]="courses.courseFormGroup.controls['levelGrop'].value[i].age_max"
-								(do)="courses.courseFormGroup.controls['levelGrop'].value[i].age_min=$event.target.value;"
-								style="width: calc(33.33% - 10px - 16px);" name="courses.min_age" type="number"
-								Suffix="years">
-							</app-form-input>
-							<app-form-input [required]="true"
-								[value]="courses.courseFormGroup.controls['levelGrop'].value[i].age_max"
-								[min]="courses.courseFormGroup.controls['levelGrop'].value[i].age_min"
-								(do)="courses.courseFormGroup.controls['levelGrop'].value[i].age_max=$event.target.value;"
-								name="courses.max_age" style="width: calc(33.33% - 10px - 16px);" type="number"
-								Suffix="years">
-							</app-form-input>
-							<app-form-input [required]="true"
-								[value]="courses.courseFormGroup.controls['levelGrop'].value[i].max_participants"
-								(do)="courses.courseFormGroup.controls['levelGrop'].value[i].max_participants=$event.target.value;"
-								name="max_pax" style="width: calc(33.33% - 10px - 16px);" type="number" Suffix="paxes">
-							</app-form-input>
 							<mat-icon
-								(click)="addLevelSubgroup(courses.courseFormGroup.controls['levelGrop'].value[i],0,true)"
-								color="primary" style="color: white;
+								*ngIf="mode==='update'&&level.active&&!find(courses.courseFormGroup.controls['booking_users'].value,'degree_id',level.id)"
+								(click)="selectLevel({target:{checked:false}},i)"
+								style="cursor: pointer;float: inline-end;">
+								delete
+							</mat-icon>
+						</div>
+						<div *ngIf="level.active" style="display: flex;gap: 16px;">
+							<app-form-input [required]="true" [value]="level.age_min" [max]="level.age_max"
+								(do)="level.age_min=$event.target.value;" style="width: calc(33.33% - 10px - 16px);"
+								name="courses.min_age" type="number" Suffix="years">
+							</app-form-input>
+							<app-form-input [required]="true" [value]="level.age_max" [min]="level.age_min"
+								(do)="level.age_max=$event.target.value;" name="courses.max_age"
+								style="width: calc(33.33% - 10px - 16px);" type="number" Suffix="years">
+							</app-form-input>
+							<app-form-input [required]="true" [value]="level.max_participants"
+								(do)="level.max_participants=$event.target.value;" name="max_pax"
+								style="width: calc(33.33% - 10px - 16px);" type="number" Suffix="paxes">
+							</app-form-input>
+							<mat-icon (click)="addLevelSubgroup(level,0,true)" color="primary" style="color: white;
 										height: 30px;
 										min-width: 30px;
 										border-radius: 15px;
@@ -360,22 +354,21 @@
 							</mat-icon>
 						</div>
 						<ng-container
-							*ngIf="find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',courses.courseFormGroup.controls['levelGrop'].value[i].id)">
+							*ngIf="find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',level.id)">
 							<ng-container
-								*ngFor="let subgroup of find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',courses.courseFormGroup.controls['levelGrop'].value[i].id).course_subgroups; index as j">
+								*ngFor="let subgroup of find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',level.id).course_subgroups; index as j">
 								<div
 									style="background-color: var(--color-grey4); display: flex;width: 100%; height: 46px;justify-content: space-between;align-items: center; border-radius: 4px;padding: 10px;">
 									{{level.annotation}} {{level.level}} {{("00"+(j+1)).slice(-2)}}
-									<img *ngIf="j!==0 && !subgroup.booking_users"
-										(click)="addLevelSubgroup(courses.courseFormGroup.controls['levelGrop'].value[i],j,false)"
-										src="assets/icons/icon/delete.png" alt class="icon20"
+									<img *ngIf="find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',level.id).course_subgroups.length>1 && (!subgroup.booking_users || subgroup.booking_users.length===0)"
+										(click)="addLevelSubgroup(level,j,false)" src="assets/icons/icon/delete.png" alt
+										class="icon20"
 										style="cursor: pointer; font-size: 20px;align-content: space-evenly;filter: var(--is-dark-theme,invert(1));">
 								</div>
 								<div *ngIf="mode==='update'"
 									style="width: 100%;margin-top: -10px;padding: 10px; background-color: var(--color-grey4);">
-									<vex-flux-disponibilidad [courseFormGroup]="courses.courseFormGroup"
-										[level]="courses.courseFormGroup.controls['levelGrop'].value[i]"
-										[group]="find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',courses.courseFormGroup.controls['levelGrop'].value[i].id)"
+									<vex-flux-disponibilidad [courseFormGroup]="courses.courseFormGroup" [level]="level"
+										[group]="find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',level.id)"
 										[subgroup_index]="j" (monitorSelect)="monitorSelect($event,level,j);">
 									</vex-flux-disponibilidad>
 								</div>

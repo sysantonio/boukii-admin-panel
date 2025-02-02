@@ -782,5 +782,6 @@
   "bookings_page.description.utilizers": "Participants",
   "bookings_page.description.monitor": "Moniteur",
   "bookings_page.description.total": "Total",
-  "bookings_page.buttons.save&CreateBooking": "Enregistrer et faire une nouvelle réservation"
+  "bookings_page.buttons.save&CreateBooking": "Enregistrer et faire une nouvelle réservation",
+  "user_transfer_not_allowed": "Le transfert de l'utilisateur vers un sous-groupe créé n'est pas autorisé sans sauvegarde préalable"
 }
