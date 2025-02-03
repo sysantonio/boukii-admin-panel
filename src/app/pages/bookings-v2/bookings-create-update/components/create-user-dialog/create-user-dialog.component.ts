@@ -19,12 +19,12 @@ export class CreateUserDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<any>
   ) { }
-  user;
+  user: any;
   expandClients: any[];
   stepForm: FormGroup;
   filteredOptions: Observable<any[]>;
-  languages;
-
+  languages: any;
+  today: Date = new Date()
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
     this.languages = this.langService.getLanguages();
@@ -47,11 +47,8 @@ export class CreateUserDialogComponent implements OnInit {
     this.filteredOptions = this.stepForm.get("client")!.valueChanges.pipe(
       startWith(""),
       debounceTime(300),
-      map((value: any) =>
-        typeof value === "string" ? value : this.displayFn(value)
-      ),
-      map((name) =>
-        name ? this._filter(name) : this.expandClients?.slice(0, 50)
+      map((value: any) => typeof value === "string" ? value : this.displayFn(value)),
+      map((name) => name ? this._filter(name) : this.expandClients?.slice(0, 50)
       )
     );
   }

@@ -8,7 +8,7 @@ import {
 } from '../../../../clients/client-create-update-modal/client-create-update-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UtilsService } from '../../../../../../service/utils.service';
-import {switchMap} from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: "booking-step-one",
@@ -61,7 +61,7 @@ export class StepOneComponent implements OnInit {
           `&school_id=${this.user.schools[0].id}&active=1&search=${value}`
         )
       ),
-      map((response:any) => this.getExpandClients(response.data)),
+      map((response: any) => this.getExpandClients(response.data)),
     );
   }
 
@@ -77,7 +77,7 @@ export class StepOneComponent implements OnInit {
 
     const dialogRef = this.dialog.open(ClientCreateUpdateModalComponent, {
       width: '1000px', // Asegurarse de que no haya un ancho máximo
-      height: '1000px', // Asegurarse de que no haya un ancho máximo
+      height: 'max-content', // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
       data: { id: this.user.schools[0].id }
     });

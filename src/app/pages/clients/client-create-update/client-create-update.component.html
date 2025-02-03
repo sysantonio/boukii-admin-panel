@@ -99,7 +99,7 @@
                 <mat-label>Email</mat-label>
                 <input formControlName="email" matInput required type="mail"
                   [(ngModel)]="defaults.email">
-                <mat-icon class="mr-2" matPrefix>main</mat-icon>
+                <mat-icon class="mr-2" matPrefix>mail</mat-icon>
                 <mat-error
                   *ngIf="formInfoAccount.controls?.email?.errors?.['required']">
                   {{'clients.creation.errors.email' | translate }}

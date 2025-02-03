@@ -24,14 +24,10 @@
   </form>
 
   <div class="stepButtonsWrapper">
-    <button mat-button type="button" (click)="handlePrevStep()">
-      <mat-icon class="icon-sm" svgIcon="mat:arrow_back"></mat-icon>
-      {{ "back" | translate }}
-    </button>
-    <div>
-      <button mat-flat-button type="button" (click)="completeStep()" [disabled]="!isFormValid()">
-        {{ "confirm" | translate }}
-      </button>
-    </div>
+    <app-form-button (click)="handlePrevStep()" form="back" name="back" icon="mat:arrow_back">
+    </app-form-button>
+
+    <app-form-button (click)="completeStep()" [disabled]="!isFormValid()" form="flat" icon="mat:add" name="confirm">
+    </app-form-button>
   </div>
 </mat-card-content>

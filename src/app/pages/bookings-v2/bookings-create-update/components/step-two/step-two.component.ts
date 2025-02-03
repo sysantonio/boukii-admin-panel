@@ -6,7 +6,7 @@ import { LangService } from "src/service/langService";
 import { UtilsService } from "src/service/utils.service";
 import { CreateUserDialogComponent } from "../create-user-dialog/create-user-dialog.component";
 import * as moment from 'moment/moment';
-import {ApiCrudService} from '../../../../../../service/crud.service';
+import { ApiCrudService } from '../../../../../../service/crud.service';
 
 @Component({
   selector: "booking-step-two",
@@ -31,7 +31,7 @@ export class StepTwoComponent implements OnInit {
     protected utilsService: UtilsService,
     public dialog: MatDialog,
     private crudService: ApiCrudService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.utilizers = [this.client, ...this.client.utilizers];
@@ -89,10 +89,35 @@ export class StepTwoComponent implements OnInit {
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
         if (data.action === 'new') {
-          this.crudService.create('/clients-utilizers', { client_id: data.ret,
-            main_id: this.client.id })
-            .subscribe((res) => {
-              this.utilizers = [res, ...this.client.utilizers];
+          const client = {
+            email: this.client.email,
+            first_name: data.data.name,
+            last_name: data.data.surname,
+            birth_date: moment(data.data.birthDate).format('DD.MM.yyyy'),
+            phone: this.client.phone,
+            telephone: this.client.telephone,
+            address: this.client.address,
+            cp: this.client.cp,
+            city: this.client.city,
+            province: this.client.province,
+            country: this.client.country,
+            image: null,
+            language1_id: data.data.lenguages[0]?.id,
+            language2_id: data.data.lenguages[1]?.id,
+            language3_id: data.data.lenguages[2]?.id,
+            language4_id: data.data.lenguages[3]?.id,
+            language5_id: data.data.lenguages[4]?.id,
+            language6_id: data.data.lenguages[5]?.id,
+            station_id: this.client.station_id
+          }
+          this.crudService.create('/clients', client)
+            .subscribe((clientCreated: any) => {
+              this.crudService.create('/clients-utilizers', {
+                client_id: clientCreated.data.id,
+                main_id: this.client.id
+              }).subscribe((res) => {
+                this.utilizers = [this.client, ...this.client.utilizers, client];
+              })
             })
         }
       }

@@ -39,7 +39,7 @@
           <mat-icon style="color:white">message-text" ></mat-icon>
           <a href="mailto:{{defaults?.email}}" style="cursor:pointer"
             title="{{defaults?.email}}">
-            <mat-icon style="color:white">main</mat-icon>
+            <mat-icon style="color:white">mail</mat-icon>
           </a>
           <a href="tel:{{defaults?.phone}}" style="cursor:pointer"
             title="{{defaults?.phone}}">
@@ -139,7 +139,7 @@
                 <div
                   @scaleIn
                   class="w-10 h-10 rounded-full bg-primary-600/10 text-primary-600 ltr:mr-3 rtl:ml-3 flex items-center justify-center">
-                  <mat-icon class="icon-sm">main</mat-icon>
+                  <mat-icon class="icon-sm">mail</mat-icon>
                 </div>
 
                 <div @fadeInRight>
@@ -1670,7 +1670,7 @@
                     <mat-label>Email</mat-label>
                     <input formControlName="email" matInput required type="mail"
                       [(ngModel)]="defaults.email">
-                    <mat-icon class="mr-2" matPrefix>main</mat-icon>
+                    <mat-icon class="mr-2" matPrefix>mail</mat-icon>
 
                   </mat-form-field>
 

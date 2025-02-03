@@ -101,7 +101,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
     password: null,
     image: null,
     type: 'clients',
-    active: false,
+    active: true,
   }
 
   loading: boolean = true;

@@ -28,6 +28,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { ClientCreateUpdateModalComponent } from './client-create-update-modal.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { IconComponent } from 'src/@vex/components/icon/app.component';
+import { ComponenteButtonModule } from 'src/@vex/components/form/button/app.module';
 
 @NgModule({
   imports: [
@@ -60,7 +61,7 @@ import { IconComponent } from 'src/@vex/components/icon/app.component';
     MatDialogModule,
     MatTableModule,
     MatSortModule,
-    MatChipsModule
+    MatChipsModule, ComponenteButtonModule
   ],
   declarations: [ClientCreateUpdateModalComponent],
   exports: [ClientCreateUpdateModalComponent]

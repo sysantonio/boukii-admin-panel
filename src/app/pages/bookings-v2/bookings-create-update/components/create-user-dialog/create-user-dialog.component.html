@@ -8,9 +8,6 @@
 <mat-dialog-content>
   <form [formGroup]="stepForm">
     <div class="newUtilizerSection">
-      <h5 class="mb-5">
-        {{ "createUtilizer.title" | translate }}
-      </h5>
       <div>
         <mat-form-field appearance="outline">
           <mat-label>{{ "name" | translate }}</mat-label>
@@ -22,7 +19,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>{{ "birth_date" | translate }}</mat-label>
-          <input matInput required readonly (click)="picker.open()" [matDatepicker]="picker"
+          <input matInput required readonly (click)="picker.open()" [matDatepicker]="picker" [max]="today"
             formControlName="birthDate" />
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
@@ -41,11 +38,9 @@
 </mat-dialog-content>
 
 <div class="buttonsWrapper">
-  <button mat-stroked-button mat-dialog-close type="button">
-    {{ "cancel" | translate }}
-  </button>
 
-  <button mat-flat-button type="button" (click)="handleConfirm()" [disabled]="!isFormValid()">
-    {{ "confirm" | translate }}
-  </button>
+  <app-form-button form="back" mat-dialog-close name="cancel">
+  </app-form-button>
+  <app-form-button [disabled]="!isFormValid()" form="flat" name="confirm" (click)="handleConfirm()">
+  </app-form-button>
 </div>
