@@ -3240,16 +3240,19 @@ export class BookingDetailComponent implements OnInit {
   }
 
   getCourseExtraForfait(forfait: any, data: any) {
-    const courseExtra = this.courseExtra.find(
-      (c) =>
-        c.course_id === data.course_id &&
-        c.course_date_id === data.course_date_id &&
-        forfait.id === c.name
+    const courseExtra = data.booking_user_extras.find(
+      (extra: any) =>
+        extra.course_extra.course_id === data.course_id &&
+        extra.course_extra.course_date_id === data.course_date_id &&
+        forfait.id === extra.course_extra.name
     );
+
     if (courseExtra) {
       data.forfait = courseExtra;
       return true;
     }
+
+    return false;
   }
 
   convertToInt(value: any) {
@@ -3258,14 +3261,15 @@ export class BookingDetailComponent implements OnInit {
 
   getCourseExtraForfaitPrice(data: any) {
     let ret = 0;
-    this.courseExtra.forEach((c) => {
-      if (c.course_id === data.course_id) {
-        ret = ret + parseFloat(c.price);
-        data.forfait = c;
+    data.booking_user_extras.forEach((extra: any) => {
+      if (extra.course_extra.course_id === data.course_id) {
+        ret += parseFloat(extra.course_extra.price);
+        data.forfait = extra.course_extra; // Esto asigna el último extra, ¿es correcto?
       }
     });
     return ret;
   }
+
 
   getCourseExtraForfaitPriceByDateHour(data: any) {
     let bookingUsers = this.getBookingUsersByCourseDateAndHour(
@@ -3288,23 +3292,23 @@ export class BookingDetailComponent implements OnInit {
 
   getCourseExtraForfaitPriceByCourse(data) {
     let ret = 0;
-    this.courseExtra
-      .filter((c) => c.course_id === data.course_id)
-      .forEach((c) => {
-        ret += parseFloat(c.price);
-        data.forfait = c;
-      });
+    data.booking_user_extras.forEach((extra: any) => {
+      if (extra.course_extra.course_id === data.course_id) {
+        ret += parseFloat(extra.course_extra.price);
+        data.forfait = extra.course_extra; // Esto asigna el último extra, ¿es correcto?
+      }
+    });
     return ret;
   }
 
   getCourseExtraForfaitPriceByBookingUser(data) {
     let ret = 0;
-    this.courseExtra
-      .filter((c) => c.booking_user_id === data.id)
-      .forEach((c) => {
-        ret += parseFloat(c.price);
-        data.forfait = c;
-      });
+    data.booking_user_extras.forEach((extra: any) => {
+      if (extra.course_extra.course_id === data.course_id) {
+        ret += parseFloat(extra.course_extra.price);
+        data.forfait = extra.course_extra; // Esto asigna el último extra, ¿es correcto?
+      }
+    });
     return ret;
   }
 
