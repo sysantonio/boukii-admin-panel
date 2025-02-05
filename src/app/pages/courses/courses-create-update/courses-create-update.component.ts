@@ -1082,9 +1082,9 @@ export class CoursesCreateUpdateComponent implements OnInit, AfterViewInit {
     if (this.mode === 'update') {
 
       this.dataSource.data.forEach(element => {
-        if (element.active || element.active === 1) {
+/*        if (element.active || element.active === 1) {
           blockedDays.push(moment(element.date).toDate())
-        }
+        }*/
       });
     }
 

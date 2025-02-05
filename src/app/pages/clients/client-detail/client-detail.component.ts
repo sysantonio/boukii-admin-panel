@@ -291,7 +291,7 @@ export class ClientDetailComponent {
             });
           });
           if (data.data.observations.length > 0) {
-            this.defaultsObservations = data.data[0];
+            this.defaultsObservations = data.data.observations[0];
           } else {
             this.defaultsObservations = {
               id: null,
