@@ -14,7 +14,7 @@
   <mat-divider class="text-border"></mat-divider>
 
   <div @fadeInUp class="card flex-auto">
-    <div class="px-6 py-4 border-b flex items-center">
+    <!--<div class="px-6 py-4 border-b flex items-center">
       <div style="float: left;width: 50%;">
         <h2 class="title m-0">{{'new_client' | translate }}</h2>
       </div>
@@ -24,23 +24,15 @@
             [ngModelOptions]="{standalone: true}"></mat-slide-toggle>
         </div>
       </div>
-    </div>
+    </div>-->
     <mat-vertical-stepper #stepper="matHorizontalStepper" [linear]="true">
-
-      <ng-template matStepperIcon="edit">
-        <mat-icon svgIcon="mat:done_all"></mat-icon>
-      </ng-template>
-
-      <ng-template matStepperIcon="done">
-        <mat-icon svgIcon="mat:done_all"></mat-icon>
-      </ng-template>
 
       <mat-step [stepControl]="formInfoAccount">
         <form [formGroup]="formInfoAccount">
-          <ng-template matStepLabel>{{'monitors.creation.info' | translate
-            }}</ng-template>
-
-          <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
+          <ng-template matStepLabel>{{'monitors.creation.info' | translate }}</ng-template>
+          <vex-flux-upload-img [imagePreviewUrl]="defaults.image" (upload)="onFileChanged($event)"
+            style="margin-top: 10px;"></vex-flux-upload-img>
+          <!--<div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
             <div class="image-container">
               <img
                 [src]="defaults.image !== null && defaults.image !== '' ? defaults.image : '../../../../assets/img/no-image.jpg'"
@@ -57,47 +49,21 @@
               <p style="font-size: 12px">{{'image_recomendation' |
                 translate}}</p>
             </div>
+          </div>-->
+          <div style="display: flex; flex-wrap: wrap; column-gap: 20px;">
+            <app-form-input name="name_client" (do)="defaults.first_name=$event.target.value" control="name"
+              style="width: calc(50% - 10px);" [form]="formInfoAccount"></app-form-input>
+            <app-form-input name="surname" (do)="defaults.last_name=$event.target.value" control="surname"
+              style="width: calc(50% - 10px);" [form]="formInfoAccount"></app-form-input>
           </div>
 
-          <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
-            <mat-form-field appearance="outline" class="flex-auto">
-              <mat-label>{{'name_client' | translate }}</mat-label>
-              <input formControlName="name" matInput required type="text" [(ngModel)]="defaults.first_name">
-              <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
-              <mat-error *ngIf="formInfoAccount.controls['name']?.errors?.['required']">
-                {{'clients.creation.errors.name' | translate }}
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="flex-auto">
-              <mat-label>{{'surname' | translate }}</mat-label>
-              <input formControlName="surname" matInput required type="text" [(ngModel)]="defaults.last_name">
-              <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
-              <mat-error *ngIf="formInfoAccount.controls['surname']?.errors?.['required']">
-                {{'course_detail' |translate}}
-              </mat-error>
-            </mat-form-field>
+          <div style="display: flex; flex-wrap: wrap; column-gap: 20px;">
+            <app-form-input name="email" (do)="defaults.email=$event.target.value" control="email" type="email"
+              style="width: calc(50% - 10px);" [form]="formInfoAccount"></app-form-input>
+            <app-form-input name="username" (do)="defaultsUser.username=$event.target.value" control="username"
+              style="width: calc(50% - 10px);" [form]="formInfoAccount"></app-form-input>
           </div>
 
-          <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-            <mat-form-field appearance="outline" class="flex-auto">
-              <mat-label>Email</mat-label>
-              <input formControlName="email" matInput required type="mail" [(ngModel)]="defaults.email">
-              <mat-icon class="mr-2" matPrefix>mail</mat-icon>
-              <mat-error *ngIf="formInfoAccount.controls['email']?.errors?.['required']">
-                {{'clients.creation.errors.email' | translate }}
-              </mat-error>
-              <mat-error *ngIf="formInfoAccount.controls['email']?.errors?.['email']">
-                {{'clients.creation.errors.email_format' | translate }}
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="flex-auto">
-              <mat-label>{{'username' | translate }}</mat-label>
-              <input formControlName="username" matInput type="text" [(ngModel)]="defaultsUser.username">
-              <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
-            </mat-form-field>
-          </div>
           <div class="actions flex items-center justify-end gap-2">
             <app-form-button form="back" [mat-dialog-close]="false" name="cancel">
             </app-form-button>
@@ -112,8 +78,7 @@
       </mat-step>
       <mat-step [stepControl]="formPersonalInfo">
         <form [formGroup]="formPersonalInfo">
-          <ng-template matStepLabel>{{'personal_data' | translate
-            }}</ng-template>
+          <ng-template matStepLabel>{{'personal_data' | translate }}</ng-template>
 
           <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
 
@@ -130,39 +95,19 @@
 
           </div>
 
-          <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-            <mat-form-field appearance="outline" class="flex-auto">
-              <mat-label>{{'phone' | translate }}</mat-label>
 
-              <input formControlName="phone" matInput type="tel" [(ngModel)]="defaults.telephone">
-              <mat-icon class="mr-2" matPrefix>phone</mat-icon>
-
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="flex-auto">
-              <mat-label>{{'mobile' | translate }}</mat-label>
-              <input formControlName="mobile" matInput required type="tel" [(ngModel)]="defaults.phone">
-              <mat-icon class="mr-2" matPrefix>phone</mat-icon>
-
-              <mat-error *ngIf="formPersonalInfo.controls?.mobile?.errors?.['required']">
-                {{'clients.creation.errors.mobile' | translate }}
-              </mat-error>
-            </mat-form-field>
+          <div style="display: flex; flex-wrap: wrap; column-gap: 20px;">
+            <app-form-input name="phone" (do)="defaults.telephone=$event.target.value" control="phone"
+              style="width: calc(50% - 10px);" [form]="formPersonalInfo"></app-form-input>
+            <app-form-input name="mobile" (do)="defaults.phone=$event.target.value" control="mobile"
+              style="width: calc(50% - 10px);" [form]="formPersonalInfo"></app-form-input>
           </div>
 
-          <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-            <mat-form-field appearance="outline" class="flex-auto">
-              <mat-label>{{'address' | translate }}</mat-label>
-
-              <input formControlName="address" matInput type="text" [(ngModel)]="defaults.address">
-              <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="flex-auto">
-              <mat-label>{{'cp' | translate }}</mat-label>
-              <input formControlName="postalCode" matInput type="text" [(ngModel)]="defaults.cp">
-              <mat-icon class="mr-2" matPrefix svgIcon="logo:task"></mat-icon>
-            </mat-form-field>
+          <div style="display: flex; flex-wrap: wrap; column-gap: 20px;">
+            <app-form-input name="address" (do)="defaults.address=$event.target.value" control="address"
+              style="width: calc(50% - 10px);" [form]="formPersonalInfo"></app-form-input>
+            <app-form-input name="cp" (do)="defaults.cp=$event.target.value" control="postalCode"
+              style="width: calc(50% - 10px);" [form]="formPersonalInfo"></app-form-input>
           </div>
 
           <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
@@ -193,7 +138,8 @@
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="flex-auto">
-              <mat-label style="display: flex;align-items: center;"> <vex-icon src="chat"> </vex-icon> {{'langs' | translate }}</mat-label>
+              <mat-label style="display: flex;align-items: center;"> <vex-icon src="chat"> </vex-icon> {{'langs' |
+                translate }}</mat-label>
               <mat-select [formControl]="languagesControl" multiple>
                 <mat-select-trigger>
                   <div *ngIf="selectedLanguages.length > 0; else placeholderLangs">
@@ -235,8 +181,7 @@
                   <div *ngIf="sportsControl.value?.length > 0; else placeholder">
                     {{ getSelectedSportsNames() }}
                   </div>
-                  <ng-template #placeholder>{{'choose_sports' | translate
-                    }}</ng-template>
+                  <ng-template #placeholder>{{'choose_sports' | translate }}</ng-template>
                 </mat-select-trigger>
 
                 <mat-option *ngFor="let sport of filteredSports | async" [value]="sport"

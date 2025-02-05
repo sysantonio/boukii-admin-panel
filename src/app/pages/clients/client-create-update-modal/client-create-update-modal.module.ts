@@ -29,6 +29,8 @@ import { ClientCreateUpdateModalComponent } from './client-create-update-modal.c
 import { TranslateModule } from '@ngx-translate/core';
 import { IconComponent } from 'src/@vex/components/icon/app.component';
 import { ComponenteButtonModule } from 'src/@vex/components/form/button/app.module';
+import { FluxUploadImgModule } from 'src/@vex/components/form/upload-img/app.module';
+import { ComponenteInputModule } from 'src/@vex/components/form/input/app.module';
 
 @NgModule({
   imports: [
@@ -61,7 +63,10 @@ import { ComponenteButtonModule } from 'src/@vex/components/form/button/app.modu
     MatDialogModule,
     MatTableModule,
     MatSortModule,
-    MatChipsModule, ComponenteButtonModule
+    MatChipsModule,
+    ComponenteButtonModule,
+    FluxUploadImgModule,
+    ComponenteInputModule
   ],
   declarations: [ClientCreateUpdateModalComponent],
   exports: [ClientCreateUpdateModalComponent]

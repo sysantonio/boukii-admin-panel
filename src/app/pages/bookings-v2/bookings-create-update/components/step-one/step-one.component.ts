@@ -3,12 +3,10 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable, debounceTime, map, skip, startWith } from "rxjs";
 import { ApiCrudService } from "src/service/crud.service";
 import { ApiResponse } from "src/app/interface/api-response";
-import {
-  ClientCreateUpdateModalComponent
-} from '../../../../clients/client-create-update-modal/client-create-update-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UtilsService } from '../../../../../../service/utils.service';
 import { switchMap } from 'rxjs/operators';
+import { ClientCreateUpdateModalComponent } from "src/app/pages/clients/client-create-update-modal/client-create-update-modal.component";
 
 @Component({
   selector: "booking-step-one",
@@ -76,9 +74,9 @@ export class StepOneComponent implements OnInit {
   addClient() {
 
     const dialogRef = this.dialog.open(ClientCreateUpdateModalComponent, {
-      width: '1000px', // Asegurarse de que no haya un ancho máximo
-      height: 'max-content', // Asegurarse de que no haya un ancho máximo
-      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales,
+      width: '1000px',
+      height: 'max-content',
+      panelClass: 'full-screen-dialog',
       data: { id: this.user.schools[0].id }
     });
 

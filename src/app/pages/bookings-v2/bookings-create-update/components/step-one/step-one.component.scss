@@ -41,3 +41,8 @@
   width: 100%; /* Usar el ancho completo del contenedor */
   overflow-y: auto; /* Habilita el scroll vertical */
 }
+::ng-deep mat-form-field {
+  label {
+    display: flex !important;
+  }
+}

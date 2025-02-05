@@ -7,16 +7,14 @@
   margin: 20px auto;
 }
 
-.full-screen-dialog {
-
-}
 .custom-card {
   transition: all 0.3s ease;
   box-shadow: none;
   border: 2px solid transparent; /* Añadido para mantener el mismo tamaño de la tarjeta al cambiar el borde */
 }
 
-.custom-card:hover, .custom-card.selected {
+.custom-card:hover,
+.custom-card.selected {
   transform: translateY(-5px);
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.12);
   border: 2px solid #ff3085; /* Añade un borde del color deseado */
@@ -24,7 +22,12 @@
 }
 
 .selected {
-  background-color: rgba(255, 48, 133, 0.1); /* Color de fondo ligero para mejorar la selección */
+  background-color: rgba(
+    255,
+    48,
+    133,
+    0.1
+  ); /* Color de fondo ligero para mejorar la selección */
 }
 
 .smaller-calendar {
@@ -38,10 +41,9 @@
 }
 
 .columns-container {
-  display: flex;  /* Establecemos un contenedor flex */
-  width: 100%;    /* Aseguramos que tome todo el ancho disponible */
+  display: flex; /* Establecemos un contenedor flex */
+  width: 100%; /* Aseguramos que tome todo el ancho disponible */
   height: 100%; /* Asegura que ocupe toda la altura disponible */
-
 }
 
 .calendar-column {
@@ -64,7 +66,6 @@
   max-height: 100%; /* Cambia esto para que ocupe toda la altura disponible */
   overflow-y: auto;
 }
-
 
 .custom-list-item {
   display: flex;
@@ -92,7 +93,7 @@
   flex-direction: column;
   justify-content: center; /* Alinea el contenido verticalmente al centro */
   flex-grow: 1; /* Ocupa el espacio restante */
-  padding: 10px 0 0 15px;/* Espacio entre la imagen y el contenido */
+  padding: 10px 0 0 15px; /* Espacio entre la imagen y el contenido */
   float: left;
   width: 90%;
 }
@@ -126,7 +127,6 @@ img {
   border-radius: 1rem;
 }
 
-
 [type="file"] {
   height: 0;
   overflow: hidden;
@@ -134,14 +134,14 @@ img {
 }
 
 [type="file"] + label {
-  background: #FF3085;
+  background: #ff3085;
   border: none;
   border-radius: 5px;
   color: #fff;
   cursor: pointer;
   display: inline-block;
-	font-family: 'Rubik', sans-serif;
-	font-size: inherit;
+  font-family: "Rubik", sans-serif;
+  font-size: inherit;
   font-weight: 500;
   margin-bottom: 1rem;
   outline: none;
@@ -151,30 +151,43 @@ img {
   vertical-align: middle;
 
   &:hover {
-    background-color: darken(#FF3085, 10%);
+    background-color: darken(#ff3085, 10%);
   }
 
   &.btn-1 {
-    background-color: #FF3085;
-    box-shadow: 0 6px darken(#FF3085, 10%);
+    background-color: #ff3085;
+    box-shadow: 0 6px darken(#ff3085, 10%);
     transition: none;
 
     &:hover {
-      box-shadow: 0 4px darken(#FF3085, 10%);
+      box-shadow: 0 4px darken(#ff3085, 10%);
       top: 2px;
     }
   }
-
 }
 
 .input-container {
   padding: 0 0 0 10px;
 }
 
-.image-container, .input-container {
-  float:left;
+.image-container,
+.input-container {
+  float: left;
 }
 
 ::ng-deep .mdc-evolution-chip__text-label {
   color: white !important;
+}
+::ng-deep .mat-vertical-stepper-header .mat-step-icon {
+  display: none;
+}
+::ng-deep .mat-step-header {
+  border-top: 1px solid var(--color-grey2);
+  border-bottom: 1px solid var(--color-grey2);
+}
+::ng-deep .mat-vertical-content-container {
+  margin-left: 0 !important;
+}
+::ng-deep .mat-vertical-content {
+  margin-top: 20px;
 }
