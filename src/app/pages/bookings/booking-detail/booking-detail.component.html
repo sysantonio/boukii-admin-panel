@@ -214,8 +214,8 @@
                     date.date
                     | date: "fullDate":"":translateService.currentLang
                     }}
-                    - {{ date.hour_start.slice(0, -3) }} /
-                    {{ date.hour_end.slice(0, -3) }}
+ {{ date.hour_start.length === 8 ? date.hour_start.slice(0, -3) : date.hour_start }}h -
+  {{ date.hour_end.length === 8 ? date.hour_end.slice(0, -3) : date.hour_end }}h
 									</li>
 								</ng-container>
 							</ul>
@@ -671,6 +671,7 @@
 								class="text-border"></mat-divider>
 
 							<div style="width: 100%;float:left;margin: 20px 0 0 0;padding: 10px;">
+
 								<div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 									<mat-form-field appearance="outline"
 										class="flex-auto">
@@ -685,8 +686,10 @@
 											required
 											type="text">
 									</mat-form-field>
+                  <div *ngIf="item.courseDates[0] && item.courseDates[0].notes" class="warning-icon-container">
+                    <mat-icon color="warn" class="warning-icon">warning</mat-icon>
+                  </div>
 								</div>
-
 								<div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 									<mat-form-field appearance="outline"
 										class="flex-auto">
@@ -701,7 +704,11 @@
 											required
 											type="text">
 									</mat-form-field>
+                  <div *ngIf="item.courseDates[0] && item.courseDates[0].notes_school" class="warning-icon-container">
+                    <mat-icon color="warn" class="warning-icon">warning</mat-icon>
+                  </div>
 								</div>
+
 							</div>
 						</mat-card-content>
 					</mat-card>

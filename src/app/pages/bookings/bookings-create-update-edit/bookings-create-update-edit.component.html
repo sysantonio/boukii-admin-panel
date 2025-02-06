@@ -1739,8 +1739,8 @@
                     date.date
                     | date: "fullDate":"":translateService.currentLang
                     }}
-                    - {{ date.hour_start.slice(0, -3) }} /
-                    {{ date.hour_end.slice(0, -3) }}
+ {{ date.hour_start.length === 8 ? date.hour_start.slice(0, -3) : date.hour_start }}h -
+  {{ date.hour_end.length === 8 ? date.hour_end.slice(0, -3) : date.hour_end }}h
                   </li>
                 </ng-container>
               </ul>
@@ -2324,8 +2324,8 @@
                       date.date
                         | date: "fullDate":"":translateService.currentLang
                     }}
-                    - {{ date.hour_start.slice(0, -3) }} /
-                    {{ date.hour_end.slice(0, -3) }}
+ {{ date.hour_start.length === 8 ? date.hour_start.slice(0, -3) : date.hour_start }}h -
+  {{ date.hour_end.length === 8 ? date.hour_end.slice(0, -3) : date.hour_end }}h
                   </li>
                 </ng-container>
               </ul>
