@@ -9,3 +9,7 @@ button:hover {
         color: white !important;
     }
 }
+
+button {
+    padding: 0 15px !important;
+}
