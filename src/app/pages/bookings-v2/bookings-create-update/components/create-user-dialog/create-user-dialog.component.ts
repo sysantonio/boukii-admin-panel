@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { debounceTime, map, Observable, startWith } from "rxjs";
+import { Observable } from "rxjs";
 import { ApiResponse } from "src/app/interface/api-response";
 import { ApiCrudService } from "src/service/crud.service";
 import { LangService } from "src/service/langService";
@@ -19,24 +19,16 @@ export class CreateUserDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<any>
   ) { }
+
   user: any;
   expandClients: any[];
   stepForm: FormGroup;
-  filteredOptions: Observable<any[]>;
   languages: any;
   today: Date = new Date()
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
     this.languages = this.langService.getLanguages();
-    this.getClients().subscribe({
-      next: (response) => {
-        this.expandClients = this.getExpandClients(response.data);
-      },
-      error: (err) => {
-        console.error("Error en la petición getClients", err);
-      },
-    });
-
+    this.getClients().subscribe({ next: (response) => this.expandClients = this.getExpandClients(response.data) });
     this.stepForm = this.fb.group({
       name: ["", Validators.required],
       surname: ["", Validators.required],
@@ -44,21 +36,7 @@ export class CreateUserDialogComponent implements OnInit {
       lenguages: ["", Validators.required],
     });
 
-    this.filteredOptions = this.stepForm.get("client")!.valueChanges.pipe(
-      startWith(""),
-      debounceTime(300),
-      map((value: any) => typeof value === "string" ? value : this.displayFn(value)),
-      map((name) => name ? this._filter(name) : this.expandClients?.slice(0, 50)
-      )
-    );
   }
-
-  displayFn(client: any): string {
-    return client && client?.first_name && client?.last_name
-      ? client?.first_name + " " + client?.last_name
-      : client?.first_name;
-  }
-
   getClients(): Observable<ApiResponse> {
     return this.crudService.list(
       "/admin/clients/mains",
@@ -70,19 +48,12 @@ export class CreateUserDialogComponent implements OnInit {
     );
   }
 
-  setClient(ev) {
-    this.stepForm.patchValue({
-      client: ev.source.value,
-    });
-  }
-
   isFormValid() {
     return this.stepForm.valid;
   }
 
   handleConfirm() {
     const data = this.stepForm.value;
-
     this.dialogRef.close({
       action: 'new',
       data: data,
@@ -101,12 +72,4 @@ export class CreateUserDialogComponent implements OnInit {
     return expandedClients;
   }
 
-  private _filter(name: string): any[] {
-    const filterValue = name.toLowerCase();
-    return this.expandClients.filter(
-      (client) =>
-        client.first_name.toLowerCase().includes(filterValue) ||
-        client.last_name.toLowerCase().includes(filterValue)
-    );
-  }
 }

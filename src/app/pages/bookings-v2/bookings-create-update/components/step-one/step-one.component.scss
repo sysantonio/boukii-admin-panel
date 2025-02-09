@@ -41,8 +41,9 @@
   width: 100%; /* Usar el ancho completo del contenedor */
   overflow-y: auto; /* Habilita el scroll vertical */
 }
-::ng-deep mat-form-field {
+::ng-deep mat-form-field.stepOneSearchInput {
   label {
     display: flex !important;
+    width: 130%;
   }
 }
