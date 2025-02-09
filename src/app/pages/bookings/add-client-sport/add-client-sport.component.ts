@@ -111,14 +111,14 @@ export class AddClientSportModalComponent implements OnInit {
 
 
   getSchoolSportDegrees() {
-    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id='+this.user.schools[0].id)
+    this.crudService.list('/school-sports', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
       .subscribe((sport) => {
         this.schoolSports = sport.data;
         sport.data.forEach((element, idx) => {
-          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id='+element.sport_id + '&active=1')
-          .subscribe((data) => {
-            this.schoolSports[idx].degrees = data.data
-          });
+          this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.user.schools[0].id + '&sport_id=' + element.sport_id + '&active=1')
+            .subscribe((data) => {
+              this.schoolSports[idx].degrees = data.data
+            });
         });
       })
   }
@@ -128,7 +128,7 @@ export class AddClientSportModalComponent implements OnInit {
       .subscribe((data) => {
         data.data.forEach(element => {
           this.schoolSports.forEach(sport => {
-            if(element.id === sport.sport_id) {
+            if (element.id === sport.sport_id) {
               sport.name = element.name;
             }
           });

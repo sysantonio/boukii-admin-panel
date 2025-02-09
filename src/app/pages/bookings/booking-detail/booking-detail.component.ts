@@ -2172,45 +2172,45 @@ export class BookingDetailComponent implements OnInit {
             })
             .subscribe(() => {
 
-                  if (this.booking.paid) {
+              if (this.booking.paid) {
+                this.crudService
+                  .post("/admin/bookings/refunds/" + this.id, {
+                    amount:
+                      priceToRefund,
+                  })
+                  .subscribe(() => {
                     this.crudService
-                      .post("/admin/bookings/refunds/" + this.id, {
-                        amount:
-                          priceToRefund,
-                      })
+                      .update("/bookings", { status: 2, paid_total: this.booking.price_total - priceToRefund, price_total: 0 }, this.booking.id)
                       .subscribe(() => {
                         this.crudService
-                          .update("/bookings", { status: 2, paid_total: this.booking.price_total - priceToRefund, price_total: 0 }, this.booking.id)
+                          .post("/admin/bookings/cancel", {
+                            bookingUsers: this.bookingUsers.map(
+                              (b) => b.id
+                            ),
+                          })
                           .subscribe(() => {
-                            this.crudService
-                              .post("/admin/bookings/cancel", {
-                                bookingUsers: this.bookingUsers.map(
-                                  (b) => b.id
-                                ),
-                              })
-                              .subscribe(() => {
-                                this.snackbar.open(
-                                  this.translateService.instant(
-                                    "snackbar.booking_detail.update"
-                                  ),
-                                  "OK",
-                                  { duration: 1000 }
-                                );
-                                this.getData();
-                              });
+                            this.snackbar.open(
+                              this.translateService.instant(
+                                "snackbar.booking_detail.update"
+                              ),
+                              "OK",
+                              { duration: 1000 }
+                            );
+                            this.getData();
                           });
                       });
-                  } else {
-                    this.snackbar.open(
-                      this.translateService.instant(
-                        "snackbar.booking_detail.update"
-                      ),
-                      "OK",
-                      { duration: 1000 }
-                    );
-                    this.getData();
-                  }
-                });
+                  });
+              } else {
+                this.snackbar.open(
+                  this.translateService.instant(
+                    "snackbar.booking_detail.update"
+                  ),
+                  "OK",
+                  { duration: 1000 }
+                );
+                this.getData();
+              }
+            });
         } else if (data.type === "refund") {
           this.crudService
             .create("/booking-logs", {

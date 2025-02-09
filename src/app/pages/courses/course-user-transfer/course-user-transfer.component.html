@@ -18,19 +18,22 @@
     <div class="column left-column">
       <h3>{{'choose_students' | translate}}</h3>
       <div class="subgroup-title">
-        <p [style.color]="defaults.group.color"><strong>{{defaults.group.annotation}}</strong> {{defaults.group.name}} - {{defaults.subgroupNumber}}</p>
+        <p [style.color]="defaults.group.color"><strong>{{defaults.group.annotation}}</strong> {{defaults.group.name}} -
+          {{defaults.subgroupNumber}}</p>
       </div>
       <div class="students-list">
         <mat-checkbox>{{'choose_all' | translate}}</mat-checkbox>
         <div *ngFor="let item of currentStudents; let i = index" style="float: left;width: 100%;">
-          <mat-checkbox style="float: left;width: 15%;" (change)="addToStudentChangeList($event, item, i)"> </mat-checkbox>
+          <mat-checkbox style="float: left;width: 15%;" (change)="addToStudentChangeList($event, item, i)">
+          </mat-checkbox>
 
           <div style="float: left;width: 15%">
-            <img [src]="getClient(item.client_id)?.image" style="border-radius: 100%;"/>
+            <img [src]="getClient(item.client_id)?.image" style="border-radius: 100%;" />
           </div>
           <div style="float: left;width: 65%;margin:0 0 0 3%">
             <p>{{getClient(item.client_id)?.first_name}} {{getClient(item.client_id)?.last_name}}</p>
-            <p>{{getLanguage(getClient(item.client_id)?.language1_id)}} · {{calculateAge(getClient(item.client_id)?.birth_date)}} {{'years' | translate }}</p>
+            <p>{{getLanguage(getClient(item.client_id)?.language1_id)}} ·
+              {{calculateAge(getClient(item.client_id)?.birth_date)}} {{'years' | translate }}</p>
           </div>
 
         </div>
@@ -44,10 +47,11 @@
       </div>
       <mat-accordion class="example-headers-align" multi>
         <ng-container *ngFor="let colorKey of this.defaults.colorKeys">
-          <ng-container *ngFor="let groupLevel of this.defaults.groupedByColor[colorKey]; let groupIndex = index" >
+          <ng-container *ngFor="let groupLevel of this.defaults.groupedByColor[colorKey]; let groupIndex = index">
 
-            <mat-expansion-panel *ngIf="groupLevel.active && getCourseSubgroups(groupLevel).length > 0" style="margin-bottom: 3%;">
-              <mat-expansion-panel-header  [style.background-color]="colorKey" style="border-radius: 5px;">
+            <mat-expansion-panel *ngIf="groupLevel.active && getCourseSubgroups(groupLevel).length > 0"
+              style="margin-bottom: 3%;">
+              <mat-expansion-panel-header [style.background-color]="colorKey" style="border-radius: 5px;">
                 <mat-panel-description style="color: #fff">
                   {{ groupLevel.annotation }} - {{groupLevel.name}}
                 </mat-panel-description>
@@ -56,17 +60,19 @@
               <!-- aqui el listado -->
               <div class="list-group">
                 <ng-container *ngFor="let item of getCourseSubgroups(groupLevel); let itemIndex = index">
-                  <div class="list-item" >
+                  <div class="list-item">
                     <p [style.color]="colorKey"><strong>{{ groupLevel.annotation }} {{itemIndex+1}}</strong></p>
-                    <mat-checkbox [checked]="item.checked" [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}" (change)="onCheckboxChange(itemIndex, item.checked, item)"
-                    [disabled]="getUserInSubGroup(item) === item.max_participants || ((itemIndex+1) === this.defaults.subgroupNumber && defaults.degree.id === item.degree_id)">
-                    <span class="item-count">{{getUserInSubGroup(item)}}/{{ item.max_participants }}</span>
+                    <mat-checkbox [checked]="item.checked" [(ngModel)]="item.checked"
+                      [ngModelOptions]="{standalone: true}" (change)="onCheckboxChange(itemIndex, item.checked, item)"
+                      [disabled]="getUserInSubGroup(item) === item.max_participants || ((itemIndex+1) === this.defaults.subgroupNumber && defaults.degree.id === item.degree_id)">
+                      <span class="item-count">{{getUserInSubGroup(item)}}/{{ item.max_participants }}</span>
                     </mat-checkbox>
                   </div>
                 </ng-container>
               </div>
               <div class="confirm-button">
-                <button mat-raised-button color="accent" style="border-radius: 0" (click)="transferStudent()"> {{'confirm' | translate}}</button>
+                <button mat-raised-button color="accent" style="border-radius: 0" (click)="transferStudent()">
+                  {{'confirm' | translate}}</button>
               </div>
 
             </mat-expansion-panel>

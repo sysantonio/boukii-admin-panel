@@ -1,4 +1,4 @@
-<form >
+<form>
   <div class="flex items-center" mat-dialog-title>
     <h2 class="headline m-0 flex-auto">Add sport</h2>
 
@@ -33,7 +33,8 @@
               <ng-template #placeholder>{{'choose_sports' | translate }}</ng-template>
             </mat-select-trigger>
 
-            <mat-option *ngFor="let sport of filteredSports | async" [value]="sport" (onSelectionChange)="toggleSelection(sport, $event)">
+            <mat-option *ngFor="let sport of filteredSports | async" [value]="sport"
+              (onSelectionChange)="toggleSelection(sport, $event)">
               {{sport.name}}
             </mat-option>
           </mat-select>
@@ -43,37 +44,38 @@
       <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
         <!-- Añadir niños con modal -->
-         <mat-table #sportsTable [dataSource]="sportsData" *ngIf="this.selectedSports.length > 0">
+        <mat-table #sportsTable [dataSource]="sportsData" *ngIf="this.selectedSports.length > 0">
 
 
-           <ng-container matColumnDef="name">
-             <mat-header-cell *matHeaderCellDef> {{'sport' | translate }}</mat-header-cell>
-             <mat-cell *matCellDef="let element">
-               <mat-form-field appearance="outline" class="flex-auto" style="margin: 2% 0 0 0;">
-                 <mat-label>{{'sport' | translate }}</mat-label>
-                 <input matInput [value]="element.name" type="text" [readonly]="true">
-               </mat-form-field>
-             </mat-cell>
-           </ng-container>
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef> {{'sport' | translate }}</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <mat-form-field appearance="outline" class="flex-auto" style="margin: 2% 0 0 0;">
+                <mat-label>{{'sport' | translate }}</mat-label>
+                <input matInput [value]="element.name" type="text" [readonly]="true">
+              </mat-form-field>
+            </mat-cell>
+          </ng-container>
 
-           <ng-container matColumnDef="level">
-             <mat-header-cell *matHeaderCellDef>{{'level' | translate }}</mat-header-cell>
-             <mat-cell *matCellDef="let element">
-               <mat-form-field appearance="outline" class="flex-auto" style="margin: 2% 0 0 0;">
+          <ng-container matColumnDef="level">
+            <mat-header-cell *matHeaderCellDef>{{'level' | translate }}</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <mat-form-field appearance="outline" class="flex-auto" style="margin: 2% 0 0 0;">
                 <mat-label>{{'level' | translate }}</mat-label>
-                <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm" [matAutocomplete]="autoLevel" [(ngModel)]="element.level"/>
+                <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="levelForm"
+                  [matAutocomplete]="autoLevel" [(ngModel)]="element.level" />
                 <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
-                  <ng-container *ngFor="let level of element.degrees" >
+                  <ng-container *ngFor="let level of element.degrees">
                     <mat-option [value]="level" *ngIf="level.active">
                       {{level.annotation}} - {{level.name}}
                     </mat-option>
                   </ng-container>
                 </mat-autocomplete>
-               </mat-form-field>
-             </mat-cell>
-           </ng-container>
+              </mat-form-field>
+            </mat-cell>
+          </ng-container>
 
-           <!-- Ícono para eliminar
+          <!-- Ícono para eliminar
            <ng-container matColumnDef="delete">
              <mat-header-cell *matHeaderCellDef> Eliminar </mat-header-cell>
              <mat-cell *matCellDef="let element">
@@ -81,16 +83,17 @@
              </mat-cell>
            </ng-container> -->
 
-           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-           <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-         </mat-table>
-       </div>
-   </div>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+      </div>
+    </div>
 
   </mat-dialog-content>
 
-  <mat-dialog-actions align="end" >
-    <button color="primary" mat-flat-button [mat-dialog-close]="{data: sportsData.data}">{{'confirm' | translate}}</button>
+  <mat-dialog-actions align="end">
+    <button color="primary" mat-flat-button [mat-dialog-close]="{data: sportsData.data}">{{'confirm' |
+      translate}}</button>
     <button color="primary" mat-flat-button [mat-dialog-close]="false">No</button>
   </mat-dialog-actions>
 </form>

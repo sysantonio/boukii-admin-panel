@@ -8,11 +8,7 @@
       <mat-icon svgIcon="mat:more_vert"></mat-icon>
     </button>-->
 
-    <button
-      class="text-secondary"
-      mat-dialog-close
-      mat-icon-button
-      type="button">
+    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
       <mat-icon svgIcon="mat:close"></mat-icon>
     </button>
   </div>
@@ -21,10 +17,7 @@
 
   <div [@stagger]="true" class="p-gutter container" style="max-width: none;">
     <mat-spinner *ngIf="loading" style="margin:0 auto"></mat-spinner>
-    <div
-      class="flex flex-col sm:flex-row gap-4"
-      style="width: 65%;float:left"
-      *ngIf="!loading && !bookingComplete">
+    <div class="flex flex-col sm:flex-row gap-4" style="width: 65%;float:left" *ngIf="!loading && !bookingComplete">
       <div @fadeInUp class="card flex-auto" style="width: 65%">
         <div class="px-6 py-4 border-b flex items-center">
           <h2 class="title m-0">
@@ -33,24 +26,12 @@
         </div>
         <div class="px-6 py-4 flex flex-col" [formGroup]="form">
           <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-            <mat-form-field
-              appearance="outline"
-              class="client-search-container">
+            <mat-form-field appearance="outline" class="client-search-container">
               <mat-label>{{'client' | translate}}</mat-label>
-              <input
-                type="text"
-                placeholder="{{'choose_client' | translate}}"
-                aria-label="Number"
-                matInput
-                [formControl]="clientsForm"
-                [matAutocomplete]="auto"
-                [(ngModel)]="defaults.client_main_id" />
-              <mat-autocomplete
-                #auto="matAutocomplete"
-                [displayWith]="displayFn">
-                <mat-option
-                  *ngFor="let filteredClient of filteredOptions | async"
-                  [value]="filteredClient"
+              <input type="text" placeholder="{{'choose_client' | translate}}" aria-label="Number" matInput
+                [formControl]="clientsForm" [matAutocomplete]="auto" [(ngModel)]="defaults.client_main_id" />
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option *ngFor="let filteredClient of filteredOptions | async" [value]="filteredClient"
                   (onSelectionChange)="getUtilzers(filteredClient, false, $event)">
                   {{filteredClient.first_name}} {{filteredClient.last_name}}
                 </mat-option>
@@ -59,25 +40,15 @@
             </mat-form-field>
 
             <div class="flex-auto">
-              <button
-                color="primary"
-                mat-raised-button
-                type="button"
-                class="client-button"
-                (click)="addClient()">
+              <button color="primary" mat-raised-button type="button" class="client-button" (click)="addClient()">
                 {{'create_new_client' | translate }}
               </button>
             </div>
           </div>
 
-          <div
-            class="flex flex-col sm:flex-row gap-2 sm:gap-6"
-            *ngIf="!loadingUtilizers">
-            <mat-card
-              class="card-users"
-              (click)="mainIdSelected = !mainIdSelected;"
-              (click)="selectMainUser(defaults.client_main_id)"
-              [ngClass]="{'active-border': mainIdSelected}">
+          <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="!loadingUtilizers">
+            <mat-card class="card-users" (click)="mainIdSelected = !mainIdSelected;"
+              (click)="selectMainUser(defaults.client_main_id)" [ngClass]="{'active-border': mainIdSelected}">
               <mat-card-header>
                 <div mat-card-avatar class="card-avatar">
                   <img
@@ -101,15 +72,11 @@
               </mat-card-actions>
             </mat-card>
 
-            <mat-card
-              class="card-users"
-              *ngFor="let item of utilizers; let i = index"
-              (click)="toggleBorder(i, item)"
+            <mat-card class="card-users" *ngFor="let item of utilizers; let i = index" (click)="toggleBorder(i, item)"
               [ngClass]="{'active-border': borderActive === i && !mainIdSelected}">
               <mat-card-header>
                 <div mat-card-avatar class="card-avatar">
-                  <img
-                    [src]="item.image !== null && item.image !== '' ? item.image : userAvatar"
+                  <img [src]="item.image !== null && item.image !== '' ? item.image : userAvatar"
                     style="border-radius: 100%;width: 100%;height: 100%;" />
                 </div>
               </mat-card-header>
@@ -129,17 +96,13 @@
 
             <mat-card class="card-users">
               <mat-card-header>
-                <button
-                  mat-fab
-                  color="accent"
-                  style="margin: 0 auto;position: relative;top: 20px;right: 35%;"
+                <button mat-fab color="accent" style="margin: 0 auto;position: relative;top: 20px;right: 35%;"
                   (click)="addUtilisateur()">
                   <mat-icon class="icon-sm" svgIcon="mat:add"></mat-icon>
                 </button>
               </mat-card-header>
               <mat-card-content>
-                <mat-card-title
-                  style="text-align: center;position: relative;top: 100%;">{{'new_user'
+                <mat-card-title style="text-align: center;position: relative;top: 100%;">{{'new_user'
                   | translate }}</mat-card-title>
               </mat-card-content>
               <mat-card-actions>
@@ -148,52 +111,34 @@
             </mat-card>
           </div>
 
-          <mat-divider
-            class="text-border"
-            style="margin: 10px 0 10px 0"></mat-divider>
+          <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
 
           <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
             <div class="flex-auto">
-              <mat-radio-group
-                aria-label="Select an option"
-                formControlName="sportType"
+              <mat-radio-group aria-label="Select an option" formControlName="sportType"
                 (change)="filterSportsByType()">
-                <mat-radio-button
-                  *ngFor="let sport of sportTypeData"
-                  class="mr-4"
+                <mat-radio-button *ngFor="let sport of sportTypeData" class="mr-4"
                   [value]="sport.id">{{sport.name}}</mat-radio-button>
               </mat-radio-group>
             </div>
             <div class="flex-auto" *ngIf="sportTypeSelected !== -1">
-              <div
-                style="float:left; width: 20%"
-                *ngFor="let item of sportDataList">
+              <div style="float:left; width: 20%" *ngFor="let item of sportDataList">
                 <span style="width: 100%;margin: 0 auto">
-                  <img
-                    style="margin: 0 auto; border-radius: 20%;border: solid 1px; cursor:pointer"
-                    [ngStyle]="{
+                  <img style="margin: 0 auto; border-radius: 20%;border: solid 1px; cursor:pointer" [ngStyle]="{
                     'background': defaults.sport_id === item.sport_id ? '#e91e63' : '#e6e6e6',
                     'border': defaults.sport_id === item.sport_id ? '#fff' : '#808080'
-                  }"
-                    [src]="item.sport_id !== defaults.sport_id ? item.icon_unselected : item.icon_selected"
+                  }" [src]="item.sport_id !== defaults.sport_id ? item.icon_unselected : item.icon_selected"
                     (click)="selectSport(item)" />
                 </span>
                 <p style="text-align: center;">{{ item.name }}</p>
               </div>
             </div>
           </div>
-          <mat-divider
-            class="text-border"
-            style="margin: 10px 0 10px 0"></mat-divider>
+          <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
 
           <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-            <div
-              class="flex-auto"
-              style="width:20%"
-              *ngIf="externalData && !externalData.onlyPrivate">
-              <mat-card
-                class="custom-card"
-                [class.selected-collectif]="courseType === 'collectif'"
+            <div class="flex-auto" style="width:20%" *ngIf="externalData && !externalData.onlyPrivate">
+              <mat-card class="custom-card" [class.selected-collectif]="courseType === 'collectif'"
                 (click)="this.selectedItem = null;setCourseType('collectif', 1)">
                 <mat-card-content>
                   <p>{{'course_colective' | translate }}</p>
@@ -201,33 +146,18 @@
               </mat-card>
             </div>
             <div class="flex-auto" style="width:20%">
-              <mat-card
-                class="custom-card"
-                [class.selected-prive]="courseType === 'privee'"
+              <mat-card class="custom-card" [class.selected-prive]="courseType === 'privee'"
                 (click)="this.selectedItem = null;setCourseType('privee', 2)">
                 <mat-card-content>
                   <p>{{'course_private' | translate }}</p>
                 </mat-card-content>
               </mat-card>
             </div>
-            <mat-form-field
-              appearance="outline"
-              class="flex-auto"
-              style="width: 48%">
-              <input
-                type="text"
-                placeholder="{{'choose_level' | translate}}"
-                aria-label="Number"
-                matInput
-                [formControl]="levelForm"
-                [matAutocomplete]="autoLevel"
-                (click)="clearInput()" />
-              <mat-autocomplete
-                #autoLevel="matAutocomplete"
-                [displayWith]="displayFnLevel">
-                <mat-option
-                  *ngFor="let level of filteredLevel | async"
-                  [value]="level"
+            <mat-form-field appearance="outline" class="flex-auto" style="width: 48%">
+              <input type="text" placeholder="{{'choose_level' | translate}}" aria-label="Number" matInput
+                [formControl]="levelForm" [matAutocomplete]="autoLevel" (click)="clearInput()" />
+              <mat-autocomplete #autoLevel="matAutocomplete" [displayWith]="displayFnLevel">
+                <mat-option *ngFor="let level of filteredLevel | async" [value]="level"
                   (onSelectionChange)="getCourses(level, monthAndYear)">
                   {{level.annotation}} - {{level.name}}
                 </mat-option>
@@ -236,51 +166,29 @@
             </mat-form-field>
           </div>
 
-          <mat-divider
-            class="text-border"
-            style="margin: 10px 0 10px 0"></mat-divider>
+          <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
           <div style="width: 100%; float:left">
             <mat-spinner *ngIf="loadingCalendar"></mat-spinner>
-            <mat-form-field
-              appearance="outline"
-              class="flex-auto"
-              style="width: 50%; float:left"
+            <mat-form-field appearance="outline" class="flex-auto" style="width: 50%; float:left"
               *ngIf="courseType !== null && courseType === 'privee' && !loadingCalendar">
-              <input
-                matInput
-                id="dateFromPrivate"
-                [matDatepicker]="pickerDateFrom"
-                formControlName="fromDate"
-                [min]="minDate"
-                [(ngModel)]="selectedDatePrivate"
-                (dateChange)="emitDateChange($event)" (click)="pickerDateFrom.open()"
-                (dateInput)="emitDateChange($event, true)"readonly />
-              <mat-datepicker-toggle
-                matSuffix
-                [for]="pickerDateFrom"></mat-datepicker-toggle>
-              <mat-datepicker
-                #pickerDateFrom
-                [startAt]="selectedDatePrivate"
-                [calendarHeaderComponent]="customHeader"
+              <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom" formControlName="fromDate"
+                [min]="minDate" [(ngModel)]="selectedDatePrivate" (dateChange)="emitDateChange($event)"
+                (click)="pickerDateFrom.open()" (dateInput)="emitDateChange($event, true)" readonly />
+              <mat-datepicker-toggle matSuffix [for]="pickerDateFrom"></mat-datepicker-toggle>
+              <mat-datepicker #pickerDateFrom [startAt]="selectedDatePrivate" [calendarHeaderComponent]="customHeader"
                 (monthSelected)="monthChanged($event, pickerDateFrom)"
                 [dateClass]="privateDateClass()"></mat-datepicker>
             </mat-form-field>
 
-            <mat-list-item
-              class="custom-list-item"
-              *ngIf="selectedItem !== null && courseType === 'privee'"
+            <mat-list-item class="custom-list-item" *ngIf="selectedItem !== null && courseType === 'privee'"
               style="width: 48%;float: left;background: #f5f5f5;border: 2px solid #E6E6E6;margin: 0 0 4% 2%;">
               <div class="avatar-container">
-                <img
-                  mat-list-avatar
-                  class="custom-avatar"
+                <img mat-list-avatar class="custom-avatar"
                   [src]="selectedItem.course_type === 1 ? collectifIcon : privateIcon" />
               </div>
               <div class="content-container">
                 <div class="title-container">
-                  <h3
-                    class="title"
-                    style="width: 70%;float: left; text-wrap:balance">
+                  <h3 class="title" style="width: 70%;float: left; text-wrap:balance">
                     {{ selectedItem.name | uppercase}}
                   </h3>
                   <h3 class="price" *ngIf="!selectedItem.is_flexible">
@@ -308,38 +216,27 @@
                 </p>
               </div>
             </mat-list-item>
-            <mat-icon
-              *ngIf="selectedItem !== null && courseType === 'privee'"
-              svgIcon="mat:view_list"
+            <mat-icon *ngIf="selectedItem !== null && courseType === 'privee'" svgIcon="mat:view_list"
               style="float: right;color: #E91E63;height: 40px;width: 40px;cursor: pointer;"
               (click)="backToList()"></mat-icon>
           </div>
 
           <div class="columns-container" *ngIf="courseType !== null">
             <!-- Columna de la lista privados -->
-            <div
-              class="list-column"
-              *ngIf="courseType === 'privee'"
+            <div class="list-column" *ngIf="courseType === 'privee'"
               [ngStyle]="{'width': selectedItem === null && courseType === 'privee' ? '50%' : '0'}">
               <div class="list-overflow-container">
                 <ng-container *ngIf="selectedItem === null">
                   <mat-list class="list mat-elevation-z1">
-                    <mat-list-item
-                      class="custom-list-item"
-                      *ngFor="let course of courses"
-                      (click)="selectItem(course)"
+                    <mat-list-item class="custom-list-item" *ngFor="let course of courses" (click)="selectItem(course)"
                       [ngClass]="{'selected-item': selectedItem === course}">
                       <div class="avatar-container">
-                        <img
-                          mat-list-avatar
-                          class="custom-avatar"
+                        <img mat-list-avatar class="custom-avatar"
                           [src]="course.course_type === 1 ? collectifIcon : privateIcon" />
                       </div>
                       <div class="content-container">
                         <div class="title-container">
-                          <h3
-                            class="title"
-                            style="width: 70%;float: left; text-wrap:balance">
+                          <h3 class="title" style="width: 70%;float: left; text-wrap:balance">
                             {{ course.name | uppercase}}
                           </h3>
                           <h3 class="price" *ngIf="!course.is_flexible">
@@ -375,66 +272,40 @@
 
             <!-- Campos privados -->
 
-            <div
-              class="calendar-column"
-              *ngIf="courseType === 'privee' && selectedItem !== null"
-              style="width: 100%">
+            <div class="calendar-column" *ngIf="courseType === 'privee' && selectedItem !== null" style="width: 100%">
               <ng-container>
-                <div
-                  class="flex flex-col sm:flex-row gap-2 sm:gap-6"
-                  *ngIf="!externalData">
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="!externalData">
                   <div class="flex-auto">
-                    <mat-checkbox
-                      color="accent"
-                      [(ngModel)]="periodUnique"
-                      formControlName="periodUnique"
+                    <mat-checkbox color="accent" [(ngModel)]="periodUnique" formControlName="periodUnique"
                       (change)="periodMultiple = false; periodUnique =true; resetCourseDates()">{{'bookings_page.same_date'
                       | translate}}</mat-checkbox>
                   </div>
                   <div class="flex-auto">
-                    <mat-checkbox
-                      color="accent"
-                      [(ngModel)]="periodMultiple"
-                      formControlName="periodMultiple"
+                    <mat-checkbox color="accent" [(ngModel)]="periodMultiple" formControlName="periodMultiple"
                       (change)="periodMultiple = true; periodUnique =false">{{'bookings_page.multiple_date'
                       | translate}}</mat-checkbox>
                   </div>
                   <div class="flex-auto">
-                    <mat-checkbox
-                      color="accent"
-                      [(ngModel)]="sameMonitor"
-                      formControlName="sameMonitor"
+                    <mat-checkbox color="accent" [(ngModel)]="sameMonitor" formControlName="sameMonitor"
                       [checked]="externalData && externalData.onlyPrivate"
                       [disabled]="externalData && externalData.onlyPrivate">{{'bookings_page.same_monitor'
                       | translate}}</mat-checkbox>
                   </div>
                 </div>
 
-                <ng-container
-                  *ngFor="let courseDate of courseDates; let i = index">
+                <ng-container *ngFor="let courseDate of courseDates; let i = index">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-                    <mat-form-field
-                      appearance="outline"
-                      class="flex-auto"
-                      style="width: 50%;">
+                    <mat-form-field appearance="outline" class="flex-auto" style="width: 50%;">
                       <mat-label>{{'date' | translate}}</mat-label>
 
-                      <input
-                        matInput
-                        id="dateFromPrivate"
-                        [matDatepicker]="pickerDateFrom"
+                      <input matInput id="dateFromPrivate" [matDatepicker]="pickerDateFrom"
                         [matDatepickerFilter]="inUseDatesFilter"
                         [value]="externalData && externalData.date ? externalData.date: ''"
-                        (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)"
-                        [min]="minDate"readonly
+                        (dateInput)="setCourseDateItemPrivateNoFlexible(courseDate, $event)" [min]="minDate" readonly
                         [max]="getMaxDate()" (click)="pickerDateFrom.open()"
                         [disabled]="externalData && externalData.onlyPrivate" />
-                      <mat-datepicker-toggle
-                        matSuffix
-                        [for]="pickerDateFrom"></mat-datepicker-toggle>
-                      <mat-datepicker
-                        #pickerDateFrom
-                        [startAt]="selectedItem.course_dates[0].date"></mat-datepicker>
+                      <mat-datepicker-toggle matSuffix [for]="pickerDateFrom"></mat-datepicker-toggle>
+                      <mat-datepicker #pickerDateFrom [startAt]="selectedItem.course_dates[0].date"></mat-datepicker>
 
                       <!--
                         <mat-select>
@@ -447,10 +318,7 @@
                       -->
                     </mat-form-field>
 
-                    <mat-form-field
-                      appearance="outline"
-                      class="flex-auto"
-                      style="width: 50%;">
+                    <mat-form-field appearance="outline" class="flex-auto" style="width: 50%;">
                       <mat-label>{{'hour' | translate}}</mat-label>
                       <mat-select
                         (selectionChange)="courseDate.hour_start = $event.value; generateCourseDurations($event.value + ':00', selectedItem.course_dates[0].hour_end, selectedItem.duration.includes(':') ? this.transformTime(selectedItem.duration) : selectedItem.duration)"
@@ -458,41 +326,31 @@
                         [value]="externalData && externalData.hour ? externalData.hour : ''">
                         <mat-option
                           *ngFor="let time of generateCourseHours(selectedItem.course_dates[0].hour_start, selectedItem.course_dates[0].hour_end, selectedItem.duration.includes(':') ? this.transformTime(selectedItem.duration) : selectedItem.duration, '5min')"
-                          [value]="time"
-                          [disabled]="calculateAvailableHours(selectedItem.course_dates[0], time, i)">
+                          [value]="time" [disabled]="calculateAvailableHours(selectedItem.course_dates[0], time, i)">
                           {{ time }}
                         </mat-option>
                       </mat-select>
                     </mat-form-field>
                   </div>
 
-                  <div
-                    class="flex flex-col sm:flex-row gap-2 sm:gap-6"
-                    *ngIf="selectedItem.is_flexible">
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="selectedItem.is_flexible">
                     <mat-form-field appearance="outline" class="flex-auto">
                       <mat-label>{{'duration' |translate}}</mat-label>
-                      <mat-select
-                        (selectionChange)="calculateAvailablePaxes($event.value)"
+                      <mat-select (selectionChange)="calculateAvailablePaxes($event.value)"
                         [disabled]="!courseDate.hour_start">
                         <ng-container>
-                          <mat-option
-                            *ngFor="let duration of durations"
-                            [value]="duration"
+                          <mat-option *ngFor="let duration of durations" [value]="duration"
                             (onSelectionChange)="courseDate.duration = duration">{{
                             duration }}</mat-option>
                         </ng-container>
                       </mat-select>
                     </mat-form-field>
 
-                    <mat-form-field
-                      appearance="outline"
-                      class="flex-auto"
+                    <mat-form-field appearance="outline" class="flex-auto"
                       title="First select the duration to calculate how many paxes can book this course">
                       <mat-label>{{'add_participant' |translate}}</mat-label>
                       <mat-select [disabled]="!courseDate.duration" multiple>
-                        <mat-option
-                          *ngFor="let person of personsToBook"
-                          [value]="person"
+                        <mat-option *ngFor="let person of personsToBook" [value]="person"
                           (onSelectionChange)="onSelectionChangePaxes($event, courseDate)">
                           {{ person?.first_name }} {{ person?.last_name }}
                         </mat-option>
@@ -500,18 +358,12 @@
                     </mat-form-field>
                   </div>
 
-                  <div
-                    class="flex flex-col sm:flex-row gap-2 sm:gap-6"
-                    *ngIf="!selectedItem.is_flexible">
-                    <mat-form-field
-                      appearance="outline"
-                      class="flex-auto"
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="!selectedItem.is_flexible">
+                    <mat-form-field appearance="outline" class="flex-auto"
                       title="First select the duration to calculate how many paxes can book this course">
                       <mat-label>{{'add_participant' |translate}}</mat-label>
                       <mat-select multiple>
-                        <mat-option
-                          *ngFor="let person of personsToBook"
-                          [value]="person"
+                        <mat-option *ngFor="let person of personsToBook" [value]="person"
                           (onSelectionChange)="onSelectionChangePaxes($event, courseDate)">
                           {{ person?.first_name }} {{ person?.last_name }}
                         </mat-option>
@@ -519,29 +371,17 @@
                     </mat-form-field>
                   </div>
 
-                  <div
-                    class="flex flex-col sm:flex-row gap-2 sm:gap-6"
+                  <div class="flex flex-col sm:flex-row gap-2 sm:gap-6"
                     *ngIf="(sameMonitor && i === 0) || !sameMonitor">
-                    <mat-form-field
-                      appearance="outline"
-                      class="flex-auto"
+                    <mat-form-field appearance="outline" class="flex-auto"
                       (click)="checkAvailableMonitors(courseDate.hour_start, courseDate.duration, courseDate.date);">
                       <mat-label>{{'choose_monitor' | translate }}</mat-label>
-                      <input
-                        type="text"
-                        placeholder="{{'choose_monitor' | translate }}"
-                        aria-label="Number"
-                        matInput
-                        [matAutocomplete]="autoMoniteur"
-                        [disabled]="(selectedItem.is_flexible && (!courseDate.duration )) || externalData && externalData.onlyPrivate
+                      <input type="text" placeholder="{{'choose_monitor' | translate }}" aria-label="Number" matInput
+                        [matAutocomplete]="autoMoniteur" [disabled]="(selectedItem.is_flexible && (!courseDate.duration )) || externalData && externalData.onlyPrivate
                       || (!selectedItem.is_flexible && (!courseDate.date || !courseDate.hour_start))"
                         [value]="externalData && externalData.monitorId ? externalData?.monitor?.first_name + ' ' + externalData?.monitor?.last_name : ''" />
-                      <mat-autocomplete
-                        #autoMoniteur="matAutocomplete"
-                        [displayWith]="displayFnMoniteurs">
-                        <mat-option
-                          *ngFor="let monitor of filteredMonitors | async"
-                          [value]="monitor"
+                      <mat-autocomplete #autoMoniteur="matAutocomplete" [displayWith]="displayFnMoniteurs">
+                        <mat-option *ngFor="let monitor of filteredMonitors | async" [value]="monitor"
                           (onSelectionChange)="courseDate.monitor_id = monitor.id; color='green'">
                           {{monitor.first_name}} {{monitor.last_name}}
                         </mat-option>
@@ -553,43 +393,31 @@
                   <mat-divider class="text-border"></mat-divider>
                 </ng-container>
 
-                <div
-                  class="flex flex-col sm:flex-row gap-2 sm:gap-6"
-                  *ngIf="color !== ''">
-                  <div
-                    style="float: left; width: 30%;padding: 10px;border-radius: 10px;cursor:pointer"
-                    (click)="color='green'"
-                    [ngStyle]="{'border': color === 'green' ? '1px #E91E63 solid' : ''}">
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" *ngIf="color !== ''">
+                  <div style="float: left; width: 30%;padding: 10px;border-radius: 10px;cursor:pointer"
+                    (click)="color='green'" [ngStyle]="{'border': color === 'green' ? '1px #E91E63 solid' : ''}">
                     <p style="text-align: center">
                       {{'color_1' | translate}}
                     </p>
-                    <div
-                      style="float:left;width:100%;background-color:green; border-radius:25px;height:30px"></div>
+                    <div style="float:left;width:100%;background-color:green; border-radius:25px;height:30px"></div>
                   </div>
-                  <div
-                    style="float: left; width: 30%;padding: 10px;border-radius: 10px;cursor:pointer"
-                    (click)="color='yellow'"
-                    [ngStyle]="{'border': color === 'yellow' ? '1px #E91E63 solid' : ''}">
+                  <div style="float: left; width: 30%;padding: 10px;border-radius: 10px;cursor:pointer"
+                    (click)="color='yellow'" [ngStyle]="{'border': color === 'yellow' ? '1px #E91E63 solid' : ''}">
                     <p style="text-align: center">
                       {{'color_2' | translate}}
                     </p>
-                    <div
-                      style="float:left;width:100%;background-color:yellow; border-radius:25px;height:30px"></div>
+                    <div style="float:left;width:100%;background-color:yellow; border-radius:25px;height:30px"></div>
                   </div>
-                  <div
-                    style="float: left; width: 30%;padding: 10px;border-radius: 10px;cursor:pointer"
-                    (click)="color='red'"
-                    [ngStyle]="{'border': color === 'red' ? '1px #E91E63 solid' : ''}">
+                  <div style="float: left; width: 30%;padding: 10px;border-radius: 10px;cursor:pointer"
+                    (click)="color='red'" [ngStyle]="{'border': color === 'red' ? '1px #E91E63 solid' : ''}">
                     <p style="text-align: center">
                       {{'color_3' | translate}}
                     </p>
-                    <div
-                      style="float:left;width:100%;background-color:red; border-radius:25px;height:30px"></div>
+                    <div style="float:left;width:100%;background-color:red; border-radius:25px;height:30px"></div>
                   </div>
                 </div>
               </ng-container>
-              <div
-                style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;"
+              <div style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;"
                 *ngIf="periodMultiple">
                 <div style="width: 15%; float:left;" (click)="addCourseDate()">
                   <button class="add-date" mat-fab>
@@ -603,40 +431,26 @@
             </div>
 
             <!-- campos colectivos -->
-            <div
-              class="list-column"
-              *ngIf="courseType === 'collectif' && defaultsBookingUser.degree_id !== null">
+            <div class="list-column" *ngIf="courseType === 'collectif' && defaultsBookingUser.degree_id !== null">
               <div class="list-overflow-container">
                 <mat-list class="list mat-elevation-z1">
                   <ng-container *ngFor="let course of courses">
-                    <mat-list-item
-                      class="custom-list-item"
-                      (click)="selectItem(course)"
+                    <mat-list-item class="custom-list-item" (click)="selectItem(course)"
                       [ngClass]="{'selected-item': course?.id === selectedItem?.id}">
                       <div class="avatar-container">
-                        <img
-                          mat-list-avatar
-                          class="custom-avatar"
+                        <img mat-list-avatar class="custom-avatar"
                           [src]="course.course_type === 1 ? collectifIcon : privateIcon" />
                       </div>
                       <div class="content-container">
                         <div class="title-container">
-                          <h3
-                            class="title"
-                            style="width: 70%;float: left; text-wrap:balance">
+                          <h3 class="title" style="width: 70%;float: left; text-wrap:balance">
                             {{ course.name | uppercase}}
                           </h3>
-                          <h3
-                            class="price"
-                            style="font-size:14px"
-                            *ngIf="course.is_flexible">
+                          <h3 class="price" style="font-size:14px" *ngIf="course.is_flexible">
                             {{'from' | translate }} {{course.price}}
                             {{ course.currency }}
                           </h3>
-                          <h3
-                            class="price"
-                            style="font-size:14px"
-                            *ngIf="!course.is_flexible">
+                          <h3 class="price" style="font-size:14px" *ngIf="!course.is_flexible">
                             {{course.price}} {{ course.currency }}
                           </h3>
                         </div>
@@ -647,11 +461,9 @@
                         <div style="float: left; width: 100%;margin-top: 5%;">
                           <ul>
                             <ng-container *ngIf="course.is_flexible">
-                              <ng-container
-                                *ngFor="let item of course.course_dates">
+                              <ng-container *ngFor="let item of course.course_dates">
                                 <li *ngIf="canBook(item.date)">
-                                  <mat-checkbox
-                                    [checked]="itemExist(item)"
+                                  <mat-checkbox [checked]="itemExist(item)"
                                     (change)="addReservableCourseDate(item, $event)">
                                     {{item.date | date: 'yyyy-MM-dd'}} -
                                     <i style="float: right;">{{item.hour_start}}
@@ -661,8 +473,7 @@
                               </ng-container>
                             </ng-container>
                             <ng-container *ngIf="!course.is_flexible">
-                              <ng-container
-                                *ngFor="let item of course.course_dates">
+                              <ng-container *ngFor="let item of course.course_dates">
                                 <li *ngIf="canBook(item.date)">
                                   {{ item.date | date: 'yyyy-MM-dd'}}
                                   <i style="float: right;">{{item.hour_start}} -
@@ -674,16 +485,12 @@
                         </div>
                       </div>
                     </mat-list-item>
-                    <ng-container
-                      *ngIf="selectedItem !== null && selectedItem.id === course.id">
-                      <ng-container
-                        *ngFor="let group of getBookableCourses(course.course_dates)">
-                        <ng-container
-                          *ngFor="let subgroup of group.course_subgroups; let subGroupIndex = index">
+                    <ng-container *ngIf="selectedItem !== null && selectedItem.id === course.id">
+                      <ng-container *ngFor="let group of getBookableCourses(course.course_dates)">
+                        <ng-container *ngFor="let subgroup of group.course_subgroups; let subGroupIndex = index">
                           <ng-container
                             *ngIf="getLevelOrder(subgroup.degree_id) === levelForm?.value?.degree_order && subgroup?.degree_id === levelForm?.value?.id && !subgroup?.is_full">
-                            <div
-                              style="float: left; width: 100%;margin-top: 5%;padding: 15px;"
+                            <div style="float: left; width: 100%;margin-top: 5%;padding: 15px;"
                               (click)="selectSubGroupItem(subgroup, subGroupIndex)"
                               [ngClass]="{'selected-item': selectedSubGroupItem?.id === subgroup.id}">
                               <div style="float: left;width: 50%;">
@@ -698,9 +505,7 @@
                                     getMonitorName(subgroup.monitor_id) :
                                     ("text_nomonitorset" | translate)}}
                                   </p>
-                                  <p
-                                    style="font-size:8px;margin: 0 0 0 10px;"
-                                    *ngIf="subgroup.monitor_id !== null">
+                                  <p style="font-size:8px;margin: 0 0 0 10px;" *ngIf="subgroup.monitor_id !== null">
                                     <i>
                                       {{
                                       getLanguage(getMonitorLang(subgroup.monitor_id))
@@ -717,8 +522,7 @@
                                 </div>
                               </div>
                               <div style="float: left;width: 50%;">
-                                <div
-                                  style="width: 100%;text-align: center;padding: 5%;color: #fff;float: right;"
+                                <div style="width: 100%;text-align: center;padding: 5%;color: #fff;float: right;"
                                   [ngStyle]="
                                     {
                                       'background': getLevelColor(subgroup.degree_id)
@@ -743,38 +547,21 @@
             </div>
 
             <!-- Columna del calendario -->
-            <div
-              class="calendar-column"
-              *ngIf="!loadingCalendar && courseTypeId === 1">
-              <mat-calendar
-                class="smaller-calendar"
-                [startAt]="selectedDate"
-                [minDate]="minDate"
-                [(selected)]="selectedDate"
-                [dateClass]="dateClass()"
-                [headerComponent]="customHeader"
-                (monthSelected)="getCourses(null, null)"
-                (selectedChange)="handleDateChange($event)">
+            <div class="calendar-column" *ngIf="!loadingCalendar && courseTypeId === 1">
+              <mat-calendar class="smaller-calendar" [startAt]="selectedDate" [minDate]="minDate"
+                [(selected)]="selectedDate" [dateClass]="dateClass()" [headerComponent]="customHeader"
+                (monthSelected)="getCourses(null, null)" (selectedChange)="handleDateChange($event)">
               </mat-calendar>
             </div>
           </div>
           <div class="flex items-center justify-end gap-2">
-            <button
-              color="primary"
-              mat-raised-button
-              type="button"
-              *ngIf="courseTypeId === 1"
+            <button color="primary" mat-raised-button type="button" *ngIf="courseTypeId === 1"
               [disabled]="(courseTypeId === 1 && selectedItem === null || selectedSubGroupItem === null)"
               (click)="confirmBooking()">
               {{'confirm' | translate}}
             </button>
-            <button
-              color="primary"
-              mat-raised-button
-              type="button"
-              *ngIf="courseTypeId === 2"
-              [disabled]="(courseTypeId === 2 && selectedItem === null)"
-              (click)="confirmBooking()">
+            <button color="primary" mat-raised-button type="button" *ngIf="courseTypeId === 2"
+              [disabled]="(courseTypeId === 2 && selectedItem === null)" (click)="confirmBooking()">
               {{'confirm' | translate}}
             </button>
           </div>
@@ -784,25 +571,14 @@
 
     <!-- Ventanas actividades -->
     <ng-container *ngFor="let item of bookingsToCreate; let bookI = index">
-      <mat-card
-        style="margin: 0 0 0 1%;width: 33%;float: left;padding: 0 1%;"
-        [ngStyle]="{'margin-top': bookI > 0 ? '2%' : '0'}"
-        *ngIf="!loading && !bookingComplete">
+      <mat-card style="margin: 0 0 0 1%;width: 33%;float: left;padding: 0 1%;"
+        [ngStyle]="{'margin-top': bookI > 0 ? '2%' : '0'}" *ngIf="!loading && !bookingComplete">
         <mat-card-header style="display:block">
           <div style="width: 100%;float: left;">
-            <mat-icon
-              svgIcon="mat:close"
-              (click)="deleteBooking(bookI)"
-              style="color:red; cursor:pointer"></mat-icon>
-            <mat-icon
-              svgIcon="mat:expand_more"
-              *ngIf="showDetail !== bookI"
-              style="float:right"
+            <mat-icon svgIcon="mat:close" (click)="deleteBooking(bookI)" style="color:red; cursor:pointer"></mat-icon>
+            <mat-icon svgIcon="mat:expand_more" *ngIf="showDetail !== bookI" style="float:right"
               (click)="showDetailFn(bookI)"></mat-icon>
-            <mat-icon
-              svgIcon="mat:expand_less"
-              *ngIf="showDetail === bookI"
-              style="float:right"
+            <mat-icon svgIcon="mat:expand_less" *ngIf="showDetail === bookI" style="float:right"
               (click)="showDetailFn(null)"></mat-icon>
           </div>
           <div style="width: 100%;float:left;">
@@ -810,9 +586,7 @@
               translate}} #{{bookI + 1 }} -
               {{item.courseDates[0].course?.name}}</mat-card-title>
           </div>
-          <div
-            style="width:100%; margin-top:5%;float:left"
-            *ngIf="showDetail === bookI">
+          <div style="width:100%; margin-top:5%;float:left" *ngIf="showDetail === bookI">
             <div style="width: 100%;">
               <p style="float: left;width: 80%;text-align: left;color:#868686">
                 <b>{{'register' | translate}}</b>
@@ -831,9 +605,7 @@
               </p>
             </div>
           </div>
-          <mat-divider
-            style="float: left;width: 100%;margin: 5% 0 5% 0;"
-            *ngIf="showDetail === bookI"></mat-divider>
+          <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;" *ngIf="showDetail === bookI"></mat-divider>
         </mat-card-header>
         <mat-card-content *ngIf="showDetail === bookI">
           <div style="float: left; width: 100%;">
@@ -841,12 +613,8 @@
               <p style="font-size: 20px;">{{'client' | translate}}</p>
             </div>
             <div style="float: left;width: 100%;">
-              <div
-                style="float: left; width: 20%; margin-top: 5%;height: 80px;">
-                <img
-                  [src]="getClientAvatar(defaults.client_main_id.id)"
-                  width="100"
-                  height="100"
+              <div style="float: left; width: 20%; margin-top: 5%;height: 80px;">
+                <img [src]="getClientAvatar(defaults.client_main_id.id)" width="100" height="100"
                   style="border-radius: 100%;height:100%" />
               </div>
               <div style="float: left; width: 75%;margin:6% 0 0 2%">
@@ -866,37 +634,26 @@
                 <div style="display:flex">
                   <vex-icon src="chat">
                   </vex-icon>
-                  <vex-icon
-                    src="mail"
-                    href="mailto:{{defaults.email}}"
-                    style="cursor:pointer"
+                  <vex-icon src="mail" href="mailto:{{defaults.email}}" style="cursor:pointer"
                     title="{{defaults.email}}">
                   </vex-icon>
-                  <vex-icon
-                    src="phone"
-                    href="tel:{{defaults.phone}}"
-                    style="cursor:pointer"
-                    title="{{defaults.phone}}">
+                  <vex-icon src="phone" href="tel:{{defaults.phone}}" style="cursor:pointer" title="{{defaults.phone}}">
                   </vex-icon>
                 </div>
               </div>
             </div>
           </div>
-          <mat-divider
-            style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
+          <mat-divider style="float: left;width: 100%;margin: 5% 0 5% 0;"></mat-divider>
           <div style="float: left; width: 100%;margin-top: 5%;">
-            <div
-              style="float: left; width: 100%;;height: 40px"
+            <div style="float: left; width: 100%;;height: 40px"
               *ngIf="item.courseDates[0].client_id === defaults.client_main_id.id">
               <div style="float: left; width: 20%;">
-                <img
-                  [src]="getClientAvatar(item.courseDates[0].client_id)"
+                <img [src]="getClientAvatar(item.courseDates[0].client_id)"
                   style="height:100%;border-radius: 100%;width: 70px;height: 70px;" />
               </div>
               <div style="float: left; width: 80%;">
                 <p>{{getClientName(item.courseDates[0].client_id)}}</p>
-                <p
-                  style="font-size:8px"
+                <p style="font-size:8px"
                   *ngIf="item.courseDates[0].monitor_id && item.courseDates[0].monitor_id !== null">
                   <i>
                     {{
@@ -914,8 +671,7 @@
               </div>
             </div>
 
-            <div
-              style="float: left; width: 100%;;height: 40px"
+            <div style="float: left; width: 100%;;height: 40px"
               *ngIf="item.courseDates[0].client_id !== defaults.client_main_id.id">
               <div style="float: left; width: 20%;">
                 <img
@@ -927,8 +683,7 @@
                   {{getUtilizer(item.courseDates[0].client_id)?.first_name}}
                   {{getUtilizer(item.courseDates[0].client_id)?.last_name}}
                 </p>
-                <p
-                  style="font-size:8px"
+                <p style="font-size:8px"
                   *ngIf="item.courseDates[0].monitor_id && item.courseDates[0].monitor_id !== null">
                   <i>
                     {{
@@ -947,15 +702,12 @@
             </div>
             <div style="float: left; width: 100%;margin-top: 10%;">
               <div style="float: left; width: 100%;">
-                <div
-                  *ngIf="item.courseDates[0].course.course_type === 2"
+                <div *ngIf="item.courseDates[0].course.course_type === 2"
                   style="background-color: #8FD14F;width: 25px;border-radius: 100%;height: 25px;float:left"></div>
-                <div
-                  *ngIf="item.courseDates[0].course.course_type === 1"
+                <div *ngIf="item.courseDates[0].course.course_type === 1"
                   style="background-color: #FAC710;width: 25px;border-radius: 100%;height: 25px;float:left"></div>
 
-                <p
-                  style="float: left; width: 80%; font-size: 18px;margin: 0 0 0 5%;">
+                <p style="float: left; width: 80%; font-size: 18px;margin: 0 0 0 5%;">
                   <strong>{{ item.courseDates[0].course?.name}}</strong>
                 </p>
                 <!--<p style="float: left; width: 100%;">
@@ -972,8 +724,7 @@
                         {{courseDateDate?.hour_end}}h</i>
                     </li>
                   </ng-container>
-                  <ng-container
-                    *ngIf="!item.courseDates[0].course?.is_flexible">
+                  <ng-container *ngIf="!item.courseDates[0].course?.is_flexible">
                     <li *ngFor="let courseDateDate of item.courseDates">
                       {{ courseDateDate?.date | date: 'yyyy-MM-dd'
                       }}<i style="float: right;">
@@ -998,8 +749,7 @@
                     {{getMonitorName(item.courseDates[0].monitor_id) ||
                     ("text_nomonitorset" | translate)}}
                   </p>
-                  <p
-                    style="font-size:8px"
+                  <p style="font-size:8px"
                     *ngIf="item.courseDates[0].monitor_id && item.courseDates[0].monitor_id !== null">
                     <i>
                       {{
@@ -1016,11 +766,8 @@
                   </p>
                 </div>
               </div>
-              <div
-                style="float: left; width: 100%;"
-                *ngIf="item.courseDates[0].course?.course_type === 1">
-                <div
-                  style="float: left; width: 100%;color:#fff; padding:5%;margin-top: 5%;"
+              <div style="float: left; width: 100%;" *ngIf="item.courseDates[0].course?.course_type === 1">
+                <div style="float: left; width: 100%;color:#fff; padding:5%;margin-top: 5%;"
                   [ngStyle]="{'background': getLevelColor(item.courseDates[0].degree_id)}">
                   {{getLevelName(item.courseDates[0].degree_id)}}
                 </div>
@@ -1051,8 +798,7 @@
               </div>
             </div>
           </div>
-          <div
-            style="float: left; width: 100%;margin-top:5%;padding:2%;background:#EFEFEF">
+          <div style="float: left; width: 100%;margin-top:5%;padding:2%;background:#EFEFEF">
             <!--<div style="float: left; width: 25%;">
               <p><strong>{{item.price_cancellation_insurance}}{{item.currency}}</strong></p>
             </div>
@@ -1076,9 +822,7 @@
               </p>
             </div>
           </div>
-          <div
-            style="float: left; width: 100%;margin-top:10%;padding:2%;background:#EFEFEF"
-            *ngIf="false">
+          <div style="float: left; width: 100%;margin-top:10%;padding:2%;background:#EFEFEF" *ngIf="false">
             <div style="text-align: left;width: 50%;float:left">
               <ul>
                 <li>{{'base_price' | translate | uppercase}}</li>
@@ -1106,28 +850,16 @@
             </div>
           </div>
 
-          <div
-            style="float: left;margin: 5% 0 0 0;width: 50%;"
-            *ngIf="!externalData">
-            <button
-              color="primary"
-              mat-raised-button
-              type="button"
-              style="border-radius: 0;"
-              [disabled]="bookingsToCreate.length === 0"
-              (click)="addAnotherCourse()">
+          <div style="float: left;margin: 5% 0 0 0;width: 50%;" *ngIf="!externalData">
+            <button color="primary" mat-raised-button type="button" style="border-radius: 0;"
+              [disabled]="bookingsToCreate.length === 0" (click)="addAnotherCourse()">
               + {{'add_another_course' | translate}}
             </button>
           </div>
 
           <div style="float: right;margin: 5% 0 0 0;width: 50%;">
-            <button
-              color="primary"
-              mat-raised-button
-              type="button"
-              style="border-radius: 0;float:right"
-              (click)="save()"
-              [disabled]="bookingsToCreate.length === 0">
+            <button color="primary" mat-raised-button type="button" style="border-radius: 0;float:right"
+              (click)="save()" [disabled]="bookingsToCreate.length === 0">
               {{'end_booking' | translate}}
             </button>
           </div>
@@ -1136,29 +868,20 @@
     </ng-container>
   </div>
 
-  <div
-    [@stagger]="true"
-    class="p-gutter container"
-    style="max-width: none;padding: 0.5%;"
+  <div [@stagger]="true" class="p-gutter container" style="max-width: none;padding: 0.5%;"
     *ngIf="bookingComplete && !loading">
     <div class="flex flex-col sm:flex-row gap-4">
       <div class="column-container">
         <!-- Aquí añade tu otro contenedor o lo que necesites -->
         <div class="card-container">
           <!-- Nuevo contenedor para las cards -->
-          <div
-            @fadeInUp
-            class="card flex-auto"
-            style="height: 100%; padding: 1px">
+          <div @fadeInUp class="card flex-auto" style="height: 100%; padding: 1px">
             <div class="px-6 py-4 border-b flex items-center">
               <h2 class="title m-0" style="width: 80%;">
                 {{'booking_info' | translate }}
               </h2>
               <div style="width: 50%">
-                <button
-                  mat-button
-                  type="button"
-                  (click)="bookingComplete = false"
+                <button mat-button type="button" (click)="bookingComplete = false"
                   style="background: #FF4081;float: right;color: #fff;">
                   {{'back' | translate}}
                 </button>
@@ -1166,9 +889,7 @@
                 <!-- Added (click) event here -->
               </div>
             </div>
-            <mat-card
-              class="reservation-detail-card"
-              *ngFor="let item of bookingsToCreate; let bI = index">
+            <mat-card class="reservation-detail-card" *ngFor="let item of bookingsToCreate; let bI = index">
               <div>
                 <p style="padding: 5%;width: 40%;float: left;font-size: 13px;">
                   {{'participant' | translate }}
@@ -1180,16 +901,12 @@
               </div>
 
               <mat-card-header>
-                <button
-                  mat-icon-button
-                  color="warn"
-                  class="delete-icon"
-                  (click)="deleteBooking(bI)">
+                <button mat-icon-button color="warn" class="delete-icon" (click)="deleteBooking(bI)">
                   <mat-icon svgIcon="mat:delete"></mat-icon>
                 </button>
-                <div
-                  mat-card-avatar
-                  [style.background-image]="'url(' + getClientAvatarUtilizer(item.courseDates[0].client_id) + ')'"></div>
+                <div mat-card-avatar
+                  [style.background-image]="'url(' + getClientAvatarUtilizer(item.courseDates[0].client_id) + ')'">
+                </div>
                 <mat-card-subtitle>{{getClientNameUtilizer(item.courseDates[0].client_id)}}</mat-card-subtitle>
                 <mat-card-subtitle>
                   {{ getLanguageUtilizer(item.courseDates[0].client_id) }} ·
@@ -1200,22 +917,19 @@
               </mat-card-header>
 
               <mat-divider class="text-border"></mat-divider>
-              <p
-                style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">
+              <p style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">
                 {{'activity' | translate }}
               </p>
 
               <mat-card-header>
-                <div
-                  mat-card-avatar
+                <div mat-card-avatar
                   [style.background-image]="'url(' + (item.courseDates[0].course?.course_type === 1 ? collectifIcon : privateIcon) + ')'"
                   style="border-radius: 5px"></div>
                 <mat-card-title class="mat-mdc-card-title">
                   <div style="float: left;width: 70%;font-size: 14px;">
                     {{item.courseDates[0].course?.name}}
                   </div>
-                  <div
-                    class="ng-tns-c545279033-6"
+                  <div class="ng-tns-c545279033-6"
                     style="float: left;font-size: 14px;width: 30%;text-align: right;color: #EA0C60;">
                     {{
                     item.courseDates[0].course?.course_type === 2 &&
@@ -1229,39 +943,32 @@
                     {{item.courseDates[0].course?.currency}}
                   </div>
                 </mat-card-title>
-                <mat-card-subtitle
-                  style="margin: 0">{{item.courseDates[0].course?.course_type
+                <mat-card-subtitle style="margin: 0">{{item.courseDates[0].course?.course_type
                   === 1 ? 'colective' : 'private' | translate}}
                   {{item.courseDates[0].course?.sport.name}}</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
                 <ul style="font-size: 12px;padding: 0 0 0 18%;">
                   <li *ngFor="let date of item.courseDates">
-                    <mat-icon
-                      style="height: 15px;width: 20px;"
-                      svgIcon="mat:calendar_today"></mat-icon>{{ date.date |
+                    <mat-icon style="height: 15px;width: 20px;" svgIcon="mat:calendar_today"></mat-icon>{{ date.date |
                     date:'fullDate': '' : translateService.currentLang }} -
                     {{date.hour_start}} /
                     {{ date.hour_end }}
                   </li>
                 </ul>
-                <div
-                  style="float: left;width: 100%;margin: 2% 0 2% 0; padding:2%; color: #fff"
+                <div style="float: left;width: 100%;margin: 2% 0 2% 0; padding:2%; color: #fff"
                   [ngStyle]="{'background': getDegree(item.courseDates[0].degree_id)?.color !== null ? getDegree(item.courseDates[0].degree_id)?.color : ''}">
                   {{getDegree(item.courseDates[0].degree_id)?.annotation}}
                   {{getDegree(item.courseDates[0].degree_id)?.level}}
                 </div>
                 <div style="float: left;width: 100%;margin: 2% 0 2% 0;">
                   <div style="float: left;width: 15%;">
-                    <img
-                      style="float: left;width: 100%;height: 60px;"
+                    <img style="float: left;width: 100%;height: 60px;"
                       [src]="item?.courseDates[0]?.monitor_id !== null ? getMonitorAvatar(item?.courseDates[0]?.monitor_id) : userAvatar"
-                      alt="Avatar de usuario"
-                      class="user-avatar" />
+                      alt="Avatar de usuario" class="user-avatar" />
                   </div>
                   <div style="float: left;width: 80%;margin: 3% 0 0 3%;">
-                    <span
-                      style="float: left;width: 100%;">{{
+                    <span style="float: left;width: 100%;">{{
                       item?.courseDates[0]?.monitor_id !== null ?
                       getMonitorName(item?.courseDates[0]?.monitor_id) :
                       ("text_nomonitorset" | translate)}}</span><br />
@@ -1278,12 +985,9 @@
                       &ensp;{{'years' | translate}}</span>
                   </div>
                 </div>
-                <mat-divider
-                  style="float: left;width: 100%;"
-                  class="text-border"></mat-divider>
+                <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
 
-                <p
-                  style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">
+                <p style="padding: 5%;width: 40%;float: left;font-size: 13px; font-weight: bold;">
                   {{'options' | translate}}
                 </p>
 
@@ -1309,10 +1013,7 @@
                     <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                       <ul>
                         <li *ngFor="let forfait of settings?.extras?.forfait">
-                          <mat-checkbox
-                            class="radio"
-                            [value]="forfait"
-                            (change)="setForfait($event, forfait, item, bI)"
+                          <mat-checkbox class="radio" [value]="forfait" (change)="setForfait($event, forfait, item, bI)"
                             [checked]="item?.forfait?.id === forfait.id">
                             <span> {{forfait.product}} - {{ forfait.name }}
                             </span>
@@ -1387,9 +1088,7 @@
                   </div>
                 </div>
 
-                <mat-divider
-                  style="float: left;width: 100%;"
-                  class="text-border"></mat-divider>
+                <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
 
                 <div style="width: 100%;float:left;">
                   <div>
@@ -1414,21 +1113,14 @@
                     </p>
                   </div>
                 </div>
-                <mat-divider
-                  style="float: left;width: 100%;"
-                  class="text-border"></mat-divider>
+                <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
 
-                <div
-                  style="width: 100%;float:left;margin: 20px 0 0 0;padding: 10px">
+                <div style="width: 100%;float:left;margin: 20px 0 0 0;padding: 10px">
                   <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
                     <mat-form-field appearance="outline" class="flex-auto">
                       <mat-label>{{'observation_client' |
                         translate}}</mat-label>
-                      <input
-                        matInput
-                        required
-                        type="text"
-                        (blur)="setClientsNotes($event, item)" />
+                      <input matInput required type="text" (blur)="setClientsNotes($event, item)" />
                     </mat-form-field>
                   </div>
 
@@ -1436,19 +1128,12 @@
                     <mat-form-field appearance="outline" class="flex-auto">
                       <mat-label>{{'observation_school' |
                         translate}}</mat-label>
-                      <input
-                        matInput
-                        required
-                        type="text"
-                        (blur)="setSchoolNotes($event, item)" />
+                      <input matInput required type="text" (blur)="setSchoolNotes($event, item)" />
                     </mat-form-field>
                   </div>
                 </div>
-                <mat-divider
-                  style="float: left;width: 100%;"
-                  class="text-border"></mat-divider>
-                <div
-                  style="width: 100%;float:left;margin: 20px 0 0 0;padding: 10px">
+                <mat-divider style="float: left;width: 100%;" class="text-border"></mat-divider>
+                <div style="width: 100%;float:left;margin: 20px 0 0 0;padding: 10px">
                   <p style="font-size: 12px;color:#868686">
                     <strong>{{'register' | translate}}</strong>:{{ minDate |
                     date: 'yyyy-MM-dd'}}
@@ -1477,8 +1162,7 @@
             </div>
             <mat-card style="width: 100%;padding:1%">
               <mat-card-header>
-                <div
-                  mat-card-avatar
+                <div mat-card-avatar
                   [style.background-image]="'url(' + getClientAvatar(defaults.client_main_id.id) + ')'"
                   style="width:100px; height: 60px;"></div>
                 <mat-card-subtitle>{{getClientName(defaults.client_main_id.id)}}</mat-card-subtitle>
@@ -1491,59 +1175,37 @@
                 <mat-card-subtitle style="display: flex;">
                   <vex-icon src="chat">
                   </vex-icon>
-                  <vex-icon
-                    src="mail"
-                    href="mailto:{{getClient(defaults.client_main_id)?.email}}"
-                    style="cursor:pointer"
-                    title="{{getClient(defaults.client_main_id)?.email}}">
+                  <vex-icon src="mail" href="mailto:{{getClient(defaults.client_main_id)?.email}}"
+                    style="cursor:pointer" title="{{getClient(defaults.client_main_id)?.email}}">
                   </vex-icon>
-                  <vex-icon
-                    src="phone"
-                    href="tel:{{getClient(defaults.client_main_id)?.phone}}"
+                  <vex-icon src="phone" href="tel:{{getClient(defaults.client_main_id)?.phone}}"
                     title="{{getClient(defaults.client_main_id)?.phone}}">
                   </vex-icon>
                 </mat-card-subtitle>
               </mat-card-header>
-              <mat-divider
-                class="text-border"
-                style="margin: 10px 0 10px 0"></mat-divider>
+              <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
               <button mat-raised-button color="accent" (click)="addReduction()">
                 {{'apply_reduction' | translate}}
               </button>
-              <mat-divider
-                class="text-border"
-                style="margin: 10px 0 10px 0"></mat-divider>
+              <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
               <button mat-raised-button color="accent" (click)="addBonus()">
                 {{'apply_bonus' | translate}}
               </button>
-              <mat-divider
-                class="text-border"
-                style="margin: 10px 0 10px 0"></mat-divider>
-              <div
-                style="float: left;width: 100%;"
-                *ngIf="!isNanValue(this.cancellationInsurance)">
+              <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+              <div style="float: left;width: 100%;" *ngIf="!isNanValue(this.cancellationInsurance)">
                 <p style="float: left;">{{'op_rem' | translate}}</p>
-                <mat-slide-toggle
-                  color="primary"
-                  [(ngModel)]="defaults.has_cancellation_insurance"
-                  (change)="calculateRem($event)"
-                  [disabled]="isNanValue(this.cancellationInsurance)"
+                <mat-slide-toggle color="primary" [(ngModel)]="defaults.has_cancellation_insurance"
+                  (change)="calculateRem($event)" [disabled]="isNanValue(this.cancellationInsurance)"
                   style="float: right;"></mat-slide-toggle>
               </div>
-              <div
-                style="float: left;width: 100%;"
+              <div style="float: left;width: 100%;"
                 *ngIf="!isNanValue(this.boukiiCarePrice) && this.boukiiCarePrice > 0">
                 <p style="float: left;">Boukii Care</p>
-                <mat-slide-toggle
-                  color="primary"
-                  [(ngModel)]="defaults.has_boukii_care"
-                  (change)="calculateBoukiiCare($event)"
-                  [disabled]="isNanValue(this.boukiiCarePrice)"
+                <mat-slide-toggle color="primary" [(ngModel)]="defaults.has_boukii_care"
+                  (change)="calculateBoukiiCare($event)" [disabled]="isNanValue(this.boukiiCarePrice)"
                   style="float: right;"></mat-slide-toggle>
               </div>
-              <mat-divider
-                class="text-border"
-                style="margin: 10px 0 10px 0"></mat-divider>
+              <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
               <h3 style="font-size: 1.5rem!important;">
                 {{'summary' | translate}}
               </h3>
@@ -1557,12 +1219,8 @@
                   </p>
                 </span>
 
-                <span
-                  style="width: 100%; float:left"
-                  *ngIf="reduction !== null">
-                  <mat-icon
-                    svgIcon="mat:delete"
-                    style="float: left;color: red; cursor:pointer"
+                <span style="width: 100%; float:left" *ngIf="reduction !== null">
+                  <mat-icon svgIcon="mat:delete" style="float: left;color: red; cursor:pointer"
                     (click)="reduction = null; calculateFinalPrice()"></mat-icon>
                   <p style="float:left">{{'reduction' |translate}}</p>
                   <p style="float:right">
@@ -1573,12 +1231,8 @@
                 </span>
 
                 <ng-container *ngIf="bonus.length > 0">
-                  <span
-                    style="width: 100%; float:left"
-                    *ngFor="let item of bonus; let i = index">
-                    <mat-icon
-                      svgIcon="mat:delete"
-                      style="float: left;color: red; cursor:pointer"
+                  <span style="width: 100%; float:left" *ngFor="let item of bonus; let i = index">
+                    <mat-icon svgIcon="mat:delete" style="float: left;color: red; cursor:pointer"
                       (click)="deleteBonus(i)"></mat-icon>
                     <p style="float:left">
                       {{'bonus' | translate}} {{item.bonus.code}}
@@ -1591,8 +1245,7 @@
                   </span>
                 </ng-container>
 
-                <ng-container
-                  *ngFor="let item of bookingsToCreate; let i = index">
+                <ng-container *ngFor="let item of bookingsToCreate; let i = index">
                   <span style="width: 100%; float:left" *ngIf="item.forfait">
                     <p style="float:left">
                       {{item.forfait.product}} - {{ item.forfait.name }}
@@ -1608,9 +1261,7 @@
                   </span>
                 </ng-container>
 
-                <span
-                  style="width: 100%; float:left"
-                  *ngIf="defaults.has_cancellation_insurance">
+                <span style="width: 100%; float:left" *ngIf="defaults.has_cancellation_insurance">
                   <p style="float:left">{{'op_rem' | translate}}</p>
                   <p style="float:right">
                     {{(getBasePrice()*this.cancellationInsurance)| number:'0.2-2'}}
@@ -1619,9 +1270,7 @@
                   </p>
                 </span>
 
-                <span
-                  style="width: 100%; float:left"
-                  *ngIf="defaults.has_boukii_care">
+                <span style="width: 100%; float:left" *ngIf="defaults.has_boukii_care">
                   <p style="float:left">Boukii Care</p>
                   <p style="float:right">
                     {{(this.boukiiCarePrice * getBookingPaxes() *
@@ -1650,120 +1299,64 @@
                 </span>
               </div>
 
-              <mat-divider
-                class="text-border"
-                style="margin: 10px 0 10px 0"></mat-divider>
-              <div class="square-buttons-container"
-                style="padding: 0 10px; gap: 10px;">
-                <button
-                  mat-raised-button
-                  color="accent"
-                  class="square-button"
-                  (click)="selectedButton='1';selectedSubButton='0';"
-                  [class.selected]="selectedButton==='1'">
+              <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+              <div class="square-buttons-container" style="padding: 0 10px; gap: 10px;">
+                <button mat-raised-button color="accent" class="square-button"
+                  (click)="selectedButton='1';selectedSubButton='0';" [class.selected]="selectedButton==='1'">
                   {{'payment_direct' | translate}}
                 </button>
-                <button
-                  mat-raised-button
-                  color="accent"
-                  class="square-button"
+                <button mat-raised-button color="accent" class="square-button"
                   (click)="selectedButton='2';selectedSubButton='0';defaults.payment_method_id = 3"
                   [class.selected]="selectedButton==='2'">
                   {{'payment_online' | translate}}
                 </button>
-                <button
-                  mat-raised-button
-                  color="accent"
-                  class="square-button"
+                <button mat-raised-button color="accent" class="square-button"
                   (click)="selectedButton='3';selectedSubButton='0';defaults.payment_method_id = 5"
                   [class.selected]="selectedButton==='3'">
                   {{'payment_no_payment' | translate}}
                 </button>
               </div>
-              <mat-divider
-                class="text-border"
-                style="margin: 10px 0 10px 0"></mat-divider>
-              <div
-                class="square-buttons-container"
-                *ngIf="selectedButton==='1'"
-                style="padding: 0 10px; gap: 10px;">
-                <button
-                  mat-raised-button
-                  color="accent"
-                  class="square-button"
+              <mat-divider class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+              <div class="square-buttons-container" *ngIf="selectedButton==='1'" style="padding: 0 10px; gap: 10px;">
+                <button mat-raised-button color="accent" class="square-button"
                   (click)="selectedSubButton='1';defaults.payment_method_id = 1"
                   [class.selected]="selectedSubButton==='1'">
                   {{'payment_cash' | translate}}
                 </button>
-                <button
-                  mat-raised-button
-                  color="accent"
-                  class="square-button"
+                <button mat-raised-button color="accent" class="square-button"
                   (click)="selectedSubButton='2'; defaults.payment_method_id = 4"
                   [class.selected]="selectedSubButton==='2'">
                   {{'payment_other' | translate}}
                 </button>
-                <button
-                  mat-raised-button
-                  color="accent"
-                  class="square-button"
+                <button mat-raised-button color="accent" class="square-button"
                   (click)="selectedSubButton='3'; defaults.payment_method_id = 2"
                   [class.selected]="selectedSubButton==='3'">
                   Boukii Pay
                 </button>
               </div>
-              <mat-divider
-                *ngIf="selectedSubButton==='1' || selectedSubButton==='2'"
-                class="text-border"
+              <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2'" class="text-border"
                 style="margin: 10px 0 10px 0"></mat-divider>
-              <div
-                style="width:100%"
-                class="square-buttons-container"
+              <div style="width:100%" class="square-buttons-container"
                 *ngIf="selectedSubButton==='1' || selectedSubButton==='2'">
                 <p style="float:left;width: 100%;">{{'is_paid' | translate}}</p>
-                <mat-slide-toggle
-                  color="primary"
-                  (change)="setPaid($event)"
-                  style="float: right;"></mat-slide-toggle>
+                <mat-slide-toggle color="primary" (change)="setPaid($event)" style="float: right;"></mat-slide-toggle>
               </div>
-              <mat-divider
-                *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'"
-                class="text-border"
-                style="margin: 10px 0 10px 0"></mat-divider>
-              <div
-                style="width:100%"
-                class="square-buttons-container"
+              <mat-divider *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'"
+                class="text-border" style="margin: 10px 0 10px 0"></mat-divider>
+              <div style="width:100%" class="square-buttons-container"
                 *ngIf="selectedSubButton==='1' || selectedSubButton==='2' || selectedSubButton === '3'">
-                <button
-                  mat-raised-button
-                  color="accent"
-                  class="square-button"
-                  (click)="create()"
+                <button mat-raised-button color="accent" class="square-button" (click)="create()"
                   [disabled]="(selectedSubButton==='1' || selectedSubButton==='2') && !defaults.paid">
                   {{'confirm_booking' | translate }}
                 </button>
               </div>
-              <div
-                class="square-buttons-container"
-                *ngIf="selectedButton==='2'">
-                <button
-                  style="width:100%"
-                  mat-raised-button
-                  color="primary"
-                  class="square-button"
-                  (click)="create()">
+              <div class="square-buttons-container" *ngIf="selectedButton==='2'">
+                <button style="width:100%" mat-raised-button color="primary" class="square-button" (click)="create()">
                   {{'confirm_email' |translate}}
                 </button>
               </div>
-              <div
-                class="square-buttons-container"
-                *ngIf="selectedButton==='3'">
-                <button
-                  style="width:100%"
-                  mat-raised-button
-                  color="primary"
-                  class="square-button"
-                  (click)="create()">
+              <div class="square-buttons-container" *ngIf="selectedButton==='3'">
+                <button style="width:100%" mat-raised-button color="primary" class="square-button" (click)="create()">
                   {{'confirm_booking' | translate }}
                 </button>
               </div>

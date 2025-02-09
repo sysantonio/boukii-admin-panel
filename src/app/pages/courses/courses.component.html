@@ -12,32 +12,20 @@
     {icon:'cursos'},
     {text:'courses.title', title: true},
     {text:'list', subtitle: true},
-    ]"
-			class="flex-auto"></vex-breadcrumbs>
+    ]" class="flex-auto"></vex-breadcrumbs>
 	</vex-secondary-toolbar>
 
 	<vex-page-layout-content class="-mt-6 fullwidth">
-		<vex-aio-table [columns]="columns"
-			[entity]="entity"
-			[deleteEntity]="deleteEntity"
-			[title]="'courses.title'"
-			[route]="'courses'"
-			[createComponent]="createComponent"
-			[canDelete]="false"
-			[canDeactivate]="true"
-			[ngClass]="{'table-show-detail': this.showDetail}"
-			[sectionIcon]="icon"
-			[canDuplicate]="true"
+		<vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'courses.title'"
+			[route]="'courses'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
+			[ngClass]="{'table-show-detail': this.showDetail}" [sectionIcon]="icon" [canDuplicate]="true"
 			[showDetail]="showDetail"
 			[with]="['user', 'courseDates.courseGroups.courseSubgroups.degree', 'station', 'bookingUsers.courseSubgroup.degree', 'sport']"
-			[updatePage]="'detail'"
-			[filterColumn]="'school_id'"
-			[filterField]="user.schools[0].id"
+			[updatePage]="'detail'" [filterColumn]="'school_id'" [filterField]="user.schools[0].id"
 			(showDetailEvent)="showDetailEvent($event)"></vex-aio-table>
 	</vex-page-layout-content>
 
-	<vex-page-layout-content *ngIf="showDetail"
-		class="fullwidth col-right">
+	<vex-page-layout-content *ngIf="showDetail" class="fullwidth col-right">
 		<mat-card>
 			<mat-card-header style="display:block">
 				<div style="width: 100%;">
@@ -47,12 +35,9 @@
 						</mat-card-title>
 					</span>
 					<span style="display: inline-block;width: 20%; text-align: right;">
-						<img (click)="goTo('/courses/detail/'+detailData.id)"
-							src="assets/img/icons/edit.svg"
+						<img (click)="goTo('/courses/detail/'+detailData.id)" src="assets/img/icons/edit.svg"
 							class="btn-edit">
-						<img (click)="showDetail = false"
-							src="assets/img/icons/close.svg"
-							class="btn-close">
+						<img (click)="showDetail = false" src="assets/img/icons/close.svg" class="btn-close">
 					</span>
 				</div>
 				<div style="width: 100%; border-top: 1px solid white; margin-top: 5px; padding-top: 5px;">
@@ -64,11 +49,11 @@
 							<span style="margin-left: 10px;font-weight: normal;color: white;">
 								<span style="color: white;">
 									{{detailData.created_at | date:
-                  'yyyy-MM-dd'}}
+									'yyyy-MM-dd'}}
 								</span>
 								<span style="margin-left: 10px;font-style: italic;color: white;">
 									{{detailData.created_at
-                  | date: 'HH:mm'}}h
+									| date: 'HH:mm'}}h
 								</span>
 							</span>
 						</div>
@@ -77,8 +62,8 @@
 							{{ detailData.user?.username }}
 							<span style="margin-left: 10px;color: white;">
 								({{
-                detailData.user?.first_name + ' '
-                + detailData.user?.last_name}})
+								detailData.user?.first_name + ' '
+								+ detailData.user?.last_name}})
 							</span>
 						</div>
 					</mat-card-subtitle>
@@ -137,19 +122,15 @@
 
 			<mat-card-content>
 				<div class="dots">
-					<div [ngStyle]="{'background-color': detailData.active ? '#CEE741' : '#e6e6e6'}"
-						class="dot"></div>
-					<div [ngStyle]="{'background-color': detailData.options ? '#CEE741' : '#e6e6e6'}"
-						class="dot"></div>
-					<div [ngStyle]="{'background-color': detailData.online ? '#CEE741' : '#e6e6e6'}"
-						class="dot"></div>
+					<div [ngStyle]="{'background-color': detailData.active ? '#CEE741' : '#e6e6e6'}" class="dot"></div>
+					<div [ngStyle]="{'background-color': detailData.options ? '#CEE741' : '#e6e6e6'}" class="dot"></div>
+					<div [ngStyle]="{'background-color': detailData.online ? '#CEE741' : '#e6e6e6'}" class="dot"></div>
 				</div>
-				<div *ngIf="detailData.course_type == 1 || detailData.is_flexible"
-					class="title-status">
+				<div *ngIf="detailData.course_type == 1 || detailData.is_flexible" class="title-status">
 					<div class="col-left">
 						<b>
 							{{'courses.date_reservable' |
-              translate}}
+							translate}}
 						</b>
 					</div>
 					<div class="col-right">
@@ -158,8 +139,7 @@
 						</b>
 					</div>
 				</div>
-				<div *ngIf="detailData.course_type == 1 || detailData.is_flexible"
-					class="list-holder">
+				<div *ngIf="detailData.course_type == 1 || detailData.is_flexible" class="list-holder">
 					<div class="col-left">
 						<b>
 							{{detailData.date_start_res | date: 'yyyy-MM-dd'}}
@@ -172,8 +152,7 @@
 					</div>
 				</div>
 
-				<div *ngIf="!detailData.is_flexible && detailData.course_type != 1"
-					class="title-status">
+				<div *ngIf="!detailData.is_flexible && detailData.course_type != 1" class="title-status">
 					<div class="col-left">
 						<b>
 							{{'from' | translate}}
@@ -185,25 +164,24 @@
 						</b>
 					</div>
 				</div>
-				<div *ngIf="!detailData.is_flexible && detailData.course_type != 1"
-					class="list-holder">
+				<div *ngIf="!detailData.is_flexible && detailData.course_type != 1" class="list-holder">
 					<div class="col-left">
 						<b>
 							{{detailData.date_start | date:
-              'yyyy-MM-dd'}}
+							'yyyy-MM-dd'}}
 						</b>
 						<br>
 						{{detailData.course_dates[0]?.hour_start.substring(0,
-            5)}}h
+						5)}}h
 					</div>
 					<div class="col-right">
 						<b>
 							{{detailData.date_end | date:
-              'yyyy-MM-dd'}}
+							'yyyy-MM-dd'}}
 						</b>
 						<br>
 						{{detailData.course_dates[0]?.hour_end.substring(0,
-            5)}}h
+						5)}}h
 					</div>
 				</div>
 
@@ -214,11 +192,8 @@
 
 					<div class="holder-deporte">
 						<div class="col-left">
-							<img *ngIf="detailData?.course_type == 1"
-								[src]="detailData?.sport?.icon_collective"
-								style="width: 75px; height: 75px;"
-								width="60"
-								height="60">
+							<img *ngIf="detailData?.course_type == 1" [src]="detailData?.sport?.icon_collective"
+								style="width: 75px; height: 75px;" width="60" height="60">
 							<!-- <app-level-user
                 *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
                 [allLevels]="detailData.degrees_sport"
@@ -231,13 +206,12 @@
 							<div class="client-name">{{detailData.name}}</div>
 							<div class="client-dates">
 								{{detailData.course_type === 1 ? 'colective' :
-                detailData.course_type === 1 ? 'private' : 'activity' |
-                translate}}
-                {{detailData.is_flexible ? 'flex' : 'fix'}}
-                {{ detailData.sport.name}}
+								detailData.course_type === 1 ? 'private' : 'activity' |
+								translate}}
+								{{detailData.is_flexible ? 'flex' : 'fix'}}
+								{{ detailData.sport.name}}
 							</div>
-							<div *ngIf="detailData.station"
-								class="client-ubicacion">
+							<div *ngIf="detailData.station" class="client-ubicacion">
 								{{detailData.station.name}}
 							</div>
 						</div>
@@ -255,11 +229,8 @@
 
 					<div class="holder-deporte">
 						<div class="col-left">
-							<img *ngIf="detailData?.course_type == 2"
-								[src]="detailData?.sport?.icon_prive"
-								style="width: 75px; height: 75px;"
-								width="60"
-								height="60">
+							<img *ngIf="detailData?.course_type == 2" [src]="detailData?.sport?.icon_prive"
+								style="width: 75px; height: 75px;" width="60" height="60">
 
 							<!-- <app-level-user
                 *ngIf="detailData.degrees_sport && detailData.degrees_sport.length"
@@ -273,11 +244,10 @@
 							<div class="client-name">{{detailData.name}}</div>
 							<div class="client-dates">
 								{{detailData.course_type === 1 ? 'Collectif' : 'Privee'}}
-                {{detailData.is_flexible ? 'flex' : 'fix'}} {{
-                detailData.sport.name}}
+								{{detailData.is_flexible ? 'flex' : 'fix'}} {{
+								detailData.sport.name}}
 							</div>
-							<div *ngIf="detailData.station"
-								class="client-ubicacion">
+							<div *ngIf="detailData.station" class="client-ubicacion">
 								{{detailData.station.name}}
 							</div>
 						</div>
@@ -288,15 +258,14 @@
 					</div>
 				</mat-card-content>
 
-				<div *ngIf="detailData.course_type === 1"
-					class="list-holder">
+				<div *ngIf="detailData.course_type === 1" class="list-holder">
 					<ul>
 						<ng-container *ngFor="let item of detailData.course_dates; let i = index">
 							<li *ngIf="item.active || item.active === 1">
 								{{item.date | date:'yyyy-MM-dd'}}
 								<i style="text-align: right;float:right">
 									{{item?.hour_start.substring(0,
-                  5)}}h - {{item?.hour_end.substring(0, 5)}}h
+									5)}}h - {{item?.hour_end.substring(0, 5)}}h
 								</i>
 							</li>
 						</ng-container>
@@ -305,24 +274,23 @@
 						<mat-divider style="border-color: transparent;"></mat-divider>
 					</div>
 				</div>
-				<div *ngIf="detailData.course_type ===2"
-					class="list-holder">
+				<div *ngIf="detailData.course_type ===2" class="list-holder">
 					<ul>
 						<li>
 							{{detailData.course_dates[0]?.date | date:'yyyy-MM-dd'}}
 							<i style="text-align: right;float:right">
 								{{detailData.course_dates[0]?.hour_start.substring(0,
-                5)}}h - {{detailData.course_dates[0]?.hour_end.substring(0,
-                5)}}h
+								5)}}h - {{detailData.course_dates[0]?.hour_end.substring(0,
+								5)}}h
 							</i>
 						</li>
 						<li>
 							{{detailData.course_dates[detailData.course_dates.length - 1]?.date | date:'yyyy-MM-dd'}}
 							<i style="text-align: right;float:right">
 								{{detailData.course_dates[detailData.course_dates.length
-                - 1].hour_start.substring(0, 5)}}h -
-                {{detailData.course_dates[detailData.course_dates.length -
-                1].hour_end.substring(0, 5)}}h
+								- 1].hour_start.substring(0, 5)}}h -
+								{{detailData.course_dates[detailData.course_dates.length -
+								1].hour_end.substring(0, 5)}}h
 							</i>
 						</li>
 					</ul>
@@ -344,20 +312,18 @@
 					</div>
 				</div>
 				<div class="list-holder">
-					<div *ngIf="!detailData.is_flexible"
-						class="col-left">
+					<div *ngIf="!detailData.is_flexible" class="col-left">
 						<b>
 							{{detailData.price}}
 						</b>
 						{{detailData.currency}}
 					</div>
-					<div *ngIf="detailData.is_flexible"
-						class="col-left">
+					<div *ngIf="detailData.is_flexible" class="col-left">
 						<b *ngIf="detailData.is_flexible
             && detailData.price_range !== null">
 							{{'from' | translate }} {{
-              encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(detailData.price_range,
-              detailData)) }}
+							encontrarPrimeraClaveConValor(encontrarPrimeraCombinacionConValores(detailData.price_range,
+							detailData)) }}
 						</b>
 						<b *ngIf="detailData.is_flexible
             && detailData.price_range == null">
@@ -368,9 +334,10 @@
             && detailData.price_range == null">
 							/ {{'day' | translate }}
 						</span>
-						<strong *ngIf="detailData.is_flexible && detailData.course_type === 2 && detailData.price_range === null">
+						<strong
+							*ngIf="detailData.is_flexible && detailData.course_type === 2 && detailData.price_range === null">
 							NO
-              PRICE RANGE SET
+							PRICE RANGE SET
 						</strong>
 					</div>
 					<div class="col-right">
@@ -468,11 +435,9 @@
 						</b>
 					</div>
 					<div class="col-right">
-						<mat-icon (click)="exportQR(detailData.id)"
-							svgIcon="mat:print"
+						<mat-icon (click)="exportQR(detailData.id)" svgIcon="mat:print"
 							style="cursor: pointer;"></mat-icon>
-						<mat-icon (click)="export(detailData.id)"
-							svgIcon="mat:save"
+						<mat-icon (click)="export(detailData.id)" svgIcon="mat:save"
 							style="cursor: pointer;"></mat-icon>
 					</div>
 				</div>
@@ -480,10 +445,8 @@
 				<ng-container *ngFor="let colorKey of colorKeys">
 					<ng-container *ngFor="let level of groupedByColor[colorKey]">
 						<div *ngIf="getSubGroups(level.id) > 0">
-							<div (click)="selectGroup(level)"
-								class="grupo-holder">
-								<div [style.background-color]="colorKey"
-									class="item">
+							<div (click)="selectGroup(level)" class="grupo-holder">
+								<div [style.background-color]="colorKey" class="item">
 									<div>
 										<img src="https://api.boukii.com/storage/icons/award_icon.svg">
 									</div>
@@ -494,7 +457,8 @@
 								</div>
 								<div class="item">
 									<div>
-										<img src="https://api.boukii.com/storage/icons/icons-outline-profile-2-user-white.svg">
+										<img
+											src="https://api.boukii.com/storage/icons/icons-outline-profile-2-user-white.svg">
 									</div>
 									<div>
 										{{'groups' | translate}}
@@ -502,7 +466,7 @@
 									<div>
 										<b>
 											{{getGroups(level.id)}}g -
-                      {{getSubGroups(level.id)}}p
+											{{getSubGroups(level.id)}}p
 										</b>
 									</div>
 								</div>
@@ -529,13 +493,14 @@
 									<div>
 										<b>
 											{{calculateFormattedDuration(detailData.course_dates[0].hour_start,
-                      detailData.course_dates[0].hour_end)}}
+											detailData.course_dates[0].hour_end)}}
 										</b>
 									</div>
 								</div>
 								<div class="item">
 									<div>
-										<img src="https://api.boukii.com/storage/icons/icons-outline-profile-2-user-white.svg">
+										<img
+											src="https://api.boukii.com/storage/icons/icons-outline-profile-2-user-white.svg">
 									</div>
 									<div>
 										{{'students' | translate}}
@@ -549,29 +514,29 @@
 							</div>
 
 							<div class="grupo-bottom-holder">
-								<div *ngFor="let item of selectedGroup; let i = index"
-									class="item">
-									<div *ngIf="level.id === item.degree_id"
-										class="holder">
+								<div *ngFor="let item of selectedGroup; let i = index" class="item">
+									<div *ngIf="level.id === item.degree_id" class="holder">
 										<div style="width: 100%;background-color: #f5f4f6;padding: 10px;">
 											{{'groups'
-                      | translate}} {{i+1}}
+											| translate}} {{i+1}}
 										</div>
 										<div style="width: 100%; border: 1px solid #f5f4f6;padding: 10px 20px;">
 											<div style="width: 70%;display: inline-block; vertical-align: middle;">
 												<img [src]="getMonitor(item.monitor_id)?.image ? getMonitor(item.monitor_id)?.image : imageAvatar"
 													style="width: 50px;height: 50px;border-radius: 100%; display: inline-block; vertical-align: middle;">
-												<div style="display: inline-block; vertical-align: middle;padding-left: 20px;">
+												<div
+													style="display: inline-block; vertical-align: middle;padding-left: 20px;">
 													{{getMonitor(item.monitor_id)?.first_name ?
-                          getMonitor(item.monitor_id)?.first_name + ' ' +
-                          getMonitor(item.monitor_id)?.last_name :
-                          ("text_nomonitorset" | translate)}}
+													getMonitor(item.monitor_id)?.first_name + ' ' +
+													getMonitor(item.monitor_id)?.last_name :
+													("text_nomonitorset" | translate)}}
 												</div>
 											</div>
-											<div style="width: 30%;text-align: right;display: inline-block; vertical-align: middle;">
+											<div
+												style="width: 30%;text-align: right;display: inline-block; vertical-align: middle;">
 												<b>
 													{{getActiveBookingUsers(item.booking_users)}}/{{item.max_participants}}
-                          {{'users' | translate}}
+													{{'users' | translate}}
 												</b>
 											</div>
 										</div>
