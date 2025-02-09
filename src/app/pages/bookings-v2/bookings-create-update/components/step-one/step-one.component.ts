@@ -33,19 +33,11 @@ export class StepOneComponent implements OnInit {
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
     this.selectedClient = this.initialData?.client;
     this.mainClient = this.initialData?.mainClient;
-    this.getClients().subscribe({
-      next: (response) => {
-        this.expandClients = this.getExpandClients(response.data);
-      },
-      error: (err) => {
-        console.error("Error en la petición getClients", err);
-      },
-    });
+    this.getClients().subscribe({ next: (response) => this.expandClients = this.getExpandClients(response.data) });
     this.stepOneForm = this.fb.group({
       client: [this.selectedClient || "", Validators.required],
       mainClient: [this.mainClient, Validators.required],
     });
-
     this.filteredOptions = this.stepOneForm.get('client')!.valueChanges.pipe(
       startWith(''),
       debounceTime(300),
@@ -63,7 +55,7 @@ export class StepOneComponent implements OnInit {
     );
   }
 
-  setClient(ev) {
+  setClient(ev: any) {
     this.selectedClient = ev;
     this.stepOneForm.patchValue({
       client: ev,
@@ -72,7 +64,6 @@ export class StepOneComponent implements OnInit {
   }
 
   addClient() {
-
     const dialogRef = this.dialog.open(ClientCreateUpdateModalComponent, {
       width: '1000px',
       height: 'max-content',
@@ -82,18 +73,28 @@ export class StepOneComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-
-        this.crudService.list('/admin/clients/mains', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&active=1')
-          .subscribe((cl: any) => {
-            const newClient = cl.data.find((c) => c.id = data.data.id);
-            this.selectedClient = newClient;
-            this.stepOneForm.patchValue({
-              client: newClient,
-              mainClient: this.selectedClient,
-            });
-
-          })
-
+        this.getClients().subscribe({
+          next: (response) => {
+            this.filteredOptions = this.stepOneForm.get('client')!.valueChanges.pipe(
+              startWith(''),
+              debounceTime(300),
+              switchMap((value: string) =>
+                this.crudService.list(
+                  '/admin/clients/mains',
+                  1,
+                  50,
+                  'desc',
+                  'id',
+                  `&school_id=${this.user.schools[0].id}&active=1&search=${value}`
+                )
+              ),
+              map((response: any) => this.getExpandClients(response.data)),
+            );
+            this.expandClients = this.getExpandClients(response.data)
+            const newClient = this.expandClients.find((c) => c.id = data.data.data.id);
+            this.setClient(newClient)
+          }
+        });
       }
     })
   }

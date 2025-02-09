@@ -10,6 +10,7 @@ export class FluxUploadImgComponent {
   @Input() imagePreviewUrl: any = ""
 
   onFileChanged(event: Event) {
+    console.log(event)
     const file = (event.target as HTMLInputElement).files[0];
     if (file) {
       const reader = new FileReader();

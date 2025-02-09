@@ -7,14 +7,12 @@ import { _MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
-import { Observable, forkJoin, map, startWith } from 'rxjs';
+import { Observable, map, startWith } from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
-import { MOCK_LANGS } from 'src/app/static-data/language-data';
 import { LEVELS } from 'src/app/static-data/level-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
-import { MOCK_SPORT_DATA } from 'src/app/static-data/sports-data';
 import { ApiCrudService } from 'src/service/crud.service';
 import { DateAdapter } from '@angular/material/core';
 
@@ -51,7 +49,7 @@ export class ClientCreateUpdateModalComponent implements OnInit {
 
   languagesControl = new FormControl([]);
   languages = [];
-  filteredLanguages: Observable<any[]>;
+  filteredLanguages: any[];
   selectedLanguages = [];
 
   stations = [];
@@ -173,12 +171,6 @@ export class ClientCreateUpdateModalComponent implements OnInit {
       map(annotation => annotation ? this._filterLevel(annotation) : this.mockLevelData.slice())
     );
 
-    this.filteredLanguages = this.languagesControl.valueChanges.pipe(
-      startWith(''),
-      map(language => (language ? this._filterLanguages(language) : this.languages.slice()))
-    );
-
-
     this.getSchoolSportDegrees();
     this.getLanguages();
 
@@ -189,19 +181,10 @@ export class ClientCreateUpdateModalComponent implements OnInit {
 
   }
 
-  onFileChanged(event: Event) {
-    const file = (event.target as HTMLInputElement).files[0];
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        this.imagePreviewUrl = reader.result;
-        this.defaults.image = reader.result;
-        this.defaultsUser.image = reader.result;
-      };
-
-      reader.readAsDataURL(file);
-    }
+  onFileChanged(event: any) {
+    this.imagePreviewUrl = event;
+    this.defaults.image = event;
+    this.defaultsUser.image = event;
   }
 
   passwordValidator(formControl: FormControl) {
@@ -218,10 +201,10 @@ export class ClientCreateUpdateModalComponent implements OnInit {
     }
   }
 
-  private _filterStations(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.stations.filter(option => option.name.toLowerCase().includes(filterValue));
-  }
+  //private _filterStations(value: string): string[] {
+  //  const filterValue = value.toLowerCase();
+  //  return this.stations.filter(option => option.name.toLowerCase().includes(filterValue));
+  //}
 
   /**Countries */
 
@@ -251,11 +234,6 @@ export class ClientCreateUpdateModalComponent implements OnInit {
   private _filterLevel(name: string): any[] {
     const filterValue = name.toLowerCase();
     return this.mockLevelData.filter(level => level.annotation.toLowerCase().includes(filterValue));
-  }
-
-  private _filterLanguages(value: any): any[] {
-    const filterValue = value.toLowerCase();
-    return this.languages.filter(language => language?.name?.toLowerCase().includes(filterValue));
   }
 
   displayFnCountry(country: any): string {

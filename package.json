@@ -76,6 +76,7 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
     "postcss": "~8.4.14",
+    "postcss-nesting": "^13.0.1",
     "postcss-scss": "~4.0.4",
     "ts-node": "~8.3.0",
     "typescript": "~5.0.4"
