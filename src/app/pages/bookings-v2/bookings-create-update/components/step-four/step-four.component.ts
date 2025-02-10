@@ -250,6 +250,7 @@ export class StepFourComponent {
   }
 
   getCourses(sportLevel: any) {
+    this.isLoading = true;
     let minDate, maxDate;
     minDate = moment(this.selectedDate);
     maxDate = moment(this.nextMonthDate);
@@ -263,7 +264,6 @@ export class StepFourComponent {
       get_lower_degrees: false,
       school_id: this.user.schools[0].id,
     };
-    this.isLoading = true;
     this.crudService.post("/availability", rq).subscribe((data) => {
       this.courses = data.data;
       this.courses = this.courses.filter(course => {
@@ -315,6 +315,13 @@ export class StepFourComponent {
   onTabChange(event) {
     this.courseTypeId = this.tabs[event.index].courseTypeId;
     this.getCourses(this.sportLevel);
+  }
+
+  preventTabChange(event: Event) {
+    if (this.isLoading) {
+      event.stopPropagation(); // Evita el cambio de pestaña cuando isLoading es true
+      event.preventDefault();
+    }
   }
 
   protected readonly CustomHeader = CustomHeader;

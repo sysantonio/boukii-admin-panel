@@ -714,7 +714,11 @@ p,
 span {
   color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea);
 }
-
+.mat-form-field-disabled .mat-mdc-text-field-wrapper {
+  background-color: #f5f5f5 !important; /* Fondo gris */
+  color: var(--mdc-outlined-text-field-disabled-input-text-color) !important; /* Texto gris */
+  border-radius: 4px; /* Bordes suaves */
+}
 .mat-sort-header-content,
 .mat-mdc-row,
 .mat-mdc-paginator-page-size-label,

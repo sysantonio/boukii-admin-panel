@@ -40,32 +40,34 @@ import {ComponentsCustomModule} from '../../../../components/components-custom.m
 import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} from '@angular/cdk/scrolling';
 import {IconComponent} from '../../../../../@vex/components/icon/app.component';
 import { ComponenteButtonModule } from "../../../../../@vex/components/form/button/app.module";
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatIconModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatButtonModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatRadioModule,
-    TranslateModule,
-    MatDialogModule,
-    MatDatepickerModule,
-    MatSelectModule,
-    MatTabsModule,
-    MatDividerModule,
-    ComponentsCustomModule,
-    CdkVirtualScrollViewport,
-    CdkFixedSizeVirtualScroll,
-    CdkVirtualForOf,
-    IconComponent,
-    ComponenteButtonModule
-],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatIconModule,
+        MatInputModule,
+        MatAutocompleteModule,
+        MatButtonModule,
+        MatCardModule,
+        MatCheckboxModule,
+        MatRadioModule,
+        TranslateModule,
+        MatDialogModule,
+        MatDatepickerModule,
+        MatSelectModule,
+        MatTabsModule,
+        MatDividerModule,
+        ComponentsCustomModule,
+        CdkVirtualScrollViewport,
+        CdkFixedSizeVirtualScroll,
+        CdkVirtualForOf,
+        IconComponent,
+        ComponenteButtonModule,
+        MatProgressSpinnerModule
+    ],
     declarations: [
         BookingFormStepper,
         StepOneComponent,

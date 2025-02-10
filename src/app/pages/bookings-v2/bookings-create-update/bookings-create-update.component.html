@@ -17,7 +17,7 @@
 				{{ "bookings_page.crumbs.utilizers" | translate }}
 			</button>
 			<button [ngClass]="{ active: currentStep === 2, prev: currentStep > 2 }" (click)="forceChange(2)"
-				[disabled]="currentStep <= 2 && selectedIndexForm == null && utilizers == null" class="crumb">
+				[disabled]="currentStep <= 2 && selectedIndexForm == null && (!utilizers || !utilizers?.length)" class="crumb">
 				{{ "bookings_page.crumbs.sport" | translate }}
 			</button>
 			<button [ngClass]="{ active: currentStep === 3, prev: currentStep > 3 }" (click)="forceChange(3)"
@@ -29,7 +29,7 @@
 				{{ "bookings_page.crumbs.details" | translate }}
 			</button>
 			<button [ngClass]="{ active: currentStep === 5, prev: currentStep > 5 }" (click)="forceChange(5)"
-				[disabled]="currentStep <= 5 && selectedIndexForm == null && dates == null" class="crumb last">
+				[disabled]="currentStep <= 5 && selectedIndexForm == null && (!dates || !dates?.length)" class="crumb last">
 				{{ "bookings_page.crumbs.observations" | translate }}
 			</button>
 		</div>

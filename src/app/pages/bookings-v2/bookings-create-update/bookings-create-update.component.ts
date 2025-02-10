@@ -98,12 +98,31 @@ export class BookingsCreateUpdateV2Component {
     this.currentStep = data.step;
     this.selectedIndexForm = index;
     this.selectedForm = this.forms[index];
+    const {
+      step1: { client, mainClient },
+      step2: { utilizers },
+      step3: { sport, sportLevel },
+      step4: { course },
+      step5: { course_dates },
+      step6: { clientObs, schoolObs },
+    } = this.selectedForm.value;
+
+    this.mainClient = mainClient;
+    this.utilizers = utilizers;
+    this.sport = sport;
+    this.sportLevel = sportLevel;
+    this.course = course;
+    this.dates = course_dates ? this.getSelectedDates(course_dates) : [];
+    //this.monitors = MOCK_MONITORS;
+    this.clientObs = clientObs;
+    this.schoolObs = schoolObs;
     this.forceStep = data.step;
     this.cdr.detectChanges();
   }
 
   addNewActivity() {
     this.isDetail = false;
+    this.selectedIndexForm = null;
     this.currentStep = 1;
     const step1Controls = this.forms[0].get('step1').value;
     this.selectedForm = this.fb.group({

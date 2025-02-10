@@ -1,5 +1,7 @@
-<mat-tab-group (selectedTabChange)="onTabChange($event)" [selectedIndex]="selectedIndex" class="tabsWrapper">
-  <mat-tab *ngFor="let tab of tabs">
+<mat-tab-group
+  (selectedTabChange)="onTabChange($event)"
+  [selectedIndex]="selectedIndex" class="tabsWrapper">
+  <mat-tab *ngFor="let tab of tabs" [disabled]="isLoading">
     <ng-template mat-tab-label>
       <mat-icon class="custom-icon" [ngClass]="tab.class">circle</mat-icon>
       {{ tab.label | translate }}
@@ -19,6 +21,8 @@
 </mat-card-content>
 
 <ng-template #myForm>
+  <mat-spinner *ngIf="isLoading"
+               style="margin: 0 auto"></mat-spinner>
   <form [formGroup]="stepForm">
     <div *ngIf="!isLoading">
       <div class="calendarWrapper">
