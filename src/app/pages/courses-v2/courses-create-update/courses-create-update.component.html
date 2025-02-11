@@ -363,7 +363,7 @@
 									<img *ngIf="find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',level.id).course_subgroups.length>1 && (!subgroup.booking_users || subgroup.booking_users.length===0)"
 										(click)="addLevelSubgroup(level,j,false)" src="assets/icons/icon/delete.png" alt
 										class="icon20"
-										style="cursor: pointer; font-size: 20px;align-content: space-evenly;filter: var(--is-dark-theme,invert(1));">
+										style="cursor: pointer; font-size: 20px;align-content: space-evenly;">
 								</div>
 								<div *ngIf="mode==='update'"
 									style="width: 100%;margin-top: -10px;padding: 10px; background-color: var(--color-grey4);">

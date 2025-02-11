@@ -40,9 +40,7 @@
     </ng-container>
     <div style="margin-left: auto;align-content: space-around;" *ngIf="isDetail"
       (click)="deleteActivity.emit(); $event.stopPropagation()">
-      <img [class]="{ sportImg: !course, courseImg: course }" style="min-width: 24px;
-      width: 24px;
-      height: 24px;" src="assets/icons/icon/delete.png" alt>
+      <img [class]="{ sportImg: !course, courseImg: course }" class="icon24" src="assets/icons/icon/delete.png" alt>
     </div>
   </div>
   <div class="bodyWrapper">

@@ -20,7 +20,7 @@
   flex-direction: row;
   justify-content: space-between;
   padding: 1rem 1.5rem;
-  background-color: var(--color-white);
+  background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);
   border-bottom: 1px solid var(--color-grey3);
   border-top: 1px solid var(--color-grey3);
   + .barWrapper {
@@ -164,7 +164,7 @@
   gap: 10px;
   position: fixed;
   bottom: 0;
-  background-color: white;
+  background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);
   width: 100%;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.12);
   flex-wrap: wrap;

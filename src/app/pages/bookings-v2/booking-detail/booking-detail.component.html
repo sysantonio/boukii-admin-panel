@@ -50,10 +50,10 @@
 <vex-flux-modal *ngIf="deleteModal"
 	[width]="570"
 	(Close)="deleteModal=false"
-	title="Eliminar actividad">
+	title="delete_activity">
 	<div body>
 		<div style="margin: 10px;">
-			Quieres cancelar “Actividad #{{("00"+deleteIndex+1).slice(-2)}}”?
+			{{"cancel_activity" | translate}} #{{("00"+deleteIndex+1).slice(-2)}}?
 		</div>
 	</div>
 	<div footer
@@ -71,7 +71,7 @@
 			mat-raised-button
 			type="button"
 			class="client-button">
-			{{ "Si, eliminar" | translate }}
+			{{ "yes_delete" | translate }}
 		</button>
 	</div>
 </vex-flux-modal>

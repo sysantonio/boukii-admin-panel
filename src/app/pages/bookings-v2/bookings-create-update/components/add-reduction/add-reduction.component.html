@@ -8,8 +8,7 @@
      word-wrap: break-word">{{'bookings_page.reductions.title'
       |translate}}</h2>
 
-    <button class="text-secondary" mat-dialog-close mat-icon-button
-      type="button">
+    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
       <mat-icon svgIcon="mat:close"></mat-icon>
     </button>
   </div>
@@ -23,13 +22,11 @@
         <ng-template mat-tab-label>
           {{ 'bookings_page.reductions.percentaje' | translate }}
         </ng-template>
-        <div style="width:100%; display: flex;gap: 16px;  padding: 30px 6px;"
-          [formGroup]="form">
+        <div style="width:100%; display: flex;gap: 16px;  padding: 30px 6px;" [formGroup]="form">
           <mat-form-field appearance="outline" style="width:calc(50% - 8px)">
             <mat-label>{{'bookings_page.reductions.discount'
               |translate}}</mat-label>
-            <input type="number" matInput formControlName="discount"
-              [(ngModel)]="discount" />
+            <input type="number" matInput formControlName="discount" [(ngModel)]="discount" />
           </mat-form-field>
           <mat-form-field appearance="outline" style="width:calc(50% - 8px)">
             <mat-label>{{'bookings_page.reductions.discount'
@@ -42,13 +39,11 @@
         <ng-template mat-tab-label>
           Cantidad fija
         </ng-template>
-        <div style="width:100%; display: flex;gap: 16px;  padding: 30px 6px;"
-          [formGroup]="form">
+        <div style="width:100%; display: flex;gap: 16px;  padding: 30px 6px;" [formGroup]="form">
           <mat-form-field appearance="outline" style="width:100%">
             <mat-label>{{'bookings_page.reductions.discount'
               |translate}}</mat-label>
-            <input type="number" matInput formControlName="discount"
-              [(ngModel)]="discount" />
+            <input type="number" matInput formControlName="discount" [(ngModel)]="discount" />
           </mat-form-field>
         </div>
       </mat-tab>
@@ -56,11 +51,10 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-raised-button [mat-dialog-close]="false"
-      style="border-radius: 3px;">{{'cancel' |
-      translate}}</button>
-    <button color="primary" mat-flat-button style="margin-left: 20px;"
-      [mat-dialog-close]="{type: type, discount: discount}"
-      [disabled]="form.invalid">{{'confirm' | translate}}</button>
+    <app-form-button form="stroked" name="cancel" [mat-dialog-close]="false">
+    </app-form-button>
+    <app-form-button form="flat" name="confirm" [mat-dialog-close]="{type: type, discount: discount}"
+      [disabled]="form.invalid">
+    </app-form-button>
   </mat-dialog-actions>
 </form>

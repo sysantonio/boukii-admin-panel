@@ -132,10 +132,10 @@
 	</div>
 </ng-container>
 
-<vex-flux-modal *ngIf="deleteModal" [width]="570" (Close)="deleteModal=false" title="Eliminar actividad">
+<vex-flux-modal *ngIf="deleteModal" [width]="570" (Close)="deleteModal=false" title="delete_activity">
 	<div body>
 		<div style="margin: 10px;">
-			{{"cancel_activity" | translate}} #{{("00"+deleteIndex+1).slice(-2)}}”?
+			{{"cancel_activity" | translate}} #{{("00"+deleteIndex+1).slice(-2)}}?
 		</div>
 	</div>
 	<div footer style="display: flex;">

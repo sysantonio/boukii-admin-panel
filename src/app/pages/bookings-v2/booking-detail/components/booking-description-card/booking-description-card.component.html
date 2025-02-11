@@ -19,17 +19,13 @@
 		</ng-container>
 		<div *ngIf="isDetail && status != 2" (click)="deleteActivity.emit(); $event.stopPropagation()"
 			style="margin-left: auto;align-content: space-around;">
-			<img [class]="{ sportImg: !course, courseImg: course }" style="min-width: 24px;
-      width: 24px;
-      height: 24px;" src="assets/icons/icon/delete.png" alt>
+			<img class="icon24" src="assets/icons/icon/delete.png">
 		</div>
 	</div>
 	<div class="bodyWrapper">
 		<div class="section">
 			<div class="sectionTitle">
-				<img src="assets/img/icons/clientes2.svg" style="min-width: 24px;
-        width: 24px;
-        height: 24px;">
+				<img src="assets/img/icons/clientes2.svg" class="icon24">
 				{{ "bookings_page.description.utilizers" | translate }}
 			</div>
 			<ng-container *ngIf="utilizers">
@@ -99,9 +95,7 @@
 				<img src="assets/img/icons/calendar-1.svg">
 				{{ "bookings_page.description.date" | translate }}
 				<img *ngIf="!summaryMode && isDetail && status != 2" (click)="sendEditForm(dates, course, utilizers)"
-					src="assets/img/icons/edit-grey.svg" style="float: right; min-width: 24px;
-        width: 24px;
-        height: 24px;">
+					src="assets/img/icons/edit-grey.svg" style="float: right" class="icon24">
 			</div>
 			<ng-container *ngIf="dates && dates.length">
 				<div *ngIf="!summaryMode; else summaryDates">
@@ -226,9 +220,8 @@
 			<div class="sectionTitle">
 				{{ "observation_client" | translate }}
 				<img *ngIf="!summaryMode && isDetail && status != 2"
-					(click)="openObservationsForm(clientObs, schoolObs)" src="assets/img/icons/edit-grey.svg" style="float: right; min-width: 24px;
-        width: 24px;
-        height: 24px;">
+					(click)="openObservationsForm(clientObs, schoolObs)" src="assets/img/icons/edit-grey.svg"
+					class="icon24" style="float: right;">
 			</div>
 			<p>{{ clientObs }}</p>
 			<div class="sectionTitle mt-5">

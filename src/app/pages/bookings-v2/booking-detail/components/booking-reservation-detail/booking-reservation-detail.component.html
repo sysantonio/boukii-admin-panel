@@ -1,21 +1,19 @@
 <div class="wrapper">
   <div class="headerWrapper">
     {{ 'booking' | translate }} #{{bookingData.id}}
-    {{'status' | translate}}    {{bookingData.cancellation_status}}
-    {{'paid' | translate}}    {{bookingData.payment_method_status}}
+    <br>
+    {{'status' | translate}}: {{bookingData.cancellation_status|translate}}
+    <br>
+    {{'ispaid' | translate}}: {{bookingData.payment_method_status|translate}}
   </div>
   <div class="bodyWrapper" style="padding-bottom: 0;">
     <div class="section">
       <div class="sectionTitle">
-        <img src="assets/img/icons/clientes2.svg" style="min-width: 24px;
-        width: 24px;
-        height: 24px;" />
+        <img src="assets/img/icons/clientes2.svg" class="icon24" />
         {{'client' | translate}}
       </div>
       <div class="utilizersWrapper">
-        <img
-          class="avatarImg"
-          [src]="
+        <img class="avatarImg" [src]="
               client.image !== null && client.image !== ''
                 ? client.image
                 : 'assets/img/booking-avatar.svg'
@@ -29,15 +27,9 @@
             }}
             · {{ utilsService.getCountry(client.country) }}</span>
           <div style="display: flex;gap: 8px;">
-            <img src="assets/icons/icon/chat.png" style="min-width: 24px;
-              width: 24px;
-              height: 24px;" />
-            <img src="assets/icons/icon/mail.png" style="min-width: 24px;
-                      width: 24px;
-                      height: 24px;" />
-            <img src="assets/icons/icon/phone.png" style="min-width: 24px;
-                              width: 24px;
-                              height: 24px;" />
+            <img src="assets/icons/icon/chat.png" class="icon24" />
+            <img src="assets/icons/icon/mail.png" class="icon24" />
+            <img src="assets/icons/icon/phone.png" class="icon24" />
           </div>
 
         </div>
@@ -50,8 +42,8 @@
           <span class="hour"> {{ activity.course.name }} </span>
           <span class="price" [ngClass]="{ 'line-through': activity.status == 2 }">
             <span class="discounted-price">
-              {{
-              activity.total }}
+              {{ activity.total | number:'0.2-2' }}
+              {{ activities[0]?.course.currency }}
             </span>
           </span>
         </div>
@@ -60,12 +52,13 @@
     <div class="section">
       <div class="dateRow">
         <div>
-          <span class="hour">{{ "Subtotal" | translate
-            }}</span>
+          <span class="hour">
+            {{ "Subtotal" | translate }}
+          </span>
           <span class="price">
             <span class="discounted-price">
-              {{ sumActivityTotal()| number:'0.2-2' }} {{
-              activities[0]?.course.currency }}
+              {{ sumActivityTotal()| number:'0.2-2' }}
+              {{ activities[0]?.course.currency }}
             </span>
           </span>
         </div>
@@ -75,10 +68,8 @@
     <div class="section" style="margin-bottom: 0;border: none;">
       <div class="dateRow">
         <div>
-          <span class="hour" (click)="addReduction()"
-            *ngIf="bookingData.reduction == null && this.calculateTotalVoucherPrice()
-            < bookingData.price_total && !bookingData.isPaid"
-            style="
+          <span class="hour" (click)="addReduction()" *ngIf="bookingData.reduction == null && this.calculateTotalVoucherPrice()
+            < bookingData.price_total && !bookingData.isPaid" style="
             color: #E91E63;
              font-size: 14px;
              font-family: DM Sans;
@@ -89,10 +80,9 @@
             <mat-icon style="margin: 0 8px;">add</mat-icon>
             {{ "apply_reduction" | translate }}
           </span>
+
           <span style="width: 100%; float:left" *ngIf="bookingData.reduction != null;">
-            <mat-icon *ngIf="!bookingData.isPaid"
-              svgIcon="mat:delete"
-              style="float: left;color: red; cursor:pointer"
+            <mat-icon *ngIf="!bookingData.isPaid" svgIcon="mat:delete" style="float: left;color: red; cursor:pointer"
               (click)="deleteReduction()"></mat-icon>
             <p style="float:left">{{'reduction' |translate}}</p>
             <p style="float:right">
@@ -105,8 +95,7 @@
       <div class="dateRow">
         <div>
           <span class="hour" *ngIf="this.calculateTotalVoucherPrice() < bookingData.price_total && !bookingData.isPaid"
-                (click)="addBonus()"
-            style="
+            (click)="addBonus()" style="
           color: #E91E63;
            font-size: 14px;
            font-family: DM Sans;
@@ -118,11 +107,8 @@
             {{ "apply_bonus" | translate }}
           </span>
           <ng-container *ngIf="bookingData.vouchers?.length">
-            <span style="width: 100%; float:left"
-              *ngFor="let item of bookingData.vouchers; let i = index">
-              <mat-icon *ngIf="!bookingData.isPaid"
-                svgIcon="mat:delete"
-                style="float: left;color: red; cursor:pointer"
+            <span style="width: 100%; float:left" *ngFor="let item of bookingData.vouchers; let i = index">
+              <mat-icon *ngIf="!bookingData.isPaid" svgIcon="mat:delete" style="float: left;color: red; cursor:pointer"
                 (click)="deleteBonus(i);"></mat-icon>
               <p style="float:left">{{'bonus' |translate}}
                 {{item.bonus.code}}</p>
@@ -136,17 +122,16 @@
       </div>
       <div class="dateRow">
         <div>
-          <mat-checkbox
-            color="primary"
-            [(ngModel)]="bookingData.has_cancellation_insurance"
-            (change)="calculateRem($event)"
-            [disabled]="isNaN(this.cancellationInsurancePercent) && !bookingData.isPaid"
+          <mat-checkbox color="primary" [(ngModel)]="bookingData.has_cancellation_insurance"
+            (change)="calculateRem($event)" [disabled]="isNaN(this.cancellationInsurancePercent) && !bookingData.isPaid"
             style="float: left;"></mat-checkbox>
-          <span class="hour">{{ "op_rem" | translate }}</span>
-          <p style="float:right">
-            -{{bookingData.price_cancellation_insurance}}
+          <span class="hour">
+            {{ "op_rem" | translate }}
+          </span>
+          <span class="price">
+            -{{bookingData.price_cancellation_insurance| number:'0.2-2'}}
             {{activities[0]?.course?.currency}}
-          </p>
+          </span>
         </div>
       </div>
     </div>
@@ -169,12 +154,7 @@
     </ng-container>
   </div>
 </div>
-<button *ngIf="!bookingData.isPaid"
-  style="height: 56px; width: 400px;border-radius: 3px;margin-top: 16px;"
-  color="primary"
-  mat-raised-button
-  type="button"
-  class="client-button" (click)="payClick.emit()">
+<button *ngIf="!bookingData.isPaid" style="height: 56px; width: 400px;border-radius: 3px;margin-top: 16px;"
+  color="primary" mat-raised-button type="button" class="client-button" (click)="payClick.emit()">
   {{ "Pagar" | translate }}
 </button>
-

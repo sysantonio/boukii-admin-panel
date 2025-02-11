@@ -7,8 +7,7 @@
       <mat-icon svgIcon="mat:more_vert"></mat-icon>
     </button>-->
 
-    <button class="text-secondary" mat-dialog-close mat-icon-button
-      type="button">
+    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
       <mat-icon svgIcon="mat:close"></mat-icon>
     </button>
   </div>
@@ -19,11 +18,9 @@
     <div style="width:100%">
       <mat-radio-group>
         <ng-container *ngFor="let b of bonuses">
-          <mat-radio-button *ngIf="!b.payed " [disabled]="isInUse(b.id)"
-            class="radio" (change)="bonus = b" [value]="b">
+          <mat-radio-button *ngIf="!b.payed " [disabled]="isInUse(b.id)" class="radio" (change)="bonus = b" [value]="b">
             {{ b.code }} - {{'remaining_balance' | translate}}: {{
-            b.remaining_balance }} {{defaults.currency}} <span
-              style="color:#8fd14f">{{ isInUse(b.id) ? 'applied' : '' |
+            b.remaining_balance }} {{defaults.currency}} <span style="color:#8fd14f">{{ isInUse(b.id) ? 'applied' : '' |
               translate}}</span>
           </mat-radio-button>
         </ng-container>
@@ -37,10 +34,9 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-raised-button [mat-dialog-close]="false"
-      style="border-radius: 3px;">{{'cancel' |
-      translate}}</button>
-    <button color="primary" mat-flat-button style="margin-left: 20px;"
-      (click)="closeModal()">{{'confirm' | translate}}</button>
+    <app-form-button form="stroked" name="cancel" [mat-dialog-close]="false">
+    </app-form-button>
+    <app-form-button (click)="closeModal()" form="flat" name="confirm">
+    </app-form-button>
   </mat-dialog-actions>
 </form>

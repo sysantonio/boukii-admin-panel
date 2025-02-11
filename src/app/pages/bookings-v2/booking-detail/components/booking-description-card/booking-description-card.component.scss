@@ -26,6 +26,7 @@
   border: 1px solid var(--color-grey3);
   border-radius: 8px;
   transform: scale(1.15);
+  background-color: var(--is-light-theme, #ffffff) var(--is-dark-theme, #222222);
 }
 @keyframes fadeOut {
   0% {
