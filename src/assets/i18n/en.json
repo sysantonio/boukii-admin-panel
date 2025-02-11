@@ -786,7 +786,9 @@
   "bookings_page.description.total": "Total",
   "bookings_page.buttons.save&CreateBooking": "Save and create new booking",
   "user_transfer_not_allowed": "User transfer to a created subgroup is not allowed without saving first",
-  "bookings_page_descriptionModal_button": "View activity summary"
-
-
+  "bookings_page_descriptionModal_button": "View activity summary",
+  "delete_activity": "Delete activity",
+  "view_activity_summary": "View activity summary",
+  "confirmed_without_payment": "Confirmed without payment",
+  "are_you_sure_action": "Are you sure you want to do this? This may have an impact throughout the course."
 }

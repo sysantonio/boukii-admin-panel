@@ -786,6 +786,9 @@
   "bookings_page.description.total": "Gesamt",
   "bookings_page.buttons.save&CreateBooking": "Speichern und neue Buchung erstellen",
   "user_transfer_not_allowed": "Das Verschieben eines Benutzers in eine erstellte Untergruppe ist ohne vorheriges Speichern nicht erlaubt",
-  "bookings_page_descriptionModal_button": "Aktivitätsübersicht anzeigen"
-
+  "bookings_page_descriptionModal_button": "Aktivitätsübersicht anzeigen",
+  "delete_activity": "Aktivität löschen",
+  "view_activity_summary": "Aktivitätsübersicht anzeigen",
+  "confirmed_without_payment": "Bestätigt ohne Zahlung",
+  "are_you_sure_action": "Bist du sicher, dass du das tun möchtest? Dies kann sich auf den gesamten Kurs auswirken."
 }

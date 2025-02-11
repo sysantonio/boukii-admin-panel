@@ -793,6 +793,9 @@
   "select_payment_method": "Selecciona la forma de pago",
   "online_payment": "Pago online",
   "confirmation_without_payment": "Confirmación sin pago",
-  "user_transfer_not_allowed": "No se permite trasladar usuario a subgrupo creado sin guardar previamente"
-
+  "user_transfer_not_allowed": "No se permite trasladar usuario a subgrupo creado sin guardar previamente",
+  "delete_activity": "Eliminar actividad",
+  "view_activity_summary": "Ver resumen actividad",
+  "confirmed_without_payment": "Confirmado sin pago",
+  "are_you_sure_action": "¿Estás seguro de hacer esto? Esto puede tener afectación a lo largo del curso."
 }

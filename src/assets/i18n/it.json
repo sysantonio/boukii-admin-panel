@@ -785,5 +785,9 @@
   "bookings_page.description.total": "Totale",
   "bookings_page.buttons.save&CreateBooking": "Salva e crea una nuova prenotazione",
   "user_transfer_not_allowed": "Non è consentito trasferire l'utente in un sottogruppo creato senza aver salvato prima",
-  "bookings_page_descriptionModal_button": "Vedi riepilogo attività"
+  "bookings_page_descriptionModal_button": "Vedi riepilogo attività",
+  "delete_activity": "Elimina attività",
+  "view_activity_summary": "Vedi riepilogo attività",
+  "confirmed_without_payment": "Confermato senza pagamento",
+  "are_you_sure_action": "Sei sicuro di volerlo fare? Questo potrebbe avere un impatto su tutto il corso."
 }

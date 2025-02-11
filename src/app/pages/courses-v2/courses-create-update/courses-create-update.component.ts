@@ -50,6 +50,15 @@ export class CoursesCreateUpdateComponent implements OnInit {
   loading: boolean = true;
   extrasModal: boolean = false
   confirmModal: boolean = false
+  editModal: boolean = false
+  editFunctionName: string | null = null;
+  editFunctionArgs: any[] = [];
+
+  setEditFunction(functionName: string, ...args: any[]) {
+    this.editFunctionName = functionName;
+    this.editFunctionArgs = args;
+  }
+
   translateExpandedIndex: number = 0
   user: any;
   id: any = null;
@@ -381,5 +390,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
     course_dates[event.i].course_groups[course_dates[event.i].course_groups.findIndex((a: any) => a.degree_id === level.id)].course_subgroups[j].monitor = event.monitor
     course_dates[event.i].course_groups[course_dates[event.i].course_groups.findIndex((a: any) => a.degree_id === level.id)].course_subgroups[j].monitor_id = event.monitor.id
     this.courses.courseFormGroup.patchValue({ course_dates })
+  }
+  deleteCourseDate(i: number) {
+    this.courses.courseFormGroup.controls['course_dates'].value.splice(i, 1)
   }
 }

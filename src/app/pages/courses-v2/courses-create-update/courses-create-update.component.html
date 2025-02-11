@@ -126,7 +126,7 @@
 							{{('date'| translate)+' '+(i+1)}}
 						</span>
 						<mat-icon *ngIf="i!==0"
-							(click)="courses.courseFormGroup.controls['course_dates'].value.splice(i,1)"
+							(click)="mode==='create'?deleteCourseDate(i):editModal=true;setEditFunction('deleteCourseDate',i)"
 							style="cursor: pointer;float: inline-end;">
 							delete
 						</mat-icon>
@@ -159,7 +159,7 @@
 					</div>
 				</div>
 				<div style="padding: 20px;border-top: 1px solid #DEE6EA;">
-					<button (click)="addCourseDate()"
+					<button (click)="mode==='create'?addCourseDate():editModal=true;setEditFunction('addCourseDate')"
 						style="border: 1px solid var(--is-light-theme, #222222) var(--is-dark-theme, #ffffff); border-radius: 3px;float: inline-end;height: 38px;width: 125px;"
 						type="button">
 						{{'add_date' | translate }}
@@ -227,7 +227,7 @@
 								{{('date'| translate)+' '+(i+1)}}
 							</span>
 							<mat-icon *ngIf="i!==0"
-								(click)="courses.courseFormGroup.controls['course_dates'].value.splice(i,1)"
+								(click)="mode==='create'?deleteCourseDate(i):editModal=true;setEditFunction('deleteCourseDate',i)"
 								style="cursor: pointer;float: inline-end;">
 								delete
 							</mat-icon>
@@ -269,8 +269,9 @@
 						</div>
 					</ng-container>
 					<div *ngIf="PeriodoFecha>0 && mode === 'create'">
-						<button (click)="addCourseDate()" style="margin-top: 0px !important;height: 38px; width: 200px;"
-							mat-button type="button">
+						<button
+							(click)="mode==='create'?addCourseDate():editModal=true;setEditFunction('addCourseDate')"
+							style="margin-top: 0px !important;height: 38px; width: 200px;" mat-button type="button">
 							<mat-icon>add</mat-icon>
 							{{'add_date' | translate }}
 						</button>
@@ -317,13 +318,14 @@
 							<mat-checkbox [disabled]="mode==='update'&&level.active"
 								[style.backgroundColor]="level.active?level.color:level.color+'33'"
 								[style.color]="level.color" [style.border]="'1px solid '+level.color"
-								[(ngModel)]="level.active" (click)="selectLevel($event,i)"
+								[(ngModel)]="level.active"
+								(click)="mode==='create'?selectLevel($event,i):editModal=true;setEditFunction('selectLevel',$event,i)"
 								style="height: 46px; border-radius: 3px; min-width: 225px;font-size: 12px;align-content: space-evenly;">
 								{{level.annotation}} {{level.level}}
 							</mat-checkbox>
 							<mat-icon
 								*ngIf="mode==='update'&&level.active&&!find(courses.courseFormGroup.controls['booking_users'].value,'degree_id',level.id)"
-								(click)="selectLevel({target:{checked:false}},i)"
+								(click)="editModal=true;setEditFunction('selectLevel',{target:{checked:false}},i)"
 								style="cursor: pointer;float: inline-end;">
 								delete
 							</mat-icon>
@@ -361,8 +363,8 @@
 									style="background-color: var(--color-grey4); display: flex;width: 100%; height: 46px;justify-content: space-between;align-items: center; border-radius: 4px;padding: 10px;">
 									{{level.annotation}} {{level.level}} {{("00"+(j+1)).slice(-2)}}
 									<img *ngIf="find(courses.courseFormGroup.controls['course_dates'].value[0].course_groups,'degree_id',level.id).course_subgroups.length>1 && (!subgroup.booking_users || subgroup.booking_users.length===0)"
-										(click)="addLevelSubgroup(level,j,false)" src="assets/icons/icon/delete.png" alt
-										class="icon20"
+										(click)="mode==='create'?addLevelSubgroup(level,j,false):editModal=true;setEditFunction('addLevelSubgroup',level,j,false)"
+										src="assets/icons/icon/delete.png" alt class="icon20"
 										style="cursor: pointer; font-size: 20px;align-content: space-evenly;">
 								</div>
 								<div *ngIf="mode==='update'"
@@ -566,7 +568,7 @@
 				<mat-icon *ngIf="mode==='create'">arrow_back</mat-icon>
 				{{ (mode === 'create' ? 'back' : 'cancel') | translate }}
 			</button>
-			<button (click)="mode==='create'?Confirm(1):endCourse()"
+			<button (click)="mode==='create'?Confirm(1):editModal=true;setEditFunction('endCourse')"
 				style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;" color="primary"
 				mat-raised-button type="button">
 				{{ (mode==='create'?'confirm':'save') | translate }}
@@ -580,6 +582,7 @@
 		[courseFormGroup]="courses.courseFormGroup" card2>
 	</vex-course-detail-card>
 </vex-flux-layout>
+
 <vex-flux-modal *ngIf="extrasModal" [width]="670" (Close)="extrasModal=false" title="{{'create_extras' | translate}}">
 	<div [formGroup]="extrasFormGroup" body style="display: flex; column-gap: 20px; flex-wrap: wrap;">
 		<app-form-input [required]="true" [form]="extrasFormGroup" style="width: calc(50% - 10px);margin-top: 10px;"
@@ -610,6 +613,7 @@
 		</button>
 	</div>
 </vex-flux-modal>
+
 <vex-flux-modal *ngIf="confirmModal" [width]="670" (Close)="confirmModal=false" title="{{'almost_done' | translate}}">
 	<div [formGroup]="courses.courseFormGroup" body style="display: flex; gap: 20px; flex-wrap: wrap;">
 		<div style="width: 100;
@@ -660,14 +664,26 @@
 				</span>
 			</mat-slide-toggle>
 		</div>
-		<button (click)="confirmModal=false"
-			style="margin-top: 0px !important;height: 38px; width: 128px;margin-left: auto;" mat-button type="button">
-			{{'cancel' | translate }}
-		</button>
-		<button (click)="confirmModal=false;endCourse()" style="margin-top: 0px !important;height: 38px; width: 260px;"
-			color="primary" mat-raised-button type="button">
-			{{(mode==='create'?'end_create_course':'end_update_course')
-			| translate }}
-		</button>
+		<div style="display: flex;width: 100%;justify-content: flex-end;gap: 20px;">
+			<app-form-button form="stroked" name="cancel" (click)="confirmModal=false">
+			</app-form-button>
+			<app-form-button form="flat" [name]="mode==='create'?'end_create_course':'end_update_course'"
+				(click)="confirmModal=false;endCourse()">
+			</app-form-button>
+		</div>
+	</div>
+</vex-flux-modal>
+<vex-flux-modal *ngIf="editModal" [width]="670" (Close)="editModal=false" title="{{'are_you_sure' | translate}}">
+	<div style="display: flex;width: 100%;justify-content: flex-end;gap: 20px;" body>
+		<div>
+			{{'are_you_sure_action' | translate}}
+		</div>
+		<div style="display: flex;width: 100%;justify-content: flex-end;gap: 20px;">
+			<app-form-button form="stroked" name="cancel" (click)="editModal=false">
+			</app-form-button>
+			<app-form-button form="flat" name="confirm"
+				(click)="this[editFunctionName](editFunctionArgs);editModal=false">
+			</app-form-button>
+		</div>
 	</div>
 </vex-flux-modal>

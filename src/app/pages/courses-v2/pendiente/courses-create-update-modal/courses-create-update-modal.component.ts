@@ -1868,11 +1868,11 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: this.defaults.date_start_res
-        ? this.formatDate(this.defaults.date_start_res)
-        : '',
+          ? this.formatDate(this.defaults.date_start_res)
+          : '',
         date_end_res: this.defaults.date_end_res
-        ? this.formatDate(this.defaults.date_end_res)
-        : '',
+          ? this.formatDate(this.defaults.date_end_res)
+          : '',
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -1897,11 +1897,11 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: this.defaults.date_start_res
-        ? this.formatDate(this.defaults.date_start_res)
-        : '',
+          ? this.formatDate(this.defaults.date_start_res)
+          : '',
         date_end_res: this.defaults.date_end_res
-        ? this.formatDate(this.defaults.date_end_res)
-        : '',
+          ? this.formatDate(this.defaults.date_end_res)
+          : '',
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -1930,11 +1930,11 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         date_start: this.periodeUnique ? moment(this.defaults.date_start).format('YYYY-MM-DD') : moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: this.periodeUnique ? moment(this.defaults.date_end).format('YYYY-MM-DD') : moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         date_start_res: this.defaults.date_start_res
-        ? this.formatDate(this.defaults.date_start_res)
-        : '',
+          ? this.formatDate(this.defaults.date_start_res)
+          : '',
         date_end_res: this.defaults.date_end_res
-        ? this.formatDate(this.defaults.date_end_res)
-        : '',
+          ? this.formatDate(this.defaults.date_end_res)
+          : '',
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
@@ -1964,11 +1964,11 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         price: this.defaults.price,
         currency: settings?.taxes?.currency || 'CHF',
         date_start_res: this.defaults.date_start_res
-        ? this.formatDate(this.defaults.date_start_res)
-        : '',
+          ? this.formatDate(this.defaults.date_start_res)
+          : '',
         date_end_res: this.defaults.date_end_res
-        ? this.formatDate(this.defaults.date_end_res)
-        : '',
+          ? this.formatDate(this.defaults.date_end_res)
+          : '',
         date_start: moment(this.defaults.date_start_res).format('YYYY-MM-DD'),
         date_end: moment(this.defaults.date_end_res).format('YYYY-MM-DD'),
         active: this.defaults.active,
@@ -2037,11 +2037,11 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         date_start: lowestDate,
         date_end: highestDate,
         date_start_res: this.defaults.date_start_res
-        ? this.formatDate(this.defaults.date_start_res)
-        : '',
+          ? this.formatDate(this.defaults.date_start_res)
+          : '',
         date_end_res: this.defaults.date_end_res
-        ? this.formatDate(this.defaults.date_end_res)
-        : '',
+          ? this.formatDate(this.defaults.date_end_res)
+          : '',
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -2069,11 +2069,11 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         date_start: lowestDate,
         date_end: highestDate,
         date_start_res: this.defaults.date_start_res
-        ? this.formatDate(this.defaults.date_start_res)
-        : '',
+          ? this.formatDate(this.defaults.date_start_res)
+          : '',
         date_end_res: this.defaults.date_end_res
-        ? this.formatDate(this.defaults.date_end_res)
-        : '',
+          ? this.formatDate(this.defaults.date_end_res)
+          : '',
         confirm_attendance: false,
         active: this.defaults.active,
         online: this.defaults.online,
@@ -2098,11 +2098,11 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         date_start: lowestDate,
         date_end: highestDate,
         date_start_res: this.defaults.date_start_res
-        ? this.formatDate(this.defaults.date_start_res)
-        : '',
+          ? this.formatDate(this.defaults.date_start_res)
+          : '',
         date_end_res: this.defaults.date_end_res
-        ? this.formatDate(this.defaults.date_end_res)
-        : '',
+          ? this.formatDate(this.defaults.date_end_res)
+          : '',
         active: this.defaults.active,
         online: this.defaults.online,
         image: this.imagePreviewUrl,
@@ -2137,11 +2137,11 @@ export class CoursesCreateUpdateModalComponent implements OnInit {
         price: this.defaults.price,
         currency: this.defaults.currency,//poner currency de reglajes
         date_start_res: this.defaults.date_start_res
-        ? this.formatDate(this.defaults.date_start_res)
-        : '',
+          ? this.formatDate(this.defaults.date_start_res)
+          : '',
         date_end_res: this.defaults.date_end_res
-        ? this.formatDate(this.defaults.date_end_res)
-        : '',
+          ? this.formatDate(this.defaults.date_end_res)
+          : '',
         date_start: lowestDateP,
         date_end: highestDateP,
         active: this.defaults.active,
