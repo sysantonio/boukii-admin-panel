@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormGroup, Validators } from '@angular/forms';
+import { DateAdapter } from '@angular/material/core';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -28,7 +29,13 @@ export class ComponenteComponent implements OnInit {
     }
   }
 
-  constructor(private TranslateService: TranslateService) { }
+  constructor(private dateAdapter: DateAdapter<Date>, private TranslateService: TranslateService) {
+    dateAdapter.getFirstDayOfWeek = () => 1
+    this.dateAdapter.getFirstDayOfWeek = () => 1
+    this.dateAdapter.setLocale('es-ES');
+    dateAdapter.setLocale('es-ES');
+  }
+
   getErrorMessage(controlName: string): string {
     const control = this.c[controlName];
     if (control.errors) {

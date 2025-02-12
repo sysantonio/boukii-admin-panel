@@ -1010,7 +1010,7 @@
 											matInput
 											placeholder="Percentaje"
 											type="number">
-										<span matTextSuffix>CHF</span>
+										<span matTextSuffix>{{currency || 'CHF'}}</span>
 									</mat-form-field>
 								</div>
 							</div>
@@ -1372,7 +1372,7 @@
 											<th *matHeaderCellDef
 												mat-header-cell
 												mat-sort-header>
-												{{'price' | translate}} - CHF / {{'day' | translate}}
+												{{'price' | translate}} - {{currency || 'CHF'}} / {{'day' | translate}}
 											</th>
 											<td *matCellDef="let element"
 												mat-cell>
@@ -1509,7 +1509,7 @@
 											<th *matHeaderCellDef
 												mat-header-cell
 												mat-sort-header>
-												{{'price' | translate}} - CHF / {{'day' | translate}}
+												{{'price' | translate}} - {{currency || 'CHF'}} / {{'day' | translate}}
 											</th>
 											<td *matCellDef="let element"
 												mat-cell>
@@ -1645,7 +1645,7 @@
 											<th *matHeaderCellDef
 												mat-header-cell
 												mat-sort-header>
-												{{'price' | translate}} - CHF / {{'day' | translate}}
+												{{'price' | translate}} - {{currency || 'CHF'}} / {{'day' | translate}}
 											</th>
 											<td *matCellDef="let element"
 												mat-cell>

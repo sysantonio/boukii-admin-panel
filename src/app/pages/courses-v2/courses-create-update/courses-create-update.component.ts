@@ -275,7 +275,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.ModalFlux--
       this.confirmModal = true
     }
-    console.log(this.courses.courseFormGroup.controls['course_dates'].value)
   }
 
   find = (array: any[], key: string, value: string | boolean) => array.find((a: any) => value ? a[key] === value : a[key])
@@ -351,7 +350,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   endCourse() {
     const courseFormGroup = this.courses.courseFormGroup.getRawValue()
-    console.log(courseFormGroup)
     courseFormGroup.translations = JSON.stringify(this.courses.courseFormGroup.controls['translations'].value)
     courseFormGroup.course_type === 1 ? delete courseFormGroup.settings : courseFormGroup.settings = JSON.stringify(this.courses.courseFormGroup.controls['settings'].value)
     if (this.mode === "create") {
@@ -380,11 +378,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   addCourseDate = () => {
     const course_date = this.courses.courseFormGroup.controls['course_dates'].value
-    const data = JSON.parse(JSON.stringify(course_date[0]))
+    const data = JSON.parse(JSON.stringify(course_date[course_date.length - 1]))
     delete data.id
-    course_date.push(data)
+    const newDate = new Date(course_date[course_date.length - 1].date);
+    newDate.setDate(newDate.getDate() + 1);
+    course_date.push({ ...data, date: newDate })
     this.courses.courseFormGroup.patchValue({ course_dates: course_date })
-    console.log(this.courses.courseFormGroup.controls['course_dates'].value)
   }
 
   monitorSelect(event: any, level: any, j: number) {
@@ -395,6 +394,5 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
   deleteCourseDate(i: number) {
     this.courses.courseFormGroup.controls['course_dates'].value.splice(i, 1)
-    console.log(1)
   }
 }
