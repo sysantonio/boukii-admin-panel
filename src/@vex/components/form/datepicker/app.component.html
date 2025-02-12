@@ -4,7 +4,7 @@
 		{{name | translate}}
 	</mat-label>
 	<input [matDatepicker]="datepicker" [min]="min" [max]="max" [formControlName]="control"
-		(dateInput)="do.emit($event)" matInput readonly>
+		(dateInput)="getLocalISOString($event)" matInput readonly>
 	<mat-datepicker-toggle [for]="datepicker" matSuffix></mat-datepicker-toggle>
 	<mat-datepicker #datepicker [startAt]="startAt"></mat-datepicker>
 	<mat-error *ngIf="c[control].touched && c[control].errors">

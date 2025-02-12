@@ -28,11 +28,11 @@ export class CoursesCreateUpdateComponent implements OnInit {
     { Name: "langs", Modal: 5 },
   ]
   Translate: { Code: string, Name: string }[] = [
-    { Code: "es", Name: "Spanish" },
-    { Code: "en", Name: "English" },
-    { Code: "fr", Name: "France" },
+    { Code: "fr", Name: "French" },
     { Code: "de", Name: "German" },
+    { Code: "en", Name: "English" },
     { Code: "it", Name: "Italian" },
+    { Code: "es", Name: "Spanish" },
   ]
 
   PeriodoFecha: number = 0
@@ -183,6 +183,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     levelGrop.sort((a: any) => a.active ? -1 : 1)
     this.courses.courseFormGroup.patchValue({ levelGrop })
   });
+
   Confirm(add: number) {
     this.courses.courseFormGroup.markAsUntouched()
     this.ModalFlux += add
@@ -274,6 +275,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       this.ModalFlux--
       this.confirmModal = true
     }
+    console.log(this.courses.courseFormGroup.controls['course_dates'].value)
   }
 
   find = (array: any[], key: string, value: string | boolean) => array.find((a: any) => value ? a[key] === value : a[key])
@@ -377,12 +379,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
   addCategory = () => this.courses.courseFormGroup.controls['settings'].value.groups.push({ ...this.courses.default_activity_groups })
 
   addCourseDate = () => {
-    if (this.mode === 'create') this.courses.courseFormGroup.controls['course_dates'].value.push({ ...this.courses.default_course_dates })
-    else {
-      const data = this.courses.courseFormGroup.controls['course_dates'].value[0]
-      delete data.id
-      this.courses.courseFormGroup.controls['course_dates'].value.push(data)
-    }
+    const course_date = this.courses.courseFormGroup.controls['course_dates'].value
+    const data = JSON.parse(JSON.stringify(course_date[0]))
+    delete data.id
+    course_date.push(data)
+    this.courses.courseFormGroup.patchValue({ course_dates: course_date })
+    console.log(this.courses.courseFormGroup.controls['course_dates'].value)
   }
 
   monitorSelect(event: any, level: any, j: number) {
@@ -393,5 +395,6 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
   deleteCourseDate(i: number) {
     this.courses.courseFormGroup.controls['course_dates'].value.splice(i, 1)
+    console.log(1)
   }
 }

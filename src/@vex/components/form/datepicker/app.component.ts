@@ -44,7 +44,7 @@ export class ComponenteComponent implements OnInit {
   getLocalISOString(event: any) {
     let date = event
     const offset = date.value.getTimezoneOffset();
-    date.value = new Date(date.value.getTime() - offset * 60 * 1000);
+    date.value = new Date(date.value.getTime() - offset * 60 * 1000).toISOString();
     this.value = date.value;
     this.do.emit(date);
   }

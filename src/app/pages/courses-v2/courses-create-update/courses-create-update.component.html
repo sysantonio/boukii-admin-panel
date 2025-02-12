@@ -136,7 +136,7 @@
 							[min]="courses.courseFormGroup.controls['date_start'].value"
 							[value]="courses.courseFormGroup.controls['course_dates'].value[i].date"
 							(do)="courses.courseFormGroup.controls['course_dates'].value[i].date=$event.value"
-							style="min-width: 0;width: 100%;" label="date">
+							style="min-width: 0;width: 100%;" name="date">
 						</app-form-datepicker>
 						<app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].hour_start"
 							[required]="true" [table]="courses.hours"
