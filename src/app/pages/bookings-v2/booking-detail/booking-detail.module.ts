@@ -8,6 +8,11 @@ import { ComponentsModule } from './components/components.module';
 import { BookingComponentsModule } from '../bookings-create-update/components/components.module';
 import { SecondaryToolbarModule } from '../../../../@vex/components/secondary-toolbar/secondary-toolbar.module';
 import { BreadcrumbsModule } from '../../../../@vex/components/breadcrumbs/breadcrumbs.module';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatOptionModule} from '@angular/material/core';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatSelectModule} from '@angular/material/select';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,7 +26,12 @@ import { BreadcrumbsModule } from '../../../../@vex/components/breadcrumbs/bread
     TranslateModule,
     SecondaryToolbarModule,
     BreadcrumbsModule,
-    BookingComponentsModule
+    BookingComponentsModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    MatRadioModule,
+    MatSelectModule,
+    FormsModule
   ],
   exports: [
     BookingDetailV2Component

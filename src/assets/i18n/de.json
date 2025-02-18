@@ -396,6 +396,7 @@
   "login.ok": "TRETEN SIE EIN",
   "login.text1": "Zugang mit Ihrer E-Mail-Adresse und Ihrem Passwort.",
   "snackbar.admin.langs": "Es können nur 6 Sprachen ausgewählt werden",
+  "No_vouchers_found": "Keine Gutscheine mit diesem Code gefunden",
   "snackbar.admin.create": "Administrator erfolgreich erstellt",
   "snackbar.admin.update": "Administrator erfolgreich aktualisiert",
   "snackbar.bonus.create": "Bonus erfolgreich erstellt",
@@ -593,6 +594,7 @@
   "color_3": "Verbotene Änderungen",
   "change_history": "Geschichte verändern",
   "api_created": "Reservierung aus dem Panel erstellt",
+  "created by api": "Reservierung aus dem Panel erstellt",
   "page_created": "Reserva creada desde la página de reservas",
   "cancel_refund": "Reservierung erstattet",
   "refund_boukii_pay": "Reservierung wird von Boukii Pay erstattet",
@@ -790,5 +792,7 @@
   "delete_activity": "Aktivität löschen",
   "view_activity_summary": "Aktivitätsübersicht anzeigen",
   "confirmed_without_payment": "Bestätigt ohne Zahlung",
-  "are_you_sure_action": "Bist du sicher, dass du das tun möchtest? Dies kann sich auf den gesamten Kurs auswirken."
+  "are_you_sure_action": "Bist du sicher, dass du das tun möchtest? Dies kann sich auf den gesamten Kurs auswirken.",
+  "text_subtotal": "Zwischensumme",
+  "credit_card": "Kreditkarte"
 }

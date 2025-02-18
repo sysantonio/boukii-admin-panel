@@ -21,6 +21,7 @@
   "italian": "italiano",
   "expand_all": "Expandir todo",
   "collapse_all": "Contraer todo",
+  "No_vouchers_found": "No se han encontrado bonus con ese código",
   "mandatory": "Este campo es obligatorio",
   "name": "Nombre",
   "name_client": "Nombre",
@@ -622,6 +623,7 @@
   "color_3": "Modificaciones prohibidas",
   "change_history": "Histórico de cambios",
   "api_created": "Reserva creada desde el panel",
+  "created by api": "Reserva creada desde el panel",
   "page_created": "Reserva creada desde la página de reservas",
   "cancel_refund": "Reserva reembolsada",
   "refund_boukii_pay": "Reserva reembolsada por Boukii Pay",
@@ -797,5 +799,7 @@
   "delete_activity": "Eliminar actividad",
   "view_activity_summary": "Ver resumen actividad",
   "confirmed_without_payment": "Confirmado sin pago",
-  "are_you_sure_action": "¿Estás seguro de hacer esto? Esto puede tener afectación a lo largo del curso."
+  "are_you_sure_action": "¿Estás seguro de hacer esto? Esto puede tener afectación a lo largo del curso.",
+  "text_subtotal": "Subtotal",
+  "credit_card": "Tarjeta de crédito"
 }

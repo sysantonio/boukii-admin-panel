@@ -41,6 +41,7 @@ import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} fr
 import {IconComponent} from '../../../../../@vex/components/icon/app.component';
 import { ComponenteButtonModule } from "../../../../../@vex/components/form/button/app.module";
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 @NgModule({
     imports: [
@@ -66,7 +67,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
         CdkVirtualForOf,
         IconComponent,
         ComponenteButtonModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        MatFormFieldModule
     ],
     declarations: [
         BookingFormStepper,

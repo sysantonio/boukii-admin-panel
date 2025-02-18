@@ -62,7 +62,7 @@
       </div>
     </div>
 
-    <div class="section" style="margin-bottom: 0;border: none;">
+    <div class="section" style="margin: 20px;border: none;">
       <div class="dateRow">
         <div>
           <span class="hour" (click)="addReduction()"
@@ -74,7 +74,7 @@
              line-height: 18px; cursor: pointer;
              word-wrap: break-word;display: flex;
              align-items: center;gap: 8px">
-            <mat-icon style="margin: 0 8px;">add</mat-icon>
+            <mat-icon>add</mat-icon>
             {{ "apply_reduction" | translate }}
           </span>
           <span style="width: 100%; float:left" *ngIf="bookingData.reduction !== null;">
@@ -99,7 +99,7 @@
            line-height: 18px; cursor: pointer;
            word-wrap: break-word;display: flex;
            align-items: center;gap: 8px;">
-            <mat-icon style="margin: 0 8px;">add</mat-icon>
+            <mat-icon>add</mat-icon>
             {{ "apply_bonus" | translate }}
           </span>
           <ng-container *ngIf="bookingData.vouchers?.length">
@@ -118,11 +118,11 @@
       </div>
       <div class="dateRow">
         <div>
-          <mat-checkbox color="primary" [(ngModel)]="bookingData.has_cancellation_insurance"
+          <mat-checkbox color="primary"  [(ngModel)]="bookingData.has_cancellation_insurance"
             (change)="calculateRem($event)" [disabled]="isNaN(this.cancellationInsurancePercent)"
             style="float: left;"></mat-checkbox>
           <span class="hour">{{ "op_rem" | translate }}</span>
-          <p style="float:right">
+          <p class="price">
             -{{bookingData.price_cancellation_insurance| number:'0.2-2'}}
             {{activities[0].course.currency}}
           </p>
@@ -134,22 +134,24 @@
     {{ "bookings_page.description.total" | translate }}
     <ng-container>
       <span class="totalPrice">
-        {{ bookingData.price_total| number:'0.2-2' }}
+        {{ bookingData.price_total | number:'0.2-2' }}
         {{ activities[0].course.currency }}
       </span>
     </ng-container>
     {{ "to_pay" | translate }}
     <ng-container>
       <span class="totalPrice">
-        {{ bookingData.price_total - calculateTotalVoucherPrice() }}
+        {{ bookingData.price_total - calculateTotalVoucherPrice() | number:'0.2-2' }}
         {{ activities[0].course.currency }}
       </span>
     </ng-container>
   </div>
 </div>
-<button *ngIf="!hideBotton" style="height: 56px; width: 400px;border-radius: 3px;margin-top: 16px;" color="primary"
-  mat-raised-button type="button" class="client-button" (click)="payClick.emit()">
-  {{ "end_reserve_pay" | translate }}
+<button *ngIf="!hideBotton"
+        style="height: 56px; width: 400px; border-radius: 3px; margin-top: 16px;"
+        color="primary" mat-raised-button type="button" class="client-button"
+        (click)="payClick.emit()">
+  {{ (bookingService.calculatePendingPrice() === 0 ? "end_booking"  : "end_reserve_pay") | translate }}
 </button>
 <button *ngIf="!hideBotton" style="height: 38px; width: 400px;border-radius: 3px;margin-top: 16px;" mat-raised-button
   type="button" class="client-button" (click)="addClick.emit()">

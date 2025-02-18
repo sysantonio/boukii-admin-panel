@@ -186,7 +186,8 @@ export class UtilsService {
     hour: string,
     course: any,
     activitiesBooked: any[] = [],
-    utilizers: any[] = []
+    utilizers: any[] = [],
+    duration: string | null = null
   ): boolean {
     const selectedDate = moment(date).format('YYYY-MM-DD');
     const selectedHour = moment(`${selectedDate} ${hour}`, 'YYYY-MM-DD HH:mm');
@@ -205,6 +206,17 @@ export class UtilsService {
       return true;
     }
 
+    // Si hay duración, calcular la hora de finalización
+    if (duration) {
+      const durationMinutes = this.parseDurationToMinutes(duration);
+      const selectedEndHour = selectedHour.clone().add(durationMinutes, 'minutes');
+
+      // Verificar que la hora de finalización no exceda el rango permitido
+      if (selectedEndHour.isAfter(end)) {
+        return true;
+      }
+    }
+
     // Filtrar actividades con fechas que coincidan y con utilizadores en común
     const conflictingDates = activitiesBooked.flatMap(activity =>
       activity.dates.filter(dateObj =>
@@ -221,6 +233,19 @@ export class UtilsService {
 
     // Verificar si la hora está ocupada
     return occupiedIntervals.some(interval => selectedHour.isBetween(interval.start, interval.end, 'minute', '[)'));
+  }
+
+// Método auxiliar para convertir duración en minutos
+  parseDurationToMinutes(duration: string): number {
+    const regex = /(\d+)h(?:\s*(\d+)m)?/; // Captura '1h', '1h 30m', '2h', etc.
+    const matches = duration.match(regex);
+
+    if (!matches) return 0;
+
+    const hours = parseInt(matches[1], 10) || 0;
+    const minutes = parseInt(matches[2] || '0', 10);
+
+    return (hours * 60) + minutes;
   }
 
 

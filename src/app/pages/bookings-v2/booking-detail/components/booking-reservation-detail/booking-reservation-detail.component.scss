@@ -83,8 +83,16 @@
   border-bottom: 1px solid var(--color-grey3);
 }
 
+.historyWrapper {
+  padding: 20px;
+
+  padding-bottom: 0;
+  border-top: 5px solid var(--color-grey3);
+}
+
 .footerWrapper {
   padding: 20px;
+  padding-bottom: 10px;
   font-family: var(--font-dm);
   font-size: 14px;
   font-weight: 400;

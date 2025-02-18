@@ -20,11 +20,26 @@ export class AddReductionModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      discount: [0, Validators.required]
-    })
-    this.form.get('discount').valueChanges.subscribe((value) => {
-      this.totalDiscount = (value / 100) * this.originalPrice;
+      discount: [0, Validators.required],
+      totalDiscount: [0, Validators.required]
     });
+
+    this.form.get('discount').valueChanges.subscribe((value) => {
+      if (this.type === 1) { // Solo actualiza si estamos en porcentaje
+        this.totalDiscount = (value / 100) * this.originalPrice;
+      }
+    });
+  }
+
+  onTabChange(index: number) {
+    this.type = index === 0 ? 1 : 2;
+  }
+
+  updateFixedDiscount(event: any) {
+    let value = event.target.value;
+    if (this.type === 2) {
+      this.totalDiscount = value;
+    }
   }
 
 }

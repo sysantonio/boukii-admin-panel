@@ -1930,7 +1930,6 @@ export class BookingDetailComponent implements OnInit {
   }
 
   refundBooking() {
-    debugger;
     const dialogRef = this.dialog.open(RefundBookingModalComponent, {
       width: "1000px", // Asegurarse de que no haya un ancho máximo
       panelClass: "full-screen-dialog", // Si necesitas estilos adicionales,

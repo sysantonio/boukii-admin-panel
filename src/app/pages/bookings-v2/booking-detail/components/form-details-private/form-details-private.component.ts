@@ -7,6 +7,7 @@ import {ApiCrudService} from '../../../../../../service/crud.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {TranslateService} from '@ngx-translate/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {pairwise, startWith} from 'rxjs';
 
 
 @Component({
@@ -21,7 +22,7 @@ export class FormDetailsPrivateComponent implements OnInit {
   @Input() utilizers: any;
   @Input() sportLevel: any;
   @Input() initialData: any;
-  @Input() activitiesBooked: any;
+  activitiesBooked: any;
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
   @Input() addDateEvent!: boolean; // Recibe el evento como Input
@@ -167,6 +168,7 @@ export class FormDetailsPrivateComponent implements OnInit {
       monitor: [{value: initialData ? initialData.monitor : null, disabled: disabled || isDatePast}],
       changeMonitorOption: [{value: initialData ? initialData.changeMonitorOption : null, disabled: disabled || isDatePast}],
       utilizers: utilizerArray,
+      originalData: [initialData]
     });
 
     this.courseDates.push(courseDateGroup);
@@ -225,7 +227,8 @@ export class FormDetailsPrivateComponent implements OnInit {
 
       const checkAval = {
         bookingUsers,
-        bookingUserIds: [] // Puedes rellenar esto según sea necesario
+        bookingUserIds: this.initialData.flatMap(data => data.booking_users.map(user => user.id))
+
       };
 
       // Llamamos al servicio para verificar la disponibilidad de la fecha
@@ -254,22 +257,8 @@ export class FormDetailsPrivateComponent implements OnInit {
         );
 
         // Si encontramos un utilizer coincidente, verificamos las fechas
-        if (matchingUtilizer) {
-          for (let normalizedDate of normalized.dates) {
-            // Comprobar si hay solapamiento entre la fecha seleccionada y la fecha de normalizedDates
-            const formattedNormalizedDate = moment(normalizedDate.date).format('YYYY-MM-DD');
-            const formattedBookingUserDate = moment(bookingUser.date).format('YYYY-MM-DD');
-
-            if (formattedBookingUserDate === formattedNormalizedDate) {
-              // Verificamos solapamiento en las horas
-              if (bookingUser.hour_start < normalizedDate.endHour &&
-                normalizedDate.startHour < bookingUser.hour_end) {
-                return true; // Si hay solapamiento, retornamos true
-              }
-            }
-          }
-        }
         for (let normalizedDate of this.courseDates.controls) {
+
 
           if ((currentFormGroup && currentFormGroup === normalizedDate)) {
             continue; // Saltamos la comparación si es el mismo FormGroup
@@ -286,6 +275,28 @@ export class FormDetailsPrivateComponent implements OnInit {
             }
           }
         }
+
+        if (matchingUtilizer) {
+          for (let normalizedDate of normalized.dates) {
+
+            const currentOriginalData = currentFormGroup.get('originalData')?.value;
+            if (normalizedDate === currentOriginalData) {
+              continue;
+            }
+
+            // Comprobar si hay solapamiento entre la fecha seleccionada y la fecha de normalizedDates
+            const formattedNormalizedDate = moment(normalizedDate.date).format('YYYY-MM-DD');
+            const formattedBookingUserDate = moment(bookingUser.date).format('YYYY-MM-DD');
+
+            if (formattedBookingUserDate === formattedNormalizedDate) {
+              // Verificamos solapamiento en las horas
+              if (bookingUser.hour_start < normalizedDate.endHour &&
+                normalizedDate.startHour < bookingUser.hour_end) {
+                return true; // Si hay solapamiento, retornamos true
+              }
+            }
+          }
+        }
       }
     }
     // Verificamos si alguno de los utilizers de bookingUsers está en los utilizers de normalizedDates
@@ -294,18 +305,25 @@ export class FormDetailsPrivateComponent implements OnInit {
 
   subscribeToFormChanges(courseDateGroup: FormGroup) {
     // Suscribirse a cambios en 'startHour'
-    courseDateGroup.get('startHour').valueChanges.subscribe(() => {
+    courseDateGroup.get('startHour').valueChanges
+      .pipe(
+        startWith(courseDateGroup.get('startHour').value), // Inicializar con el valor actual
+        pairwise() // Devuelve [valor_anterior, valor_nuevo]
+      )
+      .subscribe(([previousStartHour, newStartHour]) => {
       this.updateEndHour(courseDateGroup);
 
       if (this.course.is_flexible) {
         // Generar duraciones posibles basadas en la nueva 'startHour'
-        this.possibleDurations = this.utilService.generateCourseDurations(courseDateGroup.get('startHour').value, this.course.hour_max, this.course);
+        // this.possibleDurations = this.utilService.generateCourseDurations(courseDateGroup.get('startHour').value, this.course.hour_max, this.course);
 
         // Verificar si la duración actual está dentro de las posibles duraciones
         const currentDuration = courseDateGroup.get('duration').value;
         if (!this.possibleDurations.includes(currentDuration)) {
           // Si la duración no está en las posibles, setearla en null
-          courseDateGroup.get('duration').setValue(null);
+          //courseDateGroup.get('duration').setValue(null);
+          this.snackbar.open(this.translateService.instant('no_available'),
+            'OK', {duration:3000});
         }
         if(courseDateGroup.get('duration').value && courseDateGroup.get('startHour').value) {
           this.checkAval(courseDateGroup).then((isAvailable) => {
@@ -313,21 +331,25 @@ export class FormDetailsPrivateComponent implements OnInit {
               this.getMonitorsAvailable(courseDateGroup)
             } else {
               // Si no hay disponibilidad, deshabilitamos la fecha de nuevo
-              courseDateGroup.get('duration').setValue(null);
+              courseDateGroup.get('startHour').setValue(previousStartHour);
             }
           });
         }
       }
     });
 
-    courseDateGroup.get('date').valueChanges.subscribe(() => {
+    courseDateGroup.get('date').valueChanges.pipe(
+      startWith(courseDateGroup.get('date').value), // Inicializar con el valor actual
+      pairwise() // Devuelve [valor_anterior, valor_nuevo]
+    )
+      .subscribe(([previousDate, newDate]) => {
       if(courseDateGroup.get('duration').value && courseDateGroup.get('startHour').value) {
         this.checkAval(courseDateGroup).then((isAvailable) => {
           if (isAvailable) {
             this.getMonitorsAvailable(courseDateGroup)
           } else {
             // Si no hay disponibilidad, deshabilitamos la fecha de nuevo
-            courseDateGroup.get('duration').setValue(null);
+            courseDateGroup.get('date').setValue(previousDate);
 
           }
         });
@@ -514,6 +536,11 @@ export class FormDetailsPrivateComponent implements OnInit {
     }
 
   }
+
+  isFormValid() {
+    return this.stepForm.valid;
+  }
+
   cancel() {
     this.dialogRef.close();
   }

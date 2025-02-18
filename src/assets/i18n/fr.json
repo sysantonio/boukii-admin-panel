@@ -67,6 +67,7 @@
   "monitor_detail": "***",
   "client_detail": "***",
   "flexidates": "Dates flexibles",
+  "No_vouchers_found": "Aucun bon trouvé avec ce code",
   "from": "Depuis",
   "to": "Jusqu'à",
   "in": "dans",
@@ -598,6 +599,7 @@
   "color_3": "Modifications interdites",
   "change_history": "Historique des changements",
   "api_created": "Réservation créée depuis le panel",
+  "created by api": "Réservation créée depuis le panel",
   "cancel_refund": "Réservation remboursée",
   "refund_boukii_pay": "Réservation remboursée par Boukii Pay",
   "full_cancel": "Annulation totale",
@@ -788,5 +790,7 @@
   "delete_activity": "Supprimer l'activité",
   "view_activity_summary": "Voir le résumé de l'activité",
   "confirmed_without_payment": "Confirmé sans paiement",
-  "are_you_sure_action": "Êtes-vous sûr de vouloir faire cela ? Cela peut avoir un impact sur tout le cours."
+  "are_you_sure_action": "Êtes-vous sûr de vouloir faire cela ? Cela peut avoir un impact sur tout le cours.",
+  "text_subtotal": "Sous-total",
+  "credit_card": "Carte de crédit"
 }

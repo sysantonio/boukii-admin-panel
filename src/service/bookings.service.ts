@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import {BehaviorSubject, delay, EMPTY, forkJoin, mergeMap, Observable} from 'rxjs';
 import * as moment from 'moment';
+import {TranslateService} from '@ngx-translate/core';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ApiCrudService} from './crud.service';
 
 export interface BookingCreateData {
   school_id: number;
@@ -31,13 +34,44 @@ export interface BookingCreateData {
   cart: any[] | null;
 }
 
+interface BookingLog {
+  booking_id: number;
+  action: string;
+  description?: string;
+  before_change: string;
+  user_id: number;
+  school_id?: number;
+  reason?: string;
+}
+
+interface Payment {
+  booking_id: number;
+  school_id: number;
+  amount: number;
+  status: string;
+  notes: string;
+}
+
+interface VoucherData {
+  code: string;
+  quantity: number;
+  remaining_balance: number;
+  payed: boolean;
+  client_id: number;
+  school_id: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class BookingService {
   private bookingDataSubject = new BehaviorSubject<BookingCreateData | null>(null);
   public editData;
-  constructor() {}
+  constructor(
+    private crudService: ApiCrudService,
+    private snackbar: MatSnackBar,
+    private translateService: TranslateService
+  ) {}
 
   setBookingData(data: BookingCreateData) {
     this.bookingDataSubject.next(data);
@@ -75,6 +109,7 @@ export class BookingService {
           let bookingUser: any = {};
           bookingUser.client_id = utilizer.id;
           bookingUser.group_id = group_id;
+          bookingUser.monitor_id = item.monitor ? item.monitor.id : null;
 
           // Obtener los valores desde bookingData
           let reduction = bookingData.price_reduction || 0;
@@ -96,28 +131,33 @@ export class BookingService {
 
           // Recolectar los extras y calcular su precio total
           if (item.course.course_type == 2) {
-            date.utilizers.find(u => u.first_name == utilizer.first_name && u.last_name == utilizer.last_name)
-              .extras.forEach(extra => {
-              let extraPrice = parseFloat(extra.price);
-              totalExtrasPrice += extraPrice;
-              extras.push({
-                course_extra_id: extra.id,
-                name: extra.name,
-                quantity: extra.quantity,
-                price: extraPrice
+            let utilizers =  date.utilizers.find(u =>
+              u.first_name == utilizer.first_name && u.last_name == utilizer.last_name);
+            if(utilizers && utilizers.extras && utilizers.extras.length) {
+              utilizers.extras.forEach(extra => {
+                let extraPrice = parseFloat(extra.price);
+                totalExtrasPrice += extraPrice;
+                extras.push({
+                  course_extra_id: extra.id,
+                  name: extra.name,
+                  quantity: extra.quantity,
+                  price: extraPrice
+                });
               });
-            });
+            }
           } else {
-            date.extras.forEach(extra => {
-              let extraPrice = parseFloat(extra.price);
-              totalExtrasPrice += extraPrice;
-              extras.push({
-                course_extra_id: extra.id,
-                name: extra.name,
-                quantity: extra.quantity,
-                price: extraPrice
+            if(date.extras &&  date.extras.length) {
+              date.extras.forEach(extra => {
+                let extraPrice = parseFloat(extra.price);
+                totalExtrasPrice += extraPrice;
+                extras.push({
+                  course_extra_id: extra.id,
+                  name: extra.name,
+                  quantity: extra.quantity,
+                  price: extraPrice
+                });
               });
-            });
+            }
           }
 
           // Asignar valores al objeto de usuario de la reserva
@@ -178,5 +218,213 @@ export class BookingService {
       basket: null,  // Reset de reduction
       cart:  null
     });
+  }
+
+  private createBookingLog(logData: BookingLog): Observable<any> {
+    return this.crudService.create('/booking-logs', logData);
+  }
+
+  private createPayment(paymentData: Payment): Observable<any> {
+    return this.crudService.create('/payments', paymentData);
+  }
+
+  private updateBookingUserStatus(bookingUsers: any[], status: number): Observable<any> {
+    return forkJoin(
+      bookingUsers.map(user =>
+        this.crudService.update('/booking-users', { status }, user.id)
+      )
+    );
+  }
+
+  private cancelBookingUsers(bookingUserIds: number[]): Observable<any> {
+    return this.crudService.post('/admin/bookings/cancel', {
+      bookingUsers: bookingUserIds
+    });
+  }
+
+  private handleNoRefund(bookingId: number, bookingUsers: any[], bookTotalPrice: number, userData: any): Observable<any> {
+    const operations = [
+      this.createBookingLog({
+        booking_id: bookingId,
+        action: 'no_refund',
+        before_change: 'confirmed',
+        user_id: userData.id
+      }),
+      this.createPayment({
+        booking_id: bookingId,
+        school_id: userData.schools[0].id,
+        amount: bookTotalPrice,
+        status: 'no_refund',
+        notes: 'no refund applied'
+      }),
+      this.cancelBookingUsers(bookingUsers)
+    ];
+
+    return forkJoin(operations);
+  }
+
+  private handleBoukiiPay(bookingId: number, bookTotalPrice: number, bookingUsers: any[], userData: any, reason: string): Observable<any> {
+    const operations: Observable<any>[] = [
+      this.createBookingLog({
+        booking_id: bookingId,
+        action: 'refund_boukii_pay',
+        before_change: 'confirmed',
+        user_id: userData.id,
+        reason: reason
+      })
+    ];
+
+    operations.push(
+      this.crudService.post(`/admin/bookings/refunds/${bookingId}`, {
+        amount: bookTotalPrice
+      })
+    );
+
+
+    operations.push(
+      this.cancelBookingUsers(bookingUsers)
+    );
+
+    return forkJoin(operations);
+  }
+
+  private handleCashRefund(bookingId: number, bookingUsers: any[], bookTotalPrice: number, userData: any, reason: string): Observable<any> {
+    const operations = [
+      this.createBookingLog({
+        booking_id: bookingId,
+        action: 'refund_cash',
+        before_change: 'confirmed',
+        user_id: userData.id,
+        description: reason
+      }),
+      this.createPayment({
+        booking_id: bookingId,
+        school_id: userData.schools[0].id,
+        amount: bookTotalPrice,
+        status: 'refund',
+        notes: 'other'
+      }),
+      this.cancelBookingUsers(bookingUsers)
+    ];
+
+    return forkJoin(operations);
+  }
+
+  private handleVoucherRefund(bookingId: number, bookingUsers: any[], bookTotalPrice: number, userData: any, clientMainId: number): Observable<any> {
+    const voucherData: VoucherData = {
+      code: 'BOU-' + this.generateRandomNumber(),
+      quantity: bookTotalPrice,
+      remaining_balance: bookTotalPrice,
+      payed: false,
+      client_id: clientMainId,
+      school_id: userData.schools[0].id
+    };
+
+    return forkJoin([
+      this.createBookingLog({
+        booking_id: bookingId,
+        action: 'voucher_refund',
+        before_change: 'confirmed',
+        user_id: userData.id
+      }),
+      this.cancelBookingUsers(bookingUsers.map(b => b.id)),
+      this.createPayment({
+        booking_id: bookingId,
+        school_id: userData.schools[0].id,
+        amount: bookTotalPrice,
+        status: 'refund',
+        notes: 'voucher'
+      }),
+      this.crudService.create('/vouchers', voucherData).pipe(
+        mergeMap(result =>
+          this.crudService.create('/vouchers-logs', {
+            voucher_id: result.data.id,
+            booking_id: bookingId,
+            amount: -voucherData.quantity
+          })
+        )
+      )
+    ]);
+  }
+
+  processCancellation(
+    data: any,
+    bookingData: any,
+    isPartial = false,
+    user: any,
+    group: any
+  ): Observable<any> {
+    if (!data) return EMPTY;
+    const bookingUserIds = group.dates.flatMap(date =>
+      date.booking_users.map(b => b.id)
+    );
+    debugger;
+    const initialLog: BookingLog = {
+      booking_id: bookingData.id,
+      action: 'partial_cancel',
+      description: 'partial cancel booking',
+      user_id: user.id,
+      before_change: 'confirmed',
+      school_id: user.schools[0].id
+    };
+
+    let cancellationOperation: Observable<any>;
+
+    switch (data.type) {
+      case 'no_refund':
+        cancellationOperation = this.handleNoRefund(
+          bookingData.id,
+          bookingUserIds,
+          group.total,
+          user
+        );
+        break;
+
+      case 'boukii_pay':
+        cancellationOperation = this.handleBoukiiPay(
+          bookingData.id,
+          group.total,
+          bookingUserIds,
+          user,
+          data.reason
+        );
+        break;
+
+      case 'refund':
+        cancellationOperation = this.handleCashRefund(
+          bookingData.id,
+          bookingUserIds,
+          group.total,
+          user,
+          data.reason
+        );
+        break;
+
+      case 'refund_gift':
+        cancellationOperation = this.handleVoucherRefund(
+          bookingData.id,
+          bookingUserIds,
+          group.total,
+          user,
+          bookingData.client_main_id
+        );
+        break;
+
+      default:
+        return EMPTY;
+    }
+
+    return this.createBookingLog(initialLog).pipe(
+      mergeMap(() => cancellationOperation),
+      delay(1000),
+      mergeMap(() => {
+        const status = isPartial ? 3 : 2;
+        return this.crudService.update('/bookings', { status }, bookingData.id);
+      })
+    );
+  }
+
+  private generateRandomNumber(): string {
+    return Math.random().toString(36).substring(2, 15);
   }
 }

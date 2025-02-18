@@ -74,7 +74,8 @@
 		</button>
 		<div class="left-column">
 			<div class="activities">
-				<booking-description-card *ngFor="let activity of normalizedDates; let i = index" [index]="i"
+				<booking-description-card *ngFor="let activity of normalizedDates; let i = index"
+                                  [index]="i"
 					[utilizers]="activity.utilizers" [allLevels]="allLevels" [sport]="activity.sport"
 					[sportLevel]="activity.sportLevel" [course]="activity.course" [dates]="activity.dates"
 					[monitors]="activity.monitors" [clientObs]="activity.clientObs" [schoolObs]="activity.schoolObs"
@@ -152,7 +153,7 @@
 	</div>
 </vex-flux-modal>
 
-<vex-flux-modal *ngIf="endModal" [width]="570" (Close)="endModal=false" title="Finalizar reserva">
+<vex-flux-modal *ngIf="endModal" [width]="570" (Close)="endModal=false" title="{{'end_booking' | translate}}">
 	<div body>
 		<div style="margin: 10px;">
 			{{"leave_page_warning" | translate}}
@@ -164,7 +165,7 @@
 		<button (click)="endModal=false"
 			style="height: 38px; width: 150px;border-radius: 3px;margin-top: 20px; margin-left: auto;" mat-raised-button
 			type="button" class="client-button">
-			{{"exit_reservation" | translate }}
+			{{"cancel" | translate }}
 		</button>
 		<button style="height: 38px; width: 200px;border-radius: 3px;margin-top:20px;margin-left: 20px;" color="primary"
 			mat-raised-button type="button" class="client-button">
@@ -173,54 +174,103 @@
 	</div>
 </vex-flux-modal>
 
-<vex-flux-modal *ngIf="payModal" [width]="570" (Close)="payModal=false" title="Finalizar reserva">
-	<div body>
-		<div style="margin: 10px;">
-			{{"pending_payment" | translate}}: {{bookingService.calculatePendingPrice()}}
-		</div>
+<vex-flux-modal *ngIf="payModal" [width]="570" (Close)="payModal=false;step=1;isPaid=false"
+                title="{{'end_booking' | translate}}">
+  <div body>
+    <div style="margin: 10px;" class="sectionTitle" *ngIf="step === 1">
+      <ng-container *ngIf="bookingService.calculatePendingPrice() > 0; else confirmReservation">
+        {{"pending_payment" | translate}}: <span class="totalPrice">{{ bookingService.calculatePendingPrice() }}</span>
+      </ng-container>
+      <ng-template #confirmReservation>
+        <p>{{ "confirm_booking_message" | translate }}</p>
+      </ng-template>
+    </div>
 
-		<!-- Radio Buttons for Payment Methods -->
-		<div style="margin: 10px 0;">
-			<mat-radio-group [(ngModel)]="paymentMethod" (change)="onPaymentMethodChange($event)">
-				<mat-radio-button [value]="1" style="display: block;">
-					{{"direct_payment" | translate}}
-				</mat-radio-button>
+    <div style="margin: 10px;" class="sectionTitle" *ngIf="step === 2">
+      <ng-container>
+        {{"is_paid" | translate}}:
+      </ng-container>
+    </div>
 
-				<!-- Payment method dropdown only for 'Pago directo' -->
-				<div *ngIf="paymentMethod === 1" style="margin: 10px 0;">
-					<mat-form-field appearance="fill">
-						<mat-label>
-							{{"select_payment_method" | translate}}
-						</mat-label>
-						<mat-select [(ngModel)]="selectedPaymentOption">
-							<mat-option *ngFor="let option of paymentOptions" [value]="option.type">
-								{{option.type}}
-							</mat-option>
-						</mat-select>
-					</mat-form-field>
-				</div>
+    <!-- Paso 1: Selección de método de pago -->
+    <div *ngIf="step === 1" style="margin: 10px 0;">
+      <mat-radio-group [(ngModel)]="paymentMethod" (change)="onPaymentMethodChange($event)">
+        <mat-radio-button [value]="1" style="display: block;">
+          {{"direct_payment" | translate}}  <!-- Efectivo / Tarjeta -->
+        </mat-radio-button>
 
-				<mat-radio-button [value]="3" style="display: block;">
-					{{"online_payment" | translate}}
-				</mat-radio-button>
-				<mat-radio-button [value]="5" style="display: block;">
-					{{"confirmation_without_payment" | translate}}
-				</mat-radio-button>
-			</mat-radio-group>
-		</div>
+        <div *ngIf="paymentMethod === 1" style="margin: 10px 0;">
+          <mat-form-field appearance="fill">
+            <mat-label>{{"select_payment_method" | translate}}</mat-label>
+            <mat-select [(ngModel)]="selectedPaymentOption">
+              <mat-option *ngFor="let option of paymentOptions" [value]="option.type" >
+                {{option.translation}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-	</div>
+        <mat-radio-button [value]="3" style="display: block;">
+          {{"online_payment" | translate}}  <!-- Online Payment -->
+        </mat-radio-button>
+        <mat-radio-button [value]="4" style="display: block;">
+          {{"payment_no_payment" | translate}}  <!-- Sin Pago -->
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
 
-	<div footer style="display: flex;">
-		<button (click)="payModal=false"
-			style="height: 38px; width: 150px;border-radius: 3px;margin-top: 20px; margin-left: auto;" mat-raised-button
-			type="button" class="client-button">
-			{{"exit_reservation" | translate }}
-		</button>
-		<button (click)="finalizeBooking()"
-			style="height: 38px; width: 200px;border-radius: 3px;margin-top:20px;margin-left: 20px;" color="primary"
-			mat-raised-button type="button" class="client-button">
-			{{ "end_reserve_pay" | translate }}
-		</button>
-	</div>
+    <!-- Paso 2: Confirmación de si el cliente pagó -->
+    <div *ngIf="step === 2" style="margin: 10px 0;">
+      <mat-radio-group [(ngModel)]="isPaid">
+        <mat-radio-button [value]="true" style="display: block;">
+          {{"payment_confirmed" | translate}}  <!-- Pago Confirmado -->
+        </mat-radio-button>
+        <mat-radio-button [value]="false" style="display: block;">
+          {{"payment_not_confirmed" | translate}}  <!-- Pago No Confirmado -->
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+
+  <div footer style="display: flex;">
+    <!-- Botón Cancelar -->
+    <button (click)="cancelPaymentStep()"
+            style="height: 38px; width: 150px; border-radius: 3px; margin-top: 20px; margin-left: auto;"
+            mat-raised-button type="button" class="client-button">
+      {{"cancel" | translate }}
+    </button>
+
+    <!-- Botón de Confirmar (Solo si Efectivo o Tarjeta) -->
+    <button *ngIf="step === 1 && (selectedPaymentOption === 'Efectivo' || selectedPaymentOption === 'Tarjeta')"
+            (click)="goToNextStep()"
+            style="height: 38px; width: 200px; border-radius: 3px; margin-top:20px; margin-left: 20px;"
+            color="primary" mat-raised-button type="button" class="client-button">
+      {{"confirm_booking" | translate }}
+    </button>
+
+    <!-- Botón Finalizar Pago o Finalizar Reserva -->
+    <button *ngIf="step === 1 && !(selectedPaymentOption === 'Efectivo' || selectedPaymentOption === 'Tarjeta')"
+            (click)="finalizeBooking()"
+            style="height: 38px; width: 200px; border-radius: 3px; margin-top:20px; margin-left: 20px;"
+            color="primary" mat-raised-button type="button" class="client-button">
+      {{ paymentMethod === 3 || paymentMethod === 4 ? 'end_booking' : 'end_reserve_pay' | translate }}
+    </button>
+
+    <!-- Botón Finalizar Reserva (Solo si Confirmación de Pago es Sí) -->
+    <button *ngIf="step === 2"
+            (click)="finalizeBooking()"
+            style="height: 38px; width: 200px; border-radius: 3px; margin-top:20px; margin-left: 20px;"
+            color="primary" mat-raised-button type="button" class="client-button">
+      {{"end_booking" | translate }}
+    </button>
+
+<!--    &lt;!&ndash; Botón Cancelar (En cualquier paso) &ndash;&gt;
+    <button *ngIf="step === 2 && !isPaid"
+            (click)="cancelPaymentStep()"
+            style="height: 38px; width: 200px; border-radius: 3px; margin-top:20px; margin-left: 20px;"
+            mat-raised-button type="button" class="client-button">
+      {{"cancel" | translate }}
+    </button>-->
+  </div>
 </vex-flux-modal>
+

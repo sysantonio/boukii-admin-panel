@@ -23,7 +23,7 @@
           <h4>{{ client.first_name }} {{ client.last_name }}</h4>
           <span>{{ langService.getLanguage(client.language1_id) }} ·
             {{ utilsService.calculateYears(client.birth_date) }} &ensp;{{
-            "years" | translate
+              "years" | translate
             }}
             · {{ utilsService.getCountry(client.country) }}</span>
           <div style="display: flex;gap: 8px;">
@@ -36,6 +36,9 @@
       </div>
     </div>
     <div class="section">
+      <div class="sectionTitle">
+        {{ "summary" | translate }}
+      </div>
       <div class="dateRow" *ngFor="let activity of activities; let i = index">
         <div [ngClass]="{ 'line-through': activity.status == 2 }">
           <span class="date">{{("00"+ (i + 1)).slice(-2)}}.</span>
@@ -69,7 +72,7 @@
       <div class="dateRow">
         <div>
           <span class="hour" (click)="addReduction()" *ngIf="bookingData.reduction == null && this.calculateTotalVoucherPrice()
-            < bookingData.price_total && !bookingData.isPaid" style="
+            < bookingData.price_total && !bookingData.paid" style="
             color: #E91E63;
              font-size: 14px;
              font-family: DM Sans;
@@ -82,8 +85,8 @@
           </span>
 
           <span style="width: 100%; float:left" *ngIf="bookingData.reduction != null;">
-            <mat-icon *ngIf="!bookingData.isPaid" svgIcon="mat:delete" style="float: left;color: red; cursor:pointer"
-              (click)="deleteReduction()"></mat-icon>
+            <mat-icon *ngIf="!bookingData.paid" svgIcon="mat:delete" style="float: left;color: red; cursor:pointer"
+                      (click)="deleteReduction()"></mat-icon>
             <p style="float:left">{{'reduction' |translate}}</p>
             <p style="float:right">
               -{{bookingData.price_reduction}}
@@ -94,8 +97,8 @@
       </div>
       <div class="dateRow">
         <div>
-          <span class="hour" *ngIf="this.calculateTotalVoucherPrice() < bookingData.price_total && !bookingData.isPaid"
-            (click)="addBonus()" style="
+          <span class="hour" *ngIf="this.calculateTotalVoucherPrice() < bookingData.price_total && !bookingData.paid"
+                (click)="addBonus()" style="
           color: #E91E63;
            font-size: 14px;
            font-family: DM Sans;
@@ -108,8 +111,8 @@
           </span>
           <ng-container *ngIf="bookingData.vouchers?.length">
             <span style="width: 100%; float:left" *ngFor="let item of bookingData.vouchers; let i = index">
-              <mat-icon *ngIf="!bookingData.isPaid" svgIcon="mat:delete" style="float: left;color: red; cursor:pointer"
-                (click)="deleteBonus(i);"></mat-icon>
+              <mat-icon *ngIf="!bookingData.paid" svgIcon="mat:delete" style="float: left;color: red; cursor:pointer"
+                        (click)="deleteBonus(i);"></mat-icon>
               <p style="float:left">{{'bonus' |translate}}
                 {{item.bonus.code}}</p>
               <p style="float:right">
@@ -123,8 +126,8 @@
       <div class="dateRow">
         <div>
           <mat-checkbox color="primary" [(ngModel)]="bookingData.has_cancellation_insurance"
-            (change)="calculateRem($event)" [disabled]="isNaN(this.cancellationInsurancePercent) && !bookingData.isPaid"
-            style="float: left;"></mat-checkbox>
+                        (change)="calculateRem($event)" [disabled]="isNaN(this.cancellationInsurancePercent) || bookingData.paid"
+                        style="float: left;"></mat-checkbox>
           <span class="hour">
             {{ "op_rem" | translate }}
           </span>
@@ -135,6 +138,7 @@
         </div>
       </div>
     </div>
+
   </div>
   <div class="footerWrapper">
     {{ "bookings_page.description.total" | translate }}
@@ -144,17 +148,37 @@
         {{ activities[0]?.course?.currency }}
       </span>
     </ng-container>
-    <span *ngIf="bookingData.price_total - calculateTotalVoucherPrice() > 0">{{ "to_pay" | translate }}</span>
-    <span *ngIf="bookingData.price_total - calculateTotalVoucherPrice() <= 0">{{ "A devolver" | translate }}</span>
-    <ng-container>
+    <ng-container *ngIf="!bookingData.paid">
+      <span *ngIf="bookingData.price_total - calculateTotalVoucherPrice() > 0">{{ "to_pay" | translate }}</span>
+      <span *ngIf="bookingData.price_total - calculateTotalVoucherPrice() <= 0">{{ "A devolver" | translate }}</span>
+    </ng-container>
+    <ng-container *ngIf="!bookingData.paid">
       <span class="totalPrice" *ngIf="bookingData.price_total - calculateTotalVoucherPrice() != 0">
         {{ bookingData.price_total - calculateTotalVoucherPrice() }}
         {{ activities[0]?.course?.currency }}
       </span>
     </ng-container>
   </div>
+  <div class="historyWrapper">
+    <div class="section" style="margin-bottom: 0; border: none">
+      <div class="sectionTitle">
+        {{ "change_history" | translate }}
+      </div>
+      <div class="dateRow" *ngFor="let bookingLog of bookingData.booking_logs">
+        <div>
+          <span class="date"> {{ bookingLog.created_at | date: "dd.MM.yyyy" }}:</span>
+          <span class="hour">{{ bookingLog.created_at | date: "hh:mm" }}h </span>
+          <span class="price">
+            <span class="discounted-price">
+              {{ bookingLog.action | translate }}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<button *ngIf="!bookingData.isPaid" style="height: 56px; width: 400px;border-radius: 3px;margin-top: 16px;"
-  color="primary" mat-raised-button type="button" class="client-button" (click)="payClick.emit()">
+<button *ngIf="!bookingData.paid" style="height: 56px; width: 400px;border-radius: 3px;margin-top: 16px;"
+        color="primary" mat-raised-button type="button" class="client-button" (click)="payClick.emit()">
   {{ "Pagar" | translate }}
 </button>

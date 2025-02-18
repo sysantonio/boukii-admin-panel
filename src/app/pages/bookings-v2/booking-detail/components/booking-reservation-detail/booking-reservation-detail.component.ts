@@ -161,7 +161,10 @@ export class BookingReservationDetailComponent implements OnInit {
   }
 
   calculateTotalVoucherPrice(): number {
-    return this.bookingData.vouchers.reduce((acc, item) => acc + parseFloat(item.bonus.reducePrice), 0);
+    if(this.bookingData.vouchers) {
+      return this.bookingData.vouchers.reduce((acc, item) => acc + parseFloat(item.bonus.reducePrice), 0);
+    }
+    return 0
   }
 
   addBonus(): void {
@@ -188,13 +191,13 @@ export class BookingReservationDetailComponent implements OnInit {
   addReduction(): void {
     const dialogRef = this.dialog.open(AddReductionModalComponent, {
       width: '530px',
-      data: { currentPrice: this.bookingData.price_total },
+      data: { currentPrice: this.bookingData.price_total, currency: this.activities[0].course.currency },
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.bookingData.reduction = result;
-        this.bookingData.reduction.appliedPrice = this.calculateReduction();
+        this.bookingData.reduction.appliedPrice = result.totalDiscount;
         this.bookingData.price_reduction = this.bookingData.reduction.appliedPrice;
         this.updateBookingData();
         this.recalculateBonusPrice();

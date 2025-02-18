@@ -169,3 +169,10 @@
 .disabled-icon {
   color: var(--color-grey1);
 }
+.stepButtonsWrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 15px;
+  padding: 1rem;
+}

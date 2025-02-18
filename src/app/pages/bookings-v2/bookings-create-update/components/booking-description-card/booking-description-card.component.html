@@ -1,8 +1,11 @@
 <div class="wrapper">
-  <div class="headerWrapper" [ngClass]="{'header1': course && course.course_type===1,
+  <div class="headerWrapper"
+       [ngClass]="{'header1': course && course.course_type===1,
       'header2': course && course.course_type===2,
       'header3': course && course.course_type===3}" (click)="isDetail ? summaryMode = !summaryMode : null">
-    <span class="sportTitle">{{("00"+index).slice(-2)}}.</span>
+    <span class="sportTitle">
+      {{("00"+index+1).slice(-2)}}.
+    </span>
     <div *ngIf="sport || course">
       <img class="icon40" [class]="{ sportImg: !course, courseImg: course }" [src]="course?.icon || sport.icon_selected"
         [alt]="sport.name" />
@@ -21,6 +24,9 @@
     <ng-container *ngIf="course">
       <div class="flex flex-col">
         <h4 class="courseTitle">{{ course.name }}</h4>
+        <span class="courseSubtitle">
+          {{course.typeString | translate}} {{course.is_flexible ? 'Flex' : 'Fix' | translate}} {{course.sport.name}}
+        </span>
         <div [style.background]="sportLevel?.color" style="
       display: inline-block;
       padding: 0.2rem 0.5rem;
@@ -33,9 +39,6 @@
     ">
           {{ sportLevel?.league }}
         </div>
-        <span class="courseSubtitle">
-          {{course.typeString | translate}} {{course.is_flexible ? 'Flex' : 'Fix' | translate}} {{course.sport.name}}
-        </span>
       </div>
     </ng-container>
     <div style="margin-left: auto;align-content: space-around;" *ngIf="isDetail"

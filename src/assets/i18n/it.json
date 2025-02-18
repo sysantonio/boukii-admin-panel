@@ -24,6 +24,7 @@
   "mandatory": "Questo campo è obbligatorio",
   "name": "Nome",
   "name_client": "Nome",
+  "No_vouchers_found": "Nessun buono trovato con questo codice",
   "logout": "Esci",
   "surname": "Cognomi",
   "mobile": "Mobile",
@@ -591,6 +592,7 @@
   "color_3": "Modifiche vietate",
   "change_history": "Cambiare la storia",
   "api_created": "Prenotazione creata dal pannello",
+  "created by api": "Prenotazione creata dal pannello",
   "page_created": "Prenotazione creata dalla pagina delle prenotazioni",
   "cancel_refund": "Prenotazione rimborsata",
   "refund_boukii_pay": "Prenotazione rimborsata da Boukii Pay",
@@ -789,5 +791,7 @@
   "delete_activity": "Elimina attività",
   "view_activity_summary": "Vedi riepilogo attività",
   "confirmed_without_payment": "Confermato senza pagamento",
-  "are_you_sure_action": "Sei sicuro di volerlo fare? Questo potrebbe avere un impatto su tutto il corso."
+  "are_you_sure_action": "Sei sicuro di volerlo fare? Questo potrebbe avere un impatto su tutto il corso.",
+  "text_subtotal": "Subtotale",
+  "credit_card": "Carta di credito"
 }

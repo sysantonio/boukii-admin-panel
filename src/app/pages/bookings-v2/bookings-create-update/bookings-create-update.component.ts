@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { BookingService } from '../../../../service/bookings.service';
 import { ApiCrudService } from '../../../../service/crud.service';
 import { Router } from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: "bookings-create-update-v2",
@@ -39,11 +40,14 @@ export class BookingsCreateUpdateV2Component {
   selectedForm: FormGroup;
   payModal: boolean = false;
   paymentMethod: number = 1; // Valor por defecto
-  selectedPaymentOption: string = '';
+  step: number = 1;  // Paso inicial
+  selectedPaymentOption: string = 'Tarjeta';
+  isPaid = false;
+  isConfirmingPayment = false;
   paymentOptions: any[] = [
-    { type: 'Tarjeta', value: 4 },
-    { type: 'Efectivo', value: 1 },
-    { type: 'Boukii Pay', value: 2 }
+    { type: 'Tarjeta', value: 4, translation: this.translateService.instant('credit_card') },
+    { type: 'Efectivo', value: 1,  translation: this.translateService.instant('payment_cash') },
+    { type: 'Boukii Pay', value: 2, translation: 'Boukii Pay' }
   ]; // Opciones de pago para "Pago directo"
 
   constructor(
@@ -53,7 +57,8 @@ export class BookingsCreateUpdateV2Component {
     private fb: FormBuilder,
     public bookingService: BookingService,
     private crudService: ApiCrudService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.normalizedDates = []
     this.forms = []
@@ -205,6 +210,7 @@ export class BookingsCreateUpdateV2Component {
   deleteActivity(index: any) {
     this.forms.splice(index, 1);
     this.normalizedDates.splice(index, 1);
+    this.selectedIndexForm = null;
     this.deleteModal = false;
     if (this.forms.length == 0) {
       this.currentStep = 0;
@@ -536,33 +542,93 @@ export class BookingsCreateUpdateV2Component {
     }
   }
 
+  goToNextStep() {
+    this.step = 2;  // Cambiar al paso 2 de confirmación de pago
+  }
+
+  cancelPaymentStep() {
+    if(this.step == 1) {
+      this.payModal = false;
+    }
+    this.step = 1;  // Regresar al paso 1
+    this.isPaid = false;  // Resetear isPaid
+  }
+
   // Método para finalizar la reserva
   finalizeBooking(): void {
     let bookingData = this.bookingService.getBookingData();
     bookingData.cart = this.bookingService.setCart(this.normalizedDates, bookingData);
     bookingData.payment_method_id = this.paymentMethod;
-    if (this.selectedPaymentOption == 'Boukii Pay') {
-      bookingData.payment_method_id = 2;
-    } else if (this.selectedPaymentOption == 'Tarjeta') {
-      bookingData.payment_method_id = 4;
+
+    if(this.paymentMethod === 1) {
+      // Mapear la opción seleccionada con el método de pago
+      if (this.selectedPaymentOption === 'Efectivo') {
+        bookingData.payment_method_id = 1;
+      } else if (this.selectedPaymentOption === 'Boukii Pay') {
+        bookingData.payment_method_id = 2;
+      } else if (this.selectedPaymentOption === 'Tarjeta') {
+        bookingData.payment_method_id = 4;
+      }
     }
-    const user = JSON.parse(localStorage.getItem("boukiiUser"))
+
+
+    if (this.bookingService.calculatePendingPrice() === 0) {
+      bookingData.paid = true;
+      bookingData.paid_total = bookingData.price_total;
+    }
+    // Si es pago en efectivo o tarjeta, guardar si fue pagado
+    if (bookingData.payment_method_id === 1 || bookingData.payment_method_id === 4) {
+      if (this.isPaid) {
+        bookingData.paid = true;
+        bookingData.paid_total = bookingData.price_total;
+      } else {
+        bookingData.paid = false;
+      }
+    }
+
+    const user = JSON.parse(localStorage.getItem("boukiiUser"));
     bookingData.selectedPaymentOption = this.selectedPaymentOption;
     bookingData.user_id = user.id;
+
+    // Enviar la reserva a la API
     this.crudService.post('/admin/bookings', bookingData)
-      .subscribe((result: any) => {
-        if (bookingData.payment_method_id == 2 || bookingData.payment_method_id == 3) {
-          this.crudService.post('/admin/bookings/payments/' + result.data.id, result.data.basket)
-            .subscribe((result: any) => {
-              if (bookingData.payment_method_id == 2) {
-                window.open(result.data, "_self");
-              } else {
-                this.router.navigate(['/bookings/update/' + result.data.id]);
-              }
-            });
-        } else {
-          this.router.navigate(['/bookings/update/' + result.data.id]);
+      .subscribe(
+        (result: any) => {
+          const bookingId = result.data.id;
+
+          // Manejar pagos en línea
+          if (bookingData.payment_method_id === 2 || bookingData.payment_method_id === 3) {
+            this.crudService.post(`/admin/bookings/payments/${bookingId}`, result.data.basket)
+              .subscribe(
+                (paymentResult: any) => {
+                  if (bookingData.payment_method_id === 2) {
+                    window.open(paymentResult.data, "_self");
+                  } else {
+                    this.showErrorSnackbar("Error al procesar el pago en línea.");
+                    this.router.navigate([`/bookings-v2/update/${bookingId}`]);
+                  }
+                },
+                (error) => {
+                  this.showErrorSnackbar("Error al procesar el pago en línea.");
+                  this.router.navigate([`/bookings-v2/update/${bookingId}`]);
+                }
+              );
+          } else {
+            // Si no es pago online, llevar directamente a la página de actualización
+            this.router.navigate([`/bookings/update/${bookingId}`]);
+          }
+        },
+        (error) => {
+          this.showErrorSnackbar("Error al crear la reserva.");
         }
-      });
+      );
+  }
+
+  // Función para mostrar un Snackbar en caso de error
+  showErrorSnackbar(message: string): void {
+    this.snackBar.open(message, "Cerrar", {
+      duration: 3000,
+      panelClass: ['error-snackbar']
+    });
   }
 }

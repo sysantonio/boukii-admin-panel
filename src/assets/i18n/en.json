@@ -24,6 +24,7 @@
   "mandatory": "This field is required",
   "name": "Name",
   "name_client": "Name",
+  "No_vouchers_found": "No vouchers found with that code",
   "logout": "Go out",
   "surname": "Surnames",
   "mobile": "Mobile",
@@ -600,6 +601,7 @@
   "color_3": "Prohibited modifications",
   "change_history": "Change history",
   "api_created": "Reservation created from the panel",
+  "created by api": "Reservation created from the panel",
   "page_created": "Reservation created from the reservation page",
   "cancel_refund": "Reservation refunded",
   "refund_boukii_pay": "Reservation refunded by Boukii Pay",
@@ -790,5 +792,7 @@
   "delete_activity": "Delete activity",
   "view_activity_summary": "View activity summary",
   "confirmed_without_payment": "Confirmed without payment",
-  "are_you_sure_action": "Are you sure you want to do this? This may have an impact throughout the course."
+  "are_you_sure_action": "Are you sure you want to do this? This may have an impact throughout the course.",
+  "text_subtotal": "Subtotal",
+  "credit_card": "Credit Card"
 }

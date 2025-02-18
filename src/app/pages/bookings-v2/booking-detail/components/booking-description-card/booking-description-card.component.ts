@@ -7,6 +7,11 @@ import { FormDetailsPrivateComponent } from '../form-details-private/form-detail
 import { FormDetailsColectiveFlexComponent } from '../form-details-colective-flex/form-details-colective-flex.component';
 import { FormDetailsColectiveFixComponent } from '../form-details-colective-fix/form-details-colective-fix.component';
 import { StepObservationsComponent } from '../step-observations/step-observations.component';
+import {TranslateService} from '@ngx-translate/core';
+import {BookingService} from '../../../../../../service/bookings.service';
+import {ApiCrudService} from '../../../../../../service/crud.service';
+import {Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 export interface BookingDescriptionCardDate {
   date: string;
@@ -35,7 +40,15 @@ export class BookingDescriptionCard {
   @Input() sport: any;
   @Input() sportLevel: any;
   @Input() course: any;
-  @Input() dates: BookingDescriptionCardDate[];
+  @Input()
+  set dates(value: any[]) {
+    this._dates = value || [];
+    this.extractUniqueMonitors();
+  }
+
+  get dates(): any[] {
+    return this._dates;
+  }
   @Input() monitors: any;
   @Input() clientObs: any;
   @Input() schoolObs: any;
@@ -45,16 +58,32 @@ export class BookingDescriptionCard {
   @Input() isDetail = false;
   @Input() status = 1;
   @Input() index: number = 1;
-
+  uniqueMonitors: any[] = []; // Monitores únicos
+  private _dates: any[] = [];
 
   constructor(
+    public translateService: TranslateService,
+    public bookingService: BookingService,
     protected langService: LangService,
     protected utilsService: UtilsService,
     public dialog: MatDialog
-  ) { }
+  ) {
+    this.extractUniqueMonitors();
+  }
 
   formatDate(date: string) {
     return this.utilsService.formatDate(date);
+  }
+
+  private extractUniqueMonitors() {
+    if (this.dates.length) {
+      const allMonitors = this.dates.map((date) => date.monitor).filter((monitor) => !!monitor);
+      this.uniqueMonitors = allMonitors.filter(
+        (monitor, index, self) => self.findIndex((m) => m.id === monitor.id) === index
+      );
+    } else {
+      this.uniqueMonitors = [];
+    }
   }
 
   hasExtrasForDate(date: any): boolean {
@@ -110,6 +139,8 @@ export class BookingDescriptionCard {
       }
     }
   }
+
+
 
   private openPrivateDatesForm(dates: any, course: any, utilizers: any = []) {
     const dialogRef = this.dialog.open(FormDetailsPrivateComponent, {

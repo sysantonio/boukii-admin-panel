@@ -28,8 +28,10 @@
       <mat-form-field appearance="outline" style="width:100%">
         <mat-label>{{'Código bono'
           |translate}}</mat-label>
-        <input type="text" matInput />
+        <input type="text" matInput [(ngModel)]="voucherName"  name="voucherName"  />
       </mat-form-field>
+      <app-form-button (click)="searchVoucher()" form="flat" name="search">
+      </app-form-button>
     </div>
   </mat-dialog-content>
 

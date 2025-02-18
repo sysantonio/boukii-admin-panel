@@ -5,7 +5,7 @@
       [formGroupName]="i">
       <mat-card-header class="card__header">
         <mat-card-title> {{ "date" | translate }} {{ i + 1 }} </mat-card-title>
-        <ng-container
+<!--        <ng-container
           *ngIf="!dateGroup.get('selected').value || isPast(!dateGroup.get('date').value)">
           <mat-icon fontSet="material-icons-outlined"
             (click)="removeDate(i)">delete</mat-icon>
@@ -13,7 +13,7 @@
         <ng-container *ngIf="dateGroup.get('selected').value">
           <mat-icon fontSet="material-icons-outlined"
             (click)="removeDate(i)">delete</mat-icon>
-        </ng-container>
+        </ng-container>-->
       </mat-card-header>
       <mat-card-content class="card__content wrapper">
         <div class="row1">
@@ -33,7 +33,8 @@
             <mat-select formControlName="startHour">
               <mat-option *ngFor="let hour of possibleHours"
                 [value]="hour"
-                [disabled]="utilService.calculateAvailableHours( dateGroup.get('date').value, hour, course)">
+                [disabled]="utilService.calculateAvailableHours( dateGroup.get('date').value, hour, course,
+                [], [], dateGroup.get('duration').value)">
                 {{ hour }}
               </mat-option>
             </mat-select>
@@ -47,7 +48,7 @@
               formControlName="duration"
               readonly />
             <mat-select *ngIf="course.is_flexible" formControlName="duration">
-              <mat-option *ngFor="let duration of possibleDurations"
+              <mat-option *ngFor="let duration of possibleDurations" [disabled]="dateGroup.get('duration').value != duration"
                 [value]="duration">
                 {{ duration }}
               </mat-option>
@@ -131,11 +132,18 @@
       </mat-card-content>
     </div>
   </div>
-  <!-- Botón para registrar los datos -->
-  <div class="button-wrapper">
-    <button mat-raised-button color="primary" (click)="submitForm()">{{ 'save' |
-      translate }}</button>
-    <button mat-raised-button color="warn" (click)="cancel()">{{ 'cancel' |
-      translate }}</button>
+  <div class="stepButtonsWrapper">
+    <button mat-stroked-button type="button" (click)="cancel()">
+      {{ "cancel" | translate }}
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      (click)="submitForm()"
+      [disabled]="!isFormValid()"
+    >
+      {{ "confirm" | translate }}
+    </button>
   </div>
 </form>
