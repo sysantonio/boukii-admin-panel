@@ -85,7 +85,10 @@ export class BookingReservationDetailComponent implements OnInit {
     return this.activities.reduce((acc: any, item: any) => {
       // Solo suma si el status es 1
       if (item.status != 2) {
-        const numericValue = parseFloat(item.total.replace(/[^\d.-]/g, ''));
+        const numericValue = typeof item.total === 'number'
+          ? item.total
+          : parseFloat(item.total.toString().replace(/[^\d.-]/g, '')) || 0;
+
         return acc + numericValue;
       }
       return acc; // Si no es status 1, retorna el acumulador sin sumar
@@ -197,6 +200,7 @@ export class BookingReservationDetailComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.bookingData.reduction = result;
+        this.bookingData.has_reduction = true;
         this.bookingData.reduction.appliedPrice = result.totalDiscount;
         this.bookingData.price_reduction = this.bookingData.reduction.appliedPrice;
         this.updateBookingData();

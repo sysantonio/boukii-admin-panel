@@ -1,10 +1,74 @@
 <div class="wrapper">
   <div class="headerWrapper">
     {{ 'booking' | translate }} #{{bookingData.id}}
-    <br>
-    {{'status' | translate}}: {{bookingData.cancellation_status|translate}}
-    <br>
-    {{'ispaid' | translate}}: {{bookingData.payment_method_status|translate}}
+    <div style="color:#868686;">
+      <b>
+        {{ 'register' | translate}}:
+      </b>
+      <span style="margin-left: 5px;font-weight: normal;">
+											<span style="color:white;">
+												{{bookingData.created_at | date: 'yyyy-MM-dd HH:mm'}}h
+											</span>
+										</span>
+    </div>
+    <div *ngIf="bookingData.user"
+         style="color:#868686;font-weight: normal;">
+      <b>
+        {{ "by" | translate }}:
+      </b>
+      <span style="margin-left: 5px;color:white;">
+											{{ bookingData.user.username }} ({{
+          bookingData.user.first_name + ' ' + bookingData.user.last_name
+        }})
+										</span>
+    </div>
+    <div style="color:#868686;font-weight: normal;">
+      <b>
+        {{ 'from' | translate }}:
+      </b>
+      <span *ngIf="bookingData.source == 'web'"
+            style="margin-left: 5px;color:white;">
+											{{'page_created' |
+        translate}}
+										</span>
+      <span *ngIf="bookingData.source == 'admin'"
+            style="margin-left: 5px;color:white;">
+											{{'api_created' |
+        translate}}
+										</span>
+    </div>
+    <div class="title-status">
+								<span *ngIf="bookingData.cancellation_status == 'active'"
+                      style="color:#00C32B;background-color: #B2EFAD;">
+									{{'active' | translate | uppercase }}
+								</span>
+      <span *ngIf="bookingData.cancellation_status == 'finished'"
+            style="color:rgba(68, 74, 88, 1);background-color: #E3E3E3;">
+									{{'finished' | translate | uppercase }}
+								</span>
+      <span *ngIf="bookingData.status === 2"
+            style="color:rgba(146, 26, 0, 1);background-color: #F7BB99;">
+									{{'cancelled' | translate | uppercase }}
+								</span>
+      <span *ngIf="bookingData.status === 3"
+            style="color:rgba(83, 65, 0, 1);background-color:#F7E399;">
+									{{'partial_cancelled' | translate | uppercase }}
+								</span>
+      <span class="col-right">
+									<span *ngIf="bookingData.status === 1 && bookingData.paid"
+                        style="color:#00C32B;background-color: #B2EFAD;">
+										{{'payed' | translate | uppercase }}
+									</span>
+									<span *ngIf="bookingData.status === 1 && !bookingData.paid && bookingData.payment_method_id != 3"
+                        style="color:#FF0000;background-color: #F7BB99;">
+										{{'no_payed' | translate | uppercase }}
+									</span>
+									<span *ngIf="bookingData.status === 1 && !bookingData.paid && bookingData.payment_method_id == 3"
+                        style="color:#FA9917;background-color: #F7E399;">
+										{{'link_send' | translate | uppercase }}
+									</span>
+								</span>
+    </div>
   </div>
   <div class="bodyWrapper" style="padding-bottom: 0;">
     <div class="section">
@@ -84,7 +148,7 @@
             {{ "apply_reduction" | translate }}
           </span>
 
-          <span style="width: 100%; float:left" *ngIf="bookingData.reduction != null;">
+          <span style="width: 100%; float:left" *ngIf="bookingData.price_reduction != null;">
             <mat-icon *ngIf="!bookingData.paid" svgIcon="mat:delete" style="float: left;color: red; cursor:pointer"
                       (click)="deleteReduction()"></mat-icon>
             <p style="float:left">{{'reduction' |translate}}</p>
@@ -132,7 +196,7 @@
             {{ "op_rem" | translate }}
           </span>
           <span class="price">
-            -{{bookingData.price_cancellation_insurance| number:'0.2-2'}}
+            {{bookingData.price_cancellation_insurance| number:'0.2-2'}}
             {{activities[0]?.course?.currency}}
           </span>
         </div>
@@ -171,6 +235,24 @@
           <span class="price">
             <span class="discounted-price">
               {{ bookingLog.action | translate }}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="historyWrapper">
+    <div class="section" style="margin-bottom: 0; border: none">
+      <div class="sectionTitle">
+        {{ "method_paiment" | translate }}
+      </div>
+      <div class="dateRow" *ngFor="let payment of bookingData.payments">
+        <div>
+          <span class="date"> {{ payment.created_at | date: "dd.MM.yyyy" }}:</span>
+          <span class="hour">{{ payment.created_at | date: "hh:mm" }}h </span>
+          <span class="price">
+            <span class="discounted-price">
+              {{ payment.status | translate }} - {{ payment.notes | translate }}
             </span>
           </span>
         </div>

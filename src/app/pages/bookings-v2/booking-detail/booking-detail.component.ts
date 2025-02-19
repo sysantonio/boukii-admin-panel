@@ -86,7 +86,7 @@ export class BookingDetailV2Component implements OnInit {
 
   groupBookingUsersByGroupId(booking: any) {
     this.mainClient = booking.client_main;
-    const groupedActivities = booking.booking_users.reduce((acc: any, user: any) => {
+    const groupedActivities = Object.values(booking.booking_users.reduce((acc: any, user: any) => {
       const groupId = user.group_id;
       const courseType = user.course.course_type;
 
@@ -101,13 +101,20 @@ export class BookingDetailV2Component implements OnInit {
           clientObs: user.notes,
           schoolObs: user.notes_school,
           total: user.price,
-          status: user.status
+          status: user.status,
+          statusList: [] // Nuevo array para almacenar los status de los usuarios
         };
       }
 
-      const currentStatus = acc[groupId].status;
-      if (currentStatus !== user.status) {
-        if (currentStatus !== 3) acc[groupId].status = (user.status === 1) ? currentStatus : 3;
+      acc[groupId].statusList.push(user.status);
+
+      // Determinar el nuevo status basado en los valores de statusList
+      const uniqueStatuses = new Set(acc[groupId].statusList);
+
+      if (uniqueStatuses.size === 1) {
+        acc[groupId].status = [...uniqueStatuses][0]; // Si todos son iguales, asignamos ese mismo status
+      } else {
+        acc[groupId].status = 3; // Si hay mezcla de 1 y 2, el status del grupo es 3
       }
 
       const isUserAlreadyAdded = acc[groupId].utilizers.some(utilizer =>
@@ -180,9 +187,12 @@ export class BookingDetailV2Component implements OnInit {
 
       if (user.monitor_id) acc[groupId].monitors.push(user.monitor_id);
       return acc;
-    }, {});
-    console.log(groupedActivities)
-    return Object.values(groupedActivities);
+    }, {}));
+    groupedActivities.forEach((groupedActivity: any) => {
+      groupedActivity.total = this.bookingService.calculateActivityPrice(groupedActivity);
+    });
+
+    return groupedActivities;
   }
 
   editActivity(data: any, index: any) {
@@ -197,6 +207,7 @@ export class BookingDetailV2Component implements OnInit {
         })
         .subscribe((response) => {
           this.bookingData$.next(response.data);
+          this.bookingData = response.data;
           this.groupedActivities = [...this.groupBookingUsersByGroupId(response.data)];
           this.activitiesChangedSubject.next(response.data);
           this.snackBar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', { duration: 3000 });
@@ -239,45 +250,46 @@ export class BookingDetailV2Component implements OnInit {
     this.deleteIndex = index;
     if(this.bookingData.paid) {
       const group = this.groupedActivities[index];
-        const dialogRef = this.dialog.open(CancelPartialBookingModalComponent, {
-          width: "1000px", // Asegurarse de que no haya un ancho máximo
-          panelClass: "full-screen-dialog", // Si necesitas estilos adicionales,
-          data: {
-            itemPrice: group.total,
-            booking: this.bookingData,
-          },
-        });
+      const dialogRef = this.dialog.open(CancelPartialBookingModalComponent, {
+        width: "1000px", // Asegurarse de que no haya un ancho máximo
+        panelClass: "full-screen-dialog", // Si necesitas estilos adicionales,
+        data: {
+          itemPrice: group.total,
+          booking: this.bookingData,
+        },
+      });
 
-        dialogRef.afterClosed().subscribe((data: any) => {
-          if (data) {
-            this.bookingService.processCancellation(
-              data, this.bookingData, this.hasOtherActiveGroups(group), this.user, group)
-              .subscribe({
-                next: () => {
-                  this.snackBar.open(
-                    this.translateService.instant('snackbar.booking_detail.update'),
-                    'OK',
-                    { duration: 3000 }
-                  );
-                },
-                error: (error) => {
-                  console.error('Error processing cancellation:', error);
-                  this.snackBar.open(
-                    this.translateService.instant('snackbar.error'),
-                    'OK',
-                    { duration: 3000 }
-                  );
-                }
-              });
+      dialogRef.afterClosed().subscribe((data: any) => {
+        if (data) {
+          this.bookingService.processCancellation(
+            data, this.bookingData, this.hasOtherActiveGroups(group), this.user, group)
+            .subscribe({
+              next: () => {
+                this.snackBar.open(
+                  this.translateService.instant('snackbar.booking_detail.update'),
+                  'OK',
+                  { duration: 3000 }
+                );
+              },
+              error: (error) => {
+                console.error('Error processing cancellation:', error);
+                this.snackBar.open(
+                  this.translateService.instant('snackbar.error'),
+                  'OK',
+                  { duration: 3000 }
+                );
+              }
+            });
 
-          }
-        });
+        }
+      });
 
     } else {
       this.deleteModal = true;
     }
 
   }
+
   cancelActivity(index: any) {
     const group = this.groupedActivities[index];
     const bookingUserIds = group.dates.flatMap(date =>
@@ -299,15 +311,13 @@ export class BookingDetailV2Component implements OnInit {
 
   // Método para finalizar la reserva
   finalizeBooking(): void {
-    let bookingData = {
-      payment_method_id: this.paymentMethod,
-      paid: false,
-      price_total: this.bookingData.price_total,
-      paid_total: 0,
-      selectedPaymentOption: this.selectedPaymentOption,
-      user_id: this.user.id
-    }
-   // bookingData.cart = this.bookingService.setCart(this.groupedActivities.flatMap(activity => activity.dates), this.bookingService.getBookingData());
+    let bookingData = this.bookingData;
+    bookingData.selectedPaymentOption = this.selectedPaymentOption
+    bookingData.payment_method_id = this.paymentMethod
+    bookingData.paid = false
+    bookingData.paid_total = 0
+
+    // bookingData.cart = this.bookingService.setCart(this.groupedActivities.flatMap(activity => activity.dates), this.bookingService.getBookingData());
 
     if(this.paymentMethod === 1) {
       // Mapear la opción seleccionada con el método de pago
@@ -332,7 +342,7 @@ export class BookingDetailV2Component implements OnInit {
 
 
     // Enviar la reserva a la API
-    this.crudService.update('/bookings', bookingData, this.id)
+    this.crudService.post(`/admin/bookings/update/${this.id}/payment`, bookingData)
       .subscribe(
         (result: any) => {
           // Manejar pagos en línea
@@ -354,8 +364,8 @@ export class BookingDetailV2Component implements OnInit {
             this.snackBar.open(this.translateService.instant('snackbar.booking_detail.update'),
               'OK', { duration: 3000 });
             this.payModal = false;
-            // Si no es pago online, llevar directamente a la página de actualización
-            //this.router.navigate([`/bookings/update/${this.id}`]);
+            this.bookingData$.next(result.data);
+            this.bookingData = result.data;
           }
         },
         (error) => {
@@ -374,11 +384,6 @@ export class BookingDetailV2Component implements OnInit {
       this.selectedPaymentOption = event.value; // Ejemplo: asignar el método seleccionado
     }
   }
-
-  goToNextStep() {
-    this.step = 2;  // Cambiar al paso 2 de confirmación de pago
-  }
-
   cancelPaymentStep() {
     if(this.step == 1) {
       this.payModal = false;

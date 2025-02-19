@@ -6,8 +6,12 @@ import {UtilsService} from '../../../../../../service/utils.service';
 import {ApiCrudService} from '../../../../../../service/crud.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {TranslateService} from '@ngx-translate/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {pairwise, startWith} from 'rxjs';
+import {BookingService} from '../../../../../../service/bookings.service';
+import {
+  CancelPartialBookingModalComponent
+} from '../../../../bookings/cancel-partial-booking/cancel-partial-booking.component';
 
 
 @Component({
@@ -40,9 +44,13 @@ export class FormDetailsPrivateComponent implements OnInit {
   myHolidayDates = [];
   stepForm: FormGroup;
 
-  constructor(private fb: FormBuilder,  private snackbar: MatSnackBar, public translateService: TranslateService,
+  constructor(private fb: FormBuilder,  private snackbar: MatSnackBar,
+              public translateService: TranslateService,
               private crudService: ApiCrudService, public utilService: UtilsService,
-              @Inject(MAT_DIALOG_DATA) public data: any, private dialogRef: MatDialogRef<FormDetailsPrivateComponent>) {
+              private bookingService: BookingService,
+              public dialog: MatDialog,
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              private dialogRef: MatDialogRef<FormDetailsPrivateComponent>) {
     this.possibleMonitors = [];
     this.course = data.course;
     this.date = data.date;
@@ -419,7 +427,46 @@ export class FormDetailsPrivateComponent implements OnInit {
 
   removeDate(index: number) {
     if (this.courseDates.length > 0) {
-      this.courseDates.removeAt(index); // Utiliza removeAt para eliminar una fecha del FormArray
+      const bookingUsersIds = this.courseDates.at(index).value.booking_users.map(i => i.id);
+      const bookingData = this.bookingService.getBookingData();
+      const price = this.calculatePrice(this.courseDates.at(index).value);
+      if(bookingData.paid) {
+        const dialogRef = this.dialog.open(CancelPartialBookingModalComponent, {
+          width: "1000px", // Asegurarse de que no haya un ancho máximo
+          panelClass: "full-screen-dialog", // Si necesitas estilos adicionales,
+          data: {
+            itemPrice: price,
+            booking: bookingData,
+          },
+        });
+
+        dialogRef.afterClosed().subscribe((data: any) => {
+          if (data) {
+            this.bookingService.processCancellation(
+              data, bookingData, true, this.user, null, bookingUsersIds, price)
+              .subscribe({
+                next: () => {
+                  this.courseDates.removeAt(index);
+                  this.snackbar.open(
+                    this.translateService.instant('snackbar.booking_detail.update'),
+                    'OK',
+                    { duration: 3000 }
+                  );
+                },
+                error: (error) => {
+                  console.error('Error processing cancellation:', error);
+                  this.snackbar.open(
+                    this.translateService.instant('snackbar.error'),
+                    'OK',
+                    { duration: 3000 }
+                  );
+                }
+              });
+          }
+        });
+      } else {
+        this.courseDates.removeAt(index);
+      }
     }
   }
 
@@ -472,15 +519,19 @@ export class FormDetailsPrivateComponent implements OnInit {
   }
 
   getMonitorsAvailable(dateGroup) {
-    const monitor = dateGroup.get('monitor').value
+    const monitor = dateGroup.get('monitor').value;
     const index = this.courseDates.controls.indexOf(dateGroup);
+
+    const startTime = dateGroup.get('startHour').value;
+    const endTime = this.utilService.calculateEndHour(startTime, dateGroup.get('duration').value);
+    const date = moment(dateGroup.get('date').value).format('YYYY-MM-DD');
 
     const rq = {
       sportId: this.course.sport_id,
       minimumDegreeId: this.sportLevel.id,
-      startTime: dateGroup.get('startHour').value,
-      endTime: this.utilService.calculateEndHour(dateGroup.get('startHour').value, dateGroup.get('duration').value),
-      date: moment( dateGroup.get('date').value).format('YYYY-MM-DD'),
+      startTime,
+      endTime,
+      date,
       clientIds: this.utilizers.map(utilizer => utilizer.id)
     };
     this.crudService.post("/admin/monitors/available", rq).subscribe((data) => {
@@ -490,8 +541,9 @@ export class FormDetailsPrivateComponent implements OnInit {
       }
       dateGroup.patchValue({monitor: monitor});
       if (data.data.length === 0) {
-        this.snackbar.open(this.translateService.instant('snackbar.booking.no_match'),
-          'OK', {duration:3000});
+        const message = this.translateService.instant('snackbar.booking.no_match') +
+          ` (${date} ${startTime} - ${endTime})`;
+        this.snackbar.open(message, 'OK', { duration: 3000 });
       }
     });
   }

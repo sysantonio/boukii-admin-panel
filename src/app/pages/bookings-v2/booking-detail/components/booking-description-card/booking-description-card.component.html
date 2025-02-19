@@ -285,7 +285,7 @@
 	<div class="footerWrapper">
 		{{ "bookings_page.description.total" | translate }}
 		<ng-container *ngIf="total">
-			<span class="totalPrice">{{ total }}</span>
+			<span class="totalPrice">{{ total }} {{course.currency}}</span>
 		</ng-container>
 	</div>
 </div>

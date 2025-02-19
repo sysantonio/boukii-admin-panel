@@ -88,6 +88,61 @@ export class BookingService {
     return total > 0 ? total : 0; // Si el precio total es negativo o cero, devolver 0.
   }
 
+  calculateActivityPrice(activity:any) {
+    let price = 0;
+    let extraPrice = 0;
+
+    if (activity.course.course_type === 1) {
+      if (!activity.course.is_flexible) {
+        extraPrice = 0;
+        price = parseFloat(activity.course.price || 0);
+      } else {
+        price = parseFloat(activity.course.price || 0) * activity.dates.length;
+      }
+    } else {
+      if (activity.course.is_flexible) {
+        // Calcula el precio basado en el intervalo y el número de utilizadores para cada fecha
+        activity.dates.forEach(date => {
+          if (date.booking_users.some((user: any) => user.status === 1)) {
+            const duration = date.duration; // Duración de cada fecha
+            const selectedUtilizers = date.utilizers.length; // Número de utilizadores
+
+            // Encuentra el intervalo de duración que se aplica
+            const interval = activity.course.price_range.find(range => {
+              return range.intervalo === duration; // Comparar con la duración de la fecha
+            });
+
+            if (interval) {
+              price += parseFloat(interval[selectedUtilizers]); // Precio por utilizador para cada fecha
+            }
+          }
+        })
+
+      } else {
+        activity.dates.forEach(date => {
+          if (date.booking_users.some((user: any) => user.status === 1)) {
+            // Si el curso no es flexible
+            const dateTotal = parseFloat(activity.course.price) * date.utilizers.length; // Precio por número de utilizadores
+            price += dateTotal;
+          }
+        })
+
+      }
+    }
+
+    // Calcular la suma de los extras en todas las fechas
+    if (activity.dates && activity.dates.length > 0) {
+      extraPrice = activity.dates.reduce((sum: number, date: any) => {
+        const extrasTotal = date.extras?.reduce((extraSum: number, extra: any) => {
+          return extraSum + (parseFloat(extra.price) || 0); // Convertir price a número
+        }, 0) || 0;
+
+        return sum + extrasTotal;
+      }, 0);
+    }
+
+    return price + extraPrice;
+  }
 
   updateBookingData(partialData: Partial<BookingCreateData>) {
     const currentData = this.getBookingData();
@@ -352,13 +407,17 @@ export class BookingService {
     bookingData: any,
     isPartial = false,
     user: any,
-    group: any
+    group: any,
+    bookingUserIds:any = null,
+    total:any = null
   ): Observable<any> {
     if (!data) return EMPTY;
-    const bookingUserIds = group.dates.flatMap(date =>
-      date.booking_users.map(b => b.id)
-    );
-    debugger;
+    const bookingUserIdsFinal = group
+      ? group.dates.flatMap(date => date.booking_users.map(b => b.id))
+      : bookingUserIds;
+
+    const totalFinal = group ? group.total : total; // Si group no está, usar data.total
+
     const initialLog: BookingLog = {
       booking_id: bookingData.id,
       action: 'partial_cancel',
@@ -374,8 +433,8 @@ export class BookingService {
       case 'no_refund':
         cancellationOperation = this.handleNoRefund(
           bookingData.id,
-          bookingUserIds,
-          group.total,
+          bookingUserIdsFinal,
+          totalFinal,
           user
         );
         break;
@@ -383,8 +442,8 @@ export class BookingService {
       case 'boukii_pay':
         cancellationOperation = this.handleBoukiiPay(
           bookingData.id,
-          group.total,
-          bookingUserIds,
+          totalFinal,
+          bookingUserIdsFinal,
           user,
           data.reason
         );
@@ -393,8 +452,8 @@ export class BookingService {
       case 'refund':
         cancellationOperation = this.handleCashRefund(
           bookingData.id,
-          bookingUserIds,
-          group.total,
+          bookingUserIdsFinal,
+          totalFinal,
           user,
           data.reason
         );
@@ -403,8 +462,8 @@ export class BookingService {
       case 'refund_gift':
         cancellationOperation = this.handleVoucherRefund(
           bookingData.id,
-          bookingUserIds,
-          group.total,
+          bookingUserIdsFinal,
+          totalFinal,
           user,
           bookingData.client_main_id
         );
