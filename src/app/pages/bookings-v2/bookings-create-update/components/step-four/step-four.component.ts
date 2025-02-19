@@ -193,10 +193,14 @@ export class StepFourComponent {
         const courseDateMoment = moment(d.date, "YYYY-MM-DD");
         const currentTime = moment(); // Definir la hora actual aquí
 
-        // Comprobar si la fecha es hoy
         if (courseDateMoment.isSame(moment(), "day")) {
-          const hourStart = moment(d.hour_start, "HH:mm");
-          return this.selectedDateMoment.isSame(courseDateMoment, 'day') && currentTime.isBefore(hourStart);
+          if(course.course_type == 1) {
+            const hourStart = moment(d.hour_start, "HH:mm");
+            return this.selectedDateMoment.isSame(courseDateMoment, 'day') && currentTime.isBefore(hourStart);
+          } else {
+            const hourEnd = moment(d.hour_end, "HH:mm");
+            return this.selectedDateMoment.isSame(courseDateMoment, 'day') && currentTime.isBefore(hourEnd);
+          }
         } else {
           return this.selectedDateMoment.isSame(courseDateMoment, 'day');
         }
@@ -214,11 +218,18 @@ export class StepFourComponent {
 
         // Si la fecha del curso es hoy, comprobar las horas
         if (courseDateMoment.isSame(moment(), "day")) {
+          if(course.course_type == 1) {
           const hourStart = moment(courseDate.hour_start, "HH:mm");
 
           // Solo añadir la fecha si el curso aún no ha empezado
           if (currentTime.isBefore(hourStart)) {
             ret.push(courseDateMoment.format("YYYY-MM-DD"));
+          }
+          } else {
+            const hourEnd = moment(courseDate.hour_end, "HH:mm");
+            if (currentTime.isBefore(hourEnd)) {
+              ret.push(courseDateMoment.format("YYYY-MM-DD"));
+            }
           }
         } else {
           // Si la fecha no es hoy, añadirla sin comprobación de hora
@@ -301,8 +312,13 @@ export class StepFourComponent {
 
           // Comprobar si la fecha es hoy
           if (courseDateMoment.isSame(moment(), "day")) {
-            const hourStart = moment(d.hour_start, "HH:mm");
-            return this.selectedDateMoment.isSame(courseDateMoment, 'day') && currentTime.isBefore(hourStart);
+            if(course.course_type == 1) {
+              const hourStart = moment(d.hour_start, "HH:mm");
+              return this.selectedDateMoment.isSame(courseDateMoment, 'day') && currentTime.isBefore(hourStart);
+            } else {
+              const hourEnd = moment(d.hour_end, "HH:mm");
+              return this.selectedDateMoment.isSame(courseDateMoment, 'day') && currentTime.isBefore(hourEnd);
+            }
           } else {
             return this.selectedDateMoment.isSame(courseDateMoment, 'day');
           }
