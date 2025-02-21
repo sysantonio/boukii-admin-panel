@@ -18,6 +18,9 @@ import {FormDetailsColectiveFixComponent} from './form-details-colective-fix/for
 import {StepObservationsComponent} from './step-observations/step-observations.component';
 import {FluxModalModule} from '../../../../../@vex/components/flux-component/flux-modal/app.module';
 import {MatRadioModule} from '@angular/material/radio';
+import {MatDialogModule} from '@angular/material/dialog';
+import {IconComponent} from '../../../../../@vex/components/icon/app.component';
+import {ComponentsCustomModule} from '../../../../components/components-custom.module';
 
 
 
@@ -30,22 +33,25 @@ import {MatRadioModule} from '@angular/material/radio';
     FormDetailsColectiveFixComponent,
     StepObservationsComponent
   ],
-    imports: [
-        CommonModule,
-        TranslateModule,
-        MatIconModule,
-        MatCheckboxModule,
-        FormsModule,
-        BreadcrumbsModule,
-        MatButtonModule,
-        MatCardModule,
-        ReactiveFormsModule,
-        MatDatepickerModule,
-        MatInputModule,
-        MatSelectModule,
-        FluxModalModule,
-        MatRadioModule,
-    ],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    MatIconModule,
+    MatCheckboxModule,
+    FormsModule,
+    BreadcrumbsModule,
+    MatButtonModule,
+    MatCardModule,
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatSelectModule,
+    FluxModalModule,
+    MatRadioModule,
+    MatDialogModule,
+    IconComponent,
+    ComponentsCustomModule,
+  ],
   exports: [
     BookingDescriptionCard,
     BookingReservationDetailComponent,

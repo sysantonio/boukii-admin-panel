@@ -21,6 +21,7 @@
 				[utilizers]="activity.utilizers"
 				[sport]="activity.sport"
 				[sportLevel]="activity.sportLevel"
+                                       [allLevels]="allLevels"
 				[course]="activity.course"
 				[dates]="activity.dates"
 				[monitors]="activity.monitors"
@@ -38,6 +39,7 @@
 	<div class="right-column">
 		<booking-detail-reservation-detail *ngIf="mainClient"
 			[client]="mainClient"
+			[allLevels]="allLevels"
 			[bookingData]="bookingData$ | async"
 			[activities]="groupedActivities"
 			[activitiesChanged]="activitiesChanged$"

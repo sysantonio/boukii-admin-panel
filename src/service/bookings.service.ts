@@ -68,9 +68,7 @@ export class BookingService {
   private bookingDataSubject = new BehaviorSubject<BookingCreateData | null>(null);
   public editData;
   constructor(
-    private crudService: ApiCrudService,
-    private snackbar: MatSnackBar,
-    private translateService: TranslateService
+    private crudService: ApiCrudService
   ) {}
 
   setBookingData(data: BookingCreateData) {
@@ -79,6 +77,10 @@ export class BookingService {
 
   getBookingData(): BookingCreateData | null {
     return this.bookingDataSubject.value;
+  }
+
+  getGroupStatus(dates: any) {
+
   }
 
   calculatePendingPrice(): number {

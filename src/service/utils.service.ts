@@ -29,6 +29,28 @@ export class UtilsService {
     return allLevels.filter((a) => a.sport_id === id)
   }
 
+  getHighestAuthorizedDegree(monitor, sport_id: number, school_id: number): any | null {
+    // Encuentra los deportes asociados al monitor
+    const degrees = monitor.monitor_sports_degrees
+      .filter(degree =>
+        degree.sport_id === sport_id &&
+        degree.school_id === school_id
+      )
+      .map(degree => degree.monitor_sport_authorized_degrees)
+      .flat(); // Aplanamos el array para obtener todos los grados autorizados
+
+    if (degrees.length === 0) {
+      return null; // Si no hay grados autorizados, retornamos null
+    }
+
+    // Buscamos el degree autorizado con el degree_order más alto
+    const highestDegree = degrees.reduce((prev, current) => {
+      return current.degree.degree_order > prev.degree.degree_order ? current : prev;
+    });
+
+    return highestDegree;
+  }
+
   getCountry(id: any) {
     const country = this.countries.find((c) => c.id == id);
     return country ? country.name : "NDF";

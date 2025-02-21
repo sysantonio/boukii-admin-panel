@@ -22,6 +22,7 @@ export class BookingDetailV2Component implements OnInit {
   endModal: boolean = false
   deleteIndex: number = 1
   mainClient: any;
+  allLevels: any;
   bookingData$ = new BehaviorSubject<any>(null);
   bookingData:any;
   groupedActivities: any[] = [];
@@ -58,21 +59,29 @@ export class BookingDetailV2Component implements OnInit {
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
     if (!this.incData) this.id = this.activatedRoute.snapshot.params.id;
     else this.id = this.incData.id;
+    this.getDegrees();
     this.getBooking();
+  }
+
+  getDegrees() {
+    const user = JSON.parse(localStorage.getItem("boukiiUser"))
+    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order',
+      '&school_id=' + user.schools[0].id + '&active=1')
+      .subscribe((data) => this.allLevels = data.data)
   }
 
   getBooking() {
     this.crudService
       .get("/bookings/" + this.id, [
         "user",
-        "clientMain",
+        "clientMain.clientSports",
         "vouchersLogs.voucher",
         "bookingUsers.course.courseDates.courseGroups.courseSubgroups",
         "bookingUsers.course.courseExtras",
         "bookingUsers.bookingUserExtras.courseExtra",
-        "bookingUsers.client",
+        "bookingUsers.client.clientSports",
         "bookingUsers.courseDate",
-        "bookingUsers.monitor",
+        "bookingUsers.monitor.monitorSportsDegrees",
         "bookingUsers.degree",
         "payments",
         "bookingLogs"

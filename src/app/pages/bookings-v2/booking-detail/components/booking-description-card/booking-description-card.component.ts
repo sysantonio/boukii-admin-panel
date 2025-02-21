@@ -39,6 +39,7 @@ export class BookingDescriptionCard {
   @Input() utilizers: any;
   @Input() sport: any;
   @Input() sportLevel: any;
+  @Input() allLevels: any;
   @Input() course: any;
   @Input()
   set dates(value: any[]) {
@@ -129,6 +130,7 @@ export class BookingDescriptionCard {
   }
 
   sendEditForm(dates: any, course: any, utilizers: any = []) {
+    debugger;
     if (course.course_type == 2) {
       this.openPrivateDatesForm(dates, course, utilizers);
     } else if (course.course_type == 1) {

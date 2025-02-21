@@ -1,6 +1,16 @@
 <div class="wrapper">
   <div class="headerWrapper">
+    <div style="border-bottom: 1px solid white;
+    padding-bottom: 0.5rem;
+    color: white;">
     {{ 'booking' | translate }} #{{bookingData.id}}
+      <span style="display: inline-block;width: 70%; text-align: right;">
+									<!-- <img src="assets/img/icons/edit.svg"  (click)="showDetail = false" class="btn-edit" /> -->
+									<img
+                       src="assets/img/icons/close.svg"
+                       class="btn-close">
+								</span>
+    </div>
     <div style="color:#868686;">
       <b>
         {{ 'register' | translate}}:
@@ -77,10 +87,18 @@
         {{'client' | translate}}
       </div>
       <div class="utilizersWrapper">
-        <img class="avatarImg" [src]="
+        <app-level-user class="avatarImg"
+          mat-card-avatar *ngIf="client.client_sports && client.client_sports.length"
+                        [allLevels]="utilsService.getSportLevels(client.client_sports[0].sport_id, allLevels)"
+                        [selectLevel]="client.client_sports[0].sport_id?.degree_id" [size]="50"
+                        [userImage]="client?.image !== null && client?.image
+                        !== '' ? client?.image :  'assets/img/avatar.png'">
+        </app-level-user>
+        <img class="avatarImg" *ngIf="!client.client_sports || !client.client_sports.length"
+             [src]="
               client.image !== null && client.image !== ''
                 ? client.image
-                : 'assets/img/booking-avatar.svg'
+                : 'assets/img/avatar.png'
             " />
 
         <div class="utilizersWrapper__description">
@@ -92,8 +110,15 @@
             · {{ utilsService.getCountry(client.country) }}</span>
           <div style="display: flex;gap: 8px;">
             <img src="assets/icons/icon/chat.png" class="icon24" />
-            <img src="assets/icons/icon/mail.png" class="icon24" />
-            <img src="assets/icons/icon/phone.png" class="icon24" />
+            <vex-icon src="mail"
+                 href="mailto:{{ client.email }}"
+                 title="{{ client.email }}"
+                 class="icon24" />
+            <vex-icon src="phone"
+                 href="tel:{{ client.phone }}"
+                 title="{{ client.phone }}"
+                 class="icon24" />
+
           </div>
 
         </div>
@@ -133,7 +158,7 @@
     </div>
 
     <div class="section" style="margin-bottom: 0;border: none;">
-      <div class="dateRow">
+      <div class="dateRow" *ngIf="!bookingData.paid && bookingData.reduction != null">
         <div>
           <span class="hour" (click)="addReduction()" *ngIf="bookingData.reduction == null && this.calculateTotalVoucherPrice()
             < bookingData.price_total && !bookingData.paid" style="
@@ -148,7 +173,7 @@
             {{ "apply_reduction" | translate }}
           </span>
 
-          <span style="width: 100%; float:left" *ngIf="bookingData.price_reduction != null;">
+          <span style="width: 100%; float:left" *ngIf="bookingData.price_reduction && bookingData.price_reduction > 0;">
             <mat-icon *ngIf="!bookingData.paid" svgIcon="mat:delete" style="float: left;color: red; cursor:pointer"
                       (click)="deleteReduction()"></mat-icon>
             <p style="float:left">{{'reduction' |translate}}</p>
@@ -157,34 +182,6 @@
               {{activities[0]?.course.currency}}
             </p>
           </span>
-        </div>
-      </div>
-      <div class="dateRow">
-        <div>
-          <span class="hour" *ngIf="this.calculateTotalVoucherPrice() < bookingData.price_total && !bookingData.paid"
-                (click)="addBonus()" style="
-          color: #E91E63;
-           font-size: 14px;
-           font-family: DM Sans;
-           font-weight: 400;
-           line-height: 18px; cursor: pointer;
-           word-wrap: break-word;display: flex;
-           align-items: center;gap: 8px;">
-            <mat-icon style="margin: 0 8px;">add</mat-icon>
-            {{ "apply_bonus" | translate }}
-          </span>
-          <ng-container *ngIf="bookingData.vouchers?.length">
-            <span style="width: 100%; float:left" *ngFor="let item of bookingData.vouchers; let i = index">
-              <mat-icon *ngIf="!bookingData.paid" svgIcon="mat:delete" style="float: left;color: red; cursor:pointer"
-                        (click)="deleteBonus(i);"></mat-icon>
-              <p style="float:left">{{'bonus' |translate}}
-                {{item.bonus.code}}</p>
-              <p style="float:right">
-                -{{item.bonus.reducePrice}}
-                {{activities[0]?.course?.currency}}
-              </p>
-            </span>
-          </ng-container>
         </div>
       </div>
       <div class="dateRow">
@@ -226,6 +223,52 @@
   <div class="historyWrapper">
     <div class="section" style="margin-bottom: 0; border: none">
       <div class="sectionTitle">
+        {{ "payment_history" | translate }}
+      </div>
+      <div class="dateRow">
+        <div>
+          <span class="hour" *ngIf="this.calculateTotalVoucherPrice() < bookingData.price_total && !bookingData.paid"
+                (click)="addBonus()" style="
+          color: #E91E63;
+           font-size: 14px;
+           font-family: DM Sans;
+           font-weight: 400;
+           line-height: 18px; cursor: pointer;
+           word-wrap: break-word;display: flex;
+           align-items: center;gap: 8px;">
+            <mat-icon style="margin: 0 8px;">add</mat-icon>
+            {{ "apply_bonus" | translate }}
+          </span>
+          <ng-container *ngIf="bookingData.vouchers?.length">
+            <span style="width: 100%; float:left" *ngFor="let item of bookingData.vouchers; let i = index">
+              <mat-icon *ngIf="!bookingData.paid" svgIcon="mat:delete" style="float: left;color: red; cursor:pointer"
+                        (click)="deleteBonus(i);"></mat-icon>
+              <p style="float:left">{{'bonus' |translate}}
+                {{item.bonus.code}}</p>
+              <p style="float:right">
+                -{{item.bonus.reducePrice}}
+                {{activities[0]?.course?.currency}}
+              </p>
+            </span>
+          </ng-container>
+        </div>
+      </div>
+      <div class="dateRow" *ngFor="let payment of bookingData.payments">
+        <div>
+          <span class="date"> {{ payment.created_at | date: "dd.MM.yyyy" }}:</span>
+          <span class="hour">{{ payment.created_at | date: "hh:mm" }}h </span>
+          <span class="price">
+            <span class="discounted-price">
+              {{ payment.status | translate }} - {{ payment.notes | translate }}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="historyWrapper">
+    <div class="section" style="margin-bottom: 0; border: none">
+      <div class="sectionTitle">
         {{ "change_history" | translate }}
       </div>
       <div class="dateRow" *ngFor="let bookingLog of bookingData.booking_logs">
@@ -241,24 +284,7 @@
       </div>
     </div>
   </div>
-  <div class="historyWrapper">
-    <div class="section" style="margin-bottom: 0; border: none">
-      <div class="sectionTitle">
-        {{ "method_paiment" | translate }}
-      </div>
-      <div class="dateRow" *ngFor="let payment of bookingData.payments">
-        <div>
-          <span class="date"> {{ payment.created_at | date: "dd.MM.yyyy" }}:</span>
-          <span class="hour">{{ payment.created_at | date: "hh:mm" }}h </span>
-          <span class="price">
-            <span class="discounted-price">
-              {{ payment.status | translate }} - {{ payment.notes | translate }}
-            </span>
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
+
 </div>
 <button *ngIf="!bookingData.paid" style="height: 56px; width: 400px;border-radius: 3px;margin-top: 16px;"
         color="primary" mat-raised-button type="button" class="client-button" (click)="payClick.emit()">

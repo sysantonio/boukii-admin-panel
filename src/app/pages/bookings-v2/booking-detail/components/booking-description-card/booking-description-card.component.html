@@ -45,10 +45,17 @@
 			<ng-container *ngIf="utilizers">
 				<div *ngIf="!summaryMode; else summaryUtilizer">
 					<div *ngFor="let item of utilizers" class="utilizersWrapper">
-						<img [src]="
+            <app-level-user class="avatarImg"
+                            mat-card-avatar *ngIf="item.client_sports && item.client_sports.length"
+                            [allLevels]="utilsService.getSportLevels(item.client_sports[0].sport_id, allLevels)"
+                            [selectLevel]="item.client_sports[0].sport_id?.degree_id" [size]="50"
+                            [userImage]="item?.image !== null && item?.image
+                        !== '' ? item?.image :  'assets/img/avatar.png'">
+            </app-level-user>
+						<img *ngIf="!item.client_sports || !item.client_sports.length" [src]="
               item.image !== null && item.image !== ''
                 ? item.image
-                : 'assets/img/booking-avatar.svg'
+                : 'assets/img/avatar.png'
             " style="min-width: 24px;
           width: 24px;
           height: 24px;" class="avatarImg">
@@ -69,8 +76,20 @@
 				</div>
 				<ng-template #summaryUtilizer>
 					<div class="utilizersWrapper">
-						<img [src]="utilizers[0]?.image || 'assets/img/booking-avatar.svg'"
-							style="min-width: 24px; width: 24px; height: 24px;" class="avatarImg">
+            <app-level-user class="avatarImg"
+                            mat-card-avatar *ngIf=" utilizers[0]?.client_sports &&  utilizers[0]?.client_sports.length"
+                            [allLevels]="utilsService.getSportLevels( utilizers[0]?.client_sports[0].sport_id, allLevels)"
+                            [selectLevel]=" utilizers[0]?.client_sports[0].sport_id?.degree_id" [size]="50"
+                            [userImage]=" utilizers[0]?.image !== null &&  utilizers[0]?.image
+                        !== '' ?  utilizers[0]?.image :  'assets/img/avatar.png'">
+            </app-level-user>
+            <img *ngIf="! utilizers[0]?.client_sports || ! utilizers[0]?.client_sports.length" [src]="
+               utilizers[0]?.image !== null &&  utilizers[0]?.image !== ''
+                ?  utilizers[0]?.image
+                : 'assets/img/avatar.png'
+            " style="min-width: 24px;
+          width: 24px;
+          height: 24px;" class="avatarImg">
 						<div class="utilizersWrapper__description">
 							<h4>
 								{{ utilizers[0]?.first_name }} {{ utilizers[0]?.last_name
@@ -109,11 +128,13 @@
 				<img src="assets/img/icons/calendar-1.svg">
 				{{ "bookings_page.description.date" | translate }}
         <ng-container *ngIf="course && course.course_type!==1">
-          <img *ngIf="!summaryMode && isDetail && status != 2" (click)="sendEditForm(dates, course, utilizers)"
+          <img *ngIf="!summaryMode && isDetail && status != 2"
+               (click)="sendEditForm(dates, course, utilizers)"
                src="assets/img/icons/edit-grey.svg" style="float: right" class="icon24">
         </ng-container>
         <ng-container *ngIf="course && course.course_type ==1">
-          <img *ngIf="!summaryMode && isDetail && status != 2 && course.course_extras.length"
+          <img *ngIf="!summaryMode && isDetail && status != 2
+          && course.course_extras.length"
                (click)="sendEditForm(dates, course, utilizers)"
                src="assets/img/icons/edit-grey.svg" style="float: right" class="icon24">
         </ng-container>
@@ -145,7 +166,14 @@
               <div class="row1">
 
                 <div class="sectionTitle">
-                  <img src="assets/img/icons/monitores-3.svg" />
+                  <app-level-user class="avatarImg" *ngIf="date.monitor"
+                                  mat-card-avatar
+                                  [allLevels]="allLevels"
+                                  [selectLevel]="utilsService.getHighestAuthorizedDegree(date.monitor, course.sport_id, course.school_id)" [size]="50"
+                                  [userImage]="date.monitor?.image !== null && date.monitor?.image
+                        !== '' ? date.monitor?.image : 'assets/img/avatar.png'">
+                  </app-level-user>
+                  <img *ngIf="!date.monitor" src="assets/img/icons/monitores-3.svg" />
                   {{ "bookings_page.description.monitor" | translate }}
                 </div>
                 <span *ngIf="date.monitor">

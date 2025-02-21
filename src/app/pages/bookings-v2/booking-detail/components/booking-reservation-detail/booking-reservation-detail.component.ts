@@ -17,6 +17,7 @@ export class BookingReservationDetailComponent implements OnInit {
   @Input() activities: any;
   @Input() hideBotton = false;
   @Input() bookingData: any;
+  @Input() allLevels: any;
   @Output() endClick = new EventEmitter();
   @Output() editClick = new EventEmitter();
   @Output() payClick = new EventEmitter();

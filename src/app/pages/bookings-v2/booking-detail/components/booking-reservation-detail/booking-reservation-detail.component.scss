@@ -23,6 +23,20 @@
   word-wrap: break-word;
 }
 
+.title-status {
+  gap: 8px;
+  display: flex;
+  span {
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-family: DM Sans;
+    font-weight: 600;
+    line-height: 16px;
+    word-wrap: break-word;
+  }
+}
+
 .sportTitle {
   font-family: var(--font-dm);
   font-size: 14px;
