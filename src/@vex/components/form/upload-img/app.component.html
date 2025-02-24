@@ -6,18 +6,18 @@
         font-size: 30px;
         object-fit: scale-down;">
 		<p style="font-size: 12px">
-			{{'image_max'|translate}}
+			{{'image_max'|translate}} {{size}}Mb
 		</p>
 		<p style="font-size: 12px">
-			{{'image_format'|translate}}
+			{{'image_format'|translate}} {{format}}
 		</p>
 		<p style="font-size: 12px">
-			{{'image_recomendation'|translate}}
+			{{'image_recomendation'|translate}} {{width}}x{{height}}px
 		</p>
 	</label>
 	<div *ngIf="imagePreviewUrl" class="image-container" style="float: left;width: 50%;">
-		<img [src]="imagePreviewUrl" alt="Image Preview" width="400" height="290"
-			style="width: 400px;height: 290px;object-fit: contain;margin:0 auto">
+		<img [src]="imagePreviewUrl" alt="Image Preview" [width]="width" [height]="height" [style.width]="width"
+			[style.height]="height" style="object-fit: contain;margin:0 auto">
 	</div>
 	<label *ngIf="imagePreviewUrl" for="file" class="custom-file-upload">
 		{{"Change image" | translate}}

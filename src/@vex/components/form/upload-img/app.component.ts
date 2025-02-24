@@ -8,18 +8,19 @@ import { Component, EventEmitter, Input, Output, } from '@angular/core';
 export class FluxUploadImgComponent {
   @Output() upload: any = new EventEmitter<any>();
   @Input() imagePreviewUrl: any = ""
+  @Input() width: number = 400
+  @Input() height: number = 290
+  @Input() size: number = 1
+  @Input() format: string = "PNG, JPG"
 
   onFileChanged(event: Event) {
-    console.log(event)
     const file = (event.target as HTMLInputElement).files[0];
     if (file) {
       const reader = new FileReader();
-
       reader.onload = () => {
         this.imagePreviewUrl = reader.result;
         this.upload.emit(reader.result)
       };
-
       reader.readAsDataURL(file);
     }
   }

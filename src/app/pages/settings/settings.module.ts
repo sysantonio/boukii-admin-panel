@@ -44,6 +44,9 @@ import { ComponentsCustomModule } from '../../components/components-custom.modul
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { ComponenteButtonModule } from "../../../@vex/components/form/button/app.module";
 import { FluxUploadImgModule } from 'src/@vex/components/form/upload-img/app.module';
+import { FluxModalModule } from "../../../@vex/components/flux-component/flux-modal/app.module";
+import { ComponenteEditorModule } from "../../../@vex/components/form/editor/app.module";
+import { ComponenteInputModule } from 'src/@vex/components/form/input/app.module';
 @NgModule({
     declarations: [SettingsComponent],
     imports: [
@@ -91,7 +94,10 @@ import { FluxUploadImgModule } from 'src/@vex/components/form/upload-img/app.mod
         AngularEditorModule,
         ComponentsCustomModule,
         ComponenteButtonModule,
-        FluxUploadImgModule
+        FluxUploadImgModule,
+        FluxModalModule,
+        ComponenteEditorModule,
+        ComponenteInputModule
     ]
 })
 export class SettingsModule {

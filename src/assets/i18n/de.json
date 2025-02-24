@@ -211,10 +211,10 @@
   "family_data": "Familien Information",
   "work_data": "Arbeitsdaten",
   "work_id": "Arbeitserlaubnis",
-  "image_max": "Maximal 1 MB",
+  "image_max": "Maximal",
   "product": "Produkt",
-  "image_format": "Unterstützte Formate: PNG, JPG",
-  "image_recomendation": "Empfohlene Größe: 400x290px",
+  "image_format": "Unterstützte Formate: ",
+  "image_recomendation": "Empfohlene Größe: ",
   "enter_text": "Hier Text eingeben...",
   "timeline.timeline": "Planer",
   "timeline.reset_filters": "Filter reinigen",
@@ -805,5 +805,12 @@
   "info_message": "INFORMATIONSNACHRICHT",
   "info_message_description": "Diese Nachricht wird oben auf der Seite deutlich angezeigt.",
   "add_message": "Nachricht hinzufügen",
-  "view_preview": "Vorschau anzeigen"
+  "view_preview": "Vorschau anzeigen",
+  "desktop_version": "Desktop-Version",
+  "mobile_version": "Mobile Version",
+  "delete_message": "Nachricht löschen",
+  "headline": "Überschrift",
+  "important_info": "Wichtige Informationen",
+  "text": "Text",
+  "alert_type": "ALARMART"
 }

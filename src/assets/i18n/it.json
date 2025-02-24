@@ -213,10 +213,10 @@
   "family_data": "Informazioni sulla famiglia",
   "work_data": "Dati sul lavoro",
   "work_id": "Permesso di lavoro",
-  "image_max": "Massimo 1mb",
+  "image_max": "Massimo",
   "product": "Prodotto",
-  "image_format": "Formati supportati: PNG, JPG",
-  "image_recomendation": "Dimensione consigliata: 400x290px",
+  "image_format": "Formati supportati: ",
+  "image_recomendation": "Dimensione consigliata: ",
   "enter_text": "Inserisci il testo qui...",
   "timeline.timeline": "Pianificatore",
   "timeline.reset_filters": "Pulire il filtro",
@@ -804,5 +804,12 @@
   "info_message": "MESSAGGIO INFORMATIVO",
   "info_message_description": "Questo messaggio apparirà in evidenza nella parte superiore della pagina.",
   "add_message": "Aggiungi messaggio",
-  "view_preview": "Visualizza anteprima"
+  "view_preview": "Visualizza anteprima",
+  "desktop_version": "Versione Desktop",
+  "mobile_version": "Versione Mobile",
+  "delete_message": "Elimina messaggio",
+  "headline": "Titolo",
+  "important_info": "Informazioni importanti",
+  "text": "Testo",
+  "alert_type": "TIPO DI AVVISO"
 }

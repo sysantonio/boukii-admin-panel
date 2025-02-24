@@ -1050,4 +1050,9 @@ export class SettingsComponent implements OnInit {
     const max = 99999999; // límite superior para un número de 5 cifras
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
+
+
+  //PAGINA DE RESERVA, MODAL
+  BannerPromocionalModal: boolean = false
+  MessageInformationModal: boolean = false
 }

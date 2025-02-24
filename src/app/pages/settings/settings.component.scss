@@ -203,3 +203,11 @@ $border-color: rgba(
     }
   }
 }
+.info_message {
+  height: 44px;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+}

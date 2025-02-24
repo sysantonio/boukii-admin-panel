@@ -219,10 +219,10 @@
   "family_data": "Family information",
   "work_data": "Labor data",
   "work_id": "Work permit",
-  "image_max": "Maximum 1mb",
+  "image_max": "Maximum",
   "product": "Product",
-  "image_format": "Supported format: PNG, JPG",
-  "image_recomendation": "Recommended size: 400x290px",
+  "image_format": "Supported format: ",
+  "image_recomendation": "Recommended size: ",
   "enter_text": "Enter text here...",
   "timeline.timeline": "Planner",
   "timeline.reset_filters": "Clean filter",
@@ -805,5 +805,12 @@
   "info_message": "INFORMATION MESSAGE",
   "info_message_description": "This message will appear prominently at the top of the page.",
   "add_message": "Add message",
-  "view_preview": "View preview"
+  "view_preview": "View preview",
+  "desktop_version": "Desktop Version",
+  "mobile_version": "Mobile Version",
+  "delete_message": "Delete message",
+  "headline": "Headline",
+  "important_info": "Important information",
+  "text": "Text",
+  "alert_type": "ALERT TYPE"
 }

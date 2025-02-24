@@ -578,7 +578,8 @@
 							<div class="Small b12" style="width: 100%;">
 								{{"promotional_banner"|translate}}
 							</div>
-							<app-form-button name="add_promotional_banner"></app-form-button>
+							<app-form-button name="add_promotional_banner"
+								(click)="BannerPromocionalModal=true"></app-form-button>
 						</div>
 					</div>
 					<div class="right">
@@ -595,7 +596,8 @@
 							<div style="width: 100%;">
 								{{"info_message_description"|translate}}
 							</div>
-							<app-form-button name="add_message"></app-form-button>
+							<app-form-button name="add_message"
+								(click)="MessageInformationModal=true"></app-form-button>
 						</div>
 					</div>
 				</div>
@@ -1480,7 +1482,6 @@
                       <input matInput type="text"/>
                     </mat-form-field>
                   </div> -->
-
 								<mat-tab-group [selectedIndex]="selectedIndex"
 									(selectedTabChange)="onTabChange($event)">
 									<mat-tab label="{{'France' | translate }}">
@@ -1491,7 +1492,6 @@
 											</mat-label>
 											<input [(ngModel)]="subjectFr" [value]="subjectFr" matInput type="text">
 										</mat-form-field>
-
 										<div class="vex-mail-compose-editor flex flex-col">
 											<p>
 												{{ 'title' | translate }}
@@ -1499,7 +1499,6 @@
 											<angular-editor [(ngModel)]="titleFr"
 												class="flex-auto flex flex-col"></angular-editor>
 										</div>
-
 										<div class="vex-mail-compose-editor flex flex-col">
 											<p>
 												{{ 'message' | translate }}
@@ -1507,7 +1506,6 @@
 											<angular-editor [(ngModel)]="bodyFr"
 												class="flex-auto flex flex-col"></angular-editor>
 										</div>
-
 									</mat-tab>
 									<mat-tab label="{{'English' | translate }}">
 										<mat-form-field appearance="outline" class="block w-full"
@@ -1517,7 +1515,6 @@
 											</mat-label>
 											<input [(ngModel)]="subjectEn" [value]="subjectEn" matInput type="text">
 										</mat-form-field>
-
 										<div class="vex-mail-compose-editor flex flex-col">
 											<p>
 												{{ 'title' | translate }}
@@ -1525,7 +1522,6 @@
 											<angular-editor [(ngModel)]="titleEn"
 												class="flex-auto flex flex-col"></angular-editor>
 										</div>
-
 										<div class="vex-mail-compose-editor flex flex-col">
 											<angular-editor [(ngModel)]="bodyEn"
 												class="flex-auto flex flex-col"></angular-editor>
@@ -1539,7 +1535,6 @@
 											</mat-label>
 											<input [(ngModel)]="subjectEs" [value]="subjectEs" matInput type="text">
 										</mat-form-field>
-
 										<div class="vex-mail-compose-editor flex flex-col">
 											<p>
 												{{ 'title' | translate }}
@@ -1547,7 +1542,6 @@
 											<angular-editor [(ngModel)]="titleEs"
 												class="flex-auto flex flex-col"></angular-editor>
 										</div>
-
 										<div class="vex-mail-compose-editor flex flex-col">
 											<angular-editor [(ngModel)]="bodyEs"
 												class="flex-auto flex flex-col"></angular-editor>
@@ -1561,7 +1555,6 @@
 											</mat-label>
 											<input [(ngModel)]="subjectDe" [value]="subjectDe" matInput type="text">
 										</mat-form-field>
-
 										<div class="vex-mail-compose-editor flex flex-col">
 											<p>
 												{{ 'title' | translate }}
@@ -1569,7 +1562,6 @@
 											<angular-editor [(ngModel)]="titleDe"
 												class="flex-auto flex flex-col"></angular-editor>
 										</div>
-
 										<div class="vex-mail-compose-editor flex flex-col">
 											<angular-editor [(ngModel)]="bodyDe"
 												class="flex-auto flex flex-col"></angular-editor>
@@ -1583,7 +1575,6 @@
 											</mat-label>
 											<input [(ngModel)]="subjectIt" [value]="subjectIt" matInput type="text">
 										</mat-form-field>
-
 										<div class="vex-mail-compose-editor flex flex-col">
 											<p>
 												{{ 'title' | translate }}
@@ -1591,15 +1582,12 @@
 											<angular-editor [(ngModel)]="titleIt"
 												class="flex-auto flex flex-col"></angular-editor>
 										</div>
-
 										<div class="vex-mail-compose-editor flex flex-col">
 											<angular-editor [(ngModel)]="bodyIt"
 												class="flex-auto flex flex-col"></angular-editor>
 										</div>
-
 									</mat-tab>
 								</mat-tab-group>
-
 								<!-- <div class="vex-mail-compose-attachment mt-4 mb-2 rounded-full border px-4 py-1 flex items-center hover:bg-hover transition duration-200 ease-in-out cursor-pointer relative"
                        matRipple>
                     <mat-icon class="flex-none text-primary icon-sm" svgIcon="mat:picture_as_pdf"></mat-icon>
@@ -1633,9 +1621,7 @@
 											{{'preview' |
 											translate}}
 										</button>
-
 									</div>
-
 								</div>
 							</div>
 							<div class="preview-container" style="flex: 1; margin-left: 1%;overflow-y: auto;">
@@ -1648,19 +1634,63 @@
 									<!-- Aquí puedes mostrar el contenido del correo en vista previa -->
 									<vex-confirm-mail [title]="getEmailContent().title" [body]="getEmailContent().body"
 										[type]="mailTypeTrad">
-
 									</vex-confirm-mail>
-
 								</div>
 							</div>
 						</div>
-
 					</vex-page-layout-content>
-
 				</vex-page-layout>
-
 			</mat-tab>
 		</mat-tab-group>
 	</div>
-
 </vex-page-layout>
+
+<vex-flux-modal *ngIf="BannerPromocionalModal" title="promotional_banner" (Close)="BannerPromocionalModal=false">
+	<div body style="display: flex; gap: 10px;flex-wrap: wrap;">
+		<div style="width: 100%;"> {{"desktop_version"|translate}} </div>
+		<vex-flux-upload-img style="width: 100%;" [width]="600" [height]="100"></vex-flux-upload-img>
+		<div style="width: 100%;"> {{"mobile_version"|translate}} </div>
+		<vex-flux-upload-img style="width: 50%;" [width]="160" [height]="85"></vex-flux-upload-img>
+	</div>
+	<ng-container footer>
+		<app-form-button name="cancel" (click)="BannerPromocionalModal=false"></app-form-button>
+		<app-form-button form="flat" name="confirm" (click)="BannerPromocionalModal=false"></app-form-button>
+	</ng-container>
+</vex-flux-modal>
+
+<vex-flux-modal *ngIf="MessageInformationModal" title="info_message" (Close)="MessageInformationModal=false">
+	<div body style="display: flex; flex-wrap: wrap;flex-direction: column;">
+		<div style="display: flex;align-items: center;justify-content: flex-end;color: red;">
+			<img src="assets/icons/icon/delete.png" alt="" class="icon24">
+			{{"delete_message"|translate}}
+		</div>
+		<app-form-input name="headline"></app-form-input>
+		<app-form-input name="text"></app-form-input>
+		<span>
+			{{"alert_type"|translate}}
+		</span>
+		<mat-radio-group style="display: flex;width: 100%;margin-bottom: 20px;">
+			<mat-radio-button class="radio" style="width: 100%;">
+				<div class="info_message" style="background-color: #D2EFFF;">
+					<img src="assets/icons/icon/info_message1.png" alt="" class="icon24"
+						style="filter: brightness(0) saturate(100%) invert(17%) sepia(98%) saturate(7486%) hue-rotate(0deg) brightness(99%) contrast(118%);">
+					<span>
+						{{"info_message"|translate}}
+					</span>
+				</div>
+			</mat-radio-button>
+			<mat-radio-button class="radio" style="width: 100%;">
+				<div class="info_message" style="background-color: #FFEBEB;">
+					<img src="assets/icons/icon/info_message2.png" alt="" class="icon24">
+					<span>
+						{{"info_message"|translate}}
+					</span>
+				</div>
+			</mat-radio-button>
+		</mat-radio-group>
+	</div>
+	<ng-container footer>
+		<app-form-button name="cancel" (click)="MessageInformationModal=false"></app-form-button>
+		<app-form-button form="flat" name="confirm" (click)="MessageInformationModal=false"></app-form-button>
+	</ng-container>
+</vex-flux-modal>
