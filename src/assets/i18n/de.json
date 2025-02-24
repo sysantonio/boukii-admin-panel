@@ -795,5 +795,15 @@
   "confirmed_without_payment": "Bestätigt ohne Zahlung",
   "are_you_sure_action": "Bist du sicher, dass du das tun möchtest? Dies kann sich auf den gesamten Kurs auswirken.",
   "text_subtotal": "Zwischensumme",
-  "credit_card": "Kreditkarte"
+  "credit_card": "Kreditkarte",
+  "configure_options": "Konfigurieren Sie diese Optionen, um Ihrer Buchungsseite Mehrwert zu verleihen",
+  "theme": "THEMA",
+  "promotional_banner": "WERBEBANNER",
+  "add_promotional_banner": "Werbebanner hinzufügen",
+  "sponsors": "SPONSOREN",
+  "image_recommendations": "JPG oder PNG, max. 1MB. Empfohlene Größe: 400x290px",
+  "info_message": "INFORMATIONSNACHRICHT",
+  "info_message_description": "Diese Nachricht wird oben auf der Seite deutlich angezeigt.",
+  "add_message": "Nachricht hinzufügen",
+  "view_preview": "Vorschau anzeigen"
 }

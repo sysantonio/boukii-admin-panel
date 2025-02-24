@@ -795,5 +795,15 @@
   "confirmed_without_payment": "Confirmed without payment",
   "are_you_sure_action": "Are you sure you want to do this? This may have an impact throughout the course.",
   "text_subtotal": "Subtotal",
-  "credit_card": "Credit Card"
+  "credit_card": "Credit Card",
+  "configure_options": "Configure these options to add value to your booking page",
+  "theme": "THEME",
+  "promotional_banner": "PROMOTIONAL BANNER",
+  "add_promotional_banner": "Add promotional banner",
+  "sponsors": "SPONSORS",
+  "image_recommendations": "JPG or PNG, max 1MB. Recommended size: 400x290px",
+  "info_message": "INFORMATION MESSAGE",
+  "info_message_description": "This message will appear prominently at the top of the page.",
+  "add_message": "Add message",
+  "view_preview": "View preview"
 }

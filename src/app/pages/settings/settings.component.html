@@ -548,51 +548,60 @@
 				</div>
 			</mat-tab>
 			<mat-tab label="{{'settings.book_page' | translate}}">
-				<vex-page-layout>
-					<vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
-						<div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-							<h1 style="font-size:24px;float: left; width: 100%;">
-								{{'settings.book_page'
-								| translate}}
-							</h1>
-							<p style="padding: 1%; ;float: left; width: 75%;">
-								{{'settings.book_page.text1' | translate}}
-								<br>
-								{{'settings.book_page.text2' | translate}}
-							</p>
-							<button (click)="setTheme()" class="btn-primary-accent">
-								{{'save_changes' | translate}}
-							</button>
-						</div>
-
-						<div style="float: left; width: 100%;margin: 0 0 2% 0;">
-							<div style="width:100%; float:left;">
-
-								<div style="padding: 1%;width: 100%;float: left;border: #e6e6e6 1px solid;">
-									<div style="width: 100%; float: left; ">
-										<div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
-											<div class="flex-auto">
-												<mat-radio-group [(ngModel)]="theme">
-													<mat-radio-button [value]="layoutService.isDarkMode" class="radio">
-														{{'settings.book_page.light' | translate}}
-													</mat-radio-button>
-													<mat-radio-button [value]="!layoutService.isDarkMode" class="radio">
-														{{'settings.book_page.dark' | translate}}
-													</mat-radio-button>
-												</mat-radio-group>
-											</div>
-										</div>
-									</div>
-								</div>
+				<div class="paginaReserva">
+					<div style="width: 100%;">
+						<div>
+							<div>
+								{{'configure_options'|translate}}
 							</div>
+							<app-form-button name="view_preview" style="margin-left: auto;"
+								form="flat"></app-form-button>
 						</div>
-					</vex-page-layout-content>
-				</vex-page-layout>
+					</div>
+					<div class="left">
+						<div>
+							<div class="Small b12" style="width: 100%;">
+								{{"theme"|translate}}
+							</div>
+							<mat-radio-group style="display: flex;width: 100%;">
+								<mat-radio-button class="radio" (click)="layoutService.toggleDarkMode()"
+									[checked]="!layoutService.isDarkMode" style="width: 100%;">
+									{{'settings.book_page.light' | translate}}
+								</mat-radio-button>
+								<mat-radio-button class="radio" style="width: 100%;"
+									[checked]="layoutService.isDarkMode" (click)="layoutService.toggleDarkMode()">
+									{{'settings.book_page.dark' | translate}}
+								</mat-radio-button>
+							</mat-radio-group>
+						</div>
+						<div>
+							<div class="Small b12" style="width: 100%;">
+								{{"promotional_banner"|translate}}
+							</div>
+							<app-form-button name="add_promotional_banner"></app-form-button>
+						</div>
+					</div>
+					<div class="right">
+						<div>
+							<div class="Small b12" style="width: 100%;">
+								{{"sponsors"|translate}}
+							</div>
+							<vex-flux-upload-img style="width: 100%;"></vex-flux-upload-img>
+						</div>
+						<div>
+							<div class="Small b12" style="width: 100%;">
+								{{"info_message"|translate}}
+							</div>
+							<div style="width: 100%;">
+								{{"info_message_description"|translate}}
+							</div>
+							<app-form-button name="add_message"></app-form-button>
+						</div>
+					</div>
+				</div>
 			</mat-tab>
 			<mat-tab label="{{'settings.monitors' | translate}}">
-
 				<mat-tab-group>
-
 					<mat-tab label="{{'salarys' | translate}}">
 						<vex-page-layout style="float: left;width: 100%;">
 							<vex-page-layout-content class="-mt-6 fullwidth"

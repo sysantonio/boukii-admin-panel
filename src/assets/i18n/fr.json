@@ -793,5 +793,15 @@
   "confirmed_without_payment": "Confirmé sans paiement",
   "are_you_sure_action": "Êtes-vous sûr de vouloir faire cela ? Cela peut avoir un impact sur tout le cours.",
   "text_subtotal": "Sous-total",
-  "credit_card": "Carte de crédit"
+  "credit_card": "Carte de crédit",
+  "configure_options": "Configurez ces options pour ajouter de la valeur à votre page de réservation",
+  "theme": "THÈME",
+  "promotional_banner": "BANNIÈRE PROMOTIONNELLE",
+  "add_promotional_banner": "Ajouter une bannière promotionnelle",
+  "sponsors": "SPONSORS",
+  "image_recommendations": "JPG ou PNG, 1 Mo max. Taille recommandée : 400x290px",
+  "info_message": "MESSAGE D'INFORMATION",
+  "info_message_description": "Ce message apparaîtra en évidence en haut de la page.",
+  "add_message": "Ajouter un message",
+  "view_preview": "Voir l'aperçu"
 }
