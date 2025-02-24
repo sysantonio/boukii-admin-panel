@@ -1055,4 +1055,8 @@ export class SettingsComponent implements OnInit {
   //PAGINA DE RESERVA, MODAL
   BannerPromocionalModal: boolean = false
   MessageInformationModal: boolean = false
+  SponsorImg: any[] = []
+  removeSponsor(index: number): void {
+    this.SponsorImg.splice(index, 1);
+  }
 }

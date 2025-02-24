@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, Output, } from '@angular/core';
 export class FluxUploadImgComponent {
   @Output() upload: any = new EventEmitter<any>();
   @Input() imagePreviewUrl: any = ""
+  @Input() Previus: boolean = true
   @Input() width: number = 400
   @Input() height: number = 290
   @Input() size: number = 1

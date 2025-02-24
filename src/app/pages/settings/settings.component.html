@@ -587,7 +587,20 @@
 							<div class="Small b12" style="width: 100%;">
 								{{"sponsors"|translate}}
 							</div>
-							<vex-flux-upload-img style="width: 100%;"></vex-flux-upload-img>
+							<div *ngFor="let Img of SponsorImg; index as i" style="position: relative; border: 1px solid var(--Grey-02, #C7D0D3);
+							border-style: dashed;
+							padding: 10px;
+							width: 150px;align-content: space-evenly;
+							height: 150px;text-align: -webkit-center;
+							border-radius: 8px;">
+								<img [src]="Img" alt="" style="max-height: 100%;max-width: 100%;">
+								<img src="assets/icons/icon/x.png" alt="" class="icon24"
+									style="position: absolute; top: 0; right: 0;cursor: pointer;"
+									(click)="removeSponsor(i)">
+							</div>
+
+							<vex-flux-upload-img style="width: 250px; height: 150px;" [Previus]="false"
+								(upload)="SponsorImg.push($event)"></vex-flux-upload-img>
 						</div>
 						<div>
 							<div class="Small b12" style="width: 100%;">
@@ -1647,6 +1660,7 @@
 
 <vex-flux-modal *ngIf="BannerPromocionalModal" title="promotional_banner" (Close)="BannerPromocionalModal=false">
 	<div body style="display: flex; gap: 10px;flex-wrap: wrap;">
+		<app-form-input name="link" style="width: 100%;"></app-form-input>
 		<div style="width: 100%;"> {{"desktop_version"|translate}} </div>
 		<vex-flux-upload-img style="width: 100%;" [width]="600" [height]="100"></vex-flux-upload-img>
 		<div style="width: 100%;"> {{"mobile_version"|translate}} </div>
