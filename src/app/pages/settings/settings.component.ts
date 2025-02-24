@@ -32,6 +32,7 @@ import { DateAdapter } from '@angular/material/core';
 import { dropdownAnimation } from '../../../@vex/animations/dropdown.animation';
 import { PreviewModalComponent } from '../../components/preview-modal/preview-modal.component';
 import { LayoutService } from 'src/@vex/services/layout.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'vex-settings',
@@ -192,14 +193,16 @@ export class SettingsComponent implements OnInit {
   hasTVA = false;
 
   user: any;
+  safeUrl: SafeResourceUrl;
 
   constructor(private ngZone: NgZone, private fb: UntypedFormBuilder, private crudService: ApiCrudService, private snackbar: MatSnackBar,
-    private configService: ConfigService, private dialog: MatDialog, private schoolService: SchoolService,
-    public layoutService: LayoutService,
+    private dialog: MatDialog, private schoolService: SchoolService,
+    public layoutService: LayoutService, private sanitizer: DomSanitizer,
     private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) {
     this.filteredHours = this.hours;
     this.dateAdapter.setLocale(this.translateService.getDefaultLang());
     this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
+    this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://booking.boukii.com/' + JSON.parse(localStorage.getItem('boukiiUser')).schools[0].slug);
   }
 
 
@@ -1055,6 +1058,7 @@ export class SettingsComponent implements OnInit {
   //PAGINA DE RESERVA, MODAL
   BannerPromocionalModal: boolean = false
   MessageInformationModal: boolean = false
+  PreviumModal: boolean = false
   SponsorImg: any[] = []
   removeSponsor(index: number): void {
     this.SponsorImg.splice(index, 1);
