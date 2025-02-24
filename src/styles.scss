@@ -3,6 +3,7 @@
 // Vex Core
 @import "./@vex/styles/core";
 @import "../node_modules/angular-calendar/scss/angular-calendar.scss";
+@import "./styles/mat-tab.scss";
 
 @font-face {
   font-family: "Dinamit";
@@ -716,7 +717,9 @@ span {
 }
 .mat-form-field-disabled .mat-mdc-text-field-wrapper {
   background-color: #f5f5f5 !important; /* Fondo gris */
-  color: var(--mdc-outlined-text-field-disabled-input-text-color) !important; /* Texto gris */
+  color: var(
+    --mdc-outlined-text-field-disabled-input-text-color
+  ) !important; /* Texto gris */
   border-radius: 4px; /* Bordes suaves */
 }
 .mat-sort-header-content,
