@@ -15,7 +15,7 @@
 		{{ "bookings_page_descriptionModal_button" | translate }}
 	</button> -->
 	<div class="left-column">
-		<div class="activities">
+		<div class="activities" *ngIf="allLevels">
 			<booking-detail-description-card *ngFor="let activity of groupedActivities; let i = index"
 				[index]="i"
 				[utilizers]="activity.utilizers"

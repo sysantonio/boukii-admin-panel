@@ -31,6 +31,14 @@
   }
 }
 
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
 .row-1 {
   display: flex;
   gap: 0.5rem;
@@ -127,4 +135,11 @@
 
 .disabled-icon {
   color: var(--color-grey1);
+}
+.stepButtonsWrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 15px;
+  padding: 1rem;
 }

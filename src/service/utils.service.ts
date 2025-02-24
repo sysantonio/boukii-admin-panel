@@ -48,6 +48,7 @@ export class UtilsService {
       return current.degree.degree_order > prev.degree.degree_order ? current : prev;
     });
 
+
     return highestDegree;
   }
 

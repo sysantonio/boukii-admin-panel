@@ -1,3 +1,9 @@
+<h3 class="title">{{ "bookings_page.crumbs.details" | translate }}
+  <span style="float: right; margin-right: 1rem;" (click)="cancel()">
+    								<img
+                      src="assets/img/icons/close-black.svg"
+                      class="btn-close">
+  </span></h3>
 <form class="wrapper" [formGroup]="stepForm">
   <div class="row">
     <div>
@@ -37,8 +43,18 @@
       </div>
     </div>
   </div>
-  <div class="button-wrapper">
-    <button mat-raised-button color="primary" (click)="submitForm()">{{ 'save' | translate }}</button>
-    <button mat-raised-button color="warn" (click)="cancel()">{{ 'cancel' | translate }}</button>
+  <div class="stepButtonsWrapper">
+    <button mat-stroked-button type="button" (click)="cancel()">
+      {{ "cancel" | translate }}
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      (click)="submitForm()"
+      [disabled]="!isFormValid()"
+    >
+      {{ "confirm" | translate }}
+    </button>
   </div>
 </form>

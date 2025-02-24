@@ -103,6 +103,9 @@ export class FormDetailsColectiveFixComponent implements OnInit {
 
     }
   }
+  isFormValid() {
+    return this.stepForm.valid;
+  }
   cancel() {
     this.dialogRef.close();
   }

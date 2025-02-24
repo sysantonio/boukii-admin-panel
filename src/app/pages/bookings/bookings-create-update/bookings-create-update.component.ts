@@ -3055,7 +3055,7 @@ export class BookingsCreateUpdateComponent implements OnInit {
 
       return this.selectedItem.course_dates.find(i => {
         const courseDate = new Date(i.date).toLocaleString().split('T')[0]; // Convertimos a ISO y tomamos la parte de la fecha
-        return courseDate === formattedDate; // Comparamos con la fecha en formato yyyy-MM-dd
+        return courseDate === formattedDate; // Comparamos con la fecha en formato dd-MM-yyyy
       });
 
     }*/

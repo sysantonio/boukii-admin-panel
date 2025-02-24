@@ -41,7 +41,7 @@
             <div style="width: 60%;display:inline-block;text-align: left; color:#868686;">
               <b>{{ 'register' | translate}}:</b>
               <span style="margin-left: 10px;font-weight: normal;color:white">
-                <span style="color: white;">{{detailData.created_at | date: 'yyyy-MM-dd'}}</span>
+                <span style="color: white;">{{detailData.created_at | date: 'dd-MM-yyyy'}}</span>
                 <span style="margin-left: 10px;font-style: italic;color:white">
                   {{detailData.created_at | date: 'HH:mm'}}h
                 </span>
@@ -163,7 +163,7 @@
             <b>{{'birth_date' | translate }}</b>
           </div>
           <div class="col-right">
-            {{detailData.birth_date | date: 'yyyy-MM-dd'}}
+            {{detailData.birth_date | date: 'dd-MM-yyyy'}}
           </div>
         </div>
         <div class="list-holder">

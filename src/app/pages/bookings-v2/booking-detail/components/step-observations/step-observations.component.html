@@ -1,5 +1,10 @@
 <mat-card-content class="cardContainer">
-  <h3 class="title">{{ "bookings_page.crumbs.observations" | translate }}</h3>
+  <h3 class="title">{{ "bookings_page.crumbs.observations" | translate }}
+    <span style="float: right; margin-right: 1rem;" (click)="cancel()">
+    								<img
+                      src="assets/img/icons/close-black.svg"
+                      class="btn-close">
+  </span></h3>
 
   <form [formGroup]="stepForm" class="formWrapper">
     <mat-form-field appearance="outline" class="fullWidth">

@@ -84,14 +84,14 @@
 										</strong>
 									</li>
 									<li>
-										{{defaults.course_dates[0].date|date:'yyyy-MM-dd'}}
+										{{defaults.course_dates[0].date|date:'dd-MM-yyyy'}}
 										<i style="text-align: right;float:right">
 											{{defaults.course_dates[0].hour_start}}h -
 											{{defaults.course_dates[0].hour_end}}h
 										</i>
 									</li>
 									<li>
-										{{defaults.course_dates[defaults.course_dates.length-1].date|date:'yyyy-MM-dd'}}
+										{{defaults.course_dates[defaults.course_dates.length-1].date|date:'dd-MM-yyyy'}}
 										<i style="text-align: right;float:right">
 											{{defaults.course_dates[defaults.course_dates.length-1].hour_start}}h -
 											{{defaults.course_dates[defaults.course_dates.length-1].hour_end}}h
@@ -108,7 +108,7 @@
 										</strong>
 									</li>
 									<li *ngFor="let item of defaults.course_dates">
-										{{item.date|date:'yyyy-MM-dd'}}
+										{{item.date|date:'dd-MM-yyyy'}}
 										<i style="text-align: right;float:right">
 											{{item.hour_start}}h - {{item.hour_end}}h
 										</i>
@@ -203,7 +203,7 @@
 											</mat-label>
 
 
-											<input [value]="defaults.date_start_res | date: 'yyyy-MM-dd'"
+											<input [value]="defaults.date_start_res | date: 'dd-MM-yyyy'"
 												[readonly]="true" matInput id="dateFrom">
 										</mat-form-field>
 									</div>
@@ -217,7 +217,7 @@
 											</mat-label>
 
 
-											<input [value]="defaults.date_end_res | date: 'yyyy-MM-dd'"
+											<input [value]="defaults.date_end_res | date: 'dd-MM-yyyy'"
 												[readonly]="true" matInput id="dateTo">
 										</mat-form-field>
 									</div>
@@ -673,8 +673,8 @@
                     <p style="float: left;width: 20%;text-align: right;"><b>{{'to' | translate }}</b></p>
                 </div>
                 <div style="width: 100%;">
-                    <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.date_start | date: 'yyyy-MM-dd'}}</b></p>
-                    <p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.date_end | date: 'yyyy-MM-dd'}}</b></p>
+                    <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.date_start | date: 'dd-MM-yyyy'}}</b></p>
+                    <p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.date_end | date: 'dd-MM-yyyy'}}</b></p>
                 </div>
                 </div>
                 <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
@@ -766,12 +766,12 @@
 									<div class="col-left">
 										<b>
 											{{detailData?.course.date_start | date:
-											'yyyy-MM-dd'}}
+											'dd-MM-yyyy'}}
 										</b>
 									</div>
 									<div class="col-right">
 										<b>
-											{{detailData?.course.date_end | date: 'yyyy-MM-dd'}}
+											{{detailData?.course.date_end | date: 'dd-MM-yyyy'}}
 										</b>
 									</div>
 								</div>

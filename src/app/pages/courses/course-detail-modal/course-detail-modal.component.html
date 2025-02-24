@@ -64,12 +64,12 @@
                 <ul style="margin: 2% 0 0 0;" *ngIf="defaults.course_type === 2">
                   <li style="margin: 0 0 2% 0"><strong>{{'dates' |
                       translate}}</strong></li>
-                  <li>{{defaults.course_dates[0].date|date:'yyyy-MM-dd'}}
+                  <li>{{defaults.course_dates[0].date|date:'dd-MM-yyyy'}}
                     <i style="text-align: right;float:right">
                       {{defaults.course_dates[0].hour_start}}h -
                       {{defaults.course_dates[0].hour_end}}h</i>
                   </li>
-                  <li>{{defaults.course_dates[defaults.course_dates.length-1].date|date:'yyyy-MM-dd'}}
+                  <li>{{defaults.course_dates[defaults.course_dates.length-1].date|date:'dd-MM-yyyy'}}
                     <i style="text-align: right;float:right">
                       {{defaults.course_dates[defaults.course_dates.length-1].hour_start}}h -
                       {{defaults.course_dates[defaults.course_dates.length-1].hour_end}}h</i>
@@ -79,7 +79,7 @@
                 <ul style="margin: 2% 0 0 0;" *ngIf="defaults.course_type === 1">
                   <li style="margin: 0 0 2% 0"><strong>{{'dates' |
                       translate}}</strong></li>
-                  <li *ngFor="let item of defaults.course_dates">{{item.date|date:'yyyy-MM-dd'}}
+                  <li *ngFor="let item of defaults.course_dates">{{item.date|date:'dd-MM-yyyy'}}
                     <i style="text-align: right;float:right">
                       {{item.hour_start}}h - {{item.hour_end}}h</i>
                   </li>
@@ -141,7 +141,7 @@
                       <mat-label>{{'courses.date_reservable' |
                         translate}}</mat-label>
 
-                      <input matInput id="dateFrom" [value]="defaults.date_start_res | date: 'yyyy-MM-dd'"
+                      <input matInput id="dateFrom" [value]="defaults.date_start_res | date: 'dd-MM-yyyy'"
                         [readonly]="true">
                     </mat-form-field>
                   </div>
@@ -150,7 +150,7 @@
                     <mat-form-field appearance="outline" style="width: 100%">
                       <mat-label>{{'courses.date_reservable_to' |
                         translate}}</mat-label>
-                      <input matInput id="dateTo" [value]="defaults.date_end_res | date: 'yyyy-MM-dd'"
+                      <input matInput id="dateTo" [value]="defaults.date_end_res | date: 'dd-MM-yyyy'"
                         [readonly]="true">
                     </mat-form-field>
                   </div>
@@ -510,8 +510,8 @@
                     <p style="float: left;width: 20%;text-align: right;"><b>{{'to' | translate }}</b></p>
                 </div>
                 <div style="width: 100%;">
-                    <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.date_start | date: 'yyyy-MM-dd'}}</b></p>
-                    <p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.date_end | date: 'yyyy-MM-dd'}}</b></p>
+                    <p style="float: left;width: 50%;text-align: left;"><b>{{detailData?.course.date_start | date: 'dd-MM-yyyy'}}</b></p>
+                    <p style="float: left;width: 50%;text-align: right;"><b>{{detailData?.course.date_end | date: 'dd-MM-yyyy'}}</b></p>
                 </div>
                 </div>
                 <mat-divider style="float: left;width: 100%;margin: 2% 0 0 0;"></mat-divider>
@@ -584,10 +584,10 @@
                 <div class="list-holder">
                   <div class="col-left">
                     <b>{{detailData?.course.date_start | date:
-                      'yyyy-MM-dd'}}</b>
+                      'dd-MM-yyyy'}}</b>
                   </div>
                   <div class="col-right">
-                    <b>{{detailData?.course.date_end | date: 'yyyy-MM-dd'}}</b>
+                    <b>{{detailData?.course.date_end | date: 'dd-MM-yyyy'}}</b>
                   </div>
                 </div>
                 <div class="title-status">

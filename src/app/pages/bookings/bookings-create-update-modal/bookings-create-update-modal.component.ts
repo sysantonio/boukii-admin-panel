@@ -594,7 +594,7 @@ export class BookingsCreateUpdateModalComponent implements OnInit {
     const end = moment(selectedCourseDateItem.hour_end, 'HH:mm:ss');
 
     // Convertir la hora proporcionada a un objeto moment (con la fecha del curso para comparaciones correctas)
-    const hour = moment(`${selectedCourseDateItem.date} ${time}`, 'yyyy-MM-dd HH:mm');
+    const hour = moment(`${selectedCourseDateItem.date} ${time}`, 'dd-MM-yyyy HH:mm');
 
     // Primero, comprueba si es el mismo día
     if (!now.isSame(courseDate, 'day')) {

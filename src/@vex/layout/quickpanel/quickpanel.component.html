@@ -22,7 +22,7 @@
   </div>
   <a [routerLink]="[]" mat-list-item *ngFor="let item of paginatedCurrentTasks">
     <h4 matListItemTitle>{{item.name}}</h4>
-    <p matListItemLine>{{ item.date | date: 'yyyy-MM-dd'}} - {{item.time}}</p>
+    <p matListItemLine>{{ item.date | date: 'dd-MM-yyyy'}} - {{item.time}}</p>
   </a>
   <mat-divider></mat-divider>
   <div class="section-header">
@@ -40,7 +40,7 @@
   </div>
   <a [routerLink]="[]" mat-list-item *ngFor="let item of paginatedAllTasks">
     <h4 matListItemTitle>{{item.name}}</h4>
-    <p matListItemLine>{{ item.date | date: 'yyyy-MM-dd'}} - {{item.time}}</p>
+    <p matListItemLine>{{ item.date | date: 'dd-MM-yyyy'}} - {{item.time}}</p>
   </a>
 </mat-nav-list>
 

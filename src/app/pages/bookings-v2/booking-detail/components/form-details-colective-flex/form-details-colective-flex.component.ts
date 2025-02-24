@@ -267,6 +267,9 @@ export class FormDetailsColectiveFlexComponent implements OnInit {
       this.snackbar.open('Por favor completa todos los campos requeridos', 'OK', { duration: 3000 });
     }
   }
+  isFormValid() {
+    return this.stepForm.valid;
+  }
   cancel() {
     this.dialogRef.close();
   }

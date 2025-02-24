@@ -6,6 +6,7 @@ import { BookingService } from '../../../../../../service/bookings.service';
 import { AddReductionModalComponent } from '../../../bookings-create-update/components/add-reduction/add-reduction.component';
 import { AddDiscountBonusModalComponent } from '../../../bookings-create-update/components/add-discount-bonus/add-discount-bonus.component';
 import { Observable, Subscription } from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'booking-detail-reservation-detail',
@@ -35,6 +36,7 @@ export class BookingReservationDetailComponent implements OnInit {
   constructor(
     protected langService: LangService,
     protected utilsService: UtilsService,
+    private router: Router,
     private dialog: MatDialog,
     private bookingService: BookingService
   ) {
@@ -60,8 +62,8 @@ export class BookingReservationDetailComponent implements OnInit {
     });
   }
 
-  calculateStatus() {
-
+  goTo(route: string) {
+    this.router.navigate([route]);
   }
 
   loadExistingVouchers() {
@@ -165,6 +167,7 @@ export class BookingReservationDetailComponent implements OnInit {
   }
 
   calculateTotalVoucherPrice(): number {
+
     if(this.bookingData.vouchers) {
       return this.bookingData.vouchers.reduce((acc, item) => acc + parseFloat(item.bonus.reducePrice), 0);
     }
@@ -230,4 +233,6 @@ export class BookingReservationDetailComponent implements OnInit {
   }
 
   protected readonly isNaN = isNaN;
+  protected readonly parseFloat = parseFloat;
+  protected readonly Math = Math;
 }

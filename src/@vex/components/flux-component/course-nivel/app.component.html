@@ -66,7 +66,7 @@ flex-direction: column;">
 							</span>
 							<ng-container *ngFor="let course_date of courseFormGroup.controls['course_dates'].value">
 								<span *ngIf="ix.monitor">
-									{{course_date.date | date:'yyyy-MM-dd'}} {{"monitor" | translate}}:
+									{{course_date.date | date:'dd-MM-yyyy'}} {{"monitor" | translate}}:
 									{{find(course_date.course_groups,'degree_id',item.id).course_subgroups[i].monitor?.first_name}}
 									{{find(course_date.course_groups,'degree_id',item.id).course_subgroups[i].monitor?.last_name}}
 								</span>

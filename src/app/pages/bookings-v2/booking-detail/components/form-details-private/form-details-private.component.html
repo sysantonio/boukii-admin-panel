@@ -1,3 +1,9 @@
+<h3 class="title">{{ "bookings_page.crumbs.details" | translate }}
+  <span style="float: right; margin-right: 1rem;" (click)="cancel()">
+    								<img
+                      src="assets/img/icons/close-black.svg"
+                      class="btn-close">
+  </span></h3>
 <form [formGroup]="stepForm" class="wrapper">
   <div formArrayName="course_dates">
     <div
