@@ -9,7 +9,7 @@
     width: calc(100% - 20px);
     padding: 0;
     margin: 10px;
-    height: 50px;
+    height: calc(var(--toolbar-height) - 20px);
   }
 
   .normal-logo {
@@ -17,7 +17,7 @@
     width: calc(100% - 20px);
     padding: 0;
     margin: 10px;
-    height: 50px;
+    height: calc(var(--toolbar-height) - 20px);
   }
   &.collapsed {
     width: var(--sidenav-collapsed-width);
@@ -118,14 +118,15 @@
 
 /** VEX SIDENAV USER */
 .vex-sidenav-user__container {
-  background: var(--color-grey5);
   padding: var(--padding-8) var(--padding-12);
   border-color: var(--color-grey5);
   position: sticky;
   bottom: 0;
   left: 0;
   right: 0;
-
+  height: 73px;
+  display: flex;
+  align-items: center;
   @apply border-t;
 }
 
