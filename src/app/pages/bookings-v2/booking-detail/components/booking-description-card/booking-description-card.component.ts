@@ -93,7 +93,7 @@ export class BookingDescriptionCard {
   }
 
   calculateDiscountedPrice(date: any, index: number): number {
-    let price = parseFloat(date.price); // Asegúrate de convertir el precio a número
+    let price = this.bookingService.calculateDatePrice(this.course, date, true); // Asegúrate de convertir el precio a número
 
     if (this.course && this.course.discounts) {
       const discounts = JSON.parse(this.course.discounts);
@@ -107,6 +107,17 @@ export class BookingDescriptionCard {
 
     return price;
   }
+
+  shouldShowPrice(course: any, date: any, index: number): boolean {
+    // Si es course_type !== 1 y no es flexible, mostrar solo en la primera fecha
+    if (course.course_type === 1 && !course.is_flexible) {
+      return index === 0;
+    }
+
+    // En otros casos, mostrar el precio normalmente
+    return true;
+  }
+
 
   isDiscounted(date: any, index: number): boolean {
     const price = parseFloat(date.price);
@@ -130,7 +141,6 @@ export class BookingDescriptionCard {
   }
 
   sendEditForm(dates: any, course: any, utilizers: any = []) {
-    debugger;
     if (course.course_type == 2) {
       this.openPrivateDatesForm(dates, course, utilizers);
     } else if (course.course_type == 1) {

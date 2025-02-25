@@ -820,7 +820,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
       const adjustedEnd = min([endMonth, currentWeekEnd]);
 
       const week = {
-        startWeek: format(currentWeekStart, 'dd-MM-yyyy'),
+        startWeek: format(currentWeekStart, 'yyyy-MM-dd'),
         startDayInt: adjustedStart.getDate(),
         startDay: this.formatDayWithFrenchInitial(adjustedStart),
         endDay: this.formatDayWithFrenchInitial(adjustedEnd)

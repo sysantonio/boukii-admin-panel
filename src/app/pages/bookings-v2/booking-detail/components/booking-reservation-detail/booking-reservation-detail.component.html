@@ -6,7 +6,9 @@
       {{ 'booking' | translate }} #{{bookingData.id}}
       <span style="display: inline-block;width: 69%; text-align: right;">
 									<!-- <img src="assets/img/icons/edit.svg"  (click)="showDetail = false" class="btn-edit" /> -->
-									<img
+									 <mat-icon svgIcon="mat:delete" style="color: black; cursor:pointer"
+                             (click)="deleteActivity.emit()"></mat-icon>
+        <img
                     (click)="goTo('/bookings')"
                     src="assets/img/icons/close.svg"
                     class="btn-close">
@@ -120,6 +122,12 @@
                       title="{{ client.phone }}"
                       class="icon24" />
 
+
+            <img  *ngIf="bookingData.status !== 2" (click)="sendMailInfo()"
+                 src="assets/img/icons/send-mail-black.svg" class="icon24"
+                 style="margin-left: 12rem; cursor: pointer;">
+            <!-- {{ "send" | translate }} {{ "mail" | translate }} -->
+
           </div>
 
         </div>
@@ -206,7 +214,7 @@
     {{ "bookings_page.description.total" | translate }}
     <ng-container>
       <span class="totalPrice">
-        {{ bookingData.price_total}}
+        {{ bookingData.price_total  | number:'0.2-2'}}
         {{ activities[0]?.course?.currency }}
       </span>
     </ng-container>
@@ -215,7 +223,7 @@
     </ng-container>
     <ng-container *ngIf="!bookingData.paid && bookingData.price_total - calculateTotalVoucherPrice() > 0">
       <span class="totalPrice" *ngIf="bookingData.price_total - calculateTotalVoucherPrice() != 0">
-        {{ bookingData.price_total - calculateTotalVoucherPrice() }}
+        {{ bookingData.price_total - calculateTotalVoucherPrice()  | number:'0.2-2' }}
         {{ activities[0]?.course?.currency }}
       </span>
     </ng-container>
@@ -242,13 +250,13 @@
           <span class="price">
             <span class="discounted-price" style="color:#2fca45"
                   *ngIf="bookingData.paid || bookingData.price_total - calculateTotalVoucherPrice() <= 0">
-              {{ parseFloat(bookingData.paid_total) + Math.abs(calculateTotalVoucherPrice()) }}
+              {{ parseFloat(bookingData.paid_total) + Math.abs(calculateTotalVoucherPrice())  | number:'0.2-2' }}
               {{ activities[0]?.course?.currency }}
             </span>
 
             <span class="discounted-price" style="color:#FB9B1B"
                   *ngIf="!bookingData.paid && bookingData.price_total - calculateTotalVoucherPrice() > 0">
-              {{ bookingData.price_total + Math.abs(calculateTotalVoucherPrice()) }}
+              {{ parseFloat( bookingData.price_total) - Math.abs(calculateTotalVoucherPrice())  | number:'0.2-2'}}
               {{ activities[0]?.course?.currency }}
             </span>
           </span>

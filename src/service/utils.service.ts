@@ -118,6 +118,17 @@ export class UtilsService {
     return null;
   }
 
+  isFutureDate(courseDate: any): boolean {
+    const today = new Date();
+    const courseDay = new Date(courseDate.date);
+
+    // Ajustar hora de inicio
+    const [startHour, startMinute] = courseDate.hour_start.split(':').map(Number);
+    courseDay.setHours(startHour, startMinute, 0, 0);
+
+    // Verificar si la fecha es futura o si es hoy pero con hora futura
+    return courseDay > today;
+  }
 
   generateCourseHours(
     startTime: string,

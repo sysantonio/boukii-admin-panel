@@ -10,6 +10,7 @@ import { BookingDialogComponent } from '../bookings-create-update/components/boo
 import {
   CancelPartialBookingModalComponent
 } from '../../bookings/cancel-partial-booking/cancel-partial-booking.component';
+import {CancelBookingModalComponent} from '../../bookings/cancel-booking/cancel-booking.component';
 
 @Component({
   selector: 'booking-detail-v2',
@@ -19,6 +20,7 @@ import {
 export class BookingDetailV2Component implements OnInit {
   payModal: boolean = false;
   deleteModal: boolean = false
+  deleteFullModal: boolean = false
   endModal: boolean = false
   deleteIndex: number = 1
   mainClient: any;
@@ -89,7 +91,9 @@ export class BookingDetailV2Component implements OnInit {
       .subscribe((data) => {
         this.bookingData$.next(data.data);
         this.bookingData = data.data;
-        this.groupedActivities = this.groupBookingUsersByGroupId(data.data);
+        this.groupedActivities  = data.data.grouped_activities;
+        this.mainClient = data.data.client_main;
+/*        debugger;*/
       });
   }
 
@@ -297,6 +301,63 @@ export class BookingDetailV2Component implements OnInit {
       this.deleteModal = true;
     }
 
+  }
+
+  processFullDelete() {
+    if(this.bookingData.paid) {
+      const dialogRef = this.dialog.open(CancelBookingModalComponent, {
+        width: "1000px", // Asegurarse de que no haya un ancho máximo
+        panelClass: "full-screen-dialog", // Si necesitas estilos adicionales,
+        data: {
+          itemPrice: this.bookingData.paid_total,
+          booking: this.bookingData,
+        },
+      });
+
+      dialogRef.afterClosed().subscribe((data: any) => {
+        if (data) {
+          this.bookingService.processCancellation(
+            data, this.bookingData, false, this.user, null,
+            this.bookingData.booking_users.map(b => b.id), this.bookingData.price_total)
+            .subscribe({
+              next: () => {
+                this.snackBar.open(
+                  this.translateService.instant('snackbar.booking_detail.update'),
+                  'OK',
+                  {duration: 3000}
+                );
+              },
+              error: (error) => {
+                console.error('Error processing cancellation:', error);
+                this.snackBar.open(
+                  this.translateService.instant('snackbar.error'),
+                  'OK',
+                  {duration: 3000}
+                );
+              }
+            });
+
+        }
+      });
+    } else {
+      this.deleteFullModal = true;
+    }
+
+  }
+
+  cancelFull() {
+    const bookingUserIds = this.bookingData.booking_users.map(b => b.id)
+    this.crudService.post('/admin/bookings/cancel',
+      { bookingUsers: bookingUserIds })
+      .subscribe((response) => {
+        let bookingData = {
+          ...response.data,
+          vouchers: response.data.voucher_logs
+        };
+        this.bookingData$.next(bookingData);
+        this.snackBar.open(this.translateService.instant('snackbar.booking_detail.delete'), 'OK', { duration: 3000 });
+        this.deleteFullModal = false;
+      });
   }
 
   cancelActivity(index: any) {

@@ -79,10 +79,6 @@ export class BookingService {
     return this.bookingDataSubject.value;
   }
 
-  getGroupStatus(dates: any) {
-
-  }
-
   calculatePendingPrice(): number {
     const totalVouchers =  this.getBookingData().vouchers.reduce((acc, item) => acc + item.bonus.reducePrice, 0);
     const total =  this.getBookingData().price_total - totalVouchers;
@@ -90,60 +86,56 @@ export class BookingService {
     return total > 0 ? total : 0; // Si el precio total es negativo o cero, devolver 0.
   }
 
-  calculateActivityPrice(activity:any) {
+  calculateActivityPrice(activity: any): number {
     let price = 0;
-    let extraPrice = 0;
 
     if (activity.course.course_type === 1) {
       if (!activity.course.is_flexible) {
-        extraPrice = 0;
-        price = parseFloat(activity.course.price || 0);
+        price = parseFloat(activity.course.price || 0) * activity.utilizers.length;
       } else {
-        price = parseFloat(activity.course.price || 0) * activity.dates.length;
+        price = parseFloat(activity.course.price || 0) * activity.dates.length * activity.utilizers.length;
       }
     } else {
-      if (activity.course.is_flexible) {
-        // Calcula el precio basado en el intervalo y el número de utilizadores para cada fecha
-        activity.dates.forEach(date => {
-          if (date.booking_users.some((user: any) => user.status === 1)) {
-            const duration = date.duration; // Duración de cada fecha
-            const selectedUtilizers = date.utilizers.length; // Número de utilizadores
+      activity.dates.forEach(date => {
+        price += this.calculateDatePrice(activity.course, date);
+      });
+    }
 
-            // Encuentra el intervalo de duración que se aplica
-            const interval = activity.course.price_range.find(range => {
-              return range.intervalo === duration; // Comparar con la duración de la fecha
-            });
+    return price;
+  }
 
-            if (interval) {
-              price += parseFloat(interval[selectedUtilizers]); // Precio por utilizador para cada fecha
-            }
-          }
-        })
+  calculateDatePrice(course: any, date: any, showCancelled = false): number {
+    let datePrice = 0;
+    let extraPrice = 0;
 
+    const validUsers = showCancelled
+      ? date.booking_users
+      : date.booking_users.filter((user: any) => user.status === 1);
+
+    if (validUsers.length > 0) {
+      if (course.course_type === 1) {
+        datePrice = parseFloat(course.price || 0);
       } else {
-        activity.dates.forEach(date => {
-          if (date.booking_users.some((user: any) => user.status === 1)) {
-            // Si el curso no es flexible
-            const dateTotal = parseFloat(activity.course.price) * date.utilizers.length; // Precio por número de utilizadores
-            price += dateTotal;
+        if (course.is_flexible) {
+          const duration = date.duration;
+          const selectedUtilizers = date.utilizers.length;
+
+          const interval = course.price_range.find(range => range.intervalo === duration);
+          if (interval) {
+            datePrice += parseFloat(interval[selectedUtilizers] || 0);
           }
-        })
-
+        } else {
+          datePrice += parseFloat(course.price || 0) * date.utilizers.length;
+        }
       }
+
+      // Calcular extras solo para esta fecha
+      extraPrice = date.extras?.reduce((sum: number, extra: any) => {
+        return sum + (parseFloat(extra.price) || 0);
+      }, 0) || 0;
     }
 
-    // Calcular la suma de los extras en todas las fechas
-    if (activity.dates && activity.dates.length > 0) {
-      extraPrice = activity.dates.reduce((sum: number, date: any) => {
-        const extrasTotal = date.extras?.reduce((extraSum: number, extra: any) => {
-          return extraSum + (parseFloat(extra.price) || 0); // Convertir price a número
-        }, 0) || 0;
-
-        return sum + extrasTotal;
-      }, 0);
-    }
-
-    return price + extraPrice;
+    return datePrice + extraPrice;
   }
 
   updateBookingData(partialData: Partial<BookingCreateData>) {

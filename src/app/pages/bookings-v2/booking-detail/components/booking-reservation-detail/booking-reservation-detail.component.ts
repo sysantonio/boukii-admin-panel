@@ -1,12 +1,19 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { LangService } from '../../../../../../service/langService';
-import { UtilsService } from '../../../../../../service/utils.service';
-import { MatDialog } from '@angular/material/dialog';
-import { BookingService } from '../../../../../../service/bookings.service';
-import { AddReductionModalComponent } from '../../../bookings-create-update/components/add-reduction/add-reduction.component';
-import { AddDiscountBonusModalComponent } from '../../../bookings-create-update/components/add-discount-bonus/add-discount-bonus.component';
-import { Observable, Subscription } from 'rxjs';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {LangService} from '../../../../../../service/langService';
+import {UtilsService} from '../../../../../../service/utils.service';
+import {MatDialog} from '@angular/material/dialog';
+import {BookingService} from '../../../../../../service/bookings.service';
+import {
+  AddReductionModalComponent
+} from '../../../bookings-create-update/components/add-reduction/add-reduction.component';
+import {
+  AddDiscountBonusModalComponent
+} from '../../../bookings-create-update/components/add-discount-bonus/add-discount-bonus.component';
+import {Observable, Subscription} from 'rxjs';
 import {Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {TranslateService} from '@ngx-translate/core';
+import {ApiCrudService} from '../../../../../../service/crud.service';
 
 @Component({
   selector: 'booking-detail-reservation-detail',
@@ -20,6 +27,7 @@ export class BookingReservationDetailComponent implements OnInit {
   @Input() bookingData: any;
   @Input() allLevels: any;
   @Output() endClick = new EventEmitter();
+  @Output() deleteActivity = new EventEmitter();
   @Output() editClick = new EventEmitter();
   @Output() payClick = new EventEmitter();
   @Output() addClick = new EventEmitter();
@@ -36,6 +44,9 @@ export class BookingReservationDetailComponent implements OnInit {
   constructor(
     protected langService: LangService,
     protected utilsService: UtilsService,
+    private snackbar: MatSnackBar,
+    private crudService: ApiCrudService,
+    private translateService: TranslateService,
     private router: Router,
     private dialog: MatDialog,
     private bookingService: BookingService
@@ -64,6 +75,32 @@ export class BookingReservationDetailComponent implements OnInit {
 
   goTo(route: string) {
     this.router.navigate([route]);
+  }
+
+  sendMailInfo() {
+    this.crudService
+      .post("/admin/bookings/mail/" + this.bookingData.id, {
+        paid: this.bookingData.paid,
+        is_info: true,
+      })
+      .subscribe(
+        (data) => {
+          this.snackbar.open(
+            this.translateService.instant("snackbar.booking_detail.send_mail"),
+            "OK",
+            { duration: 1000 }
+          );
+        },
+        (error) => {
+          this.snackbar.open(
+            this.translateService.instant(
+              "snackbar.booking_detail.send_mail.error"
+            ),
+            "OK",
+            { duration: 1000 }
+          );
+        }
+      );
   }
 
   loadExistingVouchers() {

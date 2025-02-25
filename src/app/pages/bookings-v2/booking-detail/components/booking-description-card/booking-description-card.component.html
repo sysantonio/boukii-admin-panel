@@ -132,7 +132,12 @@
                (click)="sendEditForm(dates, course, utilizers)"
                src="assets/img/icons/edit-grey.svg" style="float: right" class="icon24">
         </ng-container>
-        <ng-container *ngIf="course && course.course_type ==1">
+        <ng-container *ngIf="course && course.course_type ==1 && !course.is_flexible ">
+          <img *ngIf="!summaryMode && isDetail && status != 2"
+               (click)="sendEditForm(dates, course, utilizers)"
+               src="assets/img/icons/edit-grey.svg" style="float: right" class="icon24">
+        </ng-container>
+        <ng-container *ngIf="course && course.course_type ==1 && course.is_flexible ">
           <img *ngIf="!summaryMode && isDetail && status != 2
           && course.course_extras.length"
                (click)="sendEditForm(dates, course, utilizers)"
@@ -141,7 +146,7 @@
       </div>
       <ng-container *ngIf="dates && dates.length">
         <div *ngIf="!summaryMode; else summaryDates">
-          <div *ngFor="let date of dates; let i = index; let last = last"
+          <div *ngFor="let date of dates; let i = index; let last = last;"
                [ngStyle]="!last ? {'border-bottom': '1px solid #dee6ea', 'padding-bottom': '10px'} : {}"
                [ngClass]="{ 'disabled': date.booking_users[0].status == 2 }" class="dateRow">
             <div>
@@ -151,17 +156,17 @@
               <span class="hour">
 								{{ date.startHour}}h - {{date.endHour}}h
 							</span>
-              <span *ngIf="date.price" class="price">
-								<!-- Mostrar el precio original tachado -->
-								<span *ngIf="isDiscounted(date, i)" class="original-price">
-									{{ parseFloat(date.price)| number:'0.2-2' }} {{ date.currency }}
-								</span>
-                <!-- Mostrar el precio con descuento -->
-								<span class="discounted-price">
-									{{ calculateDiscountedPrice(date, i)| number:'0.2-2' }} {{
-                    date.currency }}
-								</span>
-							</span>
+              <span *ngIf="shouldShowPrice(course, date, i)" class="price">
+                <!-- Mostrar el precio original tachado -->
+                <span *ngIf="isDiscounted(date, i)" class="original-price">
+                  {{ bookingService.calculateDatePrice(course, date, true) | number:'0.2-2' }} {{ date.currency }}
+                </span>
+
+                              <!-- Mostrar el precio con descuento -->
+                <span class="discounted-price">
+                  {{ calculateDiscountedPrice(date, i) | number:'0.2-2' }} {{ date.currency }}
+                </span>
+              </span>
             </div>
             <div class="monitorRow" *ngIf="course && course.course_type!==1">
               <div class="row1">

@@ -253,7 +253,7 @@
             (click)="finalizeBooking()"
             style="height: 38px; width: 200px; border-radius: 3px; margin-top:20px; margin-left: 20px;"
             color="primary" mat-raised-button type="button" class="client-button">
-      {{ paymentMethod === 3 || paymentMethod === 4 ? 'end_booking' : 'end_reserve_pay' | translate }}
+      {{ (paymentMethod === 3 || paymentMethod === 4 ? 'end_booking' : 'end_reserve_pay') | translate }}
     </button>
 
     <!-- Botón Finalizar Reserva (Solo si Confirmación de Pago es Sí) -->

@@ -43,6 +43,7 @@
 			[bookingData]="bookingData$ | async"
 			[activities]="groupedActivities"
 			[activitiesChanged]="activitiesChanged$"
+      (deleteActivity)="processFullDelete()"
 			(endClick)="endModal=true"
 			(payClick)="payModal=true">
 		</booking-detail-reservation-detail>
@@ -76,6 +77,34 @@
 			{{ "yes_delete" | translate }}
 		</button>
 	</div>
+</vex-flux-modal>
+<vex-flux-modal *ngIf="deleteFullModal"
+                [width]="570"
+                (Close)="deleteFullModal=false"
+                title="delete_activity">
+  <div body>
+    <div style="margin: 10px;">
+      {{"bookings_page.cancelations.cancel_booking" | translate}} ?
+    </div>
+  </div>
+  <div footer
+       style="display: flex;">
+    <button (click)="deleteFullModal=false"
+            style="height: 38px; width: 85px;border-radius: 3px;margin-top: 20px; margin-left: auto;"
+            mat-raised-button
+            type="button"
+            class="client-button">
+      {{"cancel" | translate }}
+    </button>
+    <button (click)="cancelFull()"
+            style="height: 38px; width: 85px;border-radius: 3px;margin-top:20px;margin-left: 20px;"
+            color="primary"
+            mat-raised-button
+            type="button"
+            class="client-button">
+      {{ "yes_delete" | translate }}
+    </button>
+  </div>
 </vex-flux-modal>
 <vex-flux-modal *ngIf="payModal" [width]="570" (Close)="payModal=false;step=1;isPaid=false"
                 title="{{'end_booking' | translate}}">
