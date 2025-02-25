@@ -1,26 +1,17 @@
-<div [style]="Previus && imagePreviewUrl?'':'border: 1px #C7D0D3;border-style: dashed;padding: 20px;border-radius: 8px;'"
-	class="outside">
-	<label *ngIf="!Previus || !imagePreviewUrl" style="cursor: pointer;" class="btn-1" for="file">
-		<img src="assets/icons/icon/upload.png" style="width: 100%;
-        height: 30px;
-        font-size: 30px;
-        object-fit: scale-down;">
-		<p style="font-size: 12px">
-			{{'image_max'|translate}} {{size}}Mb
-		</p>
-		<p style="font-size: 12px">
-			{{'image_format'|translate}} {{format}}
-		</p>
-		<p style="font-size: 12px">
-			{{'image_recomendation'|translate}} {{width}}x{{height}}px
-		</p>
+<div [style]="Previus && imagePreviewUrl ? '' : 'border: 1px #C7D0D3;border-style: dashed;padding: 20px;border-radius: 8px;'"
+	(click)="triggerFileInput()" class="outside">
+	<label *ngIf="!Previus || !imagePreviewUrl" class="btn-1">
+		<img src="assets/icons/icon/upload.png"
+			style="width: 100%; height: 30px; font-size: 30px; object-fit: scale-down;">
+		<p style="font-size: 12px">{{'image_max'|translate}} {{size}}Mb</p>
+		<p style="font-size: 12px">{{'image_format'|translate}} {{format}}</p>
+		<p style="font-size: 12px">{{'image_recomendation'|translate}} {{width}}x{{height}}px</p>
 	</label>
+
 	<div *ngIf="Previus && imagePreviewUrl" class="image-container" style="float: left;width: 50%;">
 		<img [src]="imagePreviewUrl" alt="Image Preview" [width]="width" [height]="height" [style.width]="width"
 			[style.height]="height" style="object-fit: contain;margin:0 auto">
 	</div>
-	<label *ngIf="Previus && imagePreviewUrl" for="file" class="custom-file-upload">
-		{{"Change image" | translate}}
-	</label>
-	<input (change)="onFileChanged($event)" type="file" style="display: none;" id="file">
+
+	<input #fileInput (change)="onFileChanged($event)" type="file" style="display: none;">
 </div>

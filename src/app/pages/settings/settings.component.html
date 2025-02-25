@@ -554,8 +554,8 @@
 							<div>
 								{{'configure_options'|translate}}
 							</div>
-							<app-form-button name="view_preview" style="margin-left: auto;" (click)="PreviumModal=true"
-								form="flat"></app-form-button>
+							<app-form-button name="view_preview" style="margin-left: auto;"
+								(click)="PageModal.Previum=true" form="flat"></app-form-button>
 						</div>
 					</div>
 					<div class="left">
@@ -563,7 +563,7 @@
 							<div class="Small b12" style="width: 100%;">
 								{{"theme"|translate}}
 							</div>
-							<mat-radio-group style="display: flex;width: 100%;">
+							<div style="display: flex;width: 100%;">
 								<mat-radio-button class="radio" (click)="layoutService.toggleDarkMode()"
 									[checked]="!layoutService.isDarkMode" style="width: 100%;">
 									{{'settings.book_page.light' | translate}}
@@ -572,14 +572,40 @@
 									[checked]="layoutService.isDarkMode" (click)="layoutService.toggleDarkMode()">
 									{{'settings.book_page.dark' | translate}}
 								</mat-radio-button>
-							</mat-radio-group>
+							</div>
 						</div>
 						<div>
 							<div class="Small b12" style="width: 100%;">
 								{{"promotional_banner"|translate}}
 							</div>
+							<div class="Small b12" style="width: 100%;"
+								*ngIf="PageForm.BannerPromocional.controls['desktopImg'].value">
+								{{"desktop_version"|translate}}
+							</div>
+							<div *ngIf="PageForm.BannerPromocional.controls['desktopImg'].value" style="position: relative; border: 1px solid var(--Grey-02, #C7D0D3);
+							border-style: dashed;
+							padding: 10px;aspect-ratio: 6.5 / 1;
+							width: 100%;align-content: space-evenly;
+							text-align: -webkit-center; 
+							border-radius: 8px;">
+								<img [src]="PageForm.BannerPromocional.controls['desktopImg'].value" alt=""
+									style="max-height: 100%;max-width: 100%;">
+							</div>
+							<div class="Small b12" style="width: 100%;"
+								*ngIf="PageForm.BannerPromocional.controls['mobileImg'].value">
+								{{"mobile_version"|translate}}
+							</div>
+							<div *ngIf="PageForm.BannerPromocional.controls['mobileImg'].value" style="position: relative; border: 1px solid var(--Grey-02, #C7D0D3);
+							border-style: dashed;
+							padding: 10px;aspect-ratio: 1.9 / 1;
+							width: 40%;align-content: space-evenly;
+							height: 150px;text-align: -webkit-center;
+							border-radius: 8px;">
+								<img [src]="PageForm.BannerPromocional.controls['mobileImg'].value" alt=""
+									style="max-height: 100%;max-width: 100%;">
+							</div>
 							<app-form-button name="add_promotional_banner"
-								(click)="BannerPromocionalModal=true"></app-form-button>
+								(click)="PageModal.BannerPromocional=true"></app-form-button>
 						</div>
 					</div>
 					<div class="right">
@@ -597,6 +623,9 @@
 								<img src="assets/icons/icon/x.png" alt="" class="icon24"
 									style="position: absolute; top: 0; right: 0;cursor: pointer;"
 									(click)="removeSponsor(i)">
+								<img src="assets/icons/icon/upload.png" alt="" class="icon24"
+									style="position: absolute; top: 0; left: 0;cursor: pointer;"
+									(click)="PageModal.SponsoLink=true">
 							</div>
 
 							<vex-flux-upload-img style="width: 250px; height: 150px;" [Previus]="false"
@@ -609,8 +638,22 @@
 							<div style="width: 100%;">
 								{{"info_message_description"|translate}}
 							</div>
+							<div *ngIf="PageForm.MessageInformation.controls['title'].value" class="info_message"
+								[style.backgroundColor]="PageForm.MessageInformation.controls['type'].value?'#D2EFFF':'#FFEBEB'">
+								<img src="assets/icons/icon/info_message1.png" alt="" class="icon24"
+									*ngIf="PageForm.MessageInformation.controls['type'].value">
+								<img src="assets/icons/icon/info_message2.png" alt="" class="icon24"
+									*ngIf="!PageForm.MessageInformation.controls['type'].value">
+								<div>
+									<span style="font-weight: 700;">
+										{{PageForm.MessageInformation.controls['title'].value}}
+									</span>
+									<br>
+									{{PageForm.MessageInformation.controls['desc'].value}}
+								</div>
+							</div>
 							<app-form-button name="add_message"
-								(click)="MessageInformationModal=true"></app-form-button>
+								(click)="PageModal.MessageInformation=true"></app-form-button>
 						</div>
 					</div>
 				</div>
@@ -1658,34 +1701,51 @@
 	</div>
 </vex-page-layout>
 
-<vex-flux-modal *ngIf="BannerPromocionalModal" title="promotional_banner" (Close)="BannerPromocionalModal=false">
+<vex-flux-modal *ngIf="PageModal.BannerPromocional" title="promotional_banner"
+	(Close)="PageModal.BannerPromocional=false" [formGroup]="PageForm.BannerPromocional">
 	<div body style="display: flex; gap: 10px;flex-wrap: wrap;">
-		<app-form-input name="link" style="width: 100%;"></app-form-input>
+		<app-form-input name="link" style="width: 100%;" control="link"
+			[form]="PageForm.BannerPromocional"></app-form-input>
 		<div style="width: 100%;"> {{"desktop_version"|translate}} </div>
-		<vex-flux-upload-img style="width: 100%;" [width]="600" [height]="100"></vex-flux-upload-img>
+		<vex-flux-upload-img style="width: 100%;" [width]="600" [height]="100"
+			[imagePreviewUrl]="PageForm.BannerPromocional.controls['desktopImg'].value"
+			(upload)="PageForm.BannerPromocional.patchValue({desktopImg:$event})">
+		</vex-flux-upload-img>
+		<div style="width: 100%;"> O añadir un enlace </div>
+		<app-form-input name="url" style="width: 100%;" control="desktopImg"
+			[form]="PageForm.BannerPromocional"></app-form-input>
 		<div style="width: 100%;"> {{"mobile_version"|translate}} </div>
-		<vex-flux-upload-img style="width: 50%;" [width]="160" [height]="85"></vex-flux-upload-img>
+		<vex-flux-upload-img style="width: 40%;" [width]="160" [height]="85"
+			[imagePreviewUrl]="PageForm.BannerPromocional.controls['mobileImg'].value"
+			(upload)="PageForm.BannerPromocional.patchValue({mobileImg:$event})">
+		</vex-flux-upload-img>
+		<div style="width: 100%;"> O añadir un enlace </div>
+		<app-form-input name="url" style="width: 100%;" control="mobileImg"
+			[form]="PageForm.BannerPromocional"></app-form-input>
 	</div>
 	<ng-container footer>
-		<app-form-button name="cancel" (click)="BannerPromocionalModal=false"></app-form-button>
-		<app-form-button form="flat" name="confirm" (click)="BannerPromocionalModal=false"></app-form-button>
+		<app-form-button name="cancel" (click)="PageModal.BannerPromocional=false"></app-form-button>
+		<app-form-button form="flat" name="confirm" (click)="PageModal.BannerPromocional=false"></app-form-button>
 	</ng-container>
 </vex-flux-modal>
 
-<vex-flux-modal *ngIf="MessageInformationModal" title="info_message" (Close)="MessageInformationModal=false">
+<vex-flux-modal *ngIf="PageModal.MessageInformation" title="info_message" (Close)="PageModal.MessageInformation=false"
+	[formGroup]="PageForm.MessageInformation">
 	<div body style="display: flex; flex-wrap: wrap;flex-direction: column;">
 		<div style="display: flex;align-items: center;justify-content: flex-end;color: red;">
 			<img src="assets/icons/icon/delete.png" alt="" class="icon24"
 				style="filter: brightness(0) saturate(100%) invert(17%) sepia(98%) saturate(7486%) hue-rotate(0deg) brightness(99%) contrast(118%);">
 			{{"delete_message"|translate}}
 		</div>
-		<app-form-input name="headline"></app-form-input>
-		<app-form-input name="text"></app-form-input>
+		<app-form-input name="headline" [form]="PageForm.MessageInformation" control="title"></app-form-input>
+		<app-form-input name="text" [form]="PageForm.MessageInformation" control="desc"></app-form-input>
 		<span>
 			{{"alert_type"|translate}}
 		</span>
 		<mat-radio-group style="display: flex;width: 100%;margin-bottom: 20px;">
-			<mat-radio-button class="radio" style="width: 100%;">
+			<mat-radio-button class="radio" style="width: 100%;"
+				[checked]="PageForm.MessageInformation.controls['type'].value"
+				(click)="PageForm.MessageInformation.patchValue({type:true})">
 				<div class="info_message" style="background-color: #D2EFFF;">
 					<img src="assets/icons/icon/info_message1.png" alt="" class="icon24">
 					<span>
@@ -1693,7 +1753,9 @@
 					</span>
 				</div>
 			</mat-radio-button>
-			<mat-radio-button class="radio" style="width: 100%;">
+			<mat-radio-button class="radio" style="width: 100%;"
+				[checked]="!PageForm.MessageInformation.controls['type'].value"
+				(click)="PageForm.MessageInformation.patchValue({type:false})">
 				<div class="info_message" style="background-color: #FFEBEB;">
 					<img src="assets/icons/icon/info_message2.png" alt="" class="icon24">
 					<span>
@@ -1704,12 +1766,23 @@
 		</mat-radio-group>
 	</div>
 	<ng-container footer>
-		<app-form-button name="cancel" (click)="MessageInformationModal=false"></app-form-button>
-		<app-form-button form="flat" name="confirm" (click)="MessageInformationModal=false"></app-form-button>
+		<app-form-button name="cancel" (click)="PageModal.MessageInformation=false"></app-form-button>
+		<app-form-button form="flat" name="confirm" (click)="PageModal.MessageInformation=false"></app-form-button>
 	</ng-container>
 </vex-flux-modal>
 
-<vex-flux-modal *ngIf="PreviumModal" title="view_preview" (Close)="PreviumModal=false">
+<vex-flux-modal *ngIf="PageModal.Previum" title="view_preview" (Close)="PageModal.Previum=false">
 	<iframe [src]="safeUrl" width="100%" height="600px" style="border: none;" body>
 	</iframe>
+</vex-flux-modal>
+
+<vex-flux-modal *ngIf="PageModal.SponsoLink" title="sponsors" (Close)="PageModal.SponsoLink=false"
+	[formGroup]="PageForm.SponsoLink">
+	<div body style="display: flex; flex-wrap: wrap;flex-direction: column;">
+		<app-form-input name="link" control="link" [form]="PageForm.SponsoLink"></app-form-input>
+	</div>
+	<ng-container footer>
+		<app-form-button name="cancel" (click)="PageModal.SponsoLink=false"></app-form-button>
+		<app-form-button form="flat" name="confirm" (click)="PageModal.SponsoLink=false"></app-form-button>
+	</ng-container>
 </vex-flux-modal>

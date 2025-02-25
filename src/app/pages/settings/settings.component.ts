@@ -1,18 +1,9 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  NgZone,
-  OnInit,
-  QueryList,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, ElementRef, HostListener, NgZone, OnInit, QueryList, ViewChild, ViewEncapsulation } from '@angular/core';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { SalaryCreateUpdateModalComponent } from './salary-create-update-modal/salary-create-update-modal.component';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { LEVELS } from 'src/app/static-data/level-data';
-import { FormControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, forkJoin, map, startWith } from 'rxjs';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
@@ -22,7 +13,6 @@ import * as moment from 'moment';
 import { ApiCrudService } from 'src/service/crud.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 //import { ColorSchemeName } from 'src/@vex/config/colorSchemeName';
-import { ConfigService } from 'src/@vex/config/config.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ExtraCreateUpdateModalComponent } from './extra-create-update-modal/extra-create-update-modal.component';
 import { LevelGoalsModalComponent } from './level-goals-modal/level-goals-modal.component';
@@ -1056,10 +1046,28 @@ export class SettingsComponent implements OnInit {
 
 
   //PAGINA DE RESERVA, MODAL
-  BannerPromocionalModal: boolean = false
-  MessageInformationModal: boolean = false
-  PreviumModal: boolean = false
+  PageModal: { BannerPromocional: boolean, MessageInformation: boolean, SponsoLink: boolean, Previum: boolean } =
+    { BannerPromocional: false, MessageInformation: false, SponsoLink: false, Previum: false }
+  PageForm: { BannerPromocional: FormGroup, MessageInformation: FormGroup, SponsoLink: FormGroup } =
+    {
+      BannerPromocional: this.fb.group({
+        link: ["", Validators.required],
+        desktopImg: ["", Validators.required],
+        mobileImg: ["", Validators.required],
+      }),
+      MessageInformation: this.fb.group({
+        title: ["", Validators.required],
+        desc: ["", Validators.required],
+        type: [true, Validators.required],
+      }),
+      SponsoLink: this.fb.group({
+        link: ["", Validators.required],
+      }),
+    }
+
   SponsorImg: any[] = []
+
+
   removeSponsor(index: number): void {
     this.SponsorImg.splice(index, 1);
   }
