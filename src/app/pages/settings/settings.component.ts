@@ -1,18 +1,9 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  NgZone,
-  OnInit,
-  QueryList,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, ElementRef, HostListener, NgZone, OnInit, QueryList, ViewChild, ViewEncapsulation } from '@angular/core';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { SalaryCreateUpdateModalComponent } from './salary-create-update-modal/salary-create-update-modal.component';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { LEVELS } from 'src/app/static-data/level-data';
-import { FormControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, forkJoin, map, startWith } from 'rxjs';
 import { MOCK_COUNTRIES } from 'src/app/static-data/countries-data';
 import { MOCK_PROVINCES } from 'src/app/static-data/province-data';
@@ -22,7 +13,6 @@ import * as moment from 'moment';
 import { ApiCrudService } from 'src/service/crud.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 //import { ColorSchemeName } from 'src/@vex/config/colorSchemeName';
-import { ConfigService } from 'src/@vex/config/config.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ExtraCreateUpdateModalComponent } from './extra-create-update-modal/extra-create-update-modal.component';
 import { LevelGoalsModalComponent } from './level-goals-modal/level-goals-modal.component';
@@ -32,6 +22,7 @@ import { DateAdapter } from '@angular/material/core';
 import { dropdownAnimation } from '../../../@vex/animations/dropdown.animation';
 import { PreviewModalComponent } from '../../components/preview-modal/preview-modal.component';
 import { LayoutService } from 'src/@vex/services/layout.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'vex-settings',
@@ -192,14 +183,16 @@ export class SettingsComponent implements OnInit {
   hasTVA = false;
 
   user: any;
+  safeUrl: SafeResourceUrl;
 
   constructor(private ngZone: NgZone, private fb: UntypedFormBuilder, private crudService: ApiCrudService, private snackbar: MatSnackBar,
-    private configService: ConfigService, private dialog: MatDialog, private schoolService: SchoolService,
-    public layoutService: LayoutService,
+    private dialog: MatDialog, private schoolService: SchoolService,
+    public layoutService: LayoutService, private sanitizer: DomSanitizer,
     private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) {
     this.filteredHours = this.hours;
     this.dateAdapter.setLocale(this.translateService.getDefaultLang());
     this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
+    this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://booking.boukii.com/' + JSON.parse(localStorage.getItem('boukiiUser')).schools[0].slug);
   }
 
 
@@ -853,24 +846,7 @@ export class SettingsComponent implements OnInit {
       })
   }
 
-  setTheme() {
-    //TODO: Save bookingpage color mode
-    /*    if (this.theme === 'dark'){
 
-          this.configService.updateConfig({
-            style: {
-              colorScheme: ColorSchemeName.dark
-            }
-          });
-        } else {
-
-          this.configService.updateConfig({
-            style: {
-              colorScheme: ColorSchemeName.light
-            }
-          });
-        }*/
-  }
 
   createExtra(product: string, isEdit: boolean, idx: number, extra: any) {
 
@@ -1066,5 +1042,33 @@ export class SettingsComponent implements OnInit {
     const min = 10000000; // límite inferior para un número de 5 cifras
     const max = 99999999; // límite superior para un número de 5 cifras
     return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+
+  //PAGINA DE RESERVA, MODAL
+  PageModal: { BannerPromocional: boolean, MessageInformation: boolean, SponsoLink: boolean, Previum: boolean } =
+    { BannerPromocional: false, MessageInformation: false, SponsoLink: false, Previum: false }
+  PageForm: { BannerPromocional: FormGroup, MessageInformation: FormGroup, SponsoLink: FormGroup } =
+    {
+      BannerPromocional: this.fb.group({
+        link: ["", Validators.required],
+        desktopImg: ["", Validators.required],
+        mobileImg: ["", Validators.required],
+      }),
+      MessageInformation: this.fb.group({
+        title: ["", Validators.required],
+        desc: ["", Validators.required],
+        type: [true, Validators.required],
+      }),
+      SponsoLink: this.fb.group({
+        link: ["", Validators.required],
+      }),
+    }
+
+  SponsorImg: any[] = []
+
+
+  removeSponsor(index: number): void {
+    this.SponsorImg.splice(index, 1);
   }
 }

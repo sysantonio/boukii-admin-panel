@@ -44,7 +44,7 @@ table caption {
 
 .add-date:hover {
   box-shadow: none;
-  background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;
+  background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);
   border: 1px solid #e6e6e6;
 }
 .add-date:hover .icon-date {
@@ -56,7 +56,7 @@ table caption {
 }
 
 .unselected-icon {
-  background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);;
+  background: var(--is-light-theme, #e6e6e6) var(--is-dark-theme, #121212);
   border: solid 1px #808080;
 }
 .selected-icon {
@@ -159,4 +159,55 @@ $border-color: rgba(
       line-height: 15px;
     }
   }
+}
+.Small {
+  font-family: DM Sans;
+  font-weight: 600;
+  letter-spacing: 0px;
+  color: #8b9099;
+}
+.b12 {
+  font-size: 12px;
+  line-height: 16px;
+}
+.paginaReserva {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  > div > div {
+    width: 100%;
+    border-bottom: 1px solid #e6e6e6;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+  }
+  .left,
+  .right {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+  }
+  .left {
+    border-right: 1px solid #e6e6e6;
+  }
+
+  @media (max-width: 800px) {
+    .left,
+    .right {
+      width: 100%;
+    }
+    .square {
+      height: 150px;
+    }
+  }
+}
+.info_message {
+  height: 44px;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
 }

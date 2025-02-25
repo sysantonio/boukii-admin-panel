@@ -28,7 +28,7 @@
 		</div>
 		<div *ngIf="ModalFlux===1" [formGroup]="courses.courseFormGroup" class="flex flex-col">
 			<mat-tab-group [selectedIndex]="courses.courseFormGroup.controls['course_type'].value-1||0"
-				(selectedIndexChange)="courses.courseFormGroup.patchValue({course_type:$event+1})" class="tabsWrapper">
+				(selectedIndexChange)="courses.courseFormGroup.patchValue({course_type:$event+1})">
 				<mat-tab [disabled]="mode==='update'">
 					<ng-template mat-tab-label>
 						<mat-icon style="color: #E5962A;" class="icon16">
@@ -206,7 +206,7 @@
 			<ng-container *ngIf="courses.courseFormGroup.controls['course_type'].value>1">
 				<mat-tab-group [selectedIndex]="courses.courseFormGroup.controls['course_dates'].value.length>1?1:0"
 					(selectedIndexChange)="PeriodoFecha=$event;$event===0?courses.courseFormGroup.patchValue({course_dates:[courses.courseFormGroup.controls['course_dates'].value[0]]}):''"
-					class="tabsWrapper" style="margin: 20px 20px 0;">
+					style="margin: 20px 20px 0;">
 					<mat-tab>
 						<ng-template mat-tab-label>
 							{{"courses.uniperiod" | translate}}

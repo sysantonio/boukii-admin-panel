@@ -42,6 +42,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ComponentsCustomModule } from '../../components/components-custom.module';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { ComponenteButtonModule } from "../../../@vex/components/form/button/app.module";
+import { FluxUploadImgModule } from 'src/@vex/components/form/upload-img/app.module';
+import { FluxModalModule } from "../../../@vex/components/flux-component/flux-modal/app.module";
+import { ComponenteEditorModule } from "../../../@vex/components/form/editor/app.module";
+import { ComponenteInputModule } from 'src/@vex/components/form/input/app.module';
 @NgModule({
     declarations: [SettingsComponent],
     imports: [
@@ -88,6 +93,11 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
         MatTooltipModule,
         AngularEditorModule,
         ComponentsCustomModule,
+        ComponenteButtonModule,
+        FluxUploadImgModule,
+        FluxModalModule,
+        ComponenteEditorModule,
+        ComponenteInputModule
     ]
 })
 export class SettingsModule {
