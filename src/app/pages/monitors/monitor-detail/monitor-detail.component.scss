@@ -19,7 +19,17 @@
   }
 }
 
-
+.box-detail-timeline {
+  width: 450px;
+  position: fixed;
+  top: 140px;
+  right: 0;
+  overflow-y: auto;
+  margin-top: 20px;
+  border: 1px solid grey;
+  padding: 0;
+  height: fit-content;
+}
 img {
   object-fit: cover;
   width: 150px;
