@@ -812,5 +812,8 @@
   "headline": "Überschrift",
   "important_info": "Wichtige Informationen",
   "text": "Text",
-  "alert_type": "ALARMART"
+  "alert_type": "ALARMART",
+  "link_to_logo_url": "Link zur Logo-URL",
+  "add_sponsor": "Sponsor hinzufügen",
+  "or_add_a_link": "Oder einen Link hinzufügen"
 }

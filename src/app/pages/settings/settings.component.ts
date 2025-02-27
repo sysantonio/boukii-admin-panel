@@ -1155,10 +1155,11 @@ export class SettingsComponent implements OnInit {
       SponsoLink: this.fb.group({
         index: [0, Validators.required],
         link: ["", Validators.required],
+        img: ["", Validators.required],
       }),
     }
 
-  SponsorImg: { img: string, link: string }[] = []
+  SponsorImg: { index: number, img: string, link: string }[] = []
 
   removeSponsor(index: number): void {
     this.SponsorImg.splice(index, 1);

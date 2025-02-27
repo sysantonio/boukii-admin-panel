@@ -810,5 +810,8 @@
   "headline": "Titre",
   "important_info": "Informations importantes",
   "text": "Texte",
-  "alert_type": "TYPE D'ALERTE"
+  "alert_type": "TYPE D'ALERTE",
+  "link_to_logo_url": "Lien vers l'URL du logo",
+  "add_sponsor": "Ajouter un sponsor",
+  "or_add_a_link": "Ou ajouter un lien"
 }

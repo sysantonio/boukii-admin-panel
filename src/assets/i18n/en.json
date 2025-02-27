@@ -812,5 +812,8 @@
   "headline": "Headline",
   "important_info": "Important information",
   "text": "Text",
-  "alert_type": "ALERT TYPE"
+  "alert_type": "ALERT TYPE",
+  "link_to_logo_url": "Link to logo URL",
+  "add_sponsor": "Add sponsor",
+  "or_add_a_link": "Or add a link"
 }
