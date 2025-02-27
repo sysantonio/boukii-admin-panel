@@ -149,7 +149,7 @@ export class BookingReservationDetailComponent implements OnInit {
   }
 
   calculateTotalVoucherPrice(): number {
-    return this.bookingData.vouchers.reduce((acc, item) => acc + item.bonus.reducePrice, 0);
+    return this.bookingData.vouchers ? this.bookingData.vouchers.reduce( (e, i) => e + parseFloat(i.bonus.reducePrice), 0) : 0
   }
 
   addBonus(): void {
