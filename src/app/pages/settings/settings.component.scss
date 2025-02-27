@@ -160,16 +160,7 @@ $border-color: rgba(
     }
   }
 }
-.Small {
-  font-family: DM Sans;
-  font-weight: 600;
-  letter-spacing: 0px;
-  color: #8b9099;
-}
-.b12 {
-  font-size: 12px;
-  line-height: 16px;
-}
+
 .paginaReserva {
   display: flex;
   flex-wrap: wrap;
@@ -204,10 +195,10 @@ $border-color: rgba(
   }
 }
 .info_message {
-  height: 44px;
   gap: 8px;
-  padding: 10px;
+  padding: 10px 20px;
   border-radius: 8px;
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  width: 100%;
 }

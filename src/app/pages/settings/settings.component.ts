@@ -322,22 +322,19 @@ export class SettingsComponent implements OnInit {
             this.dataSourceFood.data = settings?.extras.food;
             this.dataSourceTransport.data = settings?.extras.transport;
 
-
-            this.PageForm.BannerPromocional =  this.fb.group({
-              link: [settings?.bookingPage.banner.link],
-              desktopImg: [settings?.bookingPage.banner.desktopImg],
-              mobileImg: [settings?.bookingPage.banner.mobileImg],
+            this.PageForm.BannerPromocional = this.fb.group({
+              link: [settings?.bookingPage?.banner.link],
+              desktopImg: [settings?.bookingPage?.banner.desktopImg],
+              mobileImg: [settings?.bookingPage?.banner.mobileImg],
             })
 
-            this.PageForm.MessageInformation =  this.fb.group({
-              title: [settings?.bookingPage.messages.title],
-              desc: [settings?.bookingPage.messages.desc],
-              type: [settings?.bookingPage.messages.type],
+            this.PageForm.MessageInformation = this.fb.group({
+              title: [settings?.bookingPage?.messages.title],
+              desc: [settings?.bookingPage?.messages.desc],
+              type: [settings?.bookingPage?.messages.type],
             })
 
-            this.SponsorImg = settings?.bookingPage.sponsors
-
-
+            this.SponsorImg = settings?.bookingPage?.sponsors || []
 
             setTimeout(() => {
               this.dataSourceLevels.data = this.schoolSports[0].degrees;
@@ -1069,7 +1066,7 @@ export class SettingsComponent implements OnInit {
         this.getData();
 
       })*/
-
+    console.log(this.SponsorImg)
     const data = {
       taxes: {
         cancellation_insurance_percent: this.hasCancellationInsurance ? this.cancellationInsurancePercent : 0,
@@ -1086,7 +1083,6 @@ export class SettingsComponent implements OnInit {
         messages: this.PageForm.MessageInformation.value,
         sponsors: this.SponsorImg,
         banner: this.PageForm.BannerPromocional.value
-
       }
     }
 
@@ -1096,13 +1092,10 @@ export class SettingsComponent implements OnInit {
       settings: JSON.stringify(data)
     }, this.school.id)
       .subscribe(() => {
-
         this.snackbar.open(this.translateService.instant('snackbar.settings.save'), 'OK', { duration: 3000 });
         this.schoolService.refreshSchoolData();
         this.getData();
-
       })
-    console.log(data);
   }
 
   updateTVAValue(event: any) {
@@ -1160,12 +1153,12 @@ export class SettingsComponent implements OnInit {
         type: [true, Validators.required],
       }),
       SponsoLink: this.fb.group({
+        index: [0, Validators.required],
         link: ["", Validators.required],
       }),
     }
 
-  SponsorImg: any[] = []
-
+  SponsorImg: { img: string, link: string }[] = []
 
   removeSponsor(index: number): void {
     this.SponsorImg.splice(index, 1);

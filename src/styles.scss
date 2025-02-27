@@ -831,3 +831,26 @@ button[color="accent"] {
 .mat-mdc-select-arrow svg {
   filter: var(--is-dark-theme, invert(1));
 }
+
+.b14 {
+  font-size: 14px;
+}
+.b12 {
+  font-size: 12px;
+}
+.BodyB {
+  font-family: DM Sans;
+  font-weight: 600;
+  letter-spacing: 0px;
+}
+.Small {
+  font-family: DM Sans;
+  font-weight: 300;
+  letter-spacing: 0px;
+}
+.SmallB {
+  font-family: DM Sans;
+  font-weight: 600;
+  letter-spacing: 0px;
+  color: var(--Grey-01, #8b9099);
+}

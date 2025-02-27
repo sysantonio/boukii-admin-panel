@@ -554,17 +554,15 @@
 							<div>
 								{{'configure_options'|translate}}
 							</div>
-              <button (click)="saveBookingPage()"
-                      class="btn-primary-accent">
-                {{'save_changes' | translate}}
-              </button>
+							<app-form-button name="save_changes" (click)="saveBookingPage()"
+								form="flat"></app-form-button>
 							<app-form-button name="view_preview" style="margin-left: auto;"
 								(click)="PageModal.Previum=true" form="flat"></app-form-button>
 						</div>
 					</div>
 					<div class="left">
 						<div>
-							<div class="Small b12" style="width: 100%;">
+							<div class="SmallB b12" style="width: 100%;">
 								{{"theme"|translate}}
 							</div>
 							<div style="display: flex;width: 100%;">
@@ -579,12 +577,21 @@
 							</div>
 						</div>
 						<div>
-							<div class="Small b12" style="width: 100%;">
+							<div class="SmallB b12"
+								style="width: 100%;display: flex;align-items: center;justify-content: space-between;">
 								{{"promotional_banner"|translate}}
+								<img src="assets/icons/icon/edit.png" class="button icon24"
+									style="filter: var(--is-light-theme, invert(1));cursor: pointer;"
+									(click)="PageModal.BannerPromocional=true">
 							</div>
-							<div class="Small b12" style="width: 100%;"
-								*ngIf="PageForm.BannerPromocional.controls['desktopImg'].value">
+							<div class="BodyB b14" style="width: 100%;">
 								{{"desktop_version"|translate}}
+							</div>
+							<div class="Small b12" *ngIf="!PageForm.BannerPromocional.controls['desktopImg'].value">
+								· {{'image_max'|translate}} 1Mb. {{'image_format'|translate}} PNG,JPG.
+								{{'image_recomendation'|translate}} 600x100px
+								<br>
+								· {{'logo_url_link'|translate}}
 							</div>
 							<div *ngIf="PageForm.BannerPromocional.controls['desktopImg'].value" style="position: relative; border: 1px solid var(--Grey-02, #C7D0D3);
 							border-style: dashed;
@@ -594,10 +601,18 @@
 							border-radius: 8px;">
 								<img [src]="PageForm.BannerPromocional.controls['desktopImg'].value" alt=""
 									style="max-height: 100%;max-width: 100%;">
+								<img src="assets/icons/icon/x.png" alt="" class="icon24"
+									style="position: absolute; top: 0; right: 0;cursor: pointer;"
+									(click)="PageForm.BannerPromocional.patchValue({desktopImg:null})">
 							</div>
-							<div class="Small b12" style="width: 100%;"
-								*ngIf="PageForm.BannerPromocional.controls['mobileImg'].value">
+							<div class="BodyB b14" style="width: 100%;">
 								{{"mobile_version"|translate}}
+							</div>
+							<div class="Small b12" *ngIf="!PageForm.BannerPromocional.controls['mobileImg'].value">
+								· {{'image_max'|translate}} 1Mb. {{'image_format'|translate}} PNG,JPG.
+								{{'image_recomendation'|translate}} 160x85px
+								<br>
+								· {{'logo_url_link'|translate}}
 							</div>
 							<div *ngIf="PageForm.BannerPromocional.controls['mobileImg'].value" style="position: relative; border: 1px solid var(--Grey-02, #C7D0D3);
 							border-style: dashed;
@@ -607,14 +622,24 @@
 							border-radius: 8px;">
 								<img [src]="PageForm.BannerPromocional.controls['mobileImg'].value" alt=""
 									style="max-height: 100%;max-width: 100%;">
+								<img src="assets/icons/icon/x.png" alt="" class="icon24"
+									style="position: absolute; top: 0; right: 0;cursor: pointer;"
+									(click)="PageForm.BannerPromocional.patchValue({mobileImg:null})">
+							</div>
+							<div class="BodyB b14" style="width: 100%;">
+								{{"Enlace"|translate}}
+							</div>
+							<div class="Small b14" style="width: 100%;color: #E91E63;">
+								{{PageForm.BannerPromocional.controls['link'].value}}
 							</div>
 							<app-form-button name="add_promotional_banner"
+								*ngIf="!PageForm.BannerPromocional.controls['desktopImg'].value || !PageForm.BannerPromocional.controls['mobileImg'].value"
 								(click)="PageModal.BannerPromocional=true"></app-form-button>
 						</div>
 					</div>
 					<div class="right">
 						<div>
-							<div class="Small b12" style="width: 100%;">
+							<div class="SmallB b12" style="width: 100%;">
 								{{"sponsors"|translate}}
 							</div>
 							<div *ngFor="let Img of SponsorImg; index as i" style="position: relative; border: 1px solid var(--Grey-02, #C7D0D3);
@@ -623,40 +648,55 @@
 							width: 150px;align-content: space-evenly;
 							height: 150px;text-align: -webkit-center;
 							border-radius: 8px;">
-								<img [src]="Img" alt="" style="max-height: 100%;max-width: 100%;">
+								<img [src]="Img.img" alt="" style="max-height: 100%;max-width: 100%;">
 								<img src="assets/icons/icon/x.png" alt="" class="icon24"
 									style="position: absolute; top: 0; right: 0;cursor: pointer;"
 									(click)="removeSponsor(i)">
 								<img src="assets/icons/icon/upload.png" alt="" class="icon24"
 									style="position: absolute; top: 0; left: 0;cursor: pointer;"
-									(click)="PageModal.SponsoLink=true">
+									(click)="PageModal.SponsoLink=true;PageForm.SponsoLink.patchValue({index:i,link:SponsorImg[i].link})">
 							</div>
 
 							<vex-flux-upload-img style="width: 250px; height: 150px;" [Previus]="false"
-								(upload)="SponsorImg.push($event)"></vex-flux-upload-img>
+								(upload)="SponsorImg.push({img:$event,link:''})"></vex-flux-upload-img>
 						</div>
 						<div>
-							<div class="Small b12" style="width: 100%;">
+							<div class="SmallB b12" style="width: 100%;">
 								{{"info_message"|translate}}
 							</div>
 							<div style="width: 100%;">
 								{{"info_message_description"|translate}}
 							</div>
-							<div *ngIf="PageForm.MessageInformation.controls['title'].value" class="info_message"
-								[style.backgroundColor]="PageForm.MessageInformation.controls['type'].value?'#D2EFFF':'#FFEBEB'">
-								<img src="assets/icons/icon/info_message1.png" alt="" class="icon24"
-									*ngIf="PageForm.MessageInformation.controls['type'].value">
-								<img src="assets/icons/icon/info_message2.png" alt="" class="icon24"
-									*ngIf="!PageForm.MessageInformation.controls['type'].value">
-								<div>
-									<span style="font-weight: 700;">
-										{{PageForm.MessageInformation.controls['title'].value}}
-									</span>
-									<br>
-									{{PageForm.MessageInformation.controls['desc'].value}}
+							<div style="width: 100%;display: flex
+							;
+								flex-direction: row;
+								align-items: center;
+								gap: 10px;">
+								<div *ngIf="PageForm.MessageInformation.controls['title'].value" class="info_message"
+									[style.backgroundColor]="PageForm.MessageInformation.controls['type'].value?'#D2EFFF':'#FFEBEB'">
+									<img src="assets/icons/icon/info_message1.png" alt="" class="icon24"
+										*ngIf="PageForm.MessageInformation.controls['type'].value">
+									<img src="assets/icons/icon/info_message2.png" alt="" class="icon24"
+										*ngIf="!PageForm.MessageInformation.controls['type'].value">
+									<div style="display: flex
+								;
+									flex-direction: column;
+									gap: 4px;">
+										<div style="font-weight: 700;width: 100%;">
+											{{PageForm.MessageInformation.controls['title'].value}}
+										</div>
+										<div>
+											{{PageForm.MessageInformation.controls['desc'].value}}
+										</div>
+									</div>
 								</div>
+								<img src="assets/icons/icon/edit.png" class="button icon24"
+									*ngIf="PageForm.MessageInformation.controls['title'].value"
+									style="filter: var(--is-light-theme, invert(1));cursor: pointer;"
+									(click)="PageModal.MessageInformation=true">
 							</div>
 							<app-form-button name="add_message"
+								*ngIf="!PageForm.MessageInformation.controls['title'].value"
 								(click)="PageModal.MessageInformation=true"></app-form-button>
 						</div>
 					</div>
@@ -680,9 +720,7 @@
 										{{'settings.monitors.salaris.text2' | translate}}
 										<br>
 									</p>
-
 								</div>
-
 								<vex-aio-table [columns]="columns" [withHeader]="false" [entity]="entitySalary"
 									[title]="'Salaires'" [route]="'settings'" [createComponent]="createComponent"
 									[canDelete]="false" [canDeactivate]="false" [createOnModal]="true"
@@ -735,10 +773,10 @@
                       </div>
                     </div>
                   </div> -->
-								</vex-page-layout-content>
-							</vex-page-layout>
-						</mat-tab>
-			<!--			<mat-tab label="{{'settings.auths' | translate}}">
+							</vex-page-layout-content>
+						</vex-page-layout>
+					</mat-tab>
+					<!--			<mat-tab label="{{'settings.auths' | translate}}">
 							<vex-page-layout>
 								<vex-page-layout-content class="-mt-6 fullwidth"
 									style="margin: 1% 0 0 0">
@@ -870,51 +908,46 @@
 								</vex-page-layout-content>
 							</vex-page-layout>
 						</mat-tab>-->
-					</mat-tab-group>
-				</mat-tab>
-				<mat-tab label="{{'bookings'|translate}}">
-					<vex-page-layout>
-						<vex-page-layout-content class="-mt-6 fullwidth"
-							style="margin: 1% 0 0 0">
-							<div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-								<h1 style="font-size:24px;float: left; width: 100%;">
-									{{'bookings'|translate}}
-								</h1>
-								<p style="padding: 1%; ;float: left; width: 75%;">
-									{{'settings.bookings.text'|translate}}
+				</mat-tab-group>
+			</mat-tab>
+			<mat-tab label="{{'bookings'|translate}}">
+				<vex-page-layout>
+					<vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
+						<div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+							<h1 style="font-size:24px;float: left; width: 100%;">
+								{{'bookings'|translate}}
+							</h1>
+							<p style="padding: 1%; ;float: left; width: 75%;">
+								{{'settings.bookings.text'|translate}}
+							</p>
+							<button (click)="saveTaxes()" class="btn-primary-accent">
+								{{'save_changes' | translate}}
+							</button>
+						</div>
+						<div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
+							<h1 style="font-size:24px;float: left; width: 100%;">
+								<mat-slide-toggle [(ngModel)]="hasCancellationInsurance"></mat-slide-toggle>
+								{{'op_rem'|translate}}
+							</h1>
+							<div style="width:100%; float:left;">
+								<p style="width:100%; float:left;;">
+									{{'settings.bookings.op_rem_text'|translate}}
 								</p>
-								<button (click)="saveTaxes()"
-									class="btn-primary-accent">
-									{{'save_changes' | translate}}
-								</button>
+								<mat-form-field appearance="outline" class="flex-auto">
+									<input [disabled]="!hasCancellationInsurance"
+										[value]="hasCancellationInsurance ? cancellationInsurancePercent * 100 : 0"
+										(blur)="updateInsuranceValue($event)" matInput placeholder="Percentaje"
+										type="number">
+									<span matTextSuffix>%</span>
+								</mat-form-field>
 							</div>
-							<div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-								<h1 style="font-size:24px;float: left; width: 100%;">
-									<mat-slide-toggle [(ngModel)]="hasCancellationInsurance"></mat-slide-toggle>
-									{{'op_rem'|translate}}
-								</h1>
-								<div style="width:100%; float:left;">
-									<p style="width:100%; float:left;;">
-										{{'settings.bookings.op_rem_text'|translate}}
-									</p>
-									<mat-form-field appearance="outline"
-										class="flex-auto">
-										<input [disabled]="!hasCancellationInsurance"
-											[value]="hasCancellationInsurance ? cancellationInsurancePercent * 100 : 0"
-											(blur)="updateInsuranceValue($event)"
-											matInput
-											placeholder="Percentaje"
-											type="number">
-										<span matTextSuffix>%</span>
-									</mat-form-field>
-								</div>
-								<p style="padding: 1%; ;float: left; width: 75%;">
-									{{'settings.bookings.op_rem_text2'|translate}}
-									<br>
-									{{'settings.bookings.op_rem_text3'|translate}}
-									<br>
-									{{'settings.bookings.op_rem_text4'|translate}}
-								</p>
+							<p style="padding: 1%; ;float: left; width: 75%;">
+								{{'settings.bookings.op_rem_text2'|translate}}
+								<br>
+								{{'settings.bookings.op_rem_text3'|translate}}
+								<br>
+								{{'settings.bookings.op_rem_text4'|translate}}
+							</p>
 
 						</div>
 						<div style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
@@ -1836,7 +1869,8 @@
 		<app-form-input name="link" control="link" [form]="PageForm.SponsoLink"></app-form-input>
 	</div>
 	<ng-container footer>
-		<app-form-button name="cancel" (click)="PageModal.SponsoLink=false"></app-form-button>
-		<app-form-button form="flat" name="confirm" (click)="PageModal.SponsoLink=false"></app-form-button>
+		<app-form-button name="cancel" (click)="PageModal.SponsoLink=false;"></app-form-button>
+		<app-form-button form="flat" name="confirm"
+			(click)="PageModal.SponsoLink=false;SponsorImg[PageForm.SponsoLink.controls['index'].value].link=PageForm.SponsoLink.controls['link'].value"></app-form-button>
 	</ng-container>
 </vex-flux-modal>
