@@ -322,6 +322,23 @@ export class SettingsComponent implements OnInit {
             this.dataSourceFood.data = settings?.extras.food;
             this.dataSourceTransport.data = settings?.extras.transport;
 
+
+            this.PageForm.BannerPromocional =  this.fb.group({
+              link: [settings?.bookingPage.banner.link],
+              desktopImg: [settings?.bookingPage.banner.desktopImg],
+              mobileImg: [settings?.bookingPage.banner.mobileImg],
+            })
+
+            this.PageForm.MessageInformation =  this.fb.group({
+              title: [settings?.bookingPage.messages.title],
+              desc: [settings?.bookingPage.messages.desc],
+              type: [settings?.bookingPage.messages.type],
+            })
+
+            this.SponsorImg = settings?.bookingPage.sponsors
+
+
+
             setTimeout(() => {
               this.dataSourceLevels.data = this.schoolSports[0].degrees;
 
@@ -753,6 +770,12 @@ export class SettingsComponent implements OnInit {
   savePrices() {
 
     const data = {
+      taxes: {
+        cancellation_insurance_percent: this.hasCancellationInsurance ? this.cancellationInsurancePercent : 0,
+        boukii_care_price: this.hasBoukiiCare ? this.boukiiCarePrice : 0, currency: this.currency,
+        tva: this.hasTVA ? this.tva : 0
+      },
+      cancellations: { with_cancellation_insurance: this.cancellationRem, without_cancellation_insurance: this.cancellationNoRem },
       prices_range: { people: this.people, prices: this.dataSource },
       monitor_app_client_messages_permission: this.authorized,
       monitor_app_client_bookings_permission: this.authorizedBookingComm,
@@ -831,13 +854,18 @@ export class SettingsComponent implements OnInit {
 
   saveMonitorsAuth() {
     const data = {
+      taxes: {
+        cancellation_insurance_percent: this.hasCancellationInsurance ? this.cancellationInsurancePercent : 0,
+        boukii_care_price: this.hasBoukiiCare ? this.boukiiCarePrice : 0, currency: this.currency,
+        tva: this.hasTVA ? this.tva : 0
+      },
+      cancellations: { with_cancellation_insurance: this.cancellationRem, without_cancellation_insurance: this.cancellationNoRem },
       prices_range: { people: this.people, prices: this.dataSource },
       monitor_app_client_messages_permission: this.authorized,
       monitor_app_client_bookings_permission: this.authorizedBookingComm,
       extras: { forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data },
       degrees: this.dataSourceLevels.data
     }
-
     this.crudService.update('/schools', { name: this.school.name, description: this.school.description, settings: JSON.stringify(data) }, this.school.id)
       .subscribe(() => {
         this.snackbar.open(this.translateService.instant('snackbar.settings.auths'), 'OK', { duration: 3000 });
@@ -963,6 +991,12 @@ export class SettingsComponent implements OnInit {
 
   saveExtra() {
     const data = {
+      taxes: {
+        cancellation_insurance_percent: this.hasCancellationInsurance ? this.cancellationInsurancePercent : 0,
+        boukii_care_price: this.hasBoukiiCare ? this.boukiiCarePrice : 0, currency: this.currency,
+        tva: this.hasTVA ? this.tva : 0
+      },
+      cancellations: { with_cancellation_insurance: this.cancellationRem, without_cancellation_insurance: this.cancellationNoRem },
       prices_range: { people: this.people, prices: this.dataSource },
       monitor_app_client_messages_permission: this.authorized,
       monitor_app_client_bookings_permission: this.authorizedBookingComm,
@@ -1004,6 +1038,71 @@ export class SettingsComponent implements OnInit {
         this.getData();
 
       })
+  }
+
+  saveBookingPage() {
+
+    /*const data = {
+      taxes: {
+        cancellation_insurance_percent: this.hasCancellationInsurance ? this.cancellationInsurancePercent : 0,
+        boukii_care_price: this.hasBoukiiCare ? this.boukiiCarePrice : 0, currency: this.currency,
+        tva: this.hasTVA ? this.tva : 0
+      },
+      cancellations: { with_cancellation_insurance: this.cancellationRem, without_cancellation_insurance: this.cancellationNoRem },
+      prices_range: { people: this.people, prices: this.dataSource },
+      monitor_app_client_messages_permission: this.authorized,
+      monitor_app_client_bookings_permission: this.authorizedBookingComm,
+      extras: { forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data },
+      degrees: this.dataSourceLevels.data
+    }
+
+
+    this.crudService.update('/schools', {
+      name: this.school.name,
+      description: this.school.description,
+      settings: JSON.stringify(data)
+    }, this.school.id)
+      .subscribe(() => {
+
+        this.snackbar.open(this.translateService.instant('snackbar.settings.taxes'), 'OK', { duration: 3000 });
+        this.schoolService.refreshSchoolData();
+        this.getData();
+
+      })*/
+
+    const data = {
+      taxes: {
+        cancellation_insurance_percent: this.hasCancellationInsurance ? this.cancellationInsurancePercent : 0,
+        boukii_care_price: this.hasBoukiiCare ? this.boukiiCarePrice : 0, currency: this.currency,
+        tva: this.hasTVA ? this.tva : 0
+      },
+      cancellations: { with_cancellation_insurance: this.cancellationRem, without_cancellation_insurance: this.cancellationNoRem },
+      prices_range: { people: this.people, prices: this.dataSource },
+      monitor_app_client_messages_permission: this.authorized,
+      monitor_app_client_bookings_permission: this.authorizedBookingComm,
+      extras: { forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data },
+      degrees: this.dataSourceLevels.data,
+      bookingPage: {
+        messages: this.PageForm.MessageInformation.value,
+        sponsors: this.SponsorImg,
+        banner: this.PageForm.BannerPromocional.value
+
+      }
+    }
+
+    this.crudService.update('/schools', {
+      name: this.school.name,
+      description: this.school.description,
+      settings: JSON.stringify(data)
+    }, this.school.id)
+      .subscribe(() => {
+
+        this.snackbar.open(this.translateService.instant('snackbar.settings.save'), 'OK', { duration: 3000 });
+        this.schoolService.refreshSchoolData();
+        this.getData();
+
+      })
+    console.log(data);
   }
 
   updateTVAValue(event: any) {

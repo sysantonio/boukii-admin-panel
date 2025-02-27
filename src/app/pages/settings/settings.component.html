@@ -554,6 +554,10 @@
 							<div>
 								{{'configure_options'|translate}}
 							</div>
+              <button (click)="saveBookingPage()"
+                      class="btn-primary-accent">
+                {{'save_changes' | translate}}
+              </button>
 							<app-form-button name="view_preview" style="margin-left: auto;"
 								(click)="PageModal.Previum=true" form="flat"></app-form-button>
 						</div>
