@@ -28,7 +28,7 @@
 		</div>
 		<div *ngIf="ModalFlux===1" [formGroup]="courses.courseFormGroup" class="flex flex-col">
 			<mat-tab-group [selectedIndex]="courses.courseFormGroup.controls['course_type'].value-1||0"
-				(selectedIndexChange)="courses.courseFormGroup.patchValue({course_type:$event+1})">
+				(selectedIndexChange)="courses.courseFormGroup.patchValue({course_type:$event+1});setModalProgress()">
 				<mat-tab [disabled]="mode==='update'">
 					<ng-template mat-tab-label>
 						<mat-icon style="color: #E5962A;" class="icon16">
@@ -55,7 +55,7 @@
 				</mat-tab>
 			</mat-tab-group>
 			<div style="padding: 20px 20px 0;">
-				<mat-checkbox [disabled]="mode!=='update'" formControlName="is_flexible">
+				<mat-checkbox [disabled]="mode!=='update'" formControlName="is_flexible" (change)="setModalProgress()">
 					{{'flexidates' | translate }}
 				</mat-checkbox>
 				<vex-flux-upload-img [imagePreviewUrl]="courses.courseFormGroup.controls['image'].value"
@@ -237,13 +237,13 @@
 								[value]="courses.courseFormGroup.controls['course_dates'].value[i].date"
 								(do)="courses.courseFormGroup.controls['course_dates'].value[i].date=$event.value;
 								courses.courseFormGroup.controls['course_dates'].value[i].date_end<$event.value?courses.courseFormGroup.controls['course_dates'].value[i].date_end=$event.value:null"
-								style="min-width: 0;width: 100%;" name="courses.date_reservable">
+								style="min-width: 0;width: 100%;" name="courses.date_start">
 							</app-form-datepicker>
 							<app-form-datepicker [required]="true"
 								[value]="courses.courseFormGroup.controls['course_dates'].value[i].date_end"
 								[min]="courses.courseFormGroup.controls['course_dates'].value[i].date"
 								(do)="courses.courseFormGroup.controls['course_dates'].value[i].date_end=$event.value;"
-								style="min-width: 0;width: 100%;" name="courses.date_reservable_to">
+								style="min-width: 0;width: 100%;" name="courses.date_end">
 							</app-form-datepicker>
 						</div>
 						<div style="display: flex;column-gap: 20px;">
@@ -506,10 +506,14 @@
 							number:'0.2-2'}}&nbsp;{{courses.courseFormGroup.controls['currency'].value}}/{{'day' |
 							translate}}
 						</div>
+            <mat-icon *ngIf="item.id.startsWith('aFOR-')" (click)="editExtra(j)" style="cursor: pointer; float: inline-end;">
+              edit
+            </mat-icon>
 						<mat-icon *ngIf="item.id.startsWith('aFOR-')" (click)="extras.splice(j,1)"
 							style="cursor: pointer;float: inline-end;">
 							delete
 						</mat-icon>
+
 					</div>
 					<div (click)="extrasModal=!extrasModal"
 						style="width: calc(50% - 8px); height: 64px; padding-left: 12px; padding-right: 12px; padding-top: 10px; padding-bottom: 10px; border-radius: 3px; border: 1px #E91E63 dotted; flex-direction: column; justify-content: space-between; align-items: center; display: inline-flex;cursor: pointer;">
@@ -563,7 +567,9 @@
 		</div>
 		<div style="margin: 20px;display: flex;justify-content: space-between;">
 			<button *ngIf="ModalFlux>0"
-				(click)="mode==='create'?ModalFlux=ModalFlux-1:router.navigate(['/courses/detail/' + id])"
+				(click)="mode==='create' ?
+				ModalFlux = this.courses.courseFormGroup.controls['course_type'].value === 2 &&
+      !this.courses.courseFormGroup.controls['is_flexible'].value && ModalFlux == 4 ? ModalFlux-2 : ModalFlux -1 :router.navigate(['/courses/detail/' + id])"
 				style="margin-top: 0px !important;height: 38px; width: 128px;" mat-button type="button">
 				<mat-icon *ngIf="mode==='create'">arrow_back</mat-icon>
 				{{ (mode === 'create' ? 'back' : 'cancel') | translate }}
@@ -609,7 +615,7 @@
 		</button>
 		<button (click)="createExtras()" style="margin-top: 0px !important;height: 38px; width: 150px;" color="primary"
 			mat-raised-button type="button">
-			{{'create_extras' | translate }}
+      {{ editingIndex !== null ? 'save' : 'create_extras' | translate }}
 		</button>
 	</div>
 </vex-flux-modal>

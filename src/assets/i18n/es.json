@@ -282,7 +282,7 @@
   "courses.max_age": "Edad Máxima",
   "courses.summary": "Resumen",
   "courses.desc": "Descripción",
-  "courses.date_reservable": "Fecha reservable a partir de ",
+  "courses.date_reservable": "Fecha reservable desde ",
   "courses.date_reservable_to": "Fecha reservable hasta ",
   "courses.dur_min": "Duración Mínima",
   "courses.when": "¿Cuándo puedes realizar el curso?",

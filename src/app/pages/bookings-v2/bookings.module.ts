@@ -37,7 +37,6 @@ import { BookingDetailModule } from './booking-detail/booking-detail.module';
     RouterModule,
     BookingsRoutingModule,
     SecondaryToolbarModule,
-    MatIconModule,
     ChartModule,
     WidgetQuickLineChartModule,
     WidgetQuickValueCenterModule,

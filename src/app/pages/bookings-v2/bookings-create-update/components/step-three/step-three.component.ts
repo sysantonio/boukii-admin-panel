@@ -28,6 +28,7 @@ export class StepThreeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    debugger;
     this.initializeForm();
     this.loadSports();
   }
@@ -105,7 +106,14 @@ export class StepThreeComponent implements OnInit {
           && level.school_id == this.getUserSchoolId()
           && level.active
       );
-
+      if (!this.initialData?.sportLevel) {
+        const lowestDegree = this.getLowestDegreeForSport(selectedSport.id);
+        if (lowestDegree) {
+          this.stepForm.patchValue({
+            sportLevel: lowestDegree,
+          });
+        }
+      }
       // Preseleccionar el nivel si existe en `initialData`
       if (this.initialData?.sportLevel) {
         this.stepForm.patchValue({
@@ -115,6 +123,18 @@ export class StepThreeComponent implements OnInit {
     } else {
       this.levels = []; // Si no hay grados, vaciar el array
     }
+  }
+
+  getLowestDegreeForSport(sportId: number) {
+    if (!this.utilizers || this.utilizers.length === 0) return null;
+
+    const degrees = this.utilizers
+      .flatMap(utilizer => utilizer.client_sports) // Obtener todos los client_sports
+      .filter(cs => cs.sport_id === sportId) // Filtrar solo los del sport seleccionado
+      .map(cs => cs.degree) // Obtener los degrees
+      .filter(degree => degree); // Eliminar posibles `null`
+
+    return degrees.length ? degrees.reduce((min, degree) => degree.id < min.id ? degree : min) : null;
   }
 
   // Filtro de niveles para el autocompletado

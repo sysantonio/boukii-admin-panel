@@ -605,12 +605,12 @@ export class BookingsCreateUpdateV2Component {
                     window.open(paymentResult.data, "_self");
                   } else {
                     this.showErrorSnackbar("Error al procesar el pago en línea.");
-                    this.router.navigate([`/bookings-v2/update/${bookingId}`]);
+                    this.router.navigate([`/bookings/update/${bookingId}`]);
                   }
                 },
                 (error) => {
                   this.showErrorSnackbar("Error al procesar el pago en línea.");
-                  this.router.navigate([`/bookings-v2/update/${bookingId}`]);
+                  this.router.navigate([`/bookings/update/${bookingId}`]);
                 }
               );
           } else {

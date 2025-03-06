@@ -15,6 +15,7 @@ export class CoursesService {
 
   settcourseFormGroup(data: any) {
     this.resetcourseFormGroup()
+    data.booking_users = data.booking_users_active;
     this.courseFormGroup.patchValue({
       ...data,
       user: data.user ? data.user.username + " (" + data.user.first_name + " " + data.user.last_name + ")" : "",

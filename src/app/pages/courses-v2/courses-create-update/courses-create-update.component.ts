@@ -17,13 +17,14 @@ import { CoursesService } from 'src/service/courses.service';
 })
 export class CoursesCreateUpdateComponent implements OnInit {
   dataSource: any;
+  editingIndex: number | null = null;
 
   ModalFlux: number = +this.activatedRoute.snapshot.queryParamMap['params'].step || 0
   ModalProgress: { Name: string, Modal: number }[] = [
     { Name: "sport", Modal: 0 },
     { Name: "details", Modal: 1 },
     { Name: "dates", Modal: 2 },
-    { Name: "levels", Modal: 3 },
+    { Name: "details", Modal: 3 },
     { Name: "extras", Modal: 4 },
     { Name: "langs", Modal: 5 },
   ]
@@ -106,7 +107,12 @@ export class CoursesCreateUpdateComponent implements OnInit {
               ['courseGroups.degree', 'courseGroups.courseDates.courseSubgroups.bookingUsers.client', 'sport'])
               .subscribe((data: any) => {
                 this.detailData = data.data
-                this.crudService.list('/stations', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id)
+                this.detailData.station = this.detailData.station || null;
+
+                this.courses.settcourseFormGroup(this.detailData);
+                this.getDegrees();
+                setTimeout(() => this.loading = false, 0);
+/*                this.crudService.list('/stations', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id)
                   .subscribe((st: any) => {
                     st.data.forEach((element: any) => {
                       if (element.id === this.detailData.station_id) this.detailData.station = element
@@ -120,7 +126,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
                     this.courses.settcourseFormGroup(this.detailData)
                     this.getDegrees()
                     setTimeout(() => this.loading = false, 0);
-                  })
+                  })*/
               })
           }
           this.extrasFormGroup = this.fb.group({
@@ -136,17 +142,35 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   createExtras() {
+    const formData = this.extrasFormGroup.getRawValue();
+    formData.id = formData.id || "aFOR-" + formData.name + formData.product + formData.price;
+
+    if (this.editingIndex !== null) {
+      this.extras[this.editingIndex] = formData; // Actualiza el extra en lugar de crear uno nuevo
+    } else {
+      this.extras.push(formData); // Agrega un nuevo extra
+    }
+
     this.extrasModal = false;
-    this.extrasFormGroup.patchValue({ id: "aFOR-" + this.extrasFormGroup.controls['name'].value + this.extrasFormGroup.controls['product'].value + this.extrasFormGroup.controls['price'].value })
-    this.extras.push(this.extrasFormGroup.getRawValue());
-    this.extrasFormGroup = this.fb.group({
-      id: ["", Validators.required],
-      product: ["", Validators.required],
-      name: ["", Validators.required],
-      price: [1, Validators.required],
-      tva: [21, Validators.required],
-      status: [true, Validators.required],
-    })
+    this.resetExtraForm();
+  }
+
+  resetExtraForm() {
+    this.extrasFormGroup.reset({
+      id: "",
+      product: "",
+      name: "",
+      price: 1,
+      tva: 21,
+      status: true,
+    });
+    this.editingIndex = null;
+  }
+
+  editExtra(index: number) {
+    this.editingIndex = index;
+    this.extrasFormGroup.setValue(this.extras[index]);
+    this.extrasModal = true;
   }
 
   getSportsType = () => this.crudService.list('/sport-types', 1, 1000).pipe(map(data => data.data));
@@ -171,8 +195,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
           if (group.degree_id === level.id) {
             level.active = true;
             level.old = true;
-            level.age_min = group.age_min
-            level.age_max = group.age_max
+/*            level.age_min = level.age_min
+            level.age_max = level.age_max*/
             level.max_participants = group.course_subgroups[0].max_participants
             level.course_subgroups = group.course_subgroups
           } level.visible = false;
@@ -186,6 +210,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   Confirm(add: number) {
     this.courses.courseFormGroup.markAsUntouched()
+    if ( this.courses.courseFormGroup.controls['course_type'].value === 2 &&
+      !this.courses.courseFormGroup.controls['is_flexible'].value && this.ModalFlux === 2) {
+      add = add + 1;
+    }
     this.ModalFlux += add
     if (this.ModalFlux === 1) {
       if (!this.courses.courseFormGroup.controls["course_type"].value) this.courses.courseFormGroup.patchValue({ course_type: 1 })
@@ -348,6 +376,34 @@ export class CoursesCreateUpdateComponent implements OnInit {
     this.courses.courseFormGroup.patchValue({ settings: settings })
   }
 
+  setModalProgress() {
+    const courseFormGroup = this.courses.courseFormGroup.getRawValue()
+    if (courseFormGroup.course_type === 1) {
+      this.ModalProgress = [
+         { Name: "sport", Modal: 0 },
+        { Name: "data", Modal: 1 },
+        { Name: "dates", Modal: 2 },
+        { Name: "levels", Modal: 3 },
+        { Name: "extras", Modal: 4 },
+        { Name: "langs", Modal: 5 },
+      ];
+    } else if (courseFormGroup.course_type === 2) {
+      this.ModalProgress = [
+        { Name: "sport", Modal: 0 },
+        { Name: "data", Modal: 1 },
+        { Name: "dates", Modal: 2 },
+      ];
+      if (courseFormGroup.is_flexible) {
+        this.ModalProgress.push({ Name: "details", Modal: 3 });
+        this.ModalProgress.push({ Name: "extras", Modal: 4 });
+        this.ModalProgress.push({ Name: "langs", Modal: 5 });
+      } else {
+        this.ModalProgress.push({ Name: "extras", Modal: 4 });
+        this.ModalProgress.push({ Name: "langs", Modal: 5 });
+      }
+    }
+  }
+
   endCourse() {
     const courseFormGroup = this.courses.courseFormGroup.getRawValue()
     courseFormGroup.translations = JSON.stringify(this.courses.courseFormGroup.controls['translations'].value)
@@ -363,7 +419,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
     }
   }
 
-  getNumberArray = (num: number): any[] => ['intervalo', ...Array.from({ length: num }, (_, i) => `${i + 1}`)];;
+  getNumberArray = (num: number): any[] => ['intervalo', ...Array.from({ length: num }, (_, i) => `${i + 1}`)];
 
   generarIntervalos = (personas: number, intervalo: number, duracion: string[]): any[] => {
     const resultado = [];
