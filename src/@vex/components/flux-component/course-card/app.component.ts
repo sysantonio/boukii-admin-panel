@@ -23,6 +23,7 @@ export class CourseDetailCardComponent implements OnChanges {
   @Output() close = new EventEmitter()
   @Output() open = new EventEmitter<number>()
   @Output() edit = new EventEmitter<number>()
+  showDescription: boolean = false;
 
   constructor(public CoursesService: CoursesService, private translateService: TranslateService, private crudService: ApiCrudService) { }
 
@@ -53,6 +54,10 @@ export class CourseDetailCardComponent implements OnChanges {
       g: parseInt(rgb[2], 16),
       b: parseInt(rgb[3], 16)
     } : null;
+  }
+
+  toggleDescription() {
+    this.showDescription = !this.showDescription;
   }
 
   export(id: any) {

@@ -74,13 +74,19 @@
 					name="courses.desc">
 				</app-form-editor>
 				<div style="display: flex; flex-wrap: wrap; column-gap: 20px;">
-					<app-form-input [required]="true" [form]="courses.courseFormGroup"
-						[Suffix]="courses.courseFormGroup.controls['currency'].value" style="width: calc(50% - 10px);"
-						control="price"
-						name="{{courses.courseFormGroup.controls['is_flexible'].value?'price_per_date':'price_per_course'}}"
-						type="number">
-					</app-form-input>
-					<app-form-input [required]="true" [form]="courses.courseFormGroup" style="width: calc(50% - 10px);"
+          <app-form-input
+            [required]="true"
+            [form]="courses.courseFormGroup"
+            [Suffix]="courses.courseFormGroup.controls['currency'].value"
+            style="width: calc(50% - 10px);"
+            control="price"
+            name="{{ courses.courseFormGroup.controls['is_flexible'].value
+    ? (courses.courseFormGroup.controls['course_type'].value == 1 ? 'price_per_date' : 'min_price')
+    : 'price_per_course' }}"
+            type="number">
+          </app-form-input>
+
+          <app-form-input [required]="true" [form]="courses.courseFormGroup" style="width: calc(50% - 10px);"
 						control="max_participants" name="max_pax" Suffix="paxes" type="number">
 					</app-form-input>
 					<ng-container *ngIf="courses.courseFormGroup.controls['course_type'].value>1">
@@ -551,17 +557,21 @@
 							(do)="courses.courseFormGroup.controls['translations'].value[item.Code].name = $event.target.value"
 							style="width: 100%;margin-top: 20px;" name="courses.coursename">
 						</app-form-input>
-						<app-form-editor [required]="true"
-							[value]="courses.courseFormGroup.controls['translations'].value[item.Code].short_description"
-							(do)="courses.courseFormGroup.controls['translations'].value[item.Code].short_description = $event.target.textContent"
-							style="margin: 10px 0;" name="courses.summary">
-						</app-form-editor>
-						<app-form-editor [required]="true"
-							[value]="courses.courseFormGroup.controls['translations'].value[item.Code].description"
-							(do)="courses.courseFormGroup.controls['translations'].value[item.Code].description = $event.target.textContent"
-							style="margin: 10px 0;" name="courses.desc">
-						</app-form-editor>
-					</ng-template>
+            <app-form-editor [required]="true"
+                             [value]="courses.courseFormGroup.controls['translations'].value[item.Code].short_description || ''"
+                             (do)="courses.courseFormGroup.controls['translations'].value[item.Code].short_description = $event.html || courses.courseFormGroup.controls['translations'].value[item.Code].short_description"
+                             style="margin: 10px 0;"
+                             name="courses.summary">
+            </app-form-editor>
+
+            <app-form-editor [required]="true"
+                             [value]="courses.courseFormGroup.controls['translations'].value[item.Code].description || ''"
+                             (do)="courses.courseFormGroup.controls['translations'].value[item.Code].description = $event.html || courses.courseFormGroup.controls['translations'].value[item.Code].description"
+                             style="margin: 10px 0;"
+                             name="courses.desc">
+            </app-form-editor>
+
+          </ng-template>
 				</mat-expansion-panel>
 			</mat-accordion>
 		</div>

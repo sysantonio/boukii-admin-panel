@@ -23,7 +23,8 @@ export class CoursesService {
       icon: data.sport.icon_unselected,
       levelGrop: data.degrees,
       settings: JSON.parse(data.settings),
-      discounts: data.discounts
+      discounts: data.discounts,
+      booking_users: data.booking_users,
     })
   }
   user: any = JSON.parse(localStorage.getItem('boukiiUser'))
@@ -39,9 +40,9 @@ export class CoursesService {
       user_id: [this.user.id],
       booking_users: [[]],
       course_type: [null, Validators.required],
-      name: ["Curso prueba " + new Date().toISOString(), Validators.required],
-      short_description: ["Short Description Test", Validators.required],
-      description: ["Description Test", Validators.required],
+      name: ["", Validators.required],
+      short_description: ["", Validators.required],
+      description: ["", Validators.required],
       price: [100, [Validators.required, Validators.min(1)]],
       currency: [settings?.taxes?.currency || 'CHF'],
       max_participants: [10, [Validators.required, Validators.min(1)]],
@@ -53,7 +54,7 @@ export class CoursesService {
       date_end: [this.nowDate, Validators.required],
       date_start_res: [this.nowDate],
       date_end_res: [this.nowDate],
-      duration: [, Validators.required],
+      duration: [null, Validators.required],
       confirm_attendance: [false],
       active: [true],
       online: [true],

@@ -21,5 +21,21 @@ export class CourseDetailCardNivelComponent {
   numUsersArray(value: number): number[] {
     return Array.from({ length: value }, (_, i) => i);
   }
+  findBookingUsers(bookingUsers: any[], courseDates: any[], degreeId: number): number {
+    if (!bookingUsers || !courseDates) return 0;
+
+    return bookingUsers.filter(user => {
+      return courseDates.some(date =>
+        date.course_groups.some(group => group.degree_id === degreeId && group.id === user.course_group_id)
+      );
+    }).length  / courseDates.length;
+  }
+
+  countGroups(courseDates: any[], degreeId: number): number {
+    return courseDates
+      .flatMap(date => date.course_groups || []) // Obtener todos los grupos
+      .filter(group => group.degree_id === degreeId).length / courseDates.length; // Filtrar por degree_id
+  }
+
 
 }

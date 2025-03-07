@@ -12,7 +12,9 @@
 			[route]="'courses'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="true"
 			[ngClass]="{'table-show-detail': this.showDetail}" [sectionIcon]="icon" [canDuplicate]="true"
 			[withHeader]="false" [showDetail]="showDetail"
-			[with]="['user','courseDates.courseGroups.courseSubgroups.monitor', 'courseDates.courseGroups.courseSubgroups.degree', 'station', 'bookingUsers', 'sport','bookingUsers.client']"
+			[with]="['user','courseDates.courseGroups.courseSubgroups.monitor',
+			 'courseDates.courseGroups.courseSubgroups.degree', 'bookingUsersActive','bookingUsersActive.client',
+			 'station', 'sport']"
 			[updatePage]="'detail'" [filterColumn]="'school_id'" [filterField]="user.schools[0].id"
 			(showDetailEvent)="showDetailEvent($event)"></vex-aio-table>
 	</vex-page-layout-content>
