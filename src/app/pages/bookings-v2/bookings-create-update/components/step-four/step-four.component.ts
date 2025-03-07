@@ -152,6 +152,7 @@ export class StepFourComponent {
 
     if (selectedMonth.isSame(currentMonth, "month")) {
       this.selectedDate = new Date();
+      this.selectedDateMoment = moment(this.selectedDate );
     }
   }
 
@@ -324,6 +325,7 @@ export class StepFourComponent {
           }
         })
       );
+      this.stepForm.get("date").patchValue(this.selectedDateMoment);
       this.isLoading = false;
     });
   }

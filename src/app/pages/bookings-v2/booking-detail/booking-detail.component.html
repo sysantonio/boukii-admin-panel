@@ -45,7 +45,7 @@
 			[activitiesChanged]="activitiesChanged$"
       (deleteActivity)="processFullDelete()"
 			(endClick)="endModal=true"
-			(payClick)="payModal=true">
+			(payClick)="bookingService.calculatePendingPrice() === 0 ? finalizeBooking() : payModal=true">
 		</booking-detail-reservation-detail>
 	</div>
 </div>
@@ -81,7 +81,7 @@
 <vex-flux-modal *ngIf="deleteFullModal"
                 [width]="570"
                 (Close)="deleteFullModal=false"
-                title="delete_activity">
+                title="bookings_page.detail.full_cancel">
   <div body>
     <div style="margin: 10px;">
       {{"bookings_page.cancelations.cancel_booking" | translate}} ?
@@ -111,7 +111,7 @@
   <div body>
     <div style="margin: 10px;" class="sectionTitle" *ngIf="step === 1">
       <ng-container *ngIf="bookingService.calculatePendingPrice() > 0; else confirmReservation">
-        {{"pending_payment" | translate}}: <span class="totalPrice">{{ bookingService.calculatePendingPrice() }}</span>
+        {{"pending_payment" | translate}}: <span class="totalPrice">{{ bookingService.calculatePendingPrice() }} {{ groupedActivities[0].course.currency }}</span>
       </ng-container>
       <ng-template #confirmReservation>
         <p>{{ "confirm_booking_message" | translate }}</p>

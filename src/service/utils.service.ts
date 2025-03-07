@@ -450,7 +450,7 @@ export class UtilsService {
         (obj) => obj.sport_id === sport_id && obj.school_id == this.getSchoolData().id
       );
 
-      return sportObject?.degree_id;
+      return sportObject?.degree;
     }
   }
 

@@ -125,7 +125,5 @@ export class BookingDescriptionCard {
     )
   }
 
-
-
   protected readonly parseFloat = parseFloat;
 }

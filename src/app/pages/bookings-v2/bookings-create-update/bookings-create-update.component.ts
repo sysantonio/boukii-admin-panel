@@ -1,11 +1,11 @@
-import { Component, ChangeDetectorRef } from "@angular/core";
-import { TranslateService } from "@ngx-translate/core";
-import { MatDialog } from "@angular/material/dialog";
-import { BookingDialogComponent } from "./components/booking-dialog/booking-dialog.component";
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { BookingService } from '../../../../service/bookings.service';
-import { ApiCrudService } from '../../../../service/crud.service';
-import { Router } from '@angular/router';
+import {ChangeDetectorRef, Component, Inject, Optional} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {BookingDialogComponent} from './components/booking-dialog/booking-dialog.component';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {BookingService} from '../../../../service/bookings.service';
+import {ApiCrudService} from '../../../../service/crud.service';
+import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
@@ -58,7 +58,9 @@ export class BookingsCreateUpdateV2Component {
     public bookingService: BookingService,
     private crudService: ApiCrudService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    @Optional() public dialogRef: MatDialogRef<BookingsCreateUpdateV2Component>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public externalData: any
   ) {
     this.normalizedDates = []
     this.forms = []
@@ -154,7 +156,27 @@ export class BookingsCreateUpdateV2Component {
     const user = JSON.parse(localStorage.getItem("boukiiUser"))
     this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order',
       '&school_id=' + user.schools[0].id + '&active=1')
-      .subscribe((data) => this.allLevels = data.data)
+      .subscribe((data) => {
+        this.allLevels = data.data
+        if (this.externalData && this.externalData.mainClient) {
+
+          this.mainClient  = this.externalData.mainClient;
+          this.selectedIndexForm = null;
+          this.currentStep = 1;
+          const step1Controls = {mainClient: this.externalData.mainClient};
+          const step2Controls = {utilizers: this.externalData.utilizers};
+          this.selectedForm = this.fb.group({
+            step1: this.fb.group(step1Controls),
+            step2: this.fb.group(step2Controls),
+            step3: this.fb.group({}),
+            step4: this.fb.group({}),
+            step5: this.fb.group({}),
+            step6: this.fb.group({})
+          });
+          this.forceStep = 1;
+          this.cdr.detectChanges();
+        }
+      })
   }
 
   calculateTotal() {
@@ -574,13 +596,13 @@ export class BookingsCreateUpdateV2Component {
 
     if (this.bookingService.calculatePendingPrice() === 0) {
       bookingData.paid = true;
-      bookingData.paid_total = bookingData.price_total;
+      bookingData.paid_total = bookingData.price_total - this.calculateTotalVoucherPrice();
     }
     // Si es pago en efectivo o tarjeta, guardar si fue pagado
     if (bookingData.payment_method_id === 1 || bookingData.payment_method_id === 4) {
       if (this.isPaid) {
         bookingData.paid = true;
-        bookingData.paid_total = bookingData.price_total;
+        bookingData.paid_total = bookingData.price_total - this.calculateTotalVoucherPrice();
       } else {
         bookingData.paid = false;
       }
@@ -623,6 +645,13 @@ export class BookingsCreateUpdateV2Component {
         }
       );
   }
+
+  calculateTotalVoucherPrice(): number {
+    return  this.bookingService.getBookingData().vouchers ?
+      this.bookingService.getBookingData().vouchers.reduce( (e, i) => e + parseFloat(i.bonus.reducePrice), 0) : 0
+  }
+
+
 
   // Función para mostrar un Snackbar en caso de error
   showErrorSnackbar(message: string): void {

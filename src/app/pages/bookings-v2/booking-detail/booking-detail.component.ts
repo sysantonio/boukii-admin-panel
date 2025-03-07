@@ -93,7 +93,6 @@ export class BookingDetailV2Component implements OnInit {
         this.bookingData = data.data;
         this.groupedActivities  = data.data.grouped_activities;
         this.mainClient = data.data.client_main;
-/*        debugger;*/
       });
   }
 
@@ -402,11 +401,11 @@ export class BookingDetailV2Component implements OnInit {
 
     if (this.bookingService.calculatePendingPrice() === 0) {
       bookingData.paid = true;
-      bookingData.paid_total = bookingData.price_total;
+      bookingData.paid_total = bookingData.price_total - this.calculateTotalVoucherPrice();
     }
     // Si es pago en efectivo o tarjeta, guardar si fue pagado
     if (bookingData.payment_method_id === 1 || bookingData.payment_method_id === 4) {
-      bookingData.paid_total = bookingData.price_total;
+      bookingData.paid_total = bookingData.price_total - this.calculateTotalVoucherPrice();
       bookingData.paid = true;
     }
 
@@ -443,6 +442,11 @@ export class BookingDetailV2Component implements OnInit {
         }
       );
   }
+
+  calculateTotalVoucherPrice(): number {
+    return this.bookingData.vouchers ? this.bookingData.vouchers.reduce( (e, i) => e + parseFloat(i.bonus.reducePrice), 0) : 0
+  }
+
 
   onPaymentMethodChange(event: any) {
     // Lógica para manejar el cambio de método de pago

@@ -246,7 +246,7 @@
   "bookings_page.cancelations.bonus_refund_text": "Vous êtes sur le point d'annuler une réservation. ",
   "bookings_page.cancelations.bonus_refund_text_all": "Ou restituez tous les montants des bons dans un montant unifié :",
   "bookings_page.reductions.title": "Appliquer la réduction",
-  "bookings_page.reductions.discount": "Taux de remise",
+  "bookings_page.reductions.discount": "Taux d'escompte",
   "bookings_page.reductions.percentaje": "Pourcentage",
   "bookings_page.reductions.amount": "Montant",
   "bookings_page.bonus.title": "Appliquer le bon",

@@ -1073,6 +1073,9 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   checkClientStatus(data: any) {
     let ret = false;
+    if(!data) {
+      return ret
+    }
     data.forEach(element => {
       if (element.school_id === this.user.schools[0].id) {
         ret = element.accepted_at !== null;

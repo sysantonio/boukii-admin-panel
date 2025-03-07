@@ -8,7 +8,7 @@
 	</div>
 	<div class="barWrapper">
 		<div>
-			<button [disabled]="forms.length" [ngClass]="{ active: currentStep === 0, prev: currentStep > 0 }"
+			<button [disabled]="forms.length || externalData?.mainClient" [ngClass]="{ active: currentStep === 0, prev: currentStep > 0 }"
 				(click)="forceChange(0)" class="crumb">
 				{{ "bookings_page.crumbs.client" | translate }}
 			</button>
@@ -38,6 +38,7 @@
 				{{ "bookings_page.crumbs.client" | translate }}:
 			</span>
 			{{ mainClient.first_name }} {{ mainClient.last_name }}
+      <mat-icon *ngIf="externalData" svgIcon="mat:close" class="icon16"  style="cursor: pointer" mat-dialog-close></mat-icon>
 		</div>
 	</div>
 	<div class="bookingContainer">
@@ -86,7 +87,8 @@
 		</div>
 		<div class="right-column">
 			<booking-reservation-detail [client]="mainClient" [activities]="normalizedDates" (endClick)="endModal=true"
-				(payClick)="payModal=true" (addClick)="addNewActivity()">
+				(payClick)="bookingService.calculatePendingPrice() === 0 ? finalizeBooking() : payModal=true"
+                                  (addClick)="addNewActivity()">
 			</booking-reservation-detail>
 		</div>
 	</div>
@@ -179,7 +181,7 @@
   <div body>
     <div style="margin: 10px;" class="sectionTitle" *ngIf="step === 1">
       <ng-container *ngIf="bookingService.calculatePendingPrice() > 0; else confirmReservation">
-        {{"pending_payment" | translate}}: <span class="totalPrice">{{ bookingService.calculatePendingPrice() }}</span>
+        {{"pending_payment" | translate}}: <span class="totalPrice">{{ bookingService.calculatePendingPrice() }} {{ normalizedDates[0].course.currency }}</span>
       </ng-container>
       <ng-template #confirmReservation>
         <p>{{ "confirm_booking_message" | translate }}</p>

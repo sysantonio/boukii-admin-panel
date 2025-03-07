@@ -284,8 +284,8 @@
       </div>
       <ng-container *ngIf="bookingData.vouchers?.length">
         <div class="dateRow">
-          <div>
-            <span style="width: 100%; float:left" *ngFor="let item of bookingData.vouchers; let i = index">
+          <div *ngFor="let item of bookingData.vouchers; let i = index">
+            <span style="width: 100%; float:left" >
               <img class="icon24" src="assets/icons/icon/delete.png"
                    style="display: inline-flex;float: left; cursor: pointer"
                    *ngIf="!bookingData.paid" (click)="deleteBonus(i);">

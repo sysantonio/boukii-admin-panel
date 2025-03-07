@@ -28,7 +28,6 @@ export class StepThreeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    debugger;
     this.initializeForm();
     this.loadSports();
   }
@@ -128,9 +127,12 @@ export class StepThreeComponent implements OnInit {
   getLowestDegreeForSport(sportId: number) {
     if (!this.utilizers || this.utilizers.length === 0) return null;
 
+    const schoolId = this.utilsService.getSchoolData()?.id; // Obtener el ID de la escuela actual
+    if (!schoolId) return null; // Asegurar que hay un schoolId válido
+
     const degrees = this.utilizers
       .flatMap(utilizer => utilizer.client_sports) // Obtener todos los client_sports
-      .filter(cs => cs.sport_id === sportId) // Filtrar solo los del sport seleccionado
+      .filter(cs => cs.sport_id === sportId && cs.school_id === schoolId) // Filtrar por sport y school
       .map(cs => cs.degree) // Obtener los degrees
       .filter(degree => degree); // Eliminar posibles `null`
 
