@@ -567,4 +567,6 @@ export class BookingsV2Component {
         this.bookingLog = data.data;
       })
   }
+
+  protected readonly parseFloat = parseFloat;
 }
