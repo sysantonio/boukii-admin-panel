@@ -36,7 +36,8 @@ export class CourseDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.crudService.get('/admin/courses/' + this.id,
-      ['courseGroups.degree', 'courseGroups.courseDates.courseSubgroups.bookingUsers.client', 'sport'])
+      ['courseGroups.degree', 'courseGroups.courseDates.courseSubgroups.bookingUsers.client',
+        'sport' ,'courseExtras'])
       .subscribe((data: any) => {
         this.detailData = data.data
         this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', '&school_id=' + this.detailData.school_id + '&sport_id=' + this.detailData.sport_id)

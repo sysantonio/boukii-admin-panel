@@ -109,7 +109,40 @@ export class CoursesCreateUpdateComponent implements OnInit {
                 this.detailData = data.data
                 this.detailData.station = this.detailData.station || null;
 
+                // Convertimos los extras de settings en un formato estándar
+                const formattedSettingsExtras = this.extras.map(extra => ({
+                  id: extra.id,
+                  name: extra.name,
+                  product: extra.product,
+                  price: parseFloat(extra.price), // Aseguramos que el precio sea numérico
+                  tva: extra.tva,
+                  status: extra.status,
+                  active: false // Por defecto, los extras de settings no están activos
+                }));
+
+// Convertimos los extras de course_extras al mismo formato y los marcamos como activos
+                const formattedCourseExtras = this.detailData.course_extras.map(extra => ({
+                  id: extra.id.toString(), // Convertimos el id en string para evitar conflictos de comparación
+                  name: extra.name,
+                  product: extra.name, // Ajusta esto según corresponda si hay otros tipos
+                  price: parseFloat(extra.price),
+                  tva: 0, // Si no tienes el dato en course_extras, lo dejamos en 0
+                  status: true,
+                  active: true // Los extras del curso deben estar activos
+                }));
+
+// Unimos ambos arrays sin repetir basándonos en el id y el nombre
+                const mergedExtras = [...formattedSettingsExtras, ...formattedCourseExtras].reduce((acc, extra) => {
+                  if (!acc.some(e => e.id === extra.id || e.product === extra.product)) {
+                    acc.push(extra);
+                  }
+                  return acc;
+                }, []);
+
+                this.extras = mergedExtras;
+
                 this.courses.settcourseFormGroup(this.detailData);
+                this.courses.courseFormGroup.patchValue({ extras: formattedCourseExtras });
                 this.getDegrees();
                 setTimeout(() => this.loading = false, 0);
 /*                this.crudService.list('/stations', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id)

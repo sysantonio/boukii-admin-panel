@@ -72,6 +72,7 @@ export class CoursesService {
       station_id: [null],
       course_dates: [[{ ...this.default_course_dates }], Validators.required],
       discounts: [[], Validators.required],
+      course_extras: [[], Validators.required],
       unique: [true],
       hour_min: [],
       hour_max: [],

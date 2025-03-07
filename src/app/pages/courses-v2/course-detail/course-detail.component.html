@@ -53,7 +53,7 @@
 							</div>
 							<div style="padding: 0;border: none;">
 								<vex-course-detail-card [courseFormGroup]="courses.courseFormGroup" [detail]="true"
-									[noneExtras]="!count(courses.courseFormGroup.controls['levelGrop'].value,'active')"
+									[noneExtras]="!courses.courseFormGroup.controls['course_extras'].value.length"
 									(edit)="goTo('courses/update/'+id,{step:$event})" style="width: 100%">
 								</vex-course-detail-card>
 							</div>

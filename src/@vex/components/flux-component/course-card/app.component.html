@@ -440,7 +440,7 @@
           <img *ngIf="detail" (click)="edit.emit(4)" src="assets/icons/icon/edit2.png" alt
                class="editbutton icon24">
         </div>
-        <div *ngFor="let extra of courseFormGroup.controls['extras'].value">
+        <div *ngFor="let extra of courseFormGroup.controls['course_extras'].value">
 					<span
             style="color: var(--color-dark1);font-size: 12px;font-weight: 600;line-height: 18px;word-wrap: break-word">
 						{{extra.name.slice(0,20)}}
@@ -452,7 +452,7 @@
 					</span>
         </div>
         <div
-          *ngIf="!courseFormGroup.controls['extras'].value || courseFormGroup.controls['extras'].value.length<1">
+          *ngIf="!courseFormGroup.controls['course_extras'].value || courseFormGroup.controls['course_extras'].value.length<1">
 					<span
             style="color: var(--color-dark1);font-size: 12px;font-weight: 600;line-height: 18px;word-wrap: break-word">
 						{{"no_extra_assigned" | translate}}
