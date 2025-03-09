@@ -1809,16 +1809,16 @@
 		<app-form-input name="link" style="width: 100%;" control="link"
 			[form]="PageForm.BannerPromocional"></app-form-input>
 		<div style="width: 100%;"> {{"desktop_version"|translate}} </div>
-		<vex-flux-upload-img style="width: 100%;" [width]="600" [height]="100"
-			[imagePreviewUrl]="PageForm.BannerPromocional.controls['desktopImg'].value"
+		<vex-flux-upload-img style="width: 100%;" [width]="600" [height]="100" [edit]="true"
+			[imagePreviewUrl]="PageForm.BannerPromocional.controls['desktopImg'].value" [relation]="6"
 			(upload)="PageForm.BannerPromocional.patchValue({desktopImg:$event})">
 		</vex-flux-upload-img>
 		<div style="width: 100%;"> {{"or_add_a_link"|translate}} </div>
 		<app-form-input name="url" style="width: 100%;" control="desktopImg"
 			[form]="PageForm.BannerPromocional"></app-form-input>
 		<div style="width: 100%;"> {{"mobile_version"|translate}} </div>
-		<vex-flux-upload-img style="width: 40%;" [width]="160" [height]="85"
-			[imagePreviewUrl]="PageForm.BannerPromocional.controls['mobileImg'].value"
+		<vex-flux-upload-img style="width: 40%;" [width]="200" [height]="100" [edit]="true"
+			[imagePreviewUrl]="PageForm.BannerPromocional.controls['mobileImg'].value" [relation]="2"
 			(upload)="PageForm.BannerPromocional.patchValue({mobileImg:$event})">
 		</vex-flux-upload-img>
 		<div style="width: 100%;"> {{"or_add_a_link"|translate}} </div>
@@ -1877,9 +1877,8 @@
 <vex-flux-modal *ngIf="PageModal.SponsoLink" title="sponsors" (Close)="PageModal.SponsoLink=false"
 	[formGroup]="PageForm.SponsoLink">
 	<div body style="display: flex; flex-wrap: wrap;flex-direction: column;">
-		<vex-flux-upload-img style="width: 250px; height: 150px;"
-			(upload)="PageForm.SponsoLink.patchValue({img:$event})"
-			[imagePreviewUrl]="PageForm.SponsoLink.controls['img'].value"></vex-flux-upload-img>
+		<vex-flux-upload-img (upload)="PageForm.SponsoLink.patchValue({img:$event})" [edit]="true" [width]="200"
+			[height]="200" [imagePreviewUrl]="PageForm.SponsoLink.controls['img'].value"></vex-flux-upload-img>
 		<app-form-input name="link" control="link" [form]="PageForm.SponsoLink"></app-form-input>
 	</div>
 	<ng-container footer>

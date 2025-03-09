@@ -10,16 +10,20 @@ export class FluxUploadImgComponent {
   @Input() Previus: boolean = true
   @Input() width: number = 400
   @Input() height: number = 290
+  @Input() edit: boolean = false
+  @Input() relation: number = 1
+
   @Input() size: number = 1
   @Input() format: string = "PNG, JPG"
   @Output() upload = new EventEmitter();
 
   onFileChanged(event: Event) {
+    this.imageChangedEvent = event
     const file = (event.target as HTMLInputElement).files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        this.imagePreviewUrl = reader.result;
+        if (!this.edit) this.imagePreviewUrl = reader.result;
         this.upload.emit(reader.result)
         reader.onload = null;
       };
@@ -35,6 +39,23 @@ export class FluxUploadImgComponent {
   imageChangedEvent: any = null;
   archivo!: File;
   imageCropped(event: any) {
-    this.archivo = new File([event.blob], event.objectUrl + ".webp", { type: "image/webp" });
+    this.blobToBase64(event.blob)
+      .then((base64String) => {
+        this.upload.emit(base64String)
+      })
+      .catch((error) => {
+        console.error('Error converting Blob to Base64:', error);
+      });
   }
+
+  // Helper function to convert Blob to Base64 string
+  blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = function () { resolve(reader.result as string); };
+      reader.onerror = function (error) { reject(error); };
+      reader.readAsDataURL(blob);
+    });
+  }
+
 }
