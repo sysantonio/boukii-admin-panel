@@ -14,4 +14,10 @@
 	</div>
 
 	<input #fileInput (change)="onFileChanged($event)" type="file" style="display: none;">
+	<div *ngIf="imageChangedEvent" class="imgPrevisualization">
+		<image-cropper style="height: 100%;" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+			backgroundColor="#000000" [aspectRatio]="6" format="webp" (imageCropped)="imageCropped($event)"
+			class="previsualizationImg">
+		</image-cropper>
+	</div>
 </div>

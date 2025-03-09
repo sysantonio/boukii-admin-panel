@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SecondaryToolbarModule } from '../../secondary-toolbar/secondary-toolbar.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { ImageCropperComponent } from 'ngx-image-cropper';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { TranslateModule } from '@ngx-translate/core';
     MatIconModule,
     ReactiveFormsModule,
     SecondaryToolbarModule,
-    TranslateModule
+    TranslateModule,
+    ImageCropperComponent
   ],
   exports: [FluxUploadImgComponent]
 })

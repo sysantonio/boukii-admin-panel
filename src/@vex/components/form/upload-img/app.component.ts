@@ -31,4 +31,10 @@ export class FluxUploadImgComponent {
   triggerFileInput() {
     this.fileInput.nativeElement.click();
   }
+
+  imageChangedEvent: any = null;
+  archivo!: File;
+  imageCropped(event: any) {
+    this.archivo = new File([event.blob], event.objectUrl + ".webp", { type: "image/webp" });
+  }
 }
