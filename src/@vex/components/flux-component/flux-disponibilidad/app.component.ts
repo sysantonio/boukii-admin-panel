@@ -101,7 +101,6 @@ export class FluxDisponibilidadComponent implements OnInit {
         );
       }
     }
-    console.log(this.courseFormGroup.controls['course_dates'].value)
     this.cambiarModal = false
   }
 

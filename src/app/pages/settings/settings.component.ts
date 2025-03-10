@@ -1066,7 +1066,6 @@ export class SettingsComponent implements OnInit {
         this.getData();
 
       })*/
-    console.log(this.SponsorImg)
     const data = {
       taxes: {
         cancellation_insurance_percent: this.hasCancellationInsurance ? this.cancellationInsurancePercent : 0,
