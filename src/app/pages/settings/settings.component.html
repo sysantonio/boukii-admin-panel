@@ -600,13 +600,13 @@
 									</div>
 									<div *ngIf="PageForm.BannerPromocional.controls['desktopImg'].value" style="position: relative; border: 1px solid var(--Grey-02, #C7D0D3);
 									border-style: dashed;
-									padding: 10px;aspect-ratio: 6.5 / 1;
+									padding: 3px 18px;aspect-ratio: 6 / 1;
 									width: 100%;align-content: space-evenly;
 									text-align: -webkit-center;
 									border-radius: 8px;">
-										<img [src]="PageForm.BannerPromocional.controls['desktopImg'].value" alt=""
+										<img [src]="PageForm.BannerPromocional.controls['desktopImg'].value"
 											style="max-height: 100%;max-width: 100%;">
-										<img src="assets/icons/icon/x.png" alt="" class="icon24"
+										<img src="assets/icons/icon/x.png" class="icon24"
 											style="position: absolute; top: 0; right: 0;cursor: pointer;"
 											(click)="PageForm.BannerPromocional.patchValue({desktopImg:null})">
 									</div>
@@ -616,19 +616,19 @@
 									<div class="Small b12"
 										*ngIf="!PageForm.BannerPromocional.controls['mobileImg'].value">
 										· {{'image_max'|translate}} 1Mb. {{'image_format'|translate}} PNG,JPG.
-										{{'image_recomendation'|translate}} 160x85px
+										{{'image_recomendation'|translate}} 200x100px
 										<br>
 										· {{'link_to_logo_url'|translate}}
 									</div>
 									<div *ngIf="PageForm.BannerPromocional.controls['mobileImg'].value" style="position: relative; border: 1px solid var(--Grey-02, #C7D0D3);
 									border-style: dashed;
-									padding: 10px;aspect-ratio: 1.9 / 1;
+									padding: 5px 10px;aspect-ratio: 2 / 1;
 									width: 40%;align-content: space-evenly;
 									height: 150px;text-align: -webkit-center;
 									border-radius: 8px;">
-										<img [src]="PageForm.BannerPromocional.controls['mobileImg'].value" alt=""
+										<img [src]="PageForm.BannerPromocional.controls['mobileImg'].value"
 											style="max-height: 100%;max-width: 100%;">
-										<img src="assets/icons/icon/x.png" alt="" class="icon24"
+										<img src="assets/icons/icon/x.png" class="icon24"
 											style="position: absolute; top: 0; right: 0;cursor: pointer;"
 											(click)="PageForm.BannerPromocional.patchValue({mobileImg:null})">
 									</div>
@@ -660,10 +660,9 @@
 									width: 150px;align-content: space-evenly;
 									height: 150px;text-align: -webkit-center;
 									border-radius: 8px;">
-										<img [src]="Img.img" alt=""
-											style="max-height: 100%;max-width: 100%;cursor: pointer;"
+										<img [src]="Img.img" style="max-height: 100%;max-width: 100%;cursor: pointer;"
 											(click)="PageModal.SponsoLink=true;PageForm.SponsoLink.patchValue(Img)">
-										<img src="assets/icons/icon/x.png" alt="" class="icon24"
+										<img src="assets/icons/icon/x.png" class="icon24"
 											style="position: absolute; top: 0; right: 0;cursor: pointer;"
 											(click)="removeSponsor(i)">
 									</div>
@@ -677,38 +676,26 @@
 									<div style="width: 100%;">
 										{{"info_message_description"|translate}}
 									</div>
-									<div style="width: 100%;display: flex
-									;
+									<div *ngFor="let message of MessageStorage;index as i" style="width: 100%;display: flex;
 										flex-direction: row;
 										align-items: center;
 										gap: 10px;">
-										<div *ngIf="PageForm.MessageInformation.controls['title'].value"
-											class="info_message"
-											[style.backgroundColor]="PageForm.MessageInformation.controls['type'].value?'#D2EFFF':'#FFEBEB'">
-											<img src="assets/icons/icon/info_message1.png" alt="" class="icon24"
-												*ngIf="PageForm.MessageInformation.controls['type'].value">
-											<img src="assets/icons/icon/info_message2.png" alt="" class="icon24"
-												*ngIf="!PageForm.MessageInformation.controls['type'].value">
-											<div style="display: flex
-										;
-											flex-direction: column;
-											gap: 4px;">
-												<div style="font-weight: 700;width: 100%;">
-													{{PageForm.MessageInformation.controls['title'].value}}
-												</div>
-												<div>
-													{{PageForm.MessageInformation.controls['desc'].value}}
-												</div>
+										<div class="info_message"
+											[style.backgroundColor]="message.type?'#D2EFFF':'#FFEBEB'">
+											<img src="assets/icons/icon/info_message1.png" class="icon24"
+												*ngIf="message.type">
+											<img src="assets/icons/icon/info_message2.png" class="icon24"
+												*ngIf="!message.type">
+											<div style="display: flex;flex-direction: column;gap: 4px;">
+												<div style="font-weight: 700;width: 100%;"> {{message.title}} </div>
+												<div> {{message.desc}} </div>
 											</div>
 										</div>
-										<img src="assets/icons/icon/edit.png" class="button icon24"
-											*ngIf="PageForm.MessageInformation.controls['title'].value"
-											style="filter: var(--is-light-theme, invert(1));cursor: pointer;"
-											(click)="PageModal.MessageInformation=true">
+										<img src="assets/icons/icon/x.png" class="icon24" style="cursor: pointer;"
+											(click)="removeMessage(i)">
 									</div>
 									<app-form-button name="add_message"
-										*ngIf="!PageForm.MessageInformation.controls['title'].value"
-										(click)="PageModal.MessageInformation=true"></app-form-button>
+										(click)="PageForm.MessageInformation.patchValue({index:MessageStorage.length});PageModal.MessageInformation=true"></app-form-button>
 								</div>
 							</div>
 						</div>
@@ -1835,7 +1822,7 @@
 	[formGroup]="PageForm.MessageInformation">
 	<div body style="display: flex; flex-wrap: wrap;flex-direction: column;">
 		<div style="display: flex;align-items: center;justify-content: flex-end;color: red;">
-			<img src="assets/icons/icon/delete.png" alt="" class="icon24"
+			<img src="assets/icons/icon/delete.png" class="icon24"
 				style="filter: brightness(0) saturate(100%) invert(17%) sepia(98%) saturate(7486%) hue-rotate(0deg) brightness(99%) contrast(118%);cursor: pointer;"
 				(click)="PageForm.MessageInformation.reset();PageModal.MessageInformation=false">
 			{{"delete_message"|translate}}
@@ -1850,27 +1837,24 @@
 				[checked]="PageForm.MessageInformation.controls['type'].value"
 				(click)="PageForm.MessageInformation.patchValue({type:true})">
 				<div class="info_message" style="background-color: #D2EFFF;">
-					<img src="assets/icons/icon/info_message1.png" alt="" class="icon24">
-					<span>
-						{{"info_message"|translate}}
-					</span>
+					<img src="assets/icons/icon/info_message1.png" class="icon24">
+					<span> {{"info_message"|translate}} </span>
 				</div>
 			</mat-radio-button>
 			<mat-radio-button class="radio" style="width: 100%;"
 				[checked]="!PageForm.MessageInformation.controls['type'].value"
 				(click)="PageForm.MessageInformation.patchValue({type:false})">
 				<div class="info_message" style="background-color: #FFEBEB;">
-					<img src="assets/icons/icon/info_message2.png" alt="" class="icon24">
-					<span>
-						{{"info_message"|translate}}
-					</span>
+					<img src="assets/icons/icon/info_message2.png" class="icon24">
+					<span> {{"info_message"|translate}} </span>
 				</div>
 			</mat-radio-button>
 		</mat-radio-group>
 	</div>
 	<ng-container footer>
-		<!--<app-form-button name="cancel" (click)="PageModal.MessageInformation=false"></app-form-button>-->
-		<app-form-button form="flat" name="confirm" (click)="PageModal.MessageInformation=false"></app-form-button>
+		<app-form-button name="cancel" (click)="PageModal.MessageInformation=false"></app-form-button>
+		<app-form-button form="flat" name="confirm"
+			(click)="PageModal.MessageInformation=false;MessageStorage[PageForm.MessageInformation.controls['index'].value]=PageForm.MessageInformation.getRawValue();PageForm.MessageInformation.reset()"></app-form-button>
 	</ng-container>
 </vex-flux-modal>
 
