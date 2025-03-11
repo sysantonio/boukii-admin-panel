@@ -327,18 +327,11 @@ export class SettingsComponent implements OnInit {
               desktopImg: [settings?.bookingPage?.banner.desktopImg],
               mobileImg: [settings?.bookingPage?.banner.mobileImg],
             })
-
-            this.PageForm.MessageInformation = this.fb.group({
-              title: [settings?.bookingPage?.messages.title],
-              desc: [settings?.bookingPage?.messages.desc],
-              type: [settings?.bookingPage?.messages.type],
-            })
-
+            this.MessageStorage = settings?.bookingPage?.messages || []
             this.SponsorImg = settings?.bookingPage?.sponsors || []
 
             setTimeout(() => {
               this.dataSourceLevels.data = this.schoolSports[0].degrees;
-
             }, 500);
 
             this.loading = false;
@@ -1079,7 +1072,7 @@ export class SettingsComponent implements OnInit {
       extras: { forfait: this.dataSourceForfait.data, food: this.dataSourceFood.data, transport: this.dataSourceTransport.data },
       degrees: this.dataSourceLevels.data,
       bookingPage: {
-        messages: this.PageForm.MessageInformation.value,
+        messages: this.MessageStorage,
         sponsors: this.SponsorImg,
         banner: this.PageForm.BannerPromocional.value
       }
@@ -1147,6 +1140,7 @@ export class SettingsComponent implements OnInit {
         mobileImg: ["", Validators.required],
       }),
       MessageInformation: this.fb.group({
+        index: [0, Validators.required],
         title: ["", Validators.required],
         desc: ["", Validators.required],
         type: [true, Validators.required],
@@ -1159,8 +1153,12 @@ export class SettingsComponent implements OnInit {
     }
 
   SponsorImg: { index: number, img: string, link: string }[] = []
+  MessageStorage: { index: number, title: string, desc: string, type: boolean }[] = []
 
   removeSponsor(index: number): void {
     this.SponsorImg.splice(index, 1);
+  }
+  removeMessage(index: number): void {
+    this.MessageStorage.splice(index, 1);
   }
 }
