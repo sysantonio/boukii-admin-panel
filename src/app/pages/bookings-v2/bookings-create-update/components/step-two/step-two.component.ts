@@ -35,8 +35,10 @@ export class StepTwoComponent implements OnInit {
 
   ngOnInit(): void {
     this.utilizers = [this.client, ...this.client.utilizers];
-    if(this.initialData) {
+    if(this.initialData && this.initialData.length) {
       this.selectedUtilizers = Array.isArray(this.initialData.utilizers) ? this.initialData.utilizers : [this.initialData.utilizers];
+    } else {
+      this.selectedUtilizers = [];
     }
     this.stepForm = this.fb.group({
       utilizers: this.fb.array(this.selectedUtilizers, Validators.required),

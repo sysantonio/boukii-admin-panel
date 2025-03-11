@@ -22,9 +22,9 @@ flex-direction: column;">
 				<div style="display: flex;align-items: center;">
 					<img src="assets/icons/icon/people.png" class="icon16">
           <span>
-  {{ countGroups(courseFormGroup.controls['course_dates'].value, item.id) }}g
+  {{ countSubgroups(courseFormGroup.controls['course_dates'].value, item.id) }}g
   · {{ findBookingUsers(courseFormGroup.controls['booking_users'].value, courseFormGroup.controls['course_dates'].value, item.id) }} /
-            {{ item.max_participants || courseFormGroup.controls['max_participants'].value || 0 }}p
+            {{ (item.max_participants || courseFormGroup.controls['max_participants'].value) * countSubgroups(courseFormGroup.controls['course_dates'].value, item.id) || 0 }}px
 </span>
 					<div style="margin: auto;"></div>
 					<ng-container>
