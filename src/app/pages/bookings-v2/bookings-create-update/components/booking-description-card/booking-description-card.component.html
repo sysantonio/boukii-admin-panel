@@ -94,11 +94,11 @@
           <div class="utilizersWrapper">
             <img *ngIf="!utilizers[0]?.client_sports || !utilizers[0]?.client_sports.length" class="avatarImg icon40"
               [src]="utilizers[0]?.image || 'assets/img/avatar.png'" />
-            <app-level-user *ngIf="utilizers[0]?.client_sports && utilizers[0]?.client_sports.length && allLevels"
+            <app-level-user *ngIf="sport && utilizers[0]?.client_sports && utilizers[0]?.client_sports.length && allLevels"
               mat-card-avatar style="margin-right: 5px"
-              [allLevels]="utilsService.getSportLevels(sport ? sport.id : utilizers[0]?.client_sports.sport_id, allLevels)"
+              [allLevels]="utilsService.getSportLevels(sport ? sport?.id : utilizers[0]?.client_sports.sport_id, allLevels)"
               [size]="50"
-              [selectLevel]="sport ? utilsService.getClientDegreeByClient(utilizers[0], sport.id).id : utilizers[0].client_sports[0]?.degree_id"
+              [selectLevel]="sport ? utilsService.getClientDegreeByClient(utilizers[0], sport.id)?.id : utilizers[0].client_sports[0]?.degree_id"
               [userImage]="utilizers[0]?.image !== null && utilizers[0]?.image !== '' ? utilizers[0]?.image :  'assets/img/avatar.png'">
             </app-level-user>
             <div class="utilizersWrapper__description">

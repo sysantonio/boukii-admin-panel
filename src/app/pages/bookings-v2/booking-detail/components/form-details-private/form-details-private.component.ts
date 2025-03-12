@@ -134,7 +134,7 @@ export class FormDetailsPrivateComponent implements OnInit {
   }
 
   addCourseDate(initialData: any = null) {
-    let disabled =  initialData.booking_users[0].status == 2;
+    let disabled = initialData?.disabled || (initialData?.booking_users?.[0]?.status == 2);
     const isDatePast = initialData.date && moment(initialData.date).isBefore(moment(), 'day');
     const utilizerArray = this.fb.array(this.utilizers.map(utilizer =>
       this.createUtilizer(utilizer,
@@ -430,10 +430,11 @@ export class FormDetailsPrivateComponent implements OnInit {
       const bookingUsersIds = this.courseDates.at(index).value.booking_users.map(i => i.id);
       const bookingData = this.bookingService.getBookingData();
       const price = this.calculatePrice(this.courseDates.at(index).value);
-      if(bookingData.paid) {
+
+      if (bookingData.paid) {
         const dialogRef = this.dialog.open(CancelPartialBookingModalComponent, {
-          width: "1000px", // Asegurarse de que no haya un ancho máximo
-          panelClass: "full-screen-dialog", // Si necesitas estilos adicionales,
+          width: "1000px",
+          panelClass: "full-screen-dialog",
           data: {
             itemPrice: price,
             booking: bookingData,
@@ -446,7 +447,9 @@ export class FormDetailsPrivateComponent implements OnInit {
               data, bookingData, true, this.user, null, bookingUsersIds, price)
               .subscribe({
                 next: () => {
-                  this.courseDates.removeAt(index);
+                  const oldDateData = this.courseDates.at(index).value;
+                  this.courseDates.removeAt(index); // Eliminamos la fecha
+                  this.addCourseDate({ ...oldDateData, disabled: true }); // La volvemos a agregar deshabilitada
                   this.snackbar.open(
                     this.translateService.instant('snackbar.booking_detail.update'),
                     'OK',
@@ -469,6 +472,8 @@ export class FormDetailsPrivateComponent implements OnInit {
       }
     }
   }
+
+
 
   isRow1Complete(index: number): boolean {
     const dateGroup = this.courseDates.at(index) as FormGroup;

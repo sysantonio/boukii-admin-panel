@@ -591,6 +591,7 @@
   "payment": "Paiement",
   "refund": "Retour",
   "no_refund": "Aucun remboursement",
+  "no refund applied": "Aucun remboursement",
   "payment_history": "Historique de paiement",
   "monitor_no_available": "Moniteur non disponible",
   "monitor_no_available_text": "Les moniteurs de réservation ne sont pas disponibles pour les dates suivantes : ",

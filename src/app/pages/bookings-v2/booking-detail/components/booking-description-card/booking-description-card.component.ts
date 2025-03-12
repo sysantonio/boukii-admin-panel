@@ -129,15 +129,15 @@ export class BookingDescriptionCard {
   }
 
   getExtraDescription(dateExtra) {
-    return dateExtra.map((extra) => extra.description).join(", ");
+    return dateExtra.map((extra) => extra?.description).join(", ");
   }
 
   getExtraName(dateExtra) {
-    return dateExtra.map((extra) => extra.name).join(", ");
+    return dateExtra.map((extra) => extra?.name).join(", ");
   }
 
   getExtraPrice(dateExtra) {
-    return dateExtra.map((extra) => extra.price).join(", ");
+    return dateExtra.map((extra) => extra?.price).join(", ");
   }
 
   sendEditForm(dates: any, course: any, utilizers: any = []) {
@@ -177,6 +177,8 @@ export class BookingDescriptionCard {
         // Aquí puedes tomar los datos y hacer lo que necesites con ellos
         // Por ejemplo, enviarlos al backend o actualizar la UI
         //this.updateBooking(result);
+      } else {
+        this.editActivity.emit(result);
       }
     });
   }
@@ -206,6 +208,8 @@ export class BookingDescriptionCard {
         // Aquí puedes tomar los datos y hacer lo que necesites con ellos
         // Por ejemplo, enviarlos al backend o actualizar la UI
         //this.updateBooking(result);
+      } else {
+        this.editActivity.emit(result);
       }
     });
   }
@@ -234,6 +238,8 @@ export class BookingDescriptionCard {
         // Aquí puedes tomar los datos y hacer lo que necesites con ellos
         // Por ejemplo, enviarlos al backend o actualizar la UI
         //this.updateBooking(result);
+      } else {
+        this.editActivity.emit(result);
       }
     });
   }

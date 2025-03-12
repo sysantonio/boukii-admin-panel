@@ -582,6 +582,7 @@ export class BookingsCreateUpdateV2Component {
     bookingData.cart = this.bookingService.setCart(this.normalizedDates, bookingData);
     bookingData.payment_method_id = this.paymentMethod;
 
+    debugger;
     if(this.paymentMethod === 1) {
       // Mapear la opción seleccionada con el método de pago
       if (this.selectedPaymentOption === 'Efectivo') {
@@ -626,7 +627,8 @@ export class BookingsCreateUpdateV2Component {
                   if (bookingData.payment_method_id === 2) {
                     window.open(paymentResult.data, "_self");
                   } else {
-                    this.showErrorSnackbar("Error al procesar el pago en línea.");
+                    this.snackBar.open(this.translateService.instant('snackbar.booking_detail.send_mail'),
+                      'OK', { duration: 1000 });
                     this.router.navigate([`/bookings/update/${bookingId}`]);
                   }
                 },

@@ -218,19 +218,23 @@ export class BookingDetailV2Component implements OnInit {
           booking_id: this.id
         })
         .subscribe((response) => {
-          this.bookingData$.next(response.data);
+/*          this.bookingData$.next(response.data);
           this.bookingData = response.data;
           this.groupedActivities = [...this.groupBookingUsersByGroupId(response.data)];
-          this.activitiesChangedSubject.next(response.data);
+          this.activitiesChangedSubject.next(response.data);*/
+          this.getBooking();
           this.snackBar.open(this.translateService.instant('snackbar.booking_detail.update'), 'OK', { duration: 3000 });
         });
 
     }
-    if (data.schoolObs || data.clientObs) {
+    else if (data.schoolObs || data.clientObs) {
       this.groupedActivities[index].schoolObs = data.schoolObs;
       this.groupedActivities[index].clientObs = data.clientObs;
       this.editObservations(this.groupedActivities[index].dates[0].booking_users[0].id, data)
+    } else {
+      this.getBooking();
     }
+
   }
 
   editObservations(bookingUserId:number, data:any) {
@@ -259,46 +263,53 @@ export class BookingDetailV2Component implements OnInit {
   }
 
   processDelete(index) {
+    debugger;
     this.deleteIndex = index;
-    if(this.bookingData.paid) {
-      const group = this.groupedActivities[index];
-      const dialogRef = this.dialog.open(CancelPartialBookingModalComponent, {
-        width: "1000px", // Asegurarse de que no haya un ancho máximo
-        panelClass: "full-screen-dialog", // Si necesitas estilos adicionales,
-        data: {
-          itemPrice: group.total,
-          booking: this.bookingData,
-        },
-      });
-
-      dialogRef.afterClosed().subscribe((data: any) => {
-        if (data) {
-          this.bookingService.processCancellation(
-            data, this.bookingData, this.hasOtherActiveGroups(group), this.user, group)
-            .subscribe({
-              next: () => {
-                this.snackBar.open(
-                  this.translateService.instant('snackbar.booking_detail.update'),
-                  'OK',
-                  { duration: 3000 }
-                );
-              },
-              error: (error) => {
-                console.error('Error processing cancellation:', error);
-                this.snackBar.open(
-                  this.translateService.instant('snackbar.error'),
-                  'OK',
-                  { duration: 3000 }
-                );
-              }
-            });
-
-        }
-      });
-
+    const group = this.groupedActivities[index];
+    if(!this.hasOtherActiveGroups(group)) {
+      this.processFullDelete();
     } else {
-      this.deleteModal = true;
+      if(this.bookingData.paid) {
+        const dialogRef = this.dialog.open(CancelPartialBookingModalComponent, {
+          width: "1000px", // Asegurarse de que no haya un ancho máximo
+          panelClass: "full-screen-dialog", // Si necesitas estilos adicionales,
+          data: {
+            itemPrice: group.total,
+            booking: this.bookingData,
+          },
+        });
+
+        dialogRef.afterClosed().subscribe((data: any) => {
+          if (data) {
+            this.bookingService.processCancellation(
+              data, this.bookingData, this.hasOtherActiveGroups(group), this.user, group)
+              .subscribe({
+                next: () => {
+                  this.getBooking();
+                  this.snackBar.open(
+                    this.translateService.instant('snackbar.booking_detail.update'),
+                    'OK',
+                    { duration: 3000 }
+                  );
+                },
+                error: (error) => {
+                  console.error('Error processing cancellation:', error);
+                  this.snackBar.open(
+                    this.translateService.instant('snackbar.error'),
+                    'OK',
+                    { duration: 3000 }
+                  );
+                }
+              });
+
+          }
+        });
+
+      } else {
+        this.deleteModal = true;
+      }
     }
+
 
   }
 
@@ -308,7 +319,7 @@ export class BookingDetailV2Component implements OnInit {
         width: "1000px", // Asegurarse de que no haya un ancho máximo
         panelClass: "full-screen-dialog", // Si necesitas estilos adicionales,
         data: {
-          itemPrice: this.bookingData.paid_total,
+          itemPrice: this.bookingData.price_total,
           booking: this.bookingData,
         },
       });
@@ -320,6 +331,7 @@ export class BookingDetailV2Component implements OnInit {
             this.bookingData.booking_users.map(b => b.id), this.bookingData.price_total)
             .subscribe({
               next: () => {
+                this.getBooking();
                 this.snackBar.open(
                   this.translateService.instant('snackbar.booking_detail.update'),
                   'OK',
@@ -388,6 +400,7 @@ export class BookingDetailV2Component implements OnInit {
 
     // bookingData.cart = this.bookingService.setCart(this.groupedActivities.flatMap(activity => activity.dates), this.bookingService.getBookingData());
 
+    debugger;
     if(this.paymentMethod === 1) {
       // Mapear la opción seleccionada con el método de pago
       if (this.selectedPaymentOption === 'Efectivo') {
@@ -422,11 +435,12 @@ export class BookingDetailV2Component implements OnInit {
                   if (bookingData.payment_method_id === 2) {
                     window.open(paymentResult.data, "_self");
                   } else {
-                    this.showErrorSnackbar("Error al procesar el pago en línea.");
+                    this.snackBar.open(this.translateService.instant('snackbar.booking_detail.send_mail'),
+                      'OK', { duration: 1000 });
                   }
                 },
                 (error) => {
-                  this.showErrorSnackbar("Error al procesar el pago en línea.");
+                  this.showErrorSnackbar(this.translateService.instant('snackbar.booking.payment.error'));
                 }
               );
           } else {
@@ -438,7 +452,7 @@ export class BookingDetailV2Component implements OnInit {
           }
         },
         (error) => {
-          this.showErrorSnackbar("Error al actualizar el pago de la reserva.");
+          this.showErrorSnackbar(this.translateService.instant('snackbar.booking.payment.error'));
         }
       );
   }

@@ -586,6 +586,7 @@
   "payment": "Zahlen",
   "refund": "Zurückkehren",
   "no_refund": "Keine Rückerstattung",
+  "no refund applied": "Keine Rückerstattung",
   "payment_history": "Zahlungshistorie",
   "monitor_no_available": "Monitor nicht verfügbar",
   "monitor_no_available_text": "Für folgende Termine sind keine Reservierungsmonitore verfügbar: ",

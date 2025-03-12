@@ -615,6 +615,7 @@
   "payment": "Pago",
   "refund": "Devolución",
   "no_refund": "Sin reembolso",
+  "no refund applied": "Sin reembolso",
   "payment_history": "Histórico de pagos",
   "monitor_no_available": "Monitor no disponible",
   "monitor_no_available_text": "Hay monitores de la reserva no disponibles para las siguientes fechas: ",

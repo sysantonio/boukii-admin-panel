@@ -106,15 +106,15 @@ export class BookingDescriptionCard {
   }
 
   getExtraDescription(dateExtra) {
-    return dateExtra.map((extra) => extra.description).join(", ");
+    return dateExtra.map((extra) => extra?.description).join(", ");
   }
 
   getExtraName(dateExtra) {
-    return dateExtra.map((extra) => extra.name).join(", ");
+    return dateExtra.map((extra) => extra?.name).join(", ");
   }
 
   getExtraPrice(dateExtra) {
-    return dateExtra.map((extra) => extra.price).join(", ");
+    return dateExtra.map((extra) => extra?.price).join(", ");
   }
 
   sendEditForm(step: number) {
