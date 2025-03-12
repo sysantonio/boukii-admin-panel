@@ -168,9 +168,10 @@
     </div>
 
     <div class="section" style="margin-bottom: 0;border: none;">
-      <div class="dateRow" *ngIf="!bookingData.paid && bookingData.reduction != null">
+      <div class="dateRow" *ngIf="bookingData.reduction != null">
         <div>
-          <span class="hour" (click)="addReduction()" *ngIf="bookingData.reduction == null && this.calculateTotalVoucherPrice()
+          <span class="hour" (click)="addReduction()"
+                *ngIf="!bookingData.paid && bookingData.reduction == null && this.calculateTotalVoucherPrice()
             < bookingData.price_total && !bookingData.paid" style="
             color: #E91E63;
              font-size: 14px;
