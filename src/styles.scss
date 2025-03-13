@@ -558,7 +558,7 @@ body {
 }
 
 .dark-mode {
-  --is-light-theme: !important;
+  --is-light-theme: ;
   --is-dark-theme: initial !important;
 }
 
@@ -655,6 +655,10 @@ body.dark-mode {
 
 .mat-mdc-select-panel-above div.mat-mdc-select-panel {
   background-color: var(--color-grey5);
+}
+angular-editor-toolbar button i {
+  font-family: FontAwesome !important;
+  color: black !important;
 }
 angular-editor {
   .angular-editor-textarea {
