@@ -186,20 +186,8 @@ export class ClientCreateUpdateComponent implements OnInit {
     }, 500);
   }
 
-  onFileChanged(event: Event) {
-    const file = (event.target as HTMLInputElement).files[0];
-    if (file) {
-      const reader = new FileReader();
 
-      reader.onload = () => {
-        this.imagePreviewUrl = reader.result;
-        this.defaults.image = reader.result;
-      };
-
-      reader.readAsDataURL(file);
-    }
-  }
-
+  
   passwordValidator(formControl: FormControl) {
     const { value } = formControl;
     const hasUpperCase = /[A-Z]/.test(value);

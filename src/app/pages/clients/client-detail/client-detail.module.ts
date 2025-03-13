@@ -34,6 +34,7 @@ import { ComponentsModule } from 'src/@vex/components/components.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { IconComponent } from 'src/@vex/components/icon/app.component';
+import { FluxUploadImgModule } from 'src/@vex/components/form/upload-img/app.module';
 
 @NgModule({
   imports: [
@@ -71,7 +72,8 @@ import { IconComponent } from 'src/@vex/components/icon/app.component';
     PageLayoutModule,
     ComponentsModule,
     TranslateModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    FluxUploadImgModule
   ],
   declarations: [ClientDetailComponent],
   exports: [ClientDetailComponent]

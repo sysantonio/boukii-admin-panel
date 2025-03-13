@@ -14,6 +14,8 @@ export class FluxUploadImgComponent {
 
   @Input() size: number = 1
   @Input() format: string = "PNG, JPG"
+  @Input() roundCropper: boolean = false
+
   @Output() upload = new EventEmitter();
 
   onFileChanged(event: Event) {
