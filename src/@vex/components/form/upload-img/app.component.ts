@@ -11,7 +11,6 @@ export class FluxUploadImgComponent {
   @Input() width: number = 400
   @Input() height: number = 290
   @Input() edit: boolean = false
-  @Input() relation: number = 1
 
   @Input() size: number = 1
   @Input() format: string = "PNG, JPG"

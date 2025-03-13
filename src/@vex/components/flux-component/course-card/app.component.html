@@ -168,8 +168,7 @@
 		</div>
 		<div class="cardgroup">
 			<div style="width: 100%;display: flex;">
-				<img *ngIf="courseFormGroup.controls['image'].value && courseFormGroup.controls['id'].value"
-					[src]="courseFormGroup.controls['image'].value || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
+				<img [src]="courseFormGroup.controls['image'].value || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
 					[class]="courseFormGroup.controls['image'].value?'':'emptyImg1'" class="Img1"
 					style="margin-right: 10px;height: 68px;width: 95px;max-width: none;">
 				<div style="width: 100%;">

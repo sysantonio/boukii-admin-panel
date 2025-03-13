@@ -12,10 +12,11 @@
 		<img [src]="imagePreviewUrl" alt="Image Preview" [style.minWidth]="width" [style.minHeight]="height"
 			style="object-fit: contain;margin:0 auto">
 	</div>
-	<div *ngIf="edit && imageChangedEvent" class="imgPrevisualization">
+	<div *ngIf="edit && imageChangedEvent" class="outside imgPrevisualization"
+		style="border: 1px #C7D0D3;border-style: dashed;padding: 20px;border-radius: 8px;margin-bottom:10px">
+		<app-form-button name="change"> </app-form-button>
 		<image-cropper style="height: 100%;" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
-			backgroundColor="#000000" [aspectRatio]="relation" format="webp" (imageCropped)="imageCropped($event)"
-			class="previsualizationImg">
+			backgroundColor="#000000" [aspectRatio]="width/height" format="webp" (imageCropped)="imageCropped($event)">
 		</image-cropper>
 	</div>
 	<input #fileInput (change)="onFileChanged($event)" type="file" style="display: none;">
