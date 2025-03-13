@@ -7,7 +7,6 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, } from '
 })
 export class FluxUploadImgComponent {
   @Input() imagePreviewUrl: any = ""
-  @Input() Previus: boolean = true
   @Input() width: number = 400
   @Input() height: number = 290
   @Input() edit: boolean = false
@@ -49,7 +48,6 @@ export class FluxUploadImgComponent {
       });
   }
 
-  // Helper function to convert Blob to Base64 string
   blobToBase64(blob: Blob): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
