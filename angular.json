@@ -35,6 +35,11 @@
                 "glob": "**/*.svg",
                 "input": "node_modules/@material-design-icons/svg",
                 "output": "assets/img/icons/material-design-icons/"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/@kolkov/angular-editor/assets/icons",
+                "output": "assets/ae-icons/"
               }
             ],
             "styles": [
