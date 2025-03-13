@@ -303,6 +303,7 @@
                         <div class="course-title">
                           {{bUsers?.client?.first_name}}
                           {{bUsers?.client?.last_name}}
+                          <mat-icon color="warn" class="warning-icon" *ngIf="bUsers.notes || bUsers.notes_school">warning</mat-icon>
                         </div>
                         <div class="course-label">
                           {{getLanguage(bUsers?.client?.language1_id)}}

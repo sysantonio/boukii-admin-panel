@@ -67,7 +67,7 @@ export class BookingsCreateUpdateV2Component {
     this.getDegrees();
   }
 
-  handleFormChange(formData: any) {
+  handleFormChange(formData: any, createNew: boolean = false) {
     const {
       step1: { client, mainClient },
       step2: { utilizers },
@@ -96,7 +96,7 @@ export class BookingsCreateUpdateV2Component {
       } else {
         this.forms[this.selectedIndexForm] = formData;
       }
-      this.normalizeDates()
+      this.normalizeDates(createNew)
     }
   }
 
@@ -300,7 +300,7 @@ export class BookingsCreateUpdateV2Component {
     return total;
   }
 
-  private normalizeDates() {
+  private normalizeDates(createNew: boolean = false) {
     // Limpia el array normalizedDates antes de llenarlo
     this.normalizedDates = this.forms.map(form => {
       const {
@@ -332,7 +332,12 @@ export class BookingsCreateUpdateV2Component {
       };
     });
 
-    this.isDetail = true;
+    if (createNew) {
+      this.addNewActivity();
+    } else {
+      this.isDetail = true;
+    }
+
   }
 
   private calculateIndividualTotal(course, dates, utilizers) {
@@ -582,7 +587,6 @@ export class BookingsCreateUpdateV2Component {
     bookingData.cart = this.bookingService.setCart(this.normalizedDates, bookingData);
     bookingData.payment_method_id = this.paymentMethod;
 
-    debugger;
     if(this.paymentMethod === 1) {
       // Mapear la opción seleccionada con el método de pago
       if (this.selectedPaymentOption === 'Efectivo') {
@@ -625,25 +629,37 @@ export class BookingsCreateUpdateV2Component {
               .subscribe(
                 (paymentResult: any) => {
                   if (bookingData.payment_method_id === 2) {
+                    if (this.dialogRef) {
+                      this.dialogRef.close();
+                    }
                     window.open(paymentResult.data, "_self");
                   } else {
+                    if (this.dialogRef) {
+                      this.dialogRef.close();
+                    }
                     this.snackBar.open(this.translateService.instant('snackbar.booking_detail.send_mail'),
                       'OK', { duration: 1000 });
                     this.router.navigate([`/bookings/update/${bookingId}`]);
                   }
                 },
                 (error) => {
+                  if (this.dialogRef) {
+                    this.dialogRef.close();
+                  }
                   this.showErrorSnackbar("Error al procesar el pago en línea.");
                   this.router.navigate([`/bookings/update/${bookingId}`]);
                 }
               );
           } else {
+            if (this.dialogRef) {
+              this.dialogRef.close();
+            }
             // Si no es pago online, llevar directamente a la página de actualización
             this.router.navigate([`/bookings/update/${bookingId}`]);
           }
         },
         (error) => {
-          this.showErrorSnackbar("Error al crear la reserva.");
+          this.showErrorSnackbar("Error");
         }
       );
   }

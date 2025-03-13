@@ -32,6 +32,7 @@ export class BookingsV2Component {
   school: any;
   bookingLog: any = [];
   bookingUsersUnique = [];
+  allLevels: any;
 
   createComponent = BookingsCreateUpdateV2Component;
   icon = '../../../assets/img/icons/reservas.svg';
@@ -42,6 +43,7 @@ export class BookingsV2Component {
     { label: 'type', property: 'sport', type: 'booking_users_image', visible: true },
     { label: 'course', property: 'booking_users', type: 'booking_users', visible: true },
     { label: 'client', property: 'client_main', type: 'client', visible: true },
+    { label: 'obs', property: 'has_observations', type: 'light', visible: true },
     { label: 'dates', property: 'dates', type: 'booking_dates', visible: true },
     { label: 'register', property: 'created_at', type: 'date', visible: true },
     //{ label: 'options', property: 'options', type: 'text', visible: true },
@@ -68,10 +70,18 @@ export class BookingsV2Component {
 
       }
     })
-
+    this.getDegrees();
     this.getSports();
     this.getLanguages();
   }
+
+  getDegrees() {
+    const user = JSON.parse(localStorage.getItem("boukiiUser"))
+    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order',
+      '&school_id=' + user.schools[0].id + '&active=1')
+      .subscribe((data) => this.allLevels = data.data)
+  }
+
 
   async showDetailEvent(event: any) {
 
@@ -232,6 +242,13 @@ export class BookingsV2Component {
       new Date(bu.date) > new Date();
   }
 
+  isFinishedBookingUser(bu: any): boolean {
+    // Compara la fecha más futura con la fecha actual
+    return bu.status === 1 &&
+      new Date(bu.date) < new Date();
+  }
+
+
   encontrarPrimeraClaveConValor(obj: any): string | null {
     if (obj !== null) {
       for (const clave of Object.keys(obj)) {
@@ -296,11 +313,6 @@ export class BookingsV2Component {
       maxDate < new Date();
   }
 
-  isFinishedBookingUser(bu: any): boolean {
-    // Compara la fecha más futura con la fecha actual
-    return bu.status === 1 &&
-      new Date(bu.date) < new Date();
-  }
 
   getSportName(id) {
     return this.sports.find((s) => s.id === id).name

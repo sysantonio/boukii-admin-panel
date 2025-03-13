@@ -16,6 +16,7 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 export class BookingFormStepper implements OnChanges {
   @Output() changedCurrentStep = new EventEmitter<number>();
   @Output() changedFormData = new EventEmitter();
+  @Output() formSaveAndCreateNew  = new EventEmitter();
   @Input() forceStep: number;
   @Input() activitiesBooked: any;
   @Input() selectedDates: any;
@@ -73,6 +74,15 @@ export class BookingFormStepper implements OnChanges {
       this.currentStep--;
     }
     this.changedCurrentStep.emit(this.currentStep);
+  }
+
+  // Método para manejar "guardar y crear nuevo"
+  handleSaveAndCreateNew(formGroup: FormGroup) {
+    // Guardar el formulario actual para el paso 6
+    this.stepperForm.setControl('step6', formGroup);
+
+    // Emitir el evento con el formulario completo
+    this.formSaveAndCreateNew.emit(this.stepperForm);
   }
 
   // Manejar la finalización de cada paso

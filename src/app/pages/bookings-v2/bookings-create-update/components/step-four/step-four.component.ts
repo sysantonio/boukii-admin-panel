@@ -189,6 +189,8 @@ export class StepFourComponent {
     this.selectedDate = event;
     this.selectedDateMoment = moment(event);
     this.stepForm.get("date").patchValue(this.selectedDateMoment);
+    this.selectedCourse = null;
+    this.stepForm.get('course').setValue(null);
     this.cursesInSelectedDate = this.courses.filter(course =>
       course.course_dates.some(d => {
         const courseDateMoment = moment(d.date, "YYYY-MM-DD");
@@ -271,7 +273,7 @@ export class StepFourComponent {
       end_date: maxDate.format("YYYY-MM-DD"),
       course_type: this.courseTypeId,
       sport_id: sportLevel.sport_id,
-      client_id: this.client.id,
+      client_id: this.utilizers.map(item => item.id),
       /*degree_id: sportLevel.id,*/
       get_lower_degrees: false,
       school_id: this.user.schools[0].id,

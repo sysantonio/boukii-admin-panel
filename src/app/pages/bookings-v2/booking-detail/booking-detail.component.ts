@@ -208,7 +208,7 @@ export class BookingDetailV2Component implements OnInit {
   }
 
   editActivity(data: any, index: any) {
-    if (data.course_dates) {
+    if (data && data.course_dates) {
 
       this.crudService.post('/admin/bookings/update',
         {
@@ -227,7 +227,7 @@ export class BookingDetailV2Component implements OnInit {
         });
 
     }
-    else if (data.schoolObs || data.clientObs) {
+    else if (data && (data.schoolObs || data.clientObs)) {
       this.groupedActivities[index].schoolObs = data.schoolObs;
       this.groupedActivities[index].clientObs = data.clientObs;
       this.editObservations(this.groupedActivities[index].dates[0].booking_users[0].id, data)

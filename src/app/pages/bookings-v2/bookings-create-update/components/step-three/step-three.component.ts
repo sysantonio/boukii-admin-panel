@@ -16,6 +16,7 @@ export class StepThreeComponent implements OnInit {
   @Output() stepCompleted = new EventEmitter<FormGroup>();
   @Output() prevStep = new EventEmitter();
 
+  selectedLevelColor: string = ''; // Variable para almacenar el color del nivel seleccionado
   stepForm: FormGroup;
   sportData: any[] = [];
   filteredLevels: Observable<any[]>;
@@ -51,6 +52,14 @@ export class StepThreeComponent implements OnInit {
       if (sport) {
         this.stepForm.get('sportLevel').reset(); // Resetear el nivel al cambiar el deporte
         this.loadLevels(sport);
+      }
+    });
+
+    this.stepForm.get('sportLevel').valueChanges.subscribe((level) => {
+      if (level && level.color) {
+        this.selectedLevelColor = level.color; // Guardar color del nivel seleccionado
+      } else {
+        this.selectedLevelColor = ''; // Resetear si no hay nivel seleccionado
       }
     });
 
@@ -165,7 +174,7 @@ export class StepThreeComponent implements OnInit {
   }
 
   displayFnLevel(level: any): string {
-    return level ? `${level.annotation} - ${level.name}` : '';
+    return level ? `${level.league} - ${level.name}` : '';
   }
 
   isFormValid() {

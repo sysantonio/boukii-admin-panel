@@ -8,6 +8,7 @@ import { ApiCrudService } from 'src/service/crud.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SchoolService } from 'src/service/school.service';
 import { CoursesService } from 'src/service/courses.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'vex-courses-create-update',
@@ -64,7 +65,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
   user: any;
   id: any = null;
 
-  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog, private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, public router: Router, private schoolService: SchoolService,
+  constructor(private fb: UntypedFormBuilder, public dialog: MatDialog,
+              private crudService: ApiCrudService, private activatedRoute: ActivatedRoute,
+              public router: Router, private schoolService: SchoolService,
+    public translateService: TranslateService,
     public courses: CoursesService
   ) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));

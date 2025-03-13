@@ -1,9 +1,15 @@
 <vex-secondary-toolbar current>
-	<vex-breadcrumbs [crumbs]="[
-    {icon:'cursos'},
-    {text:'courses.title', title: true,  link: '/courses'},
-    {text: (mode !== 'update' ? 'courses.new' : 'courses.update'), subtitle: true},
-    ]" class="flex"></vex-breadcrumbs>
+  <vex-breadcrumbs [crumbs]="[
+    { icon: 'cursos' },
+    { text: 'courses.title', title: true, link: '/courses' },
+    {
+      text: mode !== 'update'
+        ? translateService.instant('courses.new')
+        : translateService.instant('courses.update') + ' #' + id,
+      subtitle: true
+    }
+  ]" class="flex">
+  </vex-breadcrumbs>
 </vex-secondary-toolbar>
 <vex-flux-toolbad [Modal]="ModalProgress" [Flux]="ModalFlux" [create]="mode!=='create'"
 	(Check)="ModalFlux=$event;Confirm(0)"></vex-flux-toolbad>

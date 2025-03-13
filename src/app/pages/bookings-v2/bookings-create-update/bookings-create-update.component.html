@@ -1,4 +1,4 @@
-<ng-container *ngIf="!isDetail">
+<ng-container >
 	<div class="barWrapper">
 		<vex-breadcrumbs [crumbs]="[
       { icon: 'reservas' },
@@ -7,7 +7,7 @@
     ]" class="booking-breadcrumb"></vex-breadcrumbs>
 	</div>
 	<div class="barWrapper">
-		<div>
+		<div >
 			<button [disabled]="forms.length || externalData?.mainClient" [ngClass]="{ active: currentStep === 0, prev: currentStep > 0 }"
 				(click)="forceChange(0)" class="crumb">
 				{{ "bookings_page.crumbs.client" | translate }}
@@ -38,10 +38,10 @@
 				{{ "bookings_page.crumbs.client" | translate }}:
 			</span>
 			{{ mainClient.first_name }} {{ mainClient.last_name }}
-      <mat-icon *ngIf="externalData" svgIcon="mat:close" class="icon16"  style="cursor: pointer" mat-dialog-close></mat-icon>
+      <mat-icon *ngIf="externalData" svgIcon="mat:close" style="cursor: pointer; height: 24px; width: 36px;" mat-dialog-close></mat-icon>
 		</div>
 	</div>
-	<div class="bookingContainer">
+	<div class="bookingContainer" *ngIf="!isDetail">
 		<button (click)="openBookingDialog()" mat-button type="button" class="modalButton">
 			{{ "bookings_page_descriptionModal_button" | translate }}
 		</button>
@@ -55,7 +55,8 @@
 			<booking-form-stepper [forceStep]="forceStep" [activitiesBooked]="normalizedDates"
 				[selectedForm]="selectedForm" [selectedDates]="normalizedDates[selectedIndexForm] || null"
 				[allLevels]=allLevels (changedCurrentStep)="currentStep = $event; forceStep = $event;"
-				(changedFormData)="handleFormChange($event)"></booking-form-stepper>
+				(changedFormData)="handleFormChange($event)"
+                            (formSaveAndCreateNew)="handleFormChange($event, true)"></booking-form-stepper>
 		</mat-card>
 		<mat-card class="right-column">
 			<booking-description-card [utilizers]="utilizers" [allLevels]=allLevels [sport]="sport"
