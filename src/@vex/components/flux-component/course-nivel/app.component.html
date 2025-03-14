@@ -33,14 +33,14 @@ flex-direction: column;">
 							{{courseFormGroup.controls['course_dates'].value.length
 							|| 0}} {{'days' | translate}}
 						</span>
-						<span *ngIf="courseFormGroup.controls['duration'].value">
-							&nbsp;{{courseFormGroup.controls['duration'].value}}
+						<span *ngIf="courseFormGroup.controls['course_dates'].value[0].duration">
+							&nbsp;{{courseFormGroup.controls['course_dates'].value[0].duration}}
 						</span>
 					</ng-container>
 					<div style="margin: auto;"></div>
 					<img src="assets/icons/icon/ticket.png" class="icon16">
 					<span>
-					 {{'age_from'| translate}}	{{item.age_min}} / {{'to'| translate}} {{item.age_max}}
+					 {{'age'| translate}}	{{item.age_min}} / {{item.age_max}}
 					</span>
 					<div style="margin: auto;"></div>
 				</div>

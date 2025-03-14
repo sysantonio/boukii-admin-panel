@@ -65,7 +65,7 @@
 					<div class="flexicon">
 						<img src="assets/icons/icon/alumno.png" class="icon24">
 						{{"students" | translate}}
-						<img (click)="cambiarModal=true" src="assets/icons/icon/exc.png" class="icon24"
+						<img (click)="cambiarModal=true" *ngIf="courseFormGroup.controls['booking_users'].value.length" src="assets/icons/icon/exc.png" class="icon24"
 							style="cursor: pointer; margin-left: auto;margin-right: 10px;">
 					</div>
 				</td>
@@ -89,7 +89,7 @@
 					</td>
 					<td *ngFor="let item of courseFormGroup.controls['course_dates'].value; index as j"
 						[style.backgroundColor]="selectDate===j?'var(--is-light-theme, #ffffff) var(--is-dark-theme, black)':' var(--is-light-theme, #f8f9fb) var(--is-dark-theme, #8e97a7)'"
-						[style.color]="item.attended?'#31C044':modified2[user.id]?'#FFCF25':Date(item.date)<today?'#E70F0F':'#C7D0D3'"
+						[style.color]="item.attended?'#31C044':item.group_changed?'#FFCF25':Date(item.date)<today?'#E70F0F':'#C7D0D3'"
 						(click)="selectDate=j;getAvail(item)">
 						<mat-icon class="icon10">circle</mat-icon>
 					</td>
