@@ -239,8 +239,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
           if (group.degree_id === level.id) {
             level.active = true;
             level.old = true;
-/*            level.age_min = level.age_min
-            level.age_max = level.age_max*/
+            group.age_min = level.age_min
+            group.age_max = level.age_max
             level.max_participants = group.course_subgroups[0].max_participants
             level.course_subgroups = group.course_subgroups
           } level.visible = false;
@@ -450,6 +450,22 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   endCourse() {
     const courseFormGroup = this.courses.courseFormGroup.getRawValue()
+    if (courseFormGroup.course_type === 1 && courseFormGroup.course_dates && courseFormGroup.levelGrop) {
+      courseFormGroup.course_dates.forEach((courseDate: any) => {
+        if (courseDate.course_groups) {
+          courseDate.course_groups.forEach((group: any) => {
+            // Buscar en levelGrop el que tenga el mismo degree_id que el id del grupo
+            const matchingLevel = courseFormGroup.levelGrop.find((level: any) => level.id === group.degree_id);
+
+            if (matchingLevel) {
+              // Asignar los valores de age_min y age_max del levelGrop al grupo
+              group.age_min = parseInt(matchingLevel.age_min);
+              group.age_max = parseInt(matchingLevel.age_max);
+            }
+          });
+        }
+      });
+    }
     courseFormGroup.translations = JSON.stringify(this.courses.courseFormGroup.controls['translations'].value)
     courseFormGroup.course_type === 1 ? delete courseFormGroup.settings : courseFormGroup.settings = JSON.stringify(this.courses.courseFormGroup.controls['settings'].value)
     if (this.mode === "create") {
