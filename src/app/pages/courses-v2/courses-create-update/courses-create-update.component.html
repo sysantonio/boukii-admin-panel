@@ -65,8 +65,8 @@
 					{{'flexidates' | translate }}
 				</mat-checkbox>
 				<vex-flux-upload-img [imagePreviewUrl]="courses.courseFormGroup.controls['image'].value"
-					(upload)="courses.courseFormGroup.patchValue({image:$event})" [edit]="true"
-					style="margin-top: 10px;"></vex-flux-upload-img>
+					(upload)="courses.courseFormGroup.patchValue({image:$event})" [edit]="true" [width]="320"
+					[height]="150" style="margin-top: 10px;"></vex-flux-upload-img>
 				<app-form-input [required]="true" [form]="courses.courseFormGroup" control="name"
 					name="courses.coursename">
 				</app-form-input>
@@ -518,9 +518,6 @@
 							number:'0.2-2'}}&nbsp;{{courses.courseFormGroup.controls['currency'].value}}/{{'day' |
 							translate}}
 						</div>
-            <mat-icon *ngIf="item.id.startsWith('aFOR-')" (click)="editExtra(j)" style="cursor: pointer; float: inline-end;">
-              edit
-            </mat-icon>
 						<mat-icon *ngIf="item.id.startsWith('aFOR-')" (click)="extras.splice(j,1)"
 							style="cursor: pointer;float: inline-end;">
 							delete

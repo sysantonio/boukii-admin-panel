@@ -168,7 +168,7 @@
     </div>
     <div class="cardgroup">
       <div style="width: 100%;display: flex;">
-        <img *ngIf="courseFormGroup.controls['image'].value && courseFormGroup.controls['id'].value"
+        <img
              [src]="courseFormGroup.controls['image'].value || 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='"
              [class]="courseFormGroup.controls['image'].value?'':'emptyImg1'" class="Img1"
              style="margin-right: 10px;height: 68px;width: 95px;max-width: none;">
@@ -371,59 +371,59 @@
 						<span>
 							{{"France" | translate}}
 						</span>
-            <mat-icon class="check">check</mat-icon>
-          </div>
-          <div>
+						<mat-icon class="check">check</mat-icon>
+					</div>
+					<div>
 						<span>
 							{{"English"| translate}}
 						</span>
-            <mat-icon class="check">check</mat-icon>
-          </div>
-          <div>
+						<mat-icon class="check">check</mat-icon>
+					</div>
+					<div>
 						<span>
 							{{"German"| translate}}
 						</span>
-            <mat-icon class="check">check</mat-icon>
-          </div>
-          <div>
+						<mat-icon class="check">check</mat-icon>
+					</div>
+					<div>
 						<span>
 							{{"Spanish"| translate}}
 						</span>
-            <mat-icon class="check">check</mat-icon>
-          </div>
-          <div>
+						<mat-icon class="check">check</mat-icon>
+					</div>
+					<div>
 						<span>
 							{{"Italian"| translate}}
 						</span>
-            <mat-icon class="check">check</mat-icon>
-          </div>
-        </div>
-      </div>
-    </div>
-  </ng-container>
-  <ng-container *ngIf="!noneExtras">
-    <div *ngIf="courseFormGroup.controls['course_type'].value===3 && courseFormGroup.controls['settings'].value.groups.length>0"
-         class="cardgroup extras">
-      <div *ngFor="let group of courseFormGroup.controls['settings'].value.groups; index as i">
-        <div *ngIf="group.extras" style="justify-content: space-between;">
-          <p class="label">
-            {{("extras" | translate)+' '+(i+1)+": "+group.groupName}}
-          </p>
-          <img *ngIf="detail" (click)="edit.emit(4)" src="assets/icons/icon/edit2.png" alt
-               class="editbutton icon24">
-        </div>
-        <div *ngFor="let extra of group.extras">
+						<mat-icon class="check">check</mat-icon>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ng-container>
+	<ng-container *ngIf="!noneExtras">
+		<div *ngIf="courseFormGroup.controls['course_type'].value===3 && courseFormGroup.controls['settings'].value.groups.length>0"
+			class="cardgroup extras">
+			<div *ngFor="let group of courseFormGroup.controls['settings'].value.groups; index as i">
+				<div *ngIf="group.extras" style="justify-content: space-between;">
+					<p class="label">
+						{{("extras" | translate)+' '+(i+1)+": "+group.groupName}}
+					</p>
+					<img *ngIf="detail" (click)="edit.emit(4)" src="assets/icons/icon/edit2.png" alt
+						class="editbutton icon24">
+				</div>
+				<div *ngFor="let extra of group.extras">
 					<span
-            style="color: var(--color-dark1);font-size: 12px;font-weight: 600;line-height: 18px;word-wrap: break-word">
+						style="color: var(--color-dark1);font-size: 12px;font-weight: 600;line-height: 18px;word-wrap: break-word">
 						{{extra.name.slice(0,20)}}
 					</span>
-          <span
-            style="color: var(--color-dark1);font-size: 12px;font-weight: 300;line-height: 18px;word-wrap: break-word;margin-left: auto;">
+					<span
+						style="color: var(--color-dark1);font-size: 12px;font-weight: 300;line-height: 18px;word-wrap: break-word;margin-left: auto;">
 						{{extra.price|number:'0.2'}}&nbsp;{{courseFormGroup.controls['currency'].value}}/{{"day" |
-            translate}}
+						translate}}
 					</span>
-        </div>
-        <div *ngIf="!group.extras || group.extras.length<1">
+				</div>
+				<div *ngIf="!group.extras || group.extras.length<1">
 					<span
             style="color: var(--color-dark1);font-size: 12px;font-weight: 600;line-height: 18px;word-wrap: break-word">
 						{{"no_extra_assigned" | translate}}

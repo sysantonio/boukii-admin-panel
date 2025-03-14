@@ -30,8 +30,12 @@
       <mat-step [stepControl]="formInfoAccount">
         <form [formGroup]="formInfoAccount">
           <ng-template matStepLabel>{{'monitors.creation.info' | translate }}</ng-template>
-          <vex-flux-upload-img [imagePreviewUrl]="defaults.image" (upload)="onFileChanged($event)"
-            style="margin-top: 10px;"></vex-flux-upload-img>
+
+          <vex-flux-upload-img [imagePreviewUrl]="defaults.image"
+            (upload)="formInfoAccount.patchValue({image:$event});defaults.image=$event;imagePreviewUrl=$event" [edit]="true" [width]="200"
+            [height]="200" [roundCropper]="true">
+          </vex-flux-upload-img>
+
           <!--<div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
             <div class="image-container">
               <img
