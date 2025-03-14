@@ -700,9 +700,8 @@
 		<div style="display: flex;width: 100%;justify-content: flex-end;gap: 20px;">
 			<app-form-button form="stroked" name="cancel" (click)="editModal=false">
 			</app-form-button>
-			<app-form-button form="flat" name="confirm"
-				(click)="this[editFunctionName](editFunctionArgs);editModal=false">
-			</app-form-button>
+      <app-form-button form="flat" name="confirm" (click)="executeEditFunction()">
+      </app-form-button>
 		</div>
 	</div>
 </vex-flux-modal>

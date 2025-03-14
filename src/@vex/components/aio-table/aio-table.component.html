@@ -769,6 +769,18 @@
 					</ng-container>
 				</ng-container>
 
+        <!-- Light Columns -->
+        <ng-container *ngFor="let column of columns; trackBy: trackByProperty">
+          <ng-container *ngIf="column.type === 'warning'" [matColumnDef]="column.property">
+            <th *matHeaderCellDef class="uppercase" mat-header-cell mat-sort-header>
+              {{ column.label | translate }}
+            </th>
+            <td *matCellDef="let row" [ngClass]="column.cssClasses" mat-cell>
+              <mat-icon color="warn" class="warning-icon" *ngIf="row[column.property]">warning</mat-icon>
+            </td>
+          </ng-container>
+        </ng-container>
+
 				<!-- Light DATA Columns -->
 				<ng-container *ngFor="let column of columns; trackBy: trackByProperty">
 					<ng-container *ngIf="column.type === 'light_data'" [matColumnDef]="column.property">

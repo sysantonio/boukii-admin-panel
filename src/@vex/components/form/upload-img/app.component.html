@@ -9,7 +9,7 @@
 	<img [src]="imagePreviewUrl" alt="Image Preview" [style.width.px]="width" [style.height.px]="height"
 		*ngIf="imagePreviewUrl && !imageChangedEvent" style="object-fit: contain;margin:0 auto">
 	<image-cropper style="width: max-content;" [style.height.px]="height" [imageChangedEvent]="imageChangedEvent"
-		[maintainAspectRatio]="true" [roundCropper]="true" backgroundColor="#000000" [aspectRatio]="width/height"
+		[maintainAspectRatio]="true" [roundCropper]="false" backgroundColor="#000000" [aspectRatio]="width/height"
 		format="webp" *ngIf="edit && imageChangedEvent" (imageCropped)="imageCropped($event)">
 	</image-cropper>
 	<app-form-button name="change" (click)="triggerFileInput()" *ngIf="imagePreviewUrl || imageChangedEvent">

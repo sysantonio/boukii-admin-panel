@@ -58,7 +58,14 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
   setEditFunction(functionName: string, ...args: any[]) {
     this.editFunctionName = functionName;
-    this.editFunctionArgs = args;
+    this.editFunctionArgs = args.length === 1 && Array.isArray(args[0]) ? args[0] : args;
+  }
+
+  executeEditFunction() {
+    if (this.editFunctionName && typeof this[this.editFunctionName] === 'function') {
+      this[this.editFunctionName](...this.editFunctionArgs);
+    }
+    this.editModal = false;
   }
 
   translateExpandedIndex: number = 0
