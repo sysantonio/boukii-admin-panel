@@ -376,7 +376,7 @@ export class BookingService {
         before_change: 'confirmed',
         user_id: userData.id
       }),
-      this.cancelBookingUsers(bookingUsers.map(b => b.id)),
+      this.cancelBookingUsers(bookingUsers),
       this.createPayment({
         booking_id: bookingId,
         school_id: userData.schools[0].id,
