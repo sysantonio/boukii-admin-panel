@@ -815,5 +815,13 @@
   "alert_type": "ALERT TYPE",
   "link_to_logo_url": "Link to logo URL",
   "add_sponsor": "Add sponsor",
-  "or_add_a_link": "Or add a link"
+  "or_add_a_link": "Or add a link",
+  "featured": "Featured",
+  "highlight_this_course": "Highlight this course on the booking page. Max. 4 courses",
+  "promotional_claim": "Promotional claim",
+  "add_highlight_phrase": "Add a small highlighted phrase to make the course stand out.",
+  "example_highlight_phrase": "Example: 'Only one spot available'",
+  "claim": "Claim",
+  "only_one_spot_available": "Only one spot available",
+  "edit": "Edit"
 }

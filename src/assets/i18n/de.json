@@ -815,5 +815,13 @@
   "alert_type": "ALARMART",
   "link_to_logo_url": "Link zur Logo-URL",
   "add_sponsor": "Sponsor hinzufügen",
-  "or_add_a_link": "Oder einen Link hinzufügen"
+  "or_add_a_link": "Oder einen Link hinzufügen",
+  "featured": "Hervorgehoben",
+  "highlight_this_course": "Heben Sie diesen Kurs auf der Buchungsseite hervor. Max. 4 Kurse",
+  "promotional_claim": "Werbeanspruch",
+  "add_highlight_phrase": "Fügen Sie eine kleine hervorgehobene Phrase hinzu, um den Kurs hervorzuheben.",
+  "example_highlight_phrase": "Beispiel: 'Nur ein Platz verfügbar'",
+  "claim": "Anspruch",
+  "only_one_spot_available": "Nur ein Platz verfügbar",
+  "edit": "Bearbeiten"
 }

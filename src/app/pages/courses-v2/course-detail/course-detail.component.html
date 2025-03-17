@@ -8,7 +8,7 @@
 </vex-secondary-toolbar>
 <div class="flex flex-col sm:flex-row gap-4" style="width: 100%; float: left;">
 	<div class="card flex-auto">
-		<mat-tab-group >
+		<mat-tab-group>
 			<mat-tab label="{{'course' | translate}}">
 				<mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
 				<mat-card *ngIf="!loading">
@@ -30,6 +30,14 @@
 									</mat-slide-toggle>
 								</div>
 								<div style="width: calc(50% - 10px)">
+									<button (click)="sendEmailModal=true"
+										style="margin-top: 0px !important;height: 38px; width: 160px;margin-left: auto;"
+										mat-stroked-button type="button">
+										<mat-icon>mail</mat-icon>
+										{{'send_mail' | translate }}
+									</button>
+								</div>
+								<div style="width: calc(50% - 10px)">
 									<mat-slide-toggle (click)="updateCourses()" formControlName="active">
 										<span
 											style="font-size: 14px;font-weight: 600;line-height: 18px;word-wrap: break-word">
@@ -42,13 +50,38 @@
 										</span>
 									</mat-slide-toggle>
 								</div>
-								<div>
-									<button (click)="sendEmailModal=true"
-										style="margin-top: 0px !important;height: 38px; width: 160px;margin-left: auto;"
-										mat-stroked-button type="button">
-										<mat-icon>mail</mat-icon>
-										{{'send_mail' | translate }}
-									</button>
+								<div style="width: calc(50% - 10px)">
+									<mat-slide-toggle (click)="updateCourses()" formControlName="highlighted">
+										<span
+											style="font-size: 14px;font-weight: 600;line-height: 18px;word-wrap: break-word">
+											{{'featured' | translate}}
+										</span>
+										<br>
+										<span
+											style="font-size: 12px;font-weight: 400;line-height: 16px;word-wrap: break-word">
+											{{"highlight_this_course" | translate}}
+										</span>
+									</mat-slide-toggle>
+								</div>
+								<div style="width: 100%">
+									<mat-slide-toggle [checked]="toggleClaimText"
+										(click)="toggleClaimText=!toggleClaimText;!toggleClaimText?courses.courseFormGroup.patchValue({claim_text:''}):'';!toggleClaimText?updateCourses():''">
+										<span
+											style="font-size: 14px;font-weight: 600;line-height: 18px;word-wrap: break-word">
+											{{'promotional_claim' | translate}}
+										</span>
+										<br>
+										<span
+											style="font-size: 12px;font-weight: 400;line-height: 16px;word-wrap: break-word">
+											{{"add_highlight_phrase" | translate}}
+										</span>
+									</mat-slide-toggle>
+								</div>
+								<div style="width: 100%">
+									<app-form-input control="claim_text" [form]="courses.courseFormGroup" name="claim"
+										[readonly]="!toggleClaimText" style="width: 100%;"></app-form-input>
+									<app-form-button form="stroked" name="edit" (click)="updateCourses()">
+									</app-form-button>
 								</div>
 							</div>
 							<div style="padding: 0;border: none;">

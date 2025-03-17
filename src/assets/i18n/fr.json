@@ -813,5 +813,13 @@
   "alert_type": "TYPE D'ALERTE",
   "link_to_logo_url": "Lien vers l'URL du logo",
   "add_sponsor": "Ajouter un sponsor",
-  "or_add_a_link": "Ou ajouter un lien"
+  "or_add_a_link": "Ou ajouter un lien",
+  "featured": "En vedette",
+  "highlight_this_course": "Mettez en avant ce cours sur la page de réservation. Max. 4 cours",
+  "promotional_claim": "Revendiquer promotionnel",
+  "add_highlight_phrase": "Ajoutez une petite phrase mise en avant pour distinguer le cours.",
+  "example_highlight_phrase": "Exemple : 'Une seule place disponible'",
+  "claim": "Revendiquer",
+  "only_one_spot_available": "Une seule place disponible",
+  "edit": "Modifier"
 }

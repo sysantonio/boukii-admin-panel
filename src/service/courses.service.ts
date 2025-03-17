@@ -46,6 +46,8 @@ export class CoursesService {
       max_participants: [10, [Validators.required, Validators.min(1)]],
       image: ["", Validators.required],
       icon: ["", Validators.required],
+      highlighted: [false],
+      claim_text: [""],
       age_max: [99, [Validators.required, Validators.min(0), Validators.max(99)]],
       age_min: [0, [Validators.required, Validators.min(0), Validators.max(99)]],
       date_start: [this.nowDate, Validators.required],

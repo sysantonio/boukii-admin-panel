@@ -25,7 +25,7 @@ export class CourseDetailComponent implements OnInit {
   ageRange: { age_min: number, age_max: number } = { age_min: 0, age_max: 0 };
   shortestDuration: string | null = null;
   sendEmailModal: boolean = false
-
+  toggleClaimText: boolean = false
   constructor(private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, public courses: CoursesService, public TranslateService: TranslateService) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.settings = JSON.parse(this.user.schools[0].settings);
@@ -66,6 +66,7 @@ export class CourseDetailComponent implements OnInit {
                     this.detailData.users = [];
                     this.detailData.users = bookingUser.data;
                     this.courses.settcourseFormGroup(this.detailData)
+                    this.toggleClaimText = Boolean(this.courses.courseFormGroup.controls['claim_text'].value)
                     setTimeout(() => this.loading = false, 0);
                   })
               })
@@ -77,8 +78,6 @@ export class CourseDetailComponent implements OnInit {
     const courseFormGroup = this.courses.courseFormGroup.getRawValue()
     courseFormGroup.translations = JSON.stringify(this.courses.courseFormGroup.controls['translations'].value)
     courseFormGroup.course_type === 1 ? delete courseFormGroup.settings : courseFormGroup.settings = JSON.stringify(this.courses.courseFormGroup.controls['settings'].value)
-    courseFormGroup.discounts = JSON.stringify(this.courses.courseFormGroup.controls['discounts'].value)
-    if (!courseFormGroup.options) delete courseFormGroup.options;
     this.crudService.update('/admin/courses', courseFormGroup, this.id).subscribe()
   }
 

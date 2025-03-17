@@ -822,5 +822,13 @@
   "alert_type": "TIPO DE ALERTA",
   "link_to_logo_url": "Enlace a URL logo",
   "add_sponsor": "Añadir sponsor",
-  "or_add_a_link": "O añadir un enlace"
+  "or_add_a_link": "O añadir un enlace",
+  "featured": "Destacado",
+  "highlight_this_course": "Destaca este curso en la página de reservas. Max. 4 cursos",
+  "promotional_claim": "Claim promocional",
+  "add_highlight_phrase": "Añade una pequeña frase en evidencia que destaque el curso.",
+  "example_highlight_phrase": "Ejemplo: 'Solo una plaza disponible'",
+  "claim": "Claim",
+  "only_one_spot_available": "Solo una plaza disponible",
+  "edit": "Editar"
 }
