@@ -54,13 +54,7 @@
 				</mat-card>
 			</mat-tab>
 			<mat-tab label="{{'bookings' | translate}}" style="overflow: auto;">
-				<vex-aio-table [columns]="columns" [entity]="'/bookings'" [title]="'bookings'" [route]="'bookings'"
-					[filterField]="id" [filterColumn]="'course_id'" [with]="['bookingUsers.course.sport', 'bookingUsers.monitor',
-								  'bookingUsers.client.clientSports.degree',
-								  'bookingUsers.courseSubGroup.degree',
-								  'clientMain.clientSports.degree', 'user',
-								  'vouchersLogs.voucher', 'bookingUsers.bookingUserExtras.courseExtra']">
-				</vex-aio-table>
+				<vex-bookings-v2 [filterCourseId]="id"></vex-bookings-v2>
 			</mat-tab>
 			<mat-tab label="{{'menu.stats' | translate}}"></mat-tab>
 		</mat-tab-group>

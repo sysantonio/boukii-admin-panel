@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { BookingsCreateUpdateV2Component } from './bookings-create-update/bookings-create-update.component';
 import moment from 'moment';
@@ -17,6 +17,7 @@ import { LayoutService } from 'src/@vex/services/layout.service';
   styleUrls: ['./bookings.component.scss']
 })
 export class BookingsV2Component {
+  @Input() filterCourseId: number = 0
   showDetail: boolean = false;
   detailData: any;
   imageAvatar = '../../../assets/img/avatar.png';
@@ -504,11 +505,11 @@ export class BookingsV2Component {
 
   /*  getUniqueBookingUsers(data: any) {
       const uniqueGroups = new Map<string, any>();
-
+  
       data.forEach(item => {
         // Crear una clave única por fecha y monitor
         const key = `${item.date}-${item.monitor_id}`;
-
+  
         if (uniqueGroups.has(key)) {
           const existingItem = uniqueGroups.get(key);
           // Si el precio actual es mayor que el del existente, reemplázalo
@@ -520,18 +521,18 @@ export class BookingsV2Component {
           uniqueGroups.set(key, item);
         }
       });
-
+  
       // Convertimos el Map en un array de los valores
       this.bookingUsersUnique = Array.from(uniqueGroups.values());
     }*/
 
   /*  getUniqueBookingUsers(data: any) {
       const uniqueGroups = new Map<string, any>();
-
+  
       data.forEach(item => {
         // Crear una clave única para cada combinación de client_id, date y monitor_id
         const key = `${item.client_id}-${item.date}-${item.monitor_id}`;
-
+  
         // Si el grupo ya existe, comparamos los precios y nos quedamos con el más alto
         if (uniqueGroups.has(key)) {
           const existingItem = uniqueGroups.get(key);
@@ -543,7 +544,7 @@ export class BookingsV2Component {
           uniqueGroups.set(key, item);
         }
       });
-
+  
       // Convertimos el map en un array de los valores
       this.bookingUsersUnique = Array.from(uniqueGroups.values());
     }*/

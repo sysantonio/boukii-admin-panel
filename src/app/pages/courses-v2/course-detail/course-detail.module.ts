@@ -25,6 +25,7 @@ import { ComponentsModule } from 'src/@vex/components/components.module';
 import { ComponenteButtonModule } from 'src/@vex/components/form/button/app.module';
 import { ComponenteInputModule } from "../../../../@vex/components/form/input/app.module";
 import { CourseOpcionComponent } from '../components/opcion/opcion.component';
+import { BookingsModule } from '../../bookings-v2/bookings.module';
 
 @NgModule({
   declarations: [CourseDetailComponent],
@@ -46,7 +47,8 @@ import { CourseOpcionComponent } from '../components/opcion/opcion.component';
     ComponenteEditorModule,
     ComponenteButtonModule,
     ComponenteInputModule,
-    CourseOpcionComponent
+    CourseOpcionComponent,
+    BookingsModule
   ]
 })
 export class CourseDetailModule { }
