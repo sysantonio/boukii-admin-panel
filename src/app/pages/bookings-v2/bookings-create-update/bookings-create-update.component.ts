@@ -402,8 +402,16 @@ export class BookingsCreateUpdateV2Component {
     if (course.is_flexible) {
       const selectedDatesCount = dates.length; // Número de fechas seleccionadas
       total = course.price * selectedDatesCount;
-
-      const discounts = course.discounts ? JSON.parse(course.discounts) : [];
+      const discounts = [];
+    if (this.course && this.course.discounts && !Array.isArray(this.course.discounts) ) {
+        const discounts = [];
+        try {
+          const discounts = JSON.parse(this.course.discounts);
+          console.log("Discounts parseado correctamente:", discounts);
+        } catch (error) {
+          console.error("Error al parsear discounts:", error);
+        }
+      }
       discounts.forEach((discount: { date: number; percentage: number }) => {
         if (discount.date <= selectedDatesCount) {
           const discountAmount = (course.price * discount.percentage) / 100;
@@ -492,9 +500,16 @@ export class BookingsCreateUpdateV2Component {
       // Si el curso es flexible
       const selectedDatesCount = this.dates.length; // Número de fechas seleccionadas
       total = this.course.price * selectedDatesCount;
-
+      const discounts = [];
       // Aplica los descuentos
-      const discounts = this.course.discounts ? JSON.parse(this.course.discounts) : [];
+      if (this.course && this.course.discounts && !Array.isArray(this.course.discounts) ) {
+        try {
+          const discounts = JSON.parse(this.course.discounts);
+          console.log("Discounts parseado correctamente:", discounts);
+        } catch (error) {
+          console.error("Error al parsear discounts:", error);
+        }
+      }
       discounts.forEach((discount: { date: number; percentage: number }) => {
         if (discount.date <= selectedDatesCount) {
           const discountAmount = (this.course.price * discount.percentage) / 100;

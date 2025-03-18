@@ -152,6 +152,10 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
                 this.extras = mergedExtras;
 
+                if(this.detailData.settings.periods.length > 1){
+                  this.PeriodoFecha = 0;
+                }
+
                 this.courses.settcourseFormGroup(this.detailData);
                 this.courses.courseFormGroup.patchValue({ extras: formattedCourseExtras });
                 this.getDegrees();
@@ -232,23 +236,25 @@ export class CoursesCreateUpdateComponent implements OnInit {
       if (element.active) this.detailData.degrees.push({ ...element, }); //Subgrupo: this.getSubGroups(element.id)
     });
     const levelGrop = []
-    this.detailData.degrees.forEach((level: any) => {
-      level.active = false;
-      this.detailData.course_dates.forEach((cs: any) => {
-        cs.course_groups.forEach((group: any) => {
-          if (group.degree_id === level.id) {
-            level.active = true;
-            level.old = true;
-            group.age_min = level.age_min
-            group.age_max = level.age_max
-            level.max_participants = group.course_subgroups[0].max_participants
-            level.course_subgroups = group.course_subgroups
-          } level.visible = false;
+    if(this.detailData.course_type == 1) {
+      this.detailData.degrees.forEach((level: any) => {
+        level.active = false;
+        this.detailData.course_dates.forEach((cs: any) => {
+          cs.course_groups.forEach((group: any) => {
+            if (group.degree_id === level.id) {
+              level.active = true;
+              level.old = true;
+              group.age_min = level.age_min
+              group.age_max = level.age_max
+              level.max_participants = group.course_subgroups[0].max_participants
+              level.course_subgroups = group.course_subgroups
+            } level.visible = false;
+          });
         });
+        levelGrop.push({ ...level })
       });
-      levelGrop.push({ ...level })
-    });
-    levelGrop.sort((a: any) => a.active ? -1 : 1)
+      levelGrop.sort((a: any) => a.active ? -1 : 1)
+    }
     this.courses.courseFormGroup.patchValue({ levelGrop })
   });
 
@@ -467,7 +473,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       });
     }
     courseFormGroup.translations = JSON.stringify(this.courses.courseFormGroup.controls['translations'].value)
-    courseFormGroup.course_type === 1 ? delete courseFormGroup.settings : courseFormGroup.settings = JSON.stringify(this.courses.courseFormGroup.controls['settings'].value)
+    courseFormGroup.course_type === 1 ? delete courseFormGroup.settings : courseFormGroup.settings = this.courses.courseFormGroup.controls['settings'].value
     if (this.mode === "create") {
       this.crudService.create('/admin/courses', courseFormGroup).subscribe((data) => {
         if (data.success) this.router.navigate(["/courses/detail/" + data.data.id])

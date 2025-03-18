@@ -16,13 +16,14 @@ export class CoursesService {
   settcourseFormGroup(data: any) {
     this.resetcourseFormGroup()
     data.booking_users = data.booking_users_active;
+    data.course_dates = data.course_type == 1 ? data.course_dates : data.settings.periods;
     this.courseFormGroup.patchValue({
       ...data,
       user: data.user ? data.user.username + " (" + data.user.first_name + " " + data.user.last_name + ")" : "",
       translations: JSON.parse(data.translations),
       icon: data.sport.icon_unselected,
       levelGrop: data.degrees,
-      settings: JSON.parse(data.settings),
+      settings: typeof data.settings == 'string' ? JSON.parse(data.settings) : data.settings,
       discounts: data.discounts,
       booking_users: data.booking_users,
     })

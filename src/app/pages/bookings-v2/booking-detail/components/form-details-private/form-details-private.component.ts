@@ -166,15 +166,15 @@ export class FormDetailsPrivateComponent implements OnInit {
     const courseDateGroup = this.fb.group({
       selected: [initialData ? disabled : null],
       booking_users: [initialData ? initialData.booking_users : null],
-      date: [{value: initialData ? initialData.date : formattedDate, disabled: disabled || isDatePast }, Validators.required],
-      startHour: [{value: initialData ? initialData.startHour : null, disabled: disabled || isDatePast}, Validators.required],
+      date: [{value: initialData ? initialData.date : formattedDate, disabled: disabled  }, Validators.required],
+      startHour: [{value: initialData ? initialData.startHour : null, disabled: disabled }, Validators.required],
       endHour: [initialData ? initialData.endHour : null, Validators.required],
       duration: [{value: initialData ? initialData.duration :
-        (!this.course.is_flexible ? this.course.duration : null), disabled: disabled || isDatePast}, Validators.required],
+        (!this.course.is_flexible ? this.course.duration : null), disabled: disabled }, Validators.required],
       price: [initialData ? initialData.price : null],
       currency: this.course.currency,
-      monitor: [{value: initialData ? initialData.monitor : null, disabled: disabled || isDatePast}],
-      changeMonitorOption: [{value: initialData ? initialData.changeMonitorOption : null, disabled: disabled || isDatePast}],
+      monitor: [{value: initialData ? initialData.monitor : null, disabled: disabled }],
+      changeMonitorOption: [{value: initialData ? initialData.changeMonitorOption : null, disabled: disabled }],
       utilizers: utilizerArray,
       originalData: [initialData]
     });
