@@ -245,7 +245,7 @@
                 delete
               </mat-icon>
             </div>
-            <div *ngIf="PeriodoFecha>0 || i===0" style="display: flex;column-gap: 20px;">
+            <div *ngIf="PeriodoFecha>0 || i===0 || courses.courseFormGroup.controls['course_dates'].value.length>1" style="display: flex;column-gap: 20px;">
               <app-form-datepicker [required]="true" [min]="mode==='create'?nowDate:detailData.date_start"
                                    [value]="courses.courseFormGroup.controls['course_dates'].value[i].date"
                                    (do)="courses.courseFormGroup.controls['course_dates'].value[i].date=$event.value;
@@ -274,7 +274,7 @@
               </app-form-select>-->
                <app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].hour_end"
               [required]="true"
-              [table]="courses.hours"
+              [table]="courses.filterAvailableHours(courses.courseFormGroup.controls['course_dates'].value[i].hour_start, courses.courseFormGroup.controls['duration'].value)"
               (do)="courses.courseFormGroup.controls['course_dates'].value[i].hour_end=$event.option.value"
               style="min-width: 0;width: 100%;"
               label="end_hour">

@@ -138,6 +138,60 @@ export class CoursesService {
   default_activity_groups: { groupName: string, ageMin: number, ageMax: number, optionName: string, price: number, extras: any[] } =
     { groupName: "", ageMin: 18, ageMax: 99, optionName: "", price: 1, extras: [] }
 
+  filterHoursByDuration(hourStart: string, duration: string): string[] {
+    const startIndex = this.hours.indexOf(hourStart);
+    if (startIndex === -1) {
+      console.error("Hora de inicio no válida.");
+      return [];
+    }
+
+    // Convertir duración a minutos
+    let totalMinutes = 0;
+    const regex = /(\d+)h\s*(\d*)min?/;
+    const match = duration.match(regex);
+
+    if (match) {
+      const hours = parseInt(match[1], 10) || 0;
+      const minutes = parseInt(match[2], 10) || 0;
+      totalMinutes = hours * 60 + minutes;
+    } else if (duration.includes("min")) {
+      totalMinutes = parseInt(duration.replace("min", ""), 10);
+    }
+
+    // Calcular el número de intervalos de 15 minutos
+    const intervals = totalMinutes / 15;
+    const endIndex = startIndex + intervals;
+
+    return this.hours.slice(startIndex, endIndex + 1);
+  }
+
+  filterAvailableHours(hourStart: string, duration: string): string[] {
+    const startIndex = this.hours.indexOf(hourStart);
+    if (startIndex === -1) {
+      console.error("Hora de inicio no válida.");
+      return this.hours;
+    }
+
+    // Convertimos la duración a minutos
+    let totalMinutes = 0;
+    const regex = /(\d+)h\s*(\d*)min?/;
+    const match = duration.match(regex);
+
+    if (match) {
+      const hours = parseInt(match[1], 10) || 0;
+      const minutes = parseInt(match[2], 10) || 0;
+      totalMinutes = hours * 60 + minutes;
+    } else if (duration.includes("min")) {
+      totalMinutes = parseInt(duration.replace("min", ""), 10);
+    }
+
+    // Calculamos el índice de la hora de finalización
+    const intervalsToRemove = totalMinutes / 15; // Cada bloque es de 15 min
+    const endIndex = startIndex + intervalsToRemove;
+
+    // Retornamos solo las horas **después** del tiempo ocupado
+    return this.hours.slice(endIndex);
+  }
 
   getCourseName(course: any) {
     if (!course.translations) return course.name;
