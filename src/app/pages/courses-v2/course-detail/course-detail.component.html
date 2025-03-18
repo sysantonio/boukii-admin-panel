@@ -8,49 +8,15 @@
 </vex-secondary-toolbar>
 <div class="flex flex-col sm:flex-row gap-4" style="width: 100%; float: left;">
 	<div class="card flex-auto">
-		<mat-tab-group >
+		<mat-tab-group>
 			<mat-tab label="{{'course' | translate}}">
 				<mat-spinner *ngIf="loading" style="margin: 0 auto"></mat-spinner>
 				<mat-card *ngIf="!loading">
 					<mat-card-content style="display: flex;padding: 0;">
 						<div [style.width]="count(courses.courseFormGroup.controls['levelGrop'].value,'active')?'':'100%'"
 							class="contents" style="border: 1px solid #dee6ea;">
-							<div [formGroup]="courses.courseFormGroup" style="border-bottom: 1px solid #dee6ea;">
-								<div style="width: calc(50% - 10px);">
-									<mat-slide-toggle (click)="updateCourses()" formControlName="online">
-										<span
-											style="font-size: 14px;font-weight: 600;line-height: 18px;word-wrap: break-word">
-											{{"visible_reserve_page" | translate}}
-										</span>
-										<br>
-										<span
-											style="font-size: 12px;font-weight: 400;line-height: 16px;word-wrap: break-word">
-											{{"course_visible_online_now" |translate}}
-										</span>
-									</mat-slide-toggle>
-								</div>
-								<div style="width: calc(50% - 10px)">
-									<mat-slide-toggle (click)="updateCourses()" formControlName="active">
-										<span
-											style="font-size: 14px;font-weight: 600;line-height: 18px;word-wrap: break-word">
-											{{'active' | translate}}
-										</span>
-										<br>
-										<span
-											style="font-size: 12px;font-weight: 400;line-height: 16px;word-wrap: break-word">
-											{{"course_active_reservable" | translate}}
-										</span>
-									</mat-slide-toggle>
-								</div>
-								<div>
-									<button (click)="sendEmailModal=true"
-										style="margin-top: 0px !important;height: 38px; width: 160px;margin-left: auto;"
-										mat-stroked-button type="button">
-										<mat-icon>mail</mat-icon>
-										{{'send_mail' | translate }}
-									</button>
-								</div>
-							</div>
+							<vex-course-detail-opcion [Form]="courses.courseFormGroup"
+								(update)="updateCourses()"></vex-course-detail-opcion>
 							<div style="padding: 0;border: none;">
 								<vex-course-detail-card [courseFormGroup]="courses.courseFormGroup" [detail]="true"
 									[noneExtras]="!courses.courseFormGroup.controls['course_extras'].value.length"
@@ -87,18 +53,8 @@
 					</mat-card-content>
 				</mat-card>
 			</mat-tab>
-			<mat-tab label="{{'bookings' | translate}}">
-				<vex-page-layout>
-					<vex-page-layout-content class="fullwidth">
-						<vex-aio-table [columns]="columns" [entity]="'/bookings'" [title]="'bookings'"
-							[route]="'bookings'" [filterField]="id" [filterColumn]="'course_id'" [with]="['bookingUsers.course.sport', 'bookingUsers.monitor',
-								  'bookingUsers.client.clientSports.degree',
-								  'bookingUsers.courseSubGroup.degree',
-								  'clientMain.clientSports.degree', 'user',
-								  'vouchersLogs.voucher', 'bookingUsers.bookingUserExtras.courseExtra']">
-						</vex-aio-table>
-					</vex-page-layout-content>
-				</vex-page-layout>
+			<mat-tab label="{{'bookings' | translate}}" style="overflow: auto;">
+				<vex-bookings-v2 [filterCourseId]="id"></vex-bookings-v2>
 			</mat-tab>
 			<mat-tab label="{{'menu.stats' | translate}}"></mat-tab>
 		</mat-tab-group>

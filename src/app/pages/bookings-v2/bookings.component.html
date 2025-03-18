@@ -10,7 +10,7 @@
     </button>
   </vex-secondary-toolbar> -->
 
-	<vex-secondary-toolbar current>
+	<vex-secondary-toolbar current *ngIf="filterCourseId===0">
 		<vex-breadcrumbs [crumbs]="[
     {icon:'reservas'},
     {text:'bookings', title: true},
@@ -20,12 +20,13 @@
 
 	<vex-page-layout-content [ngClass]="{'table-show-detail': this.showDetail}" class="-mt-6 fullwidth">
 		<vex-aio-table [columns]="columns" [entity]="entity" [deleteEntity]="deleteEntity" [title]="'bookings'"
-			[route]="'bookings'" [createComponent]="createComponent" [canDelete]="false" [canDeactivate]="false" [with]="['bookingUsers.course.sport', 'bookingUsers.monitor',
+			[filterField]="filterCourseId===0?null:filterCourseId" [route]="'bookings'"
+			[createComponent]="createComponent" [canDelete]="false" [canDeactivate]="false" [with]="['bookingUsers.course.sport', 'bookingUsers.monitor',
       'bookingUsers.client.clientSports.degree',
             'bookingUsers.courseSubGroup.degree',
        'clientMain.clientSports.degree', 'user',
-       'vouchersLogs.voucher', 'bookingUsers.bookingUserExtras.courseExtra']" [filterColumn]="'school_id'"
-			[filterField]="user.schools[0].id" [sectionIcon]="icon" [showDetail]="showDetail"
+       'vouchersLogs.voucher', 'bookingUsers.bookingUserExtras.courseExtra']"
+			[filterColumn]="filterCourseId===0?null:'course_id'" [sectionIcon]="icon" [showDetail]="showDetail"
 			(showDetailEvent)="showDetailEvent($event)">
 		</vex-aio-table>
 	</vex-page-layout-content>
@@ -484,50 +485,53 @@
             </div>
           </div>
 
-          <div class="list-inner-holder">
-            <div class="col-left">
-              <mat-slide-toggle [disabled]="true"
-                                [checked]="detailData?.has_boukii_care"></mat-slide-toggle>
-              Boukii Care
-            </div>
-            <div class="col-right">
-              {{detailData?.price_boukii_care | number:'0.2-2'}} {{detailData?.currency}}
-            </div>
-          </div>
+					<div class="list-inner-holder" *ngIf="detailData.price_boukii_care>0">
+						<div class="col-left">
+							<mat-slide-toggle [disabled]="true"
+								[checked]="detailData.has_boukii_care"></mat-slide-toggle>
+							Boukii Care
+						</div>
+						<div class="col-right">
+							{{detailData.price_boukii_care | number:'0.2-2'}} {{detailData.currency}}
+						</div>
+					</div>
 
-          <div class="list-inner-holder">
-            <div class="col-left">
-              <div *ngIf="true"
-                   style="width: 100%;">
-                <mat-slide-toggle [disabled]="true"
-                                  [checked]="existExtras()"></mat-slide-toggle>
-                {{'extras' | translate}}
-              </div>
-            </div>
-            <div class="col-right">
-              {{getExtrasPrice() | number:'0.2-2'}} {{detailData?.currency}}
-            </div>
-          </div>
-        </div>
-        <div class="subtitle-sub">
-          {{ 'method_paiment' | translate }}
-        </div>
-        <div *ngIf="bonus?.length > 0"
-             class="list-holder">
-          <div class="col-left">
-            {{'bonus' | translate}}
-          </div>
-          <div class="col-right">
-            -{{getBonusPrice() | number:'0.2-2'}} {{detailData?.currency}}
-          </div>
-        </div>
-        <div *ngIf="detailData?.payment_method != 6"
-             class="list-holder">
-          <div>
-            <!-- class="col-left" -->
-            <div class="col-l">
-              {{ getPaymentMethod(detailData?.payment_method) | translate }}
-            </div>
+					<div class="list-inner-holder" *ngIf="getExtrasPrice()>0">
+						<div class="col-left">
+							<div *ngIf="true" style="width: 100%;">
+								<mat-slide-toggle [disabled]="true" [checked]="existExtras()"></mat-slide-toggle>
+								{{'extras' | translate}}
+							</div>
+						</div>
+						<div class="col-right">
+							{{getExtrasPrice() | number:'0.2-2'}} {{detailData.currency}}
+						</div>
+					</div>
+				</div>
+				<div *ngIf="bonus?.length > 0" class="subtitle-sub">
+					<div class="col-left">
+						{{'bonus' | translate}}
+					</div>
+					<div class="col-right">
+						-{{getBonusPrice() | number:'0.2-2'}} {{detailData.currency}}
+					</div>
+				</div>
+				<div class="title-actividad">
+					<div class="col-left">
+						<b class="title">
+							{{ 'method_paiment' | translate }}:
+						</b>
+					</div>
+					<div class="col-right">
+						{{ getPaymentMethod(detailData.payment_method) | translate }}
+					</div>
+				</div>
+				<div *ngIf="detailData.payment_method != 6" class="list-holder">
+					<div>
+						class="col-left"
+						<div class="col-l">
+							{{ getPaymentMethod(detailData.payment_method) | translate }}
+						</div>
             <!-- TODO: revisar metodo de pago cuando hay varios pagos y que estado poner?? -->
             <!-- <div class="col-r">
                           <span style="#FA9917">En attend de paiment</span>

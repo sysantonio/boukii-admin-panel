@@ -22,6 +22,10 @@ import { CoursesDetailCardNivelModule } from 'src/@vex/components/flux-component
 import { ComponenteEditorModule } from "../../../../@vex/components/form/editor/app.module";
 import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.module';
 import { ComponentsModule } from 'src/@vex/components/components.module';
+import { ComponenteButtonModule } from 'src/@vex/components/form/button/app.module';
+import { ComponenteInputModule } from "../../../../@vex/components/form/input/app.module";
+import { CourseOpcionComponent } from '../components/opcion/opcion.component';
+import { BookingsModule } from '../../bookings-v2/bookings.module';
 
 @NgModule({
   declarations: [CourseDetailComponent],
@@ -41,7 +45,10 @@ import { ComponentsModule } from 'src/@vex/components/components.module';
     PageLayoutModule,
     MatIconModule, FluxModalModule, MatCheckboxModule, MatDatepickerModule, AngularEditorModule, MatButtonModule, CoursesDetailCardNivelModule,
     ComponenteEditorModule,
-
+    ComponenteButtonModule,
+    ComponenteInputModule,
+    CourseOpcionComponent,
+    BookingsModule
   ]
 })
 export class CourseDetailModule { }
