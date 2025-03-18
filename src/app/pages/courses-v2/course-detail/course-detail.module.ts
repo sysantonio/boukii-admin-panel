@@ -24,6 +24,7 @@ import { PageLayoutModule } from 'src/@vex/components/page-layout/page-layout.mo
 import { ComponentsModule } from 'src/@vex/components/components.module';
 import { ComponenteButtonModule } from 'src/@vex/components/form/button/app.module';
 import { ComponenteInputModule } from "../../../../@vex/components/form/input/app.module";
+import { CourseOpcionComponent } from '../components/opcion/opcion.component';
 
 @NgModule({
   declarations: [CourseDetailComponent],
@@ -44,7 +45,8 @@ import { ComponenteInputModule } from "../../../../@vex/components/form/input/ap
     MatIconModule, FluxModalModule, MatCheckboxModule, MatDatepickerModule, AngularEditorModule, MatButtonModule, CoursesDetailCardNivelModule,
     ComponenteEditorModule,
     ComponenteButtonModule,
-    ComponenteInputModule
-]
+    ComponenteInputModule,
+    CourseOpcionComponent
+  ]
 })
 export class CourseDetailModule { }
