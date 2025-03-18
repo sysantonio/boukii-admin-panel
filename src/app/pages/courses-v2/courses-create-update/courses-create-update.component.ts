@@ -152,7 +152,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
                 this.extras = mergedExtras;
 
-                if(this.detailData.settings.periods.length > 1){
+                if(this.detailData?.settings?.periods?.length > 1){
                   this.PeriodoFecha = 0;
                 }
 

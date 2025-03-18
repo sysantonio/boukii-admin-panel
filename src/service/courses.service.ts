@@ -16,7 +16,7 @@ export class CoursesService {
   settcourseFormGroup(data: any) {
     this.resetcourseFormGroup()
     data.booking_users = data.booking_users_active;
-    data.course_dates = data.course_type == 1 ? data.course_dates : data.settings.periods;
+    data.course_dates = data.course_type == 1 ? data.course_dates : data.settings?.periods;
     this.courseFormGroup.patchValue({
       ...data,
       user: data.user ? data.user.username + " (" + data.user.first_name + " " + data.user.last_name + ")" : "",
@@ -44,19 +44,19 @@ export class CoursesService {
       name: ["", Validators.required],
       short_description: ["", Validators.required],
       description: ["", Validators.required],
-      price: [100, [Validators.required, Validators.min(1)]],
+      price: [null, [Validators.required, Validators.min(1)]],
       currency: [settings?.taxes?.currency || 'CHF'],
       max_participants: [10, [Validators.required, Validators.min(1)]],
       image: ["", Validators.required],
       icon: ["", Validators.required],
       highlighted: [false],
       claim_text: [""],
-      age_max: [99, [Validators.required, Validators.min(0), Validators.max(99)]],
-      age_min: [0, [Validators.required, Validators.min(0), Validators.max(99)]],
-      date_start: [this.nowDate, Validators.required],
-      date_end: [this.nowDate, Validators.required],
-      date_start_res: [this.nowDate],
-      date_end_res: [this.nowDate],
+      age_max: [null, [Validators.required, Validators.min(0), Validators.max(99)]],
+      age_min: [null, [Validators.required, Validators.min(0), Validators.max(99)]],
+      date_start: [null, Validators.required],
+      date_end: [null, Validators.required],
+      date_start_res: [null],
+      date_end_res: [null],
       duration: [null, Validators.required],
       confirm_attendance: [false],
       active: [true],
