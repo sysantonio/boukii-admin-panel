@@ -423,6 +423,7 @@
   "login.ok": "ENTRAR",
   "login.text1": "Accede con tu correo y contraseña.",
   "snackbar.admin.langs": "Tan solo pueden seleccionarse 6 idiomas",
+  "snackbar.error": "Se ha producido un error desconocido.",
   "snackbar.admin.create": "Administrador creado correctamente",
   "snackbar.admin.update": "Administrador actualizado correctamente",
   "snackbar.bonus.create": "Bono creado correctamente",

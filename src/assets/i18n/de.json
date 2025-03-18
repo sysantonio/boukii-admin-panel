@@ -825,5 +825,6 @@
   "example_highlight_phrase": "Beispiel: 'Nur ein Platz verfügbar'",
   "claim": "Anspruch",
   "only_one_spot_available": "Nur ein Platz verfügbar",
-  "edit": "Bearbeiten"
+  "edit": "Bearbeiten",
+  "snackbar.error": "Ein unbekannter Fehler ist aufgetreten."
 }

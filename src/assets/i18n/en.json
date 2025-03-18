@@ -824,5 +824,6 @@
   "example_highlight_phrase": "Example: 'Only one spot available'",
   "claim": "Claim",
   "only_one_spot_available": "Only one spot available",
-  "edit": "Edit"
+  "edit": "Edit",
+  "snackbar.error": "An unknown error has occurred."
 }
