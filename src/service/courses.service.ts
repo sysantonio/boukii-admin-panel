@@ -13,10 +13,14 @@ export class CoursesService {
   minDate = this.nowDate;
   maxDate = new Date(2099, 12, 31);
 
-  settcourseFormGroup(data: any) {
+  settcourseFormGroup(data: any, isPreview = false) {
     this.resetcourseFormGroup()
     data.booking_users = data.booking_users_active;
-    data.course_dates = data.course_type == 1 ? data.course_dates : data.settings?.periods;
+    if(!isPreview) {
+      data.course_dates = data.course_type == 1 ? data.course_dates : data.settings?.periods;
+    } else {
+      data.course_dates_prev = data.course_type == 1 ? data.course_dates : data.settings?.periods;
+    }
     this.courseFormGroup.patchValue({
       ...data,
       user: data.user ? data.user.username + " (" + data.user.first_name + " " + data.user.last_name + ")" : "",
@@ -74,6 +78,7 @@ export class CoursesService {
       school_id: [this.user.schools[0].id],
       station_id: [null],
       course_dates: [[{ ...this.default_course_dates }], Validators.required],
+      course_dates_prev: [[{ ...this.default_course_dates }]],
       discounts: [[], Validators.required],
       course_extras: [[], Validators.required],
       unique: [true],

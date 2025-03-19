@@ -288,17 +288,17 @@
                class="editbutton icon24">
         </div>
       </div>
-      <div *ngIf="courseFormGroup.controls['course_dates'].value.length>0" style="width: 100%;">
+      <div *ngIf="courseFormGroup.controls['course_dates_prev'].value && courseFormGroup.controls['course_dates_prev'].value.length>0" style="width: 100%;">
         <div style="display: flex;">
           <img src="assets/icons/icon/calendar.png" class="icon24">
           <p class="label">
             {{'bookings_page.description.date' |translate }}
           </p>
         </div>
-        <p *ngIf="!courseFormGroup.controls['course_dates'].value" class="emptyText">
+        <p *ngIf="!courseFormGroup.controls['course_dates_prev'].value" class="emptyText">
         </p>
         <ng-container *ngIf="courseFormGroup.controls['course_type'].value === 1; else singleDate">
-          <p *ngFor="let item of courseFormGroup.controls['course_dates'].value"
+          <p *ngFor="let item of courseFormGroup.controls['course_dates_prev'].value"
              style="font-size: 14px; text-align-last: justify; display: flex; justify-content: space-between;">
             <span><b>{{ item.date | date: 'dd-MM-yyyy' }}</b></span>
             <span style="color: var(--color-grey1);">
@@ -311,7 +311,7 @@
         </ng-container>
 
         <ng-template #singleDate>
-          <p style="font-size: 14px; text-align-last: justify; display: flex; justify-content: space-between;" *ngFor="let item of courseFormGroup.controls['course_dates'].value">
+          <p style="font-size: 14px; text-align-last: justify; display: flex; justify-content: space-between;" *ngFor="let item of courseFormGroup.controls['course_dates_prev'].value">
     <span><b>
         {{ item.date | date: 'dd-MM-yyyy' }} -
       {{ item.date_end | date: 'dd-MM-yyyy' }}

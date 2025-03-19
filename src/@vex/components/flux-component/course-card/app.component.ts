@@ -32,18 +32,18 @@ export class CourseDetailCardComponent implements OnChanges {
   DateDiff = (value1: string, value2: string): number => Math.round((new Date(value2).getTime() - new Date(value1).getTime()) / 1000 / 60 / 60 / 24)
   ngOnChanges(): void {
     //if (this.courseFormGroup.controls['id'].value) {
-    //  const course_dates = []
-    //  for (const [index, value] of this.courseFormGroup.controls['course_dates'].value.entries()) {
-    //    if (index !== 0 && course_dates[course_dates.length - 1]["price"] === value["price"] &&
-    //      course_dates[course_dates.length - 1]["hour_end"] === value["hour_end"] &&
-    //      course_dates[course_dates.length - 1]["hour_start"] === value["hour_start"] &&
-    //      new Date(value["date"]).getTime() - new Date(course_dates[course_dates.length - 1]["date_end"]).getTime() === 86400000
+    //  const course_dates_prev = []
+    //  for (const [index, value] of this.courseFormGroup.controls['course_dates_prev'].value.entries()) {
+    //    if (index !== 0 && course_dates_prev[course_dates_prev.length - 1]["price"] === value["price"] &&
+    //      course_dates_prev[course_dates_prev.length - 1]["hour_end"] === value["hour_end"] &&
+    //      course_dates_prev[course_dates_prev.length - 1]["hour_start"] === value["hour_start"] &&
+    //      new Date(value["date"]).getTime() - new Date(course_dates_prev[course_dates_prev.length - 1]["date_end"]).getTime() === 86400000
     //    ) { } else {
-    //      course_dates.push(value)
+    //      course_dates_prev.push(value)
     //    }
-    //    course_dates[course_dates.length - 1].date_end = value.date
+    //    course_dates_prev[course_dates_prev.length - 1].date_end = value.date
     //  }
-    //  this.courseFormGroup.patchValue({ course_dates })
+    //  this.courseFormGroup.patchValue({ course_dates_prev })
     //}
   }
 
