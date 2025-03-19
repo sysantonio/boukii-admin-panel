@@ -236,26 +236,39 @@ export class CoursesCreateUpdateComponent implements OnInit {
       if (element.active) this.detailData.degrees.push({ ...element, }); //Subgrupo: this.getSubGroups(element.id)
     });
     const levelGrop = []
-    if(this.detailData.course_type == 1) {
+
+
+    if (this.detailData.course_dates && Array.isArray(this.detailData.course_dates)) {
       this.detailData.degrees.forEach((level: any) => {
         level.active = false;
+
         this.detailData.course_dates.forEach((cs: any) => {
-          cs.course_groups.forEach((group: any) => {
-            if (group.degree_id === level.id) {
-              level.active = true;
-              level.old = true;
-              group.age_min = level.age_min
-              group.age_max = level.age_max
-              level.max_participants = group.course_subgroups[0].max_participants
-              level.course_subgroups = group.course_subgroups
-            } level.visible = false;
-          });
+          if (cs.course_groups && Array.isArray(cs.course_groups)) {
+            cs.course_groups.forEach((group: any) => {
+              if (group.degree_id === level.id) {
+                level.active = true;
+                level.old = true;
+                group.age_min = level.age_min;
+                group.age_max = level.age_max;
+
+                if (group.course_subgroups && Array.isArray(group.course_subgroups) && group.course_subgroups.length > 0) {
+                  level.max_participants = group.course_subgroups[0].max_participants;
+                  level.course_subgroups = group.course_subgroups;
+                }
+
+                level.visible = false;
+              }
+            });
+          }
         });
-        levelGrop.push({ ...level })
+
+        levelGrop.push({ ...level });
       });
-      levelGrop.sort((a: any) => a.active ? -1 : 1)
+
+      levelGrop.sort((a: any) => (a.active ? -1 : 1));
     }
-    this.courses.courseFormGroup.patchValue({ levelGrop })
+
+    this.courses.courseFormGroup.patchValue({ levelGrop });
   });
 
   Confirm(add: number) {

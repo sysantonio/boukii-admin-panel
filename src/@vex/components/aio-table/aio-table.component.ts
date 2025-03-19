@@ -859,8 +859,14 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
     if (dates.length > 0) {
       let min = dates.find((objeto: any) => objeto.active === 1 || objeto.active === true);
       let max = dates.slice().reverse().find((objeto: any) => objeto.active === 1 || objeto.active === true);
-      return { min: min.date, max: max.date }
-    } else return { min: null, max: null }
+
+      return {
+        min: min ? min.date : null,
+        max: max ? max.date : null
+      };
+    } else {
+      return { min: null, max: null };
+    }
   }
 
   /* EXPORT QR */
