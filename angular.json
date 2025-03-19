@@ -169,6 +169,9 @@
             },
             "local": {
               "browserTarget": "vex:build:local"
+            },
+            "development": {
+              "browserTarget": "vex:build:development"
             }
           }
         },

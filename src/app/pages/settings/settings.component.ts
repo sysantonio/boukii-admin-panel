@@ -293,7 +293,7 @@ export class SettingsComponent implements OnInit {
               this.filteredProvinces = this._filterProvinces(country.id);
             });
 
-            const settings = JSON.parse(this.school.settings);
+            const settings = typeof this.school.settings === 'string' ? JSON.parse(this.school.settings) : this.school.settings;
             this.people = settings && settings.prices_range.people ? settings.prices_range.people : this.people;
             this.displayedColumns = ['intervalo', ...Array.from({ length: this.people }, (_, i) => `${i + 1}`)];
             this.dataSource = settings && settings.prices_range.prices && settings.prices_range.prices !== null ? settings.prices_range.prices :

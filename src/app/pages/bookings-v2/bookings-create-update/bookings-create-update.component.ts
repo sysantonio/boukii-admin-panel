@@ -198,16 +198,35 @@ export class BookingsCreateUpdateV2Component {
       }
 
       // Calcular el total de los extras
-      const extrasTotal = this.dates.reduce((acc: number, date: any) => {
-        if (date.extras && Array.isArray(date.extras) && date.extras.length > 0) {
-          const extrasPrice = date.extras.reduce((extraAcc: number, extra: any) => {
-            const price = parseFloat(extra.price) || 0;
-            const quantity = parseFloat(extra.quantity) || 1;
-            return extraAcc + price * quantity;
-          }, 0);
-          return acc + extrasPrice;
+      // Calcula el total de los extras
+      const extrasTotal = this.dates.reduce((acc, date) => {
+        // Para cursos colectivos
+        if (this.course.course_type === 1) {
+          if (date.extras && date.extras.length) {
+            const extrasPrice = date.extras.reduce((extraAcc, extra) => {
+              const price = parseFloat(extra.price) || 0; // Convierte el precio del extra a un número
+              return extraAcc + (price * (extra.quantity || 1)); // Multiplica el precio del extra por la cantidad
+            }, 0);
+            return acc + extrasPrice;
+          }
         }
-        return acc;
+        // Para cursos privados
+        else if (this.course.course_type === 2) {
+          // Asegúrate de que 'utilizers' está definido en la fecha
+          if (date.utilizers && date.utilizers.length) {
+            // Sumar el total de extras de cada utilizador
+            date.utilizers.forEach(utilizer => {
+              if (utilizer.extras && utilizer.extras.length) {
+                const extrasPrice = utilizer.extras.reduce((extraAcc, extra) => {
+                  const price = parseFloat(extra.price) || 0; // Convierte el precio del extra a un número
+                  return extraAcc + (price * (extra.quantity || 1)); // Multiplica el precio del extra por la cantidad
+                }, 0);
+                acc += extrasPrice; // Suma el precio de los extras del utilizador al acumulador
+              }
+            });
+          }
+        }
+        return acc; // Retorna el acumulador
       }, 0);
 
       // Asegurarse de que el total de extras sea un número válido
@@ -269,7 +288,7 @@ export class BookingsCreateUpdateV2Component {
         }
 
         // Suma el precio total de los extras para cada utilizador en esta fecha
-        date.utilizers.forEach((utilizer: any) => {
+       /* date.utilizers.forEach((utilizer: any) => {
           if (utilizer.extras && utilizer.extras.length) {
             const extrasTotal = utilizer.extras.reduce((acc, extra) => {
               const price = parseFloat(extra.price) || 0; // Convierte el precio del extra a un número
@@ -277,15 +296,15 @@ export class BookingsCreateUpdateV2Component {
             }, 0);
             total += extrasTotal; // Suma el total de extras por cada utilizador
           }
-        });
+        });*/
 
       });
     } else {
       // Si el curso no es flexible
       this.dates.forEach((date: any) => {
-        const dateTotal = parseFloat(this.course.price) * this.utilizers.length; // Precio por número de utilizadores
+        const dateTotal = parseFloat(this.course.price); // Precio por número de utilizadores
         total += dateTotal;
-        date.utilizers.forEach((utilizer: any) => {
+        /*date.utilizers.forEach((utilizer: any) => {
           if (utilizer.extras && utilizer.extras.length) {
             const extrasTotal = utilizer.extras.reduce((acc, extra) => {
               const price = parseFloat(extra.price) || 0; // Convierte el precio del extra a un número
@@ -293,7 +312,7 @@ export class BookingsCreateUpdateV2Component {
             }, 0);
             total += extrasTotal; // Suma el total de extras por cada utilizador
           }
-        });
+        });*/
       });
     }
 
@@ -351,7 +370,6 @@ export class BookingsCreateUpdateV2Component {
     }
 
     // Calcula el total de los extras
-    // Calcula el total de los extras
     const extrasTotal = dates.reduce((acc, date) => {
       // Para cursos colectivos
       if (course.course_type === 1) {
@@ -403,7 +421,7 @@ export class BookingsCreateUpdateV2Component {
       const selectedDatesCount = dates.length; // Número de fechas seleccionadas
       total = course.price * selectedDatesCount;
       const discounts = [];
-    if (this.course && this.course.discounts && !Array.isArray(this.course.discounts) ) {
+      if (this.course && this.course.discounts && !Array.isArray(this.course.discounts) ) {
         const discounts = [];
         try {
           const discounts = JSON.parse(this.course.discounts);
@@ -421,6 +439,19 @@ export class BookingsCreateUpdateV2Component {
     } else {
       total = parseFloat(course.price);
     }
+    // Calcula el total de los extras
+/*    const extrasTotal = dates.reduce((acc, date) => {
+      // Para cursos colectivos
+
+      if (date.extras && date.extras.length) {
+        const extrasPrice = date.extras.reduce((extraAcc, extra) => {
+          const price = parseFloat(extra.price) || 0; // Convierte el precio del extra a un número
+          return extraAcc + (price * (extra.quantity || 1)); // Multiplica el precio del extra por la cantidad
+        }, 0);
+        return acc + extrasPrice;
+
+      }
+    });*/
     return total;
   }
 
@@ -440,7 +471,7 @@ export class BookingsCreateUpdateV2Component {
           total += parseFloat(interval[selectedUtilizers]);
         }
 
-        date.utilizers.forEach(utilizer => {
+/*        date.utilizers.forEach(utilizer => {
           if (utilizer.extras && utilizer.extras.length) {
             const extrasTotal = utilizer.extras.reduce((acc, extra) => {
               const price = parseFloat(extra.price) || 0;
@@ -448,13 +479,13 @@ export class BookingsCreateUpdateV2Component {
             }, 0);
             total += extrasTotal;
           }
-        });
+        });*/
       });
     } else {
       dates.forEach((date: any) => {
-        const dateTotal = parseFloat(course.price) * utilizers.length;
+        const dateTotal = parseFloat(course.price);
         total += dateTotal;
-        date.utilizers.forEach(utilizer => {
+/*        date.utilizers.forEach(utilizer => {
           if (utilizer.extras && utilizer.extras.length) {
             const extrasTotal = utilizer.extras.reduce((acc, extra) => {
               const price = parseFloat(extra.price) || 0;
@@ -462,7 +493,7 @@ export class BookingsCreateUpdateV2Component {
             }, 0);
             total += extrasTotal;
           }
-        });
+        });*/
       });
     }
 

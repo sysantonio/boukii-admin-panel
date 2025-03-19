@@ -79,13 +79,15 @@
         <app-form-editor [required]="true" [form]="courses.courseFormGroup" control="description"
                          name="courses.desc">
         </app-form-editor>
-        <div style="display: flex; flex-wrap: wrap; column-gap: 20px;">
+        <div style="display: flex; flex-wrap: wrap; column-gap: 20px;" [hidden]="courses.courseFormGroup.controls['is_flexible'].value
+    && courses.courseFormGroup.controls['course_type'].value != 1">
           <app-form-input
             [required]="true"
             [form]="courses.courseFormGroup"
             [Suffix]="courses.courseFormGroup.controls['currency'].value"
             style="width: calc(50% - 10px);"
             control="price"
+            value="0"
             name="{{ courses.courseFormGroup.controls['is_flexible'].value
     ? (courses.courseFormGroup.controls['course_type'].value == 1 ? 'price_per_date' : 'min_price')
     : 'price_per_course' }}"

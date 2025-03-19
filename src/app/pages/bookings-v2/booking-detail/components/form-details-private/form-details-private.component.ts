@@ -163,6 +163,7 @@ export class FormDetailsPrivateComponent implements OnInit {
       }
     }
 
+
     const courseDateGroup = this.fb.group({
       selected: [initialData ? disabled : null],
       booking_users: [initialData ? initialData.booking_users : null],
@@ -367,6 +368,7 @@ export class FormDetailsPrivateComponent implements OnInit {
 
     // Suscribirse a cambios en 'duration'
     courseDateGroup.get('duration').valueChanges.subscribe(() => {
+      debugger;
       this.updateEndHour(courseDateGroup);
 
       const selectedDate = courseDateGroup.get('date').value;
@@ -409,7 +411,7 @@ export class FormDetailsPrivateComponent implements OnInit {
 
     } else {
       // Si el curso no es flexible
-      const dateTotal = parseFloat(this.course.price) * this.utilizers.length; // Precio por número de utilizadores
+      const dateTotal = parseFloat(this.course.price); // Precio por número de utilizadores
       total += dateTotal;
 
     }
@@ -561,7 +563,7 @@ export class FormDetailsPrivateComponent implements OnInit {
       const course_dates = this.stepForm.get('course_dates').getRawValue();
 
       let totalPrice = 0;
-
+      debugger;
       // Calcular el precio para cada fecha y acumular el total
       course_dates.forEach((date, index) => {
         if(!date.selected) {

@@ -1040,7 +1040,8 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   getTrad(data: any, name: any) {
-    const dataJ = JSON.parse(data);
+    let dataJ = typeof data === 'string' ?
+      JSON.parse(data) : data;
 
     return data !== null && dataJ[this.translateService.currentLang].name !== null && dataJ[this.translateService.currentLang].name !== '' ? dataJ[this.translateService.currentLang].name : name
   }

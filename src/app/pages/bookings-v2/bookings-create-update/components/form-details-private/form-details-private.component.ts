@@ -65,8 +65,12 @@ export class FormDetailsPrivateComponent implements OnInit {
     this.getSeason();
     this.initializeForm();
     this.setupExtrasValueChanges();
-    this.possibleHours = this.utilService.generateCourseHours(this.course.hour_min, this.course.hour_max, this.course.minDuration, '5min');
-    this.possibleDurations = this.utilService.generateCourseDurations(this.course.hour_min, this.course.hour_max,
+    let formatDate = moment(this.date).format('YYYY-MM-DD');
+    const courseDate = this.course.course_dates.find((d: any) =>
+      moment(d.date).format('YYYY-MM-DD') === formatDate
+    );
+    this.possibleHours = this.utilService.generateCourseHours(courseDate.hour_start, courseDate.hour_end, this.course.minDuration, '5min');
+    this.possibleDurations = this.utilService.generateCourseDurations(courseDate.hour_start, courseDate.hour_end,
       this.course, this.activitiesBooked, this.date, this.utilizers);
     this.courseDates.controls.forEach((dateGroup, index) => {
       const monitorControl = dateGroup.get('monitor');
@@ -147,6 +151,8 @@ export class FormDetailsPrivateComponent implements OnInit {
       }
     }
 
+    let price = parseFloat(this.course.price);
+
     const courseDateGroup = this.fb.group({
       selected: [initialData ? initialData.selected : true],
       date: [initialData ? initialData.date : formattedDate, Validators.required],
@@ -156,7 +162,7 @@ export class FormDetailsPrivateComponent implements OnInit {
         initialData ? initialData.duration : (!this.course.is_flexible ? this.course.duration : null),
         Validators.required
       ],
-      price: [initialData ? initialData.price : null],
+      price: [initialData ? initialData.price : price],
       currency: this.course.currency,
       monitor: [initialData ? initialData.monitor : null],
       changeMonitorOption: [initialData ? initialData.changeMonitorOption : null],

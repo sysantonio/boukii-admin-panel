@@ -226,10 +226,10 @@
     <div *ngIf="step === 2" style="margin: 10px 0;">
       <mat-radio-group [(ngModel)]="isPaid">
         <mat-radio-button [value]="true" style="display: block;">
-          {{"payment_confirmed" | translate}}  <!-- Pago Confirmado -->
+          {{"yes" | translate}}  <!-- Pago Confirmado -->
         </mat-radio-button>
         <mat-radio-button [value]="false" style="display: block;">
-          {{"payment_not_confirmed" | translate}}  <!-- Pago No Confirmado -->
+          {{"no" | translate}}  <!-- Pago No Confirmado -->
         </mat-radio-button>
       </mat-radio-group>
     </div>

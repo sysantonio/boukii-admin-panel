@@ -117,7 +117,8 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
     })
     this.getSchoolSports().subscribe(res => {
       this.allSports = res.data;
-      let settings = JSON.parse(this.user.schools[0].settings);
+      let settings = typeof this.user.schools[0].settings === 'string' ?
+        JSON.parse(this.user.schools[0].settings) : this.user.schools[0].settings;
       this.currency = settings?.taxes?.currency;
       this.reloadData(false);
     })
@@ -197,7 +198,8 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked {
     this.getMonitor().subscribe(res => {
       this.monitor = res.data;
       this.filter += '&monitor_id=' + this.selectedId;
-      let settings = JSON.parse(this.user.schools[0].settings);
+      let settings = typeof this.user.schools[0].settings === 'string' ?
+        JSON.parse(this.user.schools[0].settings) : this.user.schools[0].settings;
       this.courseTypeHoursData = [
         { name: this.translateService.instant('course_colective'), value: 0, max_value: 0, color: '#ff5733' },
         { name: this.translateService.instant('course_private'), value: 0, max_value: 0, color: '#33c7ff' },
