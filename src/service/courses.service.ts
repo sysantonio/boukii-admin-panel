@@ -267,20 +267,26 @@ export class CoursesService {
   }
 
   weekString = (): string => {
-    const allDays = Object.keys(this.courseFormGroup.controls['settings'].value.weekDays).filter(day => this.courseFormGroup.controls['settings'].value.weekDays[day]);
+    const weekDays = this.courseFormGroup?.controls['settings']?.value?.weekDays;
+
+    if (!weekDays) return null; // Si no hay datos, retornamos null
+
+    const allDays = Object.keys(weekDays).filter(day => weekDays[day]);
     const workDays = ["monday", "tuesday", "wednesday", "thursday", "friday"];
     const weekendDays = ["saturday", "sunday"];
     const isAllTrue = allDays.length === 7;
-    const isAllWorkDaysTrue = workDays.every(day => this.courseFormGroup.controls['settings'].value.weekDays[day]) && weekendDays.every(day => !this.courseFormGroup.controls['settings'].value.weekDays[day]);
+    const isAllWorkDaysTrue = workDays.every(day => weekDays[day]) && weekendDays.every(day => !weekDays[day]);
     const isAllFalse = allDays.length === 0;
+
     if (isAllTrue) return this.translateService.instant("all_days_week");
     if (isAllWorkDaysTrue) return this.translateService.instant("workdays_only");
     if (isAllFalse) return null;
+
     const translatedDays = allDays.map(day => this.translateService.instant(day));
     const lastDay = translatedDays.pop();
     if (translatedDays.length === 0) return lastDay;
     return `${translatedDays.join(", ")} y ${lastDay}`;
-  }
+  };
 
   addMinutesToTime(timeString: string, minutesToAdd: string) {
     const [hours, minutes] = timeString.split(":").map(Number);
