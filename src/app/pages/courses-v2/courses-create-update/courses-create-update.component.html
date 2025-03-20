@@ -557,6 +557,16 @@
           word-wrap: break-word">
             <mat-panel-title>
               {{item.Name | translate}}
+              <mat-icon style="float: right"
+                        *ngIf="
+                        courses.courseFormGroup.controls['translations'].value[item.Code]?.name &&
+                        courses.courseFormGroup.controls['translations'].value[item.Code]?.short_description &&
+                        courses.courseFormGroup.controls['translations'].value[item.Code]?.description
+                          "
+                        class="check">check</mat-icon>
+              <button (click)="translateCourse(item.Code);$event.stopPropagation()"
+                      style="margin-top: 0px !important;height: 38px;margin-left: auto;" color="primary"
+                      mat-raised-button type="button">{{'translate_ia' | translate}}</button>
             </mat-panel-title>
           </mat-expansion-panel-header>
           <ng-template matExpansionPanelContent>

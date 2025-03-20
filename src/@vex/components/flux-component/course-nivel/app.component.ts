@@ -25,7 +25,7 @@ export class CourseDetailCardNivelComponent {
     if (!bookingUsers || !courseDates) return 0;
     if(!this.courseFormGroup.value.is_flexible) {
       return bookingUsers.filter(user => {
-        return courseDates[0].course_groups.some(group =>
+       return courseDates[0].course_groups.some(group =>
           group.degree_id === degreeId && group.id === user.course_group_id)}).length;
     } else {
       return bookingUsers.filter(user => {

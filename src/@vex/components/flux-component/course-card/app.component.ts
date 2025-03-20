@@ -25,6 +25,14 @@ export class CourseDetailCardComponent implements OnChanges {
   @Output() edit = new EventEmitter<number>()
   showDescription: boolean = false;
 
+  Translate: { Code: string, Name: string }[] = [
+    { Code: "fr", Name: "French" },
+    { Code: "de", Name: "German" },
+    { Code: "en", Name: "English" },
+    { Code: "it", Name: "Italian" },
+    { Code: "es", Name: "Spanish" },
+  ]
+
   constructor(public CoursesService: CoursesService, private translateService: TranslateService, private crudService: ApiCrudService) { }
 
   find = (array: any[], key: string, value: string) => array.find((a: any) => a[key] === value)

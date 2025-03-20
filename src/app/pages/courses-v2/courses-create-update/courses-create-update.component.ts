@@ -305,20 +305,42 @@ export class CoursesCreateUpdateComponent implements OnInit {
             const { name, short_description, description } = this.courses.courseFormGroup.controls;
             const translations: any = {};
             try {
-              const translationPromises = languages.map(async (lang) => {
-                const translatedName = await this.crudService.translateText(name.value, lang.toUpperCase()).toPromise();
-                const translatedShortDescription = await this.crudService.translateText(short_description.value, lang.toUpperCase()).toPromise();
-                const translatedDescription = await this.crudService.translateText(description.value, lang.toUpperCase()).toPromise();
-                translations[lang] = {
-                  name: translatedName?.data.translations[0].text,
-                  short_description: translatedShortDescription?.data.translations[0].text,
-                  description: translatedDescription?.data.translations[0].text,
-                };
+              const translationResults = await Promise.allSettled(
+                languages.map(async (lang) => {
+                  try {
+                    const translatedName = await this.crudService.translateText(name.value, lang.toUpperCase()).toPromise();
+                    const translatedShortDescription = await this.crudService.translateText(short_description.value, lang.toUpperCase()).toPromise();
+                    const translatedDescription = await this.crudService.translateText(description.value, lang.toUpperCase()).toPromise();
+
+                    return {
+                      lang,
+                      name: translatedName?.data?.translations?.[0]?.text || name.value,
+                      short_description: translatedShortDescription?.data?.translations?.[0]?.text || short_description.value,
+                      description: translatedDescription?.data?.translations?.[0]?.text || description.value,
+                    };
+                  } catch (error) {
+                    console.error(`Error translating to ${lang}:`, error);
+                    return null; // Retorna null en caso de error para que no rompa el flujo
+                  }
+                })
+              );
+
+              // Filtramos los resultados exitosos y asignamos las traducciones
+              const translations: Record<string, any> = {};
+              translationResults.forEach((result) => {
+                if (result.status === "fulfilled" && result.value) {
+                  translations[result.value.lang] = {
+                    name: result.value.name,
+                    short_description: result.value.short_description,
+                    description: result.value.description,
+                  };
+                }
               });
-              await Promise.all(translationPromises);
+
               this.courses.courseFormGroup.patchValue({ translations });
+
             } catch (error) {
-              console.error("Error translating text:", error);
+              console.error("Unexpected error in translation process:", error);
             }
           }, 1000);
         }
@@ -368,6 +390,32 @@ export class CoursesCreateUpdateComponent implements OnInit {
     }
   }
 
+  async translateCourse(lang: string): Promise<void> {
+    try {
+      const translations = this.courses.courseFormGroup.controls['translations'].value || {};
+      const currentTranslation = translations[lang] || {};
+
+      const translatedName = await this.crudService.translateText(currentTranslation.name || this.courses.courseFormGroup.value.name, lang.toUpperCase()).toPromise();
+      const translatedShortDescription = await this.crudService.translateText(currentTranslation.short_description || this.courses.courseFormGroup.value.short_description, lang.toUpperCase()).toPromise();
+      const translatedDescription = await this.crudService.translateText(currentTranslation.description || this.courses.courseFormGroup.value.description, lang.toUpperCase()).toPromise();
+
+      // Actualizar solo los valores traducidos sin afectar los demás idiomas
+      this.courses.courseFormGroup.patchValue({
+        translations: {
+          ...translations,
+          [lang]: {
+            name: translatedName?.data?.translations?.[0]?.text || currentTranslation.name,
+            short_description: translatedShortDescription?.data?.translations?.[0]?.text || currentTranslation.short_description,
+            description: translatedDescription?.data?.translations?.[0]?.text || currentTranslation.description,
+          },
+        },
+      });
+
+    } catch (error) {
+      console.error(`Error translating to ${lang}:`, error);
+    }
+  }
+
   find = (array: any[], key: string, value: string | boolean) => array.find((a: any) => value ? a[key] === value : a[key])
   filter = (array: any[], key: string, value: string | boolean) => array.filter((a: any) => value ? a[key] === value : a[key])
 
@@ -399,26 +447,40 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   addLevelSubgroup = (level: any, j: number, add: boolean) => {
-    const course_dates = this.courses.courseFormGroup.controls['course_dates'].value
-    for (const course of course_dates) {
+    const course_dates = this.courses.courseFormGroup.controls['course_dates'].value.map((course: any) => {
+      // Verificamos en course_groups
       for (const group in course.course_groups) {
         if (course.course_groups[group].degree_id === level.id) {
           if (add) {
             if (this.mode === "create") {
-              course.groups[group].subgroups = [...course.groups[group].subgroups, { degree_id: level.id, max_participants: level.max_participants, monitor: null, monitor_id: null }]
+              course.groups[group].subgroups = [
+                ...course.groups[group].subgroups,
+                { degree_id: level.id, max_participants: level.max_participants, monitor: null, monitor_id: null }
+              ];
             }
-            course.course_groups[group].course_subgroups = [...course.course_groups[group].course_subgroups, { degree_id: level.id, max_participants: level.max_participants, monitor: null, monitor_id: null }]
+            course.course_groups[group].course_subgroups = [
+              ...course.course_groups[group].course_subgroups,
+              { degree_id: level.id, max_participants: level.max_participants, monitor: null, monitor_id: null }
+            ];
           } else {
             if (this.mode === "create") {
-              course.groups[group].subgroups.splice(j, 1)
+              course.groups[group].subgroups = course.groups[group].subgroups.filter((_, index: number) => index !== j);
             }
-            course.course_groups[group].course_subgroups.splice(j, 1)
+            course.course_groups[group].course_subgroups = course.course_groups[group].course_subgroups.filter((_, index: number) => index !== j);
           }
         }
       }
-    }
-    this.courses.courseFormGroup.patchValue({ course_dates })
-  }
+
+      // Eliminamos también en course_subgroups del propio course_date
+      if (!add && course.course_subgroups) {
+        course.course_subgroups = course.course_subgroups.filter((_, index: number) => index !== j);
+      }
+
+      return course; // Retornamos el course modificado
+    });
+
+    this.courses.courseFormGroup.patchValue({ course_dates });
+  };
 
   selectExtra = (event: any, item: any, i: number) => {
     if (this.courses.courseFormGroup.controls['course_type'].value === 3) {
