@@ -42,4 +42,9 @@ export class CourseOpcionComponent {
   minDate = new Date(2000, 1, 1);
   nowDate = new Date()
   maxDate = new Date(2099, 12, 31);
+
+  ngOnInit() {
+    // Si el campo claim_text tiene algún valor, activa el toggle
+    this.toggleClaimText = !!this.Form?.get('claim_text')?.value;
+  }
 }

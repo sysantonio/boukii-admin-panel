@@ -18,7 +18,9 @@ export class CoursesService {
     data.booking_users = data.booking_users_active;
     if(!isPreview) {
       data.course_dates = data.course_type == 1 ? data.course_dates : data.settings?.periods;
+      data.course_dates_prev = [];
     } else {
+      data.course_dates = [];
       data.course_dates_prev = data.course_type == 1 ? data.course_dates : data.settings?.periods;
     }
     this.courseFormGroup.patchValue({
@@ -48,15 +50,15 @@ export class CoursesService {
       name: ["", Validators.required],
       short_description: ["", Validators.required],
       description: ["", Validators.required],
-      price: [null, [Validators.required, Validators.min(1)]],
+      price: [100, [Validators.required, Validators.min(1)]],
       currency: [settings?.taxes?.currency || 'CHF'],
       max_participants: [10, [Validators.required, Validators.min(1)]],
       image: ["", Validators.required],
       icon: ["", Validators.required],
       highlighted: [false],
       claim_text: [""],
-      age_max: [null, [Validators.required, Validators.min(0), Validators.max(99)]],
-      age_min: [null, [Validators.required, Validators.min(0), Validators.max(99)]],
+      age_max: [1, [Validators.required, Validators.min(0), Validators.max(99)]],
+      age_min: [99, [Validators.required, Validators.min(0), Validators.max(99)]],
       date_start: [null, Validators.required],
       date_end: [null, Validators.required],
       date_start_res: [null],
@@ -78,7 +80,7 @@ export class CoursesService {
       school_id: [this.user.schools[0].id],
       station_id: [null],
       course_dates: [[{ ...this.default_course_dates }], Validators.required],
-      course_dates_prev: [[{ ...this.default_course_dates }]],
+      course_dates_prev: [],
       discounts: [[], Validators.required],
       course_extras: [[], Validators.required],
       unique: [true],

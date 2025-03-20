@@ -376,8 +376,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
     const course_dates = this.courses.courseFormGroup.controls['course_dates'].value
     levelGrop[i].active = event.target.checked
     if (event.target.checked) {
-      levelGrop[i].age_min = this.courses.courseFormGroup.controls['age_min'].value
-      levelGrop[i].age_max = this.courses.courseFormGroup.controls['age_max'].value
+/*      levelGrop[i].age_min = this.courses.courseFormGroup.controls['age_min'].value
+      levelGrop[i].age_max = this.courses.courseFormGroup.controls['age_max'].value*/
       levelGrop[i].max_participants = this.courses.courseFormGroup.controls['max_participants'].value
       for (const course of course_dates) {
         if (this.mode === "create") {

@@ -79,9 +79,10 @@
         <app-form-editor [required]="true" [form]="courses.courseFormGroup" control="description"
                          name="courses.desc">
         </app-form-editor>
-        <div style="display: flex; flex-wrap: wrap; column-gap: 20px;" [hidden]="courses.courseFormGroup.controls['is_flexible'].value
-    && courses.courseFormGroup.controls['course_type'].value != 1">
+        <div style="display: flex; flex-wrap: wrap; column-gap: 20px;">
           <app-form-input
+            [hidden]="courses.courseFormGroup.controls['is_flexible'].value
+    && courses.courseFormGroup.controls['course_type'].value != 1"
             [required]="true"
             [form]="courses.courseFormGroup"
             [Suffix]="courses.courseFormGroup.controls['currency'].value"
@@ -128,7 +129,7 @@
                              control="date_end_res" style="min-width: 0;width: 100%;" name="courses.date_reservable_to">
         </app-form-datepicker>
         <app-form-select *ngIf="courses.courseFormGroup.controls['course_type'].value>1" [required]="true"
-                         [table]="courses.duration" [form]="courses.courseFormGroup" label="courses.dur_min"
+                         [table]="courses.duration" [form]="courses.courseFormGroup" label="{{courses.courseFormGroup.controls['is_flexible'].value ? 'courses.dur_min' : 'duration'}}"
                          style="min-width: 0;width: 100%;" control="duration">
         </app-form-select>
 
@@ -140,7 +141,7 @@
 						<span>
 							{{('date'| translate)+' '+(i+1)}}
 						</span>
-            <mat-icon *ngIf="i!==0"
+            <mat-icon *ngIf="courses.courseFormGroup.controls['course_dates'].value.length !== 1"
                       (click)="mode==='create'?deleteCourseDate(i):editModal=true;setEditFunction('deleteCourseDate',i)"
                       style="cursor: pointer;float: inline-end;">
               delete
@@ -153,24 +154,24 @@
                                  (do)="courses.courseFormGroup.controls['course_dates'].value[i].date=$event.value"
                                  style="min-width: 0;width: 100%;" name="date">
             </app-form-datepicker>
-            <app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].hour_start"
+<!--            <app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].hour_start"
                              [required]="true" [table]="courses.hours"
                              (do)="courses.courseFormGroup.controls['course_dates'].value[i].hour_start=$event.option.value;"
                              style="min-width: 0;width: 100%;" label="start_hour">
-            </app-form-select>
-<!--            <app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].duration"
+            </app-form-select>-->
+            <app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].duration"
                              [required]="true" [table]="courses.duration"
                              (do)="courses.courseFormGroup.controls['course_dates'].value[i].duration=$event.option.value;
 							courses.courseFormGroup.controls['course_dates'].value[i].hour_end=courses.addMinutesToTime(item.hour_start, $event.option.value)"
                              style="min-width: 0;width: 100%;" label="duration">
-            </app-form-select>-->
-             <app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].hour_end"
+            </app-form-select>
+<!--             <app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].hour_end"
               [required]="true"
               [table]="courses.hours"
               (do)="courses.courseFormGroup.controls['course_dates'].value[i].hour_end=$event.option.value;"
               style="min-width: 0;width: 100%;"
               label="end_hour">
-            </app-form-select>
+            </app-form-select>-->
           </div>
         </div>
         <div style="padding: 20px;border-top: 1px solid #DEE6EA;">
@@ -271,7 +272,8 @@
 <!--              <app-form-select
                 [value]="courses.courseFormGroup.controls['course_dates'].value[i].duration"
                 [required]="true" [table]="courses.duration"
-                (do)="courses.courseFormGroup.controls['course_dates'].value[i].duration=$event.option.value;"
+                (do)="courses.courseFormGroup.controls['course_dates'].value[i].duration=$event.option.value;
+							courses.courseFormGroup.controls['course_dates'].value[i].hour_end=courses.addMinutesToTime(item.hour_start, $event.option.value)"
                 style="min-width: 0;width: 100%;" label="duration">
               </app-form-select>-->
                <app-form-select [value]="courses.courseFormGroup.controls['course_dates'].value[i].hour_end"
