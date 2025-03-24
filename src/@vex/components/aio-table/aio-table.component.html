@@ -1212,7 +1212,7 @@
 				{{'deactivate' | translate }}
 			</span>
 		</button>
-		<button *ngIf="canDeactivate && entity.includes('courses') && item.booking_users.length == 0"
+		<button *ngIf="canDeactivate && entity.includes('courses') && item.booking_users_active?.length == 0"
 			(click)="delete(item)" mat-menu-item>
 			<mat-icon svgIcon="mat:delete"></mat-icon>
 			<span>
