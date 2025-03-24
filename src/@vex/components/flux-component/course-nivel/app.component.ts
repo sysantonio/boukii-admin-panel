@@ -10,6 +10,7 @@ export class CourseDetailCardNivelComponent {
 
   @Input() courseFormGroup!: UntypedFormGroup
   @Input() checkbox: boolean = false
+  @Input() selectedSubgroup: any;
   @Output() changeMonitor = new EventEmitter<any>()
 
   today: Date = new Date()
