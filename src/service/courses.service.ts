@@ -127,6 +127,16 @@ export class CoursesService {
     //'6h 15min', '6h 30min', '6h 45min', '7h', '7h 15min', '7h 30min', '7h 45min'
   ];
 
+  getFilteredDuration(): string[] {
+    const selectedDuration = this.courseFormGroup.controls['duration'].value;
+
+    // Obtener índice del valor seleccionado en `duration`
+    const index = this.duration.indexOf(selectedDuration);
+
+    // Retornar solo las duraciones iguales o mayores
+    return index !== -1 ? this.duration.slice(index) : this.duration;
+  }
+
   ndays: number[] = [2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   weekSelect: string[] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
