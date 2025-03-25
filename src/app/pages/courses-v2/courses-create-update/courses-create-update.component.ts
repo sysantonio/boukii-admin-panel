@@ -85,109 +85,129 @@ export class CoursesCreateUpdateComponent implements OnInit {
   detailData: any = { degrees: [], course_dates: [] }
 
   ngOnInit() {
-    const extras = JSON.parse(JSON.parse(localStorage.getItem("boukiiUser")).schools[0].settings).extras
-    this.extras = [...extras.food, ...extras.forfait, ...extras.transport]
+    this.initializeExtras();
     this.mode = this.id ? 'update' : 'create';
-    forkJoin(
-      this.mode === "update" ?
-        {
-          sports: this.getSports(),
-          stations: this.getStations(),
-          monitors: this.getMonitors(),
-        } : {
-          sports: this.getSports(),
-          stations: this.getStations(),
-        }).subscribe(({ sports, stations, monitors }) => {
-          this.sportData = sports;
-          this.stations = stations;
-          this.courses.resetcourseFormGroup()
-          if (this.mode === "create") {
-            this.courses.courseFormGroup.patchValue({
-              sport_id: this.sportData[0].sport_id,
-              station_id: this.stations[0].id,
-              duration: this.courses.duration[0],
-              school_id: this.user.schools[0].id,
-              hour_min: this.courses.hours[0],
-              hour_max: this.courses.hours[4],
-            })
-            this.Confirm(0)
-            setTimeout(() => this.loading = false, 0);
-          } else {
-            this.monitors = monitors
-            this.crudService.get('/admin/courses/' + this.id,
-              ['courseGroups.degree', 'courseGroups.courseDates.courseSubgroups.bookingUsers.client', 'sport'])
-              .subscribe((data: any) => {
-                this.detailData = data.data
-                this.detailData.station = this.detailData.station || null;
 
-                // Convertimos los extras de settings en un formato estándar
-                const formattedSettingsExtras = this.extras.map(extra => ({
-                  id: extra.id,
-                  name: extra.name,
-                  product: extra.product,
-                  price: parseFloat(extra.price), // Aseguramos que el precio sea numérico
-                  tva: extra.tva,
-                  status: extra.status,
-                  active: false // Por defecto, los extras de settings no están activos
-                }));
+    const requests = {
+      sports: this.getSports(),
+      stations: this.getStations(),
+      ...(this.mode === "update" && { monitors: this.getMonitors() }),
+    };
 
-// Convertimos los extras de course_extras al mismo formato y los marcamos como activos
-                const formattedCourseExtras = this.detailData.course_extras.map(extra => ({
-                  id: extra.id.toString(), // Convertimos el id en string para evitar conflictos de comparación
-                  name: extra.name,
-                  product: extra.name, // Ajusta esto según corresponda si hay otros tipos
-                  price: parseFloat(extra.price),
-                  tva: 0, // Si no tienes el dato en course_extras, lo dejamos en 0
-                  status: true,
-                  active: true // Los extras del curso deben estar activos
-                }));
-
-// Unimos ambos arrays sin repetir basándonos en el id y el nombre
-                const mergedExtras = [...formattedSettingsExtras, ...formattedCourseExtras].reduce((acc, extra) => {
-                  if (!acc.some(e => e.id === extra.id || e.product === extra.product)) {
-                    acc.push(extra);
-                  }
-                  return acc;
-                }, []);
-
-                this.extras = mergedExtras;
-
-                if(this.detailData?.settings?.periods?.length > 1){
-                  this.PeriodoFecha = 0;
-                }
-
-                this.courses.settcourseFormGroup(this.detailData);
-                this.courses.courseFormGroup.patchValue({ extras: formattedCourseExtras });
-                this.getDegrees();
-                setTimeout(() => this.loading = false, 0);
-/*                this.crudService.list('/stations', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id)
-                  .subscribe((st: any) => {
-                    st.data.forEach((element: any) => {
-                      if (element.id === this.detailData.station_id) this.detailData.station = element
-                    });
-                    //this.extras.push(...this.detailData.extras)
-                    //this.crudService.list('/booking-users', 1, 10000, 'desc', 'id', '&school_id=' + this.detailData.school_id + '&course_id=' + this.detailData.id)
-                    //  .subscribe((bookingUser) => {
-                    //    this.detailData.users = [];
-                    //    this.detailData.users = bookingUser.data;
-                    //  })
-                    this.courses.settcourseFormGroup(this.detailData)
-                    this.getDegrees()
-                    setTimeout(() => this.loading = false, 0);
-                  })*/
-              })
-          }
-          this.extrasFormGroup = this.fb.group({
-            id: ["", Validators.required],
-            product: ["", Validators.required],
-            name: ["", Validators.required],
-            price: [1, Validators.required],
-            tva: [21, Validators.required],
-            status: [true, Validators.required],
-          })
-          this.schoolService.getSchoolData().subscribe((data) => { this.schoolData = data.data })
-        });
+    forkJoin(requests).subscribe(({ sports, stations, monitors }) => {
+      this.sportData = sports;
+      this.stations = stations;
+      if (this.mode === "update") {
+        this.monitors = monitors;
+        this.loadCourseData();
+      } else {
+        this.setupCreateMode();
+      }
+      this.initializeExtrasForm();
+      this.loadSchoolData();
+    });
   }
+
+  private initializeExtras() {
+    try {
+      const storedUser = localStorage.getItem("boukiiUser");
+      const user = storedUser ? JSON.parse(storedUser) : null;
+      const settings =  typeof user?.schools?.[0]?.settings === 'string' ? JSON.parse(user.schools[0].settings) : null;
+      this.extras = settings?.extras
+        ? [...settings.extras.food, ...settings.extras.forfait, ...settings.extras.transport]
+        : [];
+    } catch (error) {
+      console.error("Error loading extras from localStorage:", error);
+      this.extras = [];
+    }
+  }
+
+  private setupCreateMode() {
+    this.courses.resetcourseFormGroup();
+    this.courses.courseFormGroup.patchValue({
+      sport_id: this.sportData[0]?.sport_id || null,
+      station_id: this.stations[0]?.id || null,
+      duration: this.courses.duration[0] || null,
+      school_id: this.user.schools?.[0]?.id || null,
+      hour_min: this.courses.hours[0] || null,
+      hour_max: this.courses.hours[4] || null,
+    });
+    this.Confirm(0);
+    this.loading = false
+   //setTimeout(() => (), 0);
+  }
+
+  private loadCourseData() {
+    this.crudService
+      .get(`/admin/courses/${this.id}`, [
+        "courseGroups.degree",
+        "courseGroups.courseDates.courseSubgroups.bookingUsers.client",
+        "sport",
+      ])
+      .subscribe((response: any) => {
+        this.detailData = response.data;
+        this.detailData.station = this.detailData.station || null;
+        this.mergeCourseExtras();
+        if (this.detailData?.settings?.periods?.length > 1) {
+          this.PeriodoFecha = 0;
+        }
+        this.courses.settcourseFormGroup(this.detailData);
+        this.courses.courseFormGroup.patchValue({ extras: this.detailData.course_extras || [] });
+        this.getDegrees();
+        this.loading = false
+       // setTimeout(() => (this.loading = false), 0);
+      });
+  }
+
+  private mergeCourseExtras() {
+    // Formatear extras de configuración
+    const formattedSettingsExtras = (this.extras || []).map(extra => ({
+      id: extra.id.toString(),
+      name: extra.name,
+      product: extra.product,
+      price: parseFloat(extra.price) || 0,
+      tva: extra.tva || 0,
+      status: extra.status || false,
+      active: false,
+    }));
+
+    // Formatear extras del curso
+    const formattedCourseExtras = (this.detailData.course_extras || []).map(extra => ({
+      id: extra.id.toString(),
+      name: extra.name,
+      product: extra.name,
+      price: parseFloat(extra.price) || 0,
+      tva: 0,
+      status: true,
+      active: true,
+    }));
+
+    // Unir sin duplicados
+    this.extras = [...formattedSettingsExtras, ...formattedCourseExtras].reduce((acc, extra) => {
+      if (!acc.some(e => e.id === extra.id)) {
+        acc.push(extra);
+      }
+      return acc;
+    }, []);
+  }
+
+  private initializeExtrasForm() {
+    this.extrasFormGroup = this.fb.group({
+      id: ["", Validators.required],
+      product: ["", Validators.required],
+      name: ["", Validators.required],
+      price: [1, Validators.required],
+      tva: [21, Validators.required],
+      status: [true, Validators.required],
+    });
+  }
+
+  private loadSchoolData() {
+    this.schoolService.getSchoolData().subscribe(data => {
+      this.schoolData = data.data;
+    });
+  }
+
 
   createExtras() {
     const formData = this.extrasFormGroup.getRawValue();
@@ -303,7 +323,17 @@ export class CoursesCreateUpdateComponent implements OnInit {
           setTimeout(async () => {
             const languages = ['fr', 'en', 'de', 'es', 'it'];
             const { name, short_description, description } = this.courses.courseFormGroup.controls;
-            const translations: any = {};
+
+            // Inicializamos el objeto de traducciones con valores vacíos
+            const translations: Record<string, any> = {};
+            languages.forEach(lang => {
+              translations[lang] = {
+                name: '',
+                short_description: '',
+                description: ''
+              };
+            });
+
             try {
               const translationResults = await Promise.allSettled(
                 languages.map(async (lang) => {
@@ -314,19 +344,18 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
                     return {
                       lang,
-                      name: translatedName?.data?.translations?.[0]?.text || name.value,
-                      short_description: translatedShortDescription?.data?.translations?.[0]?.text || short_description.value,
-                      description: translatedDescription?.data?.translations?.[0]?.text || description.value,
+                      name: translatedName?.data?.translations?.[0]?.text || '',
+                      short_description: translatedShortDescription?.data?.translations?.[0]?.text || '',
+                      description: translatedDescription?.data?.translations?.[0]?.text || '',
                     };
                   } catch (error) {
                     console.error(`Error translating to ${lang}:`, error);
-                    return null; // Retorna null en caso de error para que no rompa el flujo
+                    return { lang, name: '', short_description: '', description: '' }; // Retorna un objeto vacío si hay error
                   }
                 })
               );
 
-              // Filtramos los resultados exitosos y asignamos las traducciones
-              const translations: Record<string, any> = {};
+              // Asignamos los valores traducidos (si existen)
               translationResults.forEach((result) => {
                 if (result.status === "fulfilled" && result.value) {
                   translations[result.value.lang] = {

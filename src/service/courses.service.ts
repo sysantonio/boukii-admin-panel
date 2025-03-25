@@ -16,12 +16,49 @@ export class CoursesService {
   settcourseFormGroup(data: any, isPreview = false) {
     this.resetcourseFormGroup()
     data.booking_users = data.booking_users_active;
-    if(!isPreview) {
-      data.course_dates = data.course_type == 1 ? data.course_dates : data.settings?.periods;
+    if (!isPreview) {
+      if (data.course_type == 1) {
+        data.course_dates = data.course_dates;
+      } else {
+        if (data.settings?.periods?.length) {
+          data.course_dates = data.settings.periods;
+        } else if (data.course_dates?.length) {
+          const dates = data.course_dates.map(d => new Date(d.date));
+          const hoursStart = data.course_dates.map(d => d.hour_start);
+          const hoursEnd = data.course_dates.map(d => d.hour_end);
+
+          const period = {
+            date: new Date(Math.min(...dates)).toISOString(),
+            date_end: new Date(Math.max(...dates)).toISOString(),
+            hour_start: hoursStart.reduce((min, h) => h < min ? h : min, hoursStart[0]),
+            hour_end: hoursEnd.reduce((max, h) => h > max ? h : max, hoursEnd[0])
+          };
+
+          data.course_dates = [period];
+        }
+      }
       data.course_dates_prev = [];
     } else {
       data.course_dates = [];
-      data.course_dates_prev = data.course_type == 1 ? data.course_dates : data.settings?.periods;
+      if (data.course_type == 1) {
+        data.course_dates_prev = data.course_dates;
+      } else {
+        if (data.settings?.periods?.length) {
+          data.course_dates_prev = data.settings.periods;
+        } else if (data.course_dates?.length) {
+          const dates = data.course_dates.map(d => new Date(d.date));
+          const hours = data.course_dates.map(d => d.hour);
+
+          const period = {
+            date: new Date(Math.min(...dates)).toISOString(),
+            date_end: new Date(Math.max(...dates)).toISOString(),
+            hour_start: hours.reduce((min, h) => h < min ? h : min, hours[0]),
+            hour_end: hours.reduce((max, h) => h > max ? h : max, hours[0])
+          };
+
+          data.course_dates_prev = [period];
+        }
+      }
     }
     this.courseFormGroup.patchValue({
       ...data,
