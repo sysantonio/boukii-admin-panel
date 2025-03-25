@@ -387,14 +387,23 @@ export class CoursesCreateUpdateComponent implements OnInit {
         this.ModalFlux -= add
       }
       if (this.courses.courseFormGroup.controls['course_type'].value === 2) {
+        let durations = this.courses.getFilteredDuration();
         let Range = this.generarIntervalos(
           this.courses.courseFormGroup.controls["max_participants"].value,
-          this.courses.duration.length,
-          this.courses.duration
-        )
+          durations.length,
+          durations
+        );
+
         const settings = JSON.parse(this.user.schools[0].settings);
-        for (const range in settings.prices_range.prices) Range[range] = { ...Range[range], ...settings.prices_range.prices[range] }
-        this.courses.courseFormGroup.patchValue({ price_range: Range })
+        const priceRanges = settings.prices_range.prices;
+
+        // Asignar los precios a los intervalos correctos
+        Range = Range.map((intervalo) => {
+          const matchingPrice = priceRanges.find(p => p.intervalo === intervalo.intervalo);
+          return matchingPrice ? { ...intervalo, ...matchingPrice } : intervalo;
+        });
+
+        this.courses.courseFormGroup.patchValue({ price_range: Range });
       }
     }
     else if (this.ModalFlux === 4) {
