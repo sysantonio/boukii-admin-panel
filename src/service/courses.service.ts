@@ -20,22 +20,7 @@ export class CoursesService {
       if (data.course_type == 1) {
         data.course_dates = data.course_dates;
       } else {
-        if (data.settings?.periods?.length) {
-          data.course_dates = data.settings.periods;
-        } else if (data.course_dates?.length) {
-          const dates = data.course_dates.map(d => new Date(d.date));
-          const hoursStart = data.course_dates.map(d => d.hour_start);
-          const hoursEnd = data.course_dates.map(d => d.hour_end);
-
-          const period = {
-            date: new Date(Math.min(...dates)).toISOString(),
-            date_end: new Date(Math.max(...dates)).toISOString(),
-            hour_start: hoursStart.reduce((min, h) => h < min ? h : min, hoursStart[0]),
-            hour_end: hoursEnd.reduce((max, h) => h > max ? h : max, hoursEnd[0])
-          };
-
-          data.course_dates = [period];
-        }
+        data.course_dates = data.settings?.periods?.length ? data.settings.periods : [this.getCoursePeriod(data)];
       }
       data.course_dates_prev = [];
     } else {
@@ -43,21 +28,7 @@ export class CoursesService {
       if (data.course_type == 1) {
         data.course_dates_prev = data.course_dates;
       } else {
-        if (data.settings?.periods?.length) {
-          data.course_dates_prev = data.settings.periods;
-        } else if (data.course_dates?.length) {
-          const dates = data.course_dates.map(d => new Date(d.date));
-          const hours = data.course_dates.map(d => d.hour);
-
-          const period = {
-            date: new Date(Math.min(...dates)).toISOString(),
-            date_end: new Date(Math.max(...dates)).toISOString(),
-            hour_start: hours.reduce((min, h) => h < min ? h : min, hours[0]),
-            hour_end: hours.reduce((max, h) => h > max ? h : max, hours[0])
-          };
-
-          data.course_dates_prev = [period];
-        }
+        data.course_dates_prev = data.settings?.periods?.length ? data.settings.periods : [this.getCoursePeriod(data)];
       }
     }
     this.courseFormGroup.patchValue({
@@ -71,6 +42,30 @@ export class CoursesService {
       booking_users: data.booking_users,
     })
   }
+  private getCoursePeriod(data: any): any {
+    if (data.course_dates?.length) {
+      const dates = data.course_dates.map(d => new Date(d.date));
+      const hoursStart = data.course_dates.map(d => d.hour_start);
+      const hoursEnd = data.course_dates.map(d => d.hour_end);
+
+      return {
+        date: new Date(Math.min(...dates)).toISOString(),
+        date_end: new Date(Math.max(...dates)).toISOString(),
+        hour_start: hoursStart.reduce((min, h) => h < min ? h : min, hoursStart[0]),
+        hour_end: hoursEnd.reduce((max, h) => h > max ? h : max, hoursEnd[0])
+      };
+    } else {
+      // Si no hay fechas, usar la fecha de hoy y el horario de 09:00 a 10:00
+      const today = new Date();
+      return {
+        date: today.toISOString(),
+        date_end: today.toISOString(),
+        hour_start: "09:00",
+        hour_end: "10:00"
+      };
+    }
+  }
+
   user: any = JSON.parse(localStorage.getItem('boukiiUser'))
 
   resetcourseFormGroup() {
