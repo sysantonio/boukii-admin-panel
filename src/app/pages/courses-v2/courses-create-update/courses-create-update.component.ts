@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { map, forkJoin, mergeMap } from 'rxjs';
+import {map, forkJoin, mergeMap, throwError, catchError} from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { ApiCrudService } from 'src/service/crud.service';
@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SchoolService } from 'src/service/school.service';
 import { CoursesService } from 'src/service/courses.service';
 import {TranslateService} from '@ngx-translate/core';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'vex-courses-create-update',
@@ -75,6 +76,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   constructor(private fb: UntypedFormBuilder, public dialog: MatDialog,
               private crudService: ApiCrudService, private activatedRoute: ActivatedRoute,
               public router: Router, private schoolService: SchoolService,
+              private snackBar: MatSnackBar,
     public translateService: TranslateService,
     public courses: CoursesService
   ) {
@@ -395,10 +397,13 @@ export class CoursesCreateUpdateComponent implements OnInit {
         );
 
         const settings = JSON.parse(this.user.schools[0].settings);
-        const priceRanges = settings.prices_range.prices;
+        const priceRanges = settings.prices_range.prices.map(p => ({
+          ...p,
+          intervalo: p.intervalo.replace(/^(\d+)h$/, "$1h 0min") // Convierte "1h" en "1h0min" para que coincida con durations
+        }));
 
         // Asignar los precios a los intervalos correctos
-        Range = Range.map((intervalo) => {
+        Range = Range.map(intervalo => {
           const matchingPrice = priceRanges.find(p => p.intervalo === intervalo.intervalo);
           return matchingPrice ? { ...intervalo, ...matchingPrice } : intervalo;
         });
@@ -588,14 +593,42 @@ export class CoursesCreateUpdateComponent implements OnInit {
     courseFormGroup.translations = JSON.stringify(this.courses.courseFormGroup.controls['translations'].value)
     courseFormGroup.course_type === 1 ? delete courseFormGroup.settings : courseFormGroup.settings = this.courses.courseFormGroup.controls['settings'].value
     if (this.mode === "create") {
-      this.crudService.create('/admin/courses', courseFormGroup).subscribe((data) => {
-        if (data.success) this.router.navigate(["/courses/detail/" + data.data.id])
-      })
+      this.crudService.create('/admin/courses', courseFormGroup)
+        .pipe(
+          catchError((error) => {
+            console.error("Error al crear el curso:", error);
+            this.showErrorMessage("Hubo un problema al crear el curso. Inténtalo de nuevo.");
+            return throwError(() => error);
+          })
+        )
+        .subscribe((data:any) => {
+          if (data.success) {
+            this.router.navigate(["/courses/detail/" + data.data.id]);
+          } else {
+            this.showErrorMessage(data.message || "No se pudo crear el curso.");
+          }
+        });
     } else {
-      this.crudService.update('/admin/courses', courseFormGroup, this.id).subscribe((data) => {
-        if (data.success) this.router.navigate(["/courses/detail/" + data.data.id])
-      })
+      this.crudService.update('/admin/courses', courseFormGroup, this.id)
+        .pipe(
+          catchError((error:any) => {
+            console.error("Error al actualizar el curso:", error);
+            this.showErrorMessage("Hubo un problema al actualizar el curso. Inténtalo de nuevo.");
+            return throwError(() => error);
+          })
+        )
+        .subscribe((data) => {
+          if (data.success) {
+            this.router.navigate(["/courses/detail/" + data.data.id]);
+          } else {
+            this.showErrorMessage(data.message || "No se pudo actualizar el curso.");
+          }
+        });
     }
+  }
+
+  showErrorMessage(message: string) {
+    this.snackBar.open(message, 'Cerrar', { duration: 5000, panelClass: ['error-snackbar'] });
   }
 
   getNumberArray = (num: number): any[] => ['intervalo', ...Array.from({ length: num }, (_, i) => `${i + 1}`)];

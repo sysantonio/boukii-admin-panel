@@ -158,6 +158,12 @@
           <ng-container *ngIf="courseFormGroup.controls['course_type'].value===3">
             {{'activity' | translate}}
           </ng-container>
+          <ng-container *ngIf="courseFormGroup.controls['is_flexible'].value">
+          {{'flex' | uppercase |translate}}
+          </ng-container>
+          <ng-container *ngIf="!courseFormGroup.controls['is_flexible'].value">
+            {{'fix' | uppercase |translate}}
+          </ng-container>
         </p>
       </div>
       <div *ngIf="courseFormGroup.controls['id'].value && !detail" style="margin-left: auto;">
@@ -225,7 +231,7 @@
           [class]="courseFormGroup.controls['price'].value ? '' : 'emptyText'"
           style="color: var(--color-dark1); font-weight: 400;">
           {{courseFormGroup.controls['is_flexible'].value && courseFormGroup.controls['course_type'].value != 1 ?
-          'FLEXIBLE' : courseFormGroup.controls['price'].value | number:'0.2' }}&nbsp;{{ courseFormGroup.controls['is_flexible'].value && courseFormGroup.controls['course_type'].value != 1 ?
+          courseFormGroup.controls['minPrice'].value || 'FLEXIBLE' : courseFormGroup.controls['price'].value | number:'0.2' }}&nbsp;{{ courseFormGroup.controls['is_flexible'].value && courseFormGroup.controls['course_type'].value != 1 ?
           '' : courseFormGroup.controls['currency'].value }}
         </p>
       </div>
