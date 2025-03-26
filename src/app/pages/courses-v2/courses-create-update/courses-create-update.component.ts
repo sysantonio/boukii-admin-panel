@@ -438,9 +438,9 @@ export class CoursesCreateUpdateComponent implements OnInit {
       const translations = this.courses.courseFormGroup.controls['translations'].value || {};
       const currentTranslation = translations[lang] || {};
 
-      const translatedName = await this.crudService.translateText(currentTranslation.name || this.courses.courseFormGroup.value.name, lang.toUpperCase()).toPromise();
-      const translatedShortDescription = await this.crudService.translateText(currentTranslation.short_description || this.courses.courseFormGroup.value.short_description, lang.toUpperCase()).toPromise();
-      const translatedDescription = await this.crudService.translateText(currentTranslation.description || this.courses.courseFormGroup.value.description, lang.toUpperCase()).toPromise();
+      const translatedName = await this.crudService.translateText(this.courses.courseFormGroup.value.name, lang.toUpperCase()).toPromise();
+      const translatedShortDescription = await this.crudService.translateText(this.courses.courseFormGroup.value.short_description, lang.toUpperCase()).toPromise();
+      const translatedDescription = await this.crudService.translateText(this.courses.courseFormGroup.value.description, lang.toUpperCase()).toPromise();
 
       // Actualizar solo los valores traducidos sin afectar los demás idiomas
       this.courses.courseFormGroup.patchValue({
