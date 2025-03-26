@@ -1191,12 +1191,11 @@
 
 
 								<mat-form-field appearance="outline" class="flex-auto">
-									<input [matDatepicker]="pickerFrom" [max]="minDate"
-										[(ngModel)]="defaults.birth_date" (click)="pickerFrom.open()" matInput
-										placeholder="{{'birth_date' | translate }}" formControlName="fromDate" readonly
-										required>
-									<mat-datepicker-toggle [for]="pickerFrom" matSuffix></mat-datepicker-toggle>
-									<mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
+                  <mat-label>{{'birth_date' | translate}}</mat-label>
+                  <input type="date" matInput class="flex-auto" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date" required>
+                  <mat-error *ngIf="formPersonalInfo.controls?.fromDate?.errors?.['required']">
+                    {{'clients.creation.errors.monitor_date' | translate }}
+                  </mat-error>
 								</mat-form-field>
 
 

@@ -1506,11 +1506,8 @@
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6" style="margin: 3% 0 0 0;">
 
                   <mat-form-field appearance="outline" class="flex-auto">
-                    <input matInput [matDatepicker]="pickerFrom" placeholder="{{'birth_date' | translate }}" readonly
-                      formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date" required
-                      (click)="pickerFrom.open()">
-                    <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-                    <mat-datepicker #pickerFrom [startAt]="minDate"></mat-datepicker>
+                    <mat-label>{{'birth_date' | translate}}</mat-label>
+                    <input type="date" matInput class="flex-auto" formControlName="fromDate" [max]="minDate" [(ngModel)]="defaults.birth_date" required>
                   </mat-form-field>
 
                 </div>
@@ -1687,11 +1684,8 @@
                         translate }} </mat-header-cell>
                       <mat-cell *matCellDef="let element">
                         <mat-form-field appearance="outline" class="flex-auto" style="margin: 2% 0 0 0;">
-                          <input matInput [matDatepicker]="pickerFromChild" readonly (click)="pickerFromChild.open()"
-                            placeholder="{{'birth_date' | translate }}" [(ngModel)]="element.date" [max]="minDateChild"
-                            formControlName="childAge">
-                          <mat-datepicker-toggle matSuffix [for]="pickerFromChild"></mat-datepicker-toggle>
-                          <mat-datepicker #pickerFromChild [startAt]="minDateChild"></mat-datepicker>
+                          <mat-label>{{'birth_date' | translate}}</mat-label>
+                          <input type="date" matInput class="flex-auto" formControlName="childAge" [max]="minDateChild" [(ngModel)]="element.date" required>
                         </mat-form-field>
                       </mat-cell>
                     </ng-container>
