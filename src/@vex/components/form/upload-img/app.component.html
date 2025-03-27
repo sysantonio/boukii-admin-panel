@@ -12,7 +12,8 @@
 		[maintainAspectRatio]="true" [roundCropper]="false" backgroundColor="#000000" [aspectRatio]="width/height"
 		format="webp" *ngIf="edit && imageChangedEvent" (imageCropped)="imageCropped($event)">
 	</image-cropper>
-	<app-form-button name="change" (click)="triggerFileInput()" *ngIf="imagePreviewUrl || imageChangedEvent">
-	</app-form-button>
+
 	<input #fileInput (change)="onFileChanged($event)" type="file" style="display: none;">
 </div>
+<app-form-button name="change" (click)="triggerFileInput()" *ngIf="imagePreviewUrl || imageChangedEvent">
+</app-form-button>
