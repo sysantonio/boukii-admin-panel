@@ -75,8 +75,8 @@
 											translate }}
 										</label>
 										<mat-form-field appearance="outline" style="width: 100%;">
-											<input [matAutocomplete]="matHourFrom" id="hour" type="text"
-												placeholder="Hora " matInput formControlName="startHour">
+											<input [matAutocomplete]="matHourFrom" id="hour" type="text"  [value]="selectedFromHour"
+												placeholder="Hora " matInput formControlName="startHour" [(ngModel)]="selectedFromHour">
 											<mat-autocomplete #matHourFrom="matAutocomplete">
 												<mat-option *ngFor="let hour of hours" [value]="hour"
 													(onSelectionChange)="selectedFromHour = hour">
@@ -92,8 +92,8 @@
 											translate }}
 										</label>
 										<mat-form-field appearance="outline" style="width: 100%;">
-											<input [matAutocomplete]="matHourTo" id="endHour" type="text"
-												placeholder="Hora" matInput formControlName="endHour">
+											<input [matAutocomplete]="matHourTo" id="endHour" type="text"  [value]="selectedToHour"
+												placeholder="Hora" matInput formControlName="endHour" [(ngModel)]="selectedToHour">
 											<mat-autocomplete #matHourTo="matAutocomplete">
 												<mat-option *ngFor="let hour of filteredHours" [value]="hour"
 													(onSelectionChange)="selectedToHour = hour">
@@ -1805,7 +1805,7 @@
 			[form]="PageForm.BannerPromocional"></app-form-input>
 		<div style="width: 100%;"> {{"mobile_version"|translate}} </div>
 		<vex-flux-upload-img style="width: 40%;" [width]="200" [height]="100" [edit]="true"
-			[imagePreviewUrl]="PageForm.BannerPromocional.controls['mobileImg'].value" 
+			[imagePreviewUrl]="PageForm.BannerPromocional.controls['mobileImg'].value"
 			(upload)="PageForm.BannerPromocional.patchValue({mobileImg:$event})">
 		</vex-flux-upload-img>
 		<div style="width: 100%;"> {{"or_add_a_link"|translate}} </div>

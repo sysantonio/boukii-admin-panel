@@ -249,7 +249,10 @@ export class SettingsComponent implements OnInit {
             this.getSchoolSportDegrees();
 
             this.selectedFrom = moment(this.season?.start_date).toDate();
+            this.selectedFromHour = this.season?.hour_start?.split(':').slice(0, 2).join(':'); // "18:00"
+            this.selectedToHour = this.season?.hour_end?.split(':').slice(0, 2).join(':'); // "18:00"
             this.selectedTo = moment(this.season?.end_date).toDate();
+
 
             this.seasonForm = this.fb.group({
               fromDate: [moment(this.season?.start_date).toDate()],

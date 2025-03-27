@@ -248,7 +248,6 @@
                 delete
               </mat-icon>
             </div>
-            Nardos
             <div *ngIf="PeriodoFecha>0 || i===0 || courses.courseFormGroup.controls['course_dates'].value.length>1" style="display: flex;column-gap: 20px;">
               <app-form-datepicker [required]="true" [min]="mode==='create'?nowDate:detailData.date_start"
                                    [value]="courses.courseFormGroup.controls['course_dates'].value[i].date"
