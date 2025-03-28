@@ -330,6 +330,12 @@ export class SettingsComponent implements OnInit {
               desktopImg: [settings?.bookingPage?.banner.desktopImg],
               mobileImg: [settings?.bookingPage?.banner.mobileImg],
             })
+/*            this.PageForm.MessageInformation = this.fb.group({
+              index: [0, Validators.required],
+              title: ["", Validators.required],
+              desc: ["", Validators.required],
+              color: ["#D2EFFF", Validators.required],
+            })*/
             this.MessageStorage = settings?.bookingPage?.messages || []
             this.SponsorImg = settings?.bookingPage?.sponsors || []
 
@@ -1146,7 +1152,8 @@ export class SettingsComponent implements OnInit {
         index: [0, Validators.required],
         title: ["", Validators.required],
         desc: ["", Validators.required],
-        type: [true, Validators.required],
+        type: [false, Validators.required],
+        color: ["#D2EFFF", Validators.required]
       }),
       SponsoLink: this.fb.group({
         index: [0, Validators.required],
