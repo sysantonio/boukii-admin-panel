@@ -368,7 +368,6 @@ export class FormDetailsPrivateComponent implements OnInit {
 
     // Suscribirse a cambios en 'duration'
     courseDateGroup.get('duration').valueChanges.subscribe(() => {
-      debugger;
       this.updateEndHour(courseDateGroup);
 
       const selectedDate = courseDateGroup.get('date').value;
@@ -563,7 +562,6 @@ export class FormDetailsPrivateComponent implements OnInit {
       const course_dates = this.stepForm.get('course_dates').getRawValue();
 
       let totalPrice = 0;
-      debugger;
       // Calcular el precio para cada fecha y acumular el total
       course_dates.forEach((date, index) => {
         if(!date.selected) {

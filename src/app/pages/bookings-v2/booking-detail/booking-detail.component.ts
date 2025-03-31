@@ -263,7 +263,6 @@ export class BookingDetailV2Component implements OnInit {
   }
 
   processDelete(index) {
-    debugger;
     this.deleteIndex = index;
     const group = this.groupedActivities[index];
     if(!this.hasOtherActiveGroups(group)) {
@@ -400,7 +399,6 @@ export class BookingDetailV2Component implements OnInit {
 
     // bookingData.cart = this.bookingService.setCart(this.groupedActivities.flatMap(activity => activity.dates), this.bookingService.getBookingData());
 
-    debugger;
     if(this.paymentMethod === 1) {
       // Mapear la opción seleccionada con el método de pago
       if (this.selectedPaymentOption === 'Efectivo') {

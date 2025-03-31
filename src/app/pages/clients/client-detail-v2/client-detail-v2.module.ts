@@ -25,7 +25,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
-import { ClientDetailComponent } from './client-detail.component';
+
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ComponentsCustomModule } from '../../../components/components-custom.module';
@@ -35,7 +35,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { IconComponent } from 'src/@vex/components/icon/app.component';
 import { FluxUploadImgModule } from 'src/@vex/components/form/upload-img/app.module';
-import {SportCardComponent} from './sport-card/app.component';
+import {ClientDetailV2Component} from './client-detail-v2.component';
 
 @NgModule({
   imports: [
@@ -76,8 +76,8 @@ import {SportCardComponent} from './sport-card/app.component';
     MatProgressSpinnerModule,
     FluxUploadImgModule
   ],
-  declarations: [ClientDetailComponent, SportCardComponent],
-  exports: [ClientDetailComponent]
+  declarations: [ClientDetailV2Component],
+  exports: [ClientDetailV2Component]
 })
 export class ClientDetailModule {
 }
