@@ -876,7 +876,6 @@ export class SettingsComponent implements OnInit {
 
 
   createExtra(product: string, isEdit: boolean, idx: number, extra: any) {
-
     const dialogRef = this.dialog.open(ExtraCreateUpdateModalComponent, {
       width: '90vw',
       height: '90vh',

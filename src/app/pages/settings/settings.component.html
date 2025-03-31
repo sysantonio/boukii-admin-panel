@@ -1338,14 +1338,14 @@
 										<tr *matRowDef="let row; columns: displayedExtrasColumns;" mat-row></tr>
 									</tbody>
 								</table>
-								<div class="flex-auto" style="margin: 1% 0 0 0">
-									<button [disabled]="dataSourceForfait.data.length === 2"
+								<div class="flex-auto" style="margin: 1% 0">
+									<button
 										(click)="createExtra('Forfait', false, null, null)" class="add-date" mat-fab>
 										<mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
 									</button>
 								</div>
 
-								<div
+<!--								<div
 									style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 2% 0 2% 0;">
 									<h1 style="font-size:24px;float: left; width: 100%;">
 										{{'transport'
@@ -1554,7 +1554,7 @@
 										(click)="createExtra('Food', false, null, null)" class="add-date" mat-fab>
 										<mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
 									</button>
-								</div>
+								</div>-->
 							</vex-page-layout-content>
 						</vex-page-layout>
 					</mat-tab>
