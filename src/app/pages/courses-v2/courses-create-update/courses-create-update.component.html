@@ -650,7 +650,7 @@
 
 <vex-flux-modal *ngIf="confirmModal" [width]="670" (Close)="confirmModal=false" title="{{'almost_done' | translate}}">
 	<div [formGroup]="courses.courseFormGroup" body style="display: flex; gap: 20px; flex-wrap: wrap;">
-    <vex-course-detail-opcion [Form]="courses.courseFormGroup"></vex-course-detail-opcion>
+    <vex-course-detail-opcion [isCreate]="true" [Form]="courses.courseFormGroup"></vex-course-detail-opcion>
 <!--		<div style="width: 100;
     font-size: 14px;
     font-weight: 400;

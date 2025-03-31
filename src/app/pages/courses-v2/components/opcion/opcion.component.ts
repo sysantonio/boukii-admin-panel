@@ -38,6 +38,7 @@ export class CourseOpcionComponent {
   @Input() Form: FormGroup
   @Output() update = new EventEmitter()
   toggleClaimText: boolean = false
+  @Input() isCreate: boolean = false;
   sendEmailModal: boolean = false
   minDate = new Date(2000, 1, 1);
   nowDate = new Date()

@@ -13,7 +13,7 @@
 				</span>
 			</mat-slide-toggle>
 		</div>
-		<div style="width: calc(50% - 10px)">
+		<div style="width: calc(50% - 10px)" *ngIf="!isCreate">
 			<button (click)="sendEmailModal=true"
 				style="margin-top: 0px !important;height: 38px; width: 160px;margin-left: auto;" mat-stroked-button
 				type="button">
