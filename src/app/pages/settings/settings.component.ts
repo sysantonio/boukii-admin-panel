@@ -161,6 +161,16 @@ export class SettingsComponent implements OnInit {
     });
   }
 
+  Translate: { Code: string, Name: string }[] = [
+    { Code: "fr", Name: "French" },
+    { Code: "de", Name: "German" },
+    { Code: "en", Name: "English" },
+    { Code: "it", Name: "Italian" },
+    { Code: "es", Name: "Spanish" },
+  ]
+
+  selectedTabIndex = 0;
+
   createComponent = SalaryCreateUpdateModalComponent;
 
   entitySalary = '/school-salary-levels';
@@ -186,9 +196,9 @@ export class SettingsComponent implements OnInit {
   safeUrl: SafeResourceUrl;
 
   constructor(private ngZone: NgZone, private fb: UntypedFormBuilder, private crudService: ApiCrudService, private snackbar: MatSnackBar,
-    private dialog: MatDialog, private schoolService: SchoolService,
-    public layoutService: LayoutService, private sanitizer: DomSanitizer,
-    private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) {
+              private dialog: MatDialog, private schoolService: SchoolService,
+              public layoutService: LayoutService, private sanitizer: DomSanitizer,
+              private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) {
     this.filteredHours = this.hours;
     this.dateAdapter.setLocale(this.translateService.getDefaultLang());
     this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
@@ -330,12 +340,17 @@ export class SettingsComponent implements OnInit {
               desktopImg: [settings?.bookingPage?.banner.desktopImg],
               mobileImg: [settings?.bookingPage?.banner.mobileImg],
             })
-/*            this.PageForm.MessageInformation = this.fb.group({
-              index: [0, Validators.required],
-              title: ["", Validators.required],
-              desc: ["", Validators.required],
-              color: ["#D2EFFF", Validators.required],
-            })*/
+            this.PageForm.Conditions = this.fb.group({
+              terms: [settings?.bookingPage?.conditions?.terms || { es: '', en: '', fr: '', de: '', it: '' }],
+              privacy: [settings?.bookingPage?.conditions?.privacy || { es: '', en: '', fr: '', de: '', it: '' }],
+              contact: [settings?.bookingPage?.conditions?.contact || { es: '', en: '', fr: '', de: '', it: '' }]
+            });
+            /*            this.PageForm.MessageInformation = this.fb.group({
+                          index: [0, Validators.required],
+                          title: ["", Validators.required],
+                          desc: ["", Validators.required],
+                          color: ["#D2EFFF", Validators.required],
+                        })*/
             this.MessageStorage = settings?.bookingPage?.messages || []
             this.SponsorImg = settings?.bookingPage?.sponsors || []
 
@@ -1067,6 +1082,7 @@ export class SettingsComponent implements OnInit {
         this.getData();
 
       })*/
+    debugger;
     const data = {
       taxes: {
         cancellation_insurance_percent: this.hasCancellationInsurance ? this.cancellationInsurancePercent : 0,
@@ -1082,7 +1098,8 @@ export class SettingsComponent implements OnInit {
       bookingPage: {
         messages: this.MessageStorage,
         sponsors: this.SponsorImg,
-        banner: this.PageForm.BannerPromocional.value
+        banner: this.PageForm.BannerPromocional.value,
+        conditions: this.PageForm.Conditions.value
       }
     }
 
@@ -1096,6 +1113,12 @@ export class SettingsComponent implements OnInit {
         this.schoolService.refreshSchoolData();
         this.getData();
       })
+  }
+
+  updateConditions(field: string, lang: string, value: any) {
+    const currentConditions = this.PageForm.Conditions.value;
+    currentConditions[field][lang] = value;
+    this.PageForm.Conditions.patchValue({ [field]: currentConditions[field] });
   }
 
   updateTVAValue(event: any) {
@@ -1140,7 +1163,7 @@ export class SettingsComponent implements OnInit {
   //PAGINA DE RESERVA, MODAL
   PageModal: { BannerPromocional: boolean, MessageInformation: boolean, SponsoLink: boolean, Previum: boolean } =
     { BannerPromocional: false, MessageInformation: false, SponsoLink: false, Previum: false }
-  PageForm: { BannerPromocional: FormGroup, MessageInformation: FormGroup, SponsoLink: FormGroup } =
+  PageForm: { BannerPromocional: FormGroup, MessageInformation: FormGroup, SponsoLink: FormGroup, Conditions: FormGroup } =
     {
       BannerPromocional: this.fb.group({
         link: ["", Validators.required],
@@ -1159,7 +1182,37 @@ export class SettingsComponent implements OnInit {
         link: ["", Validators.required],
         img: ["", Validators.required],
       }),
+      Conditions: this.fb.group({
+        terms: [
+          {
+            es: '',
+            en:  '',
+            fr:  '',
+            it:  '',
+            de:  '',
+          }
+        ],
+        privacy: [
+          {
+            es: '',
+            en:  '',
+            fr:  '',
+            it:  '',
+            de:  '',
+          }
+        ],
+        contact: [
+          {
+            es: '',
+            en:  '',
+            fr:  '',
+            it:  '',
+            de:  '',
+          }
+        ],
+      })
     }
+
 
   SponsorImg: { index: number, img: string, link: string }[] = []
   MessageStorage: { index: number, title: string, desc: string, type: boolean }[] = []
