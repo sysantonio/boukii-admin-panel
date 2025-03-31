@@ -51,14 +51,14 @@
             {{"course_private" | translate}}
           </ng-template>
         </mat-tab>
-        <mat-tab [disabled]="mode==='update'">
+       <!-- <mat-tab [disabled]="mode==='update'">
           <ng-template mat-tab-label>
             <mat-icon style="color: #0AB0BC;" class="icon16">
               circle
             </mat-icon>
             {{"activity" | translate}}
           </ng-template>
-        </mat-tab>
+        </mat-tab>-->
       </mat-tab-group>
       <div style="padding: 20px 20px 0;">
         <mat-checkbox [disabled]="mode!=='update'" formControlName="is_flexible" (change)="setModalProgress()">

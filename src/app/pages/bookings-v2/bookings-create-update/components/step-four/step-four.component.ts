@@ -52,8 +52,7 @@ export class StepFourComponent {
 
   tabs = [
     { label: "course_colective", courseTypeId: 1, class: "yellow" },
-    { label: "course_private", courseTypeId: 2, class: "green" },
-    { label: "activity", courseTypeId: 3, class: "blue" },
+    { label: "course_private", courseTypeId: 2, class: "green" }
   ];
 
   constructor(
