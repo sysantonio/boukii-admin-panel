@@ -834,5 +834,8 @@
   "example_highlight_phrase": "Ejemplo: 'Solo una plaza disponible'",
   "claim": "Claim",
   "only_one_spot_available": "Solo una plaza disponible",
-  "edit": "Editar"
+  "edit": "Editar",
+  "privacy_policy": "Política de privacidad",
+  "terms_conditions": "Términos y condiciones",
+  "contact": "Contacto"
 }

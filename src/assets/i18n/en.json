@@ -826,5 +826,8 @@
   "claim": "Claim",
   "only_one_spot_available": "Only one spot available",
   "edit": "Edit",
-  "snackbar.error": "An unknown error has occurred."
+  "snackbar.error": "An unknown error has occurred.",
+  "privacy_policy": "Privacy policy",
+  "terms_conditions": "Terms and conditions",
+  "contact": "Contact"
 }

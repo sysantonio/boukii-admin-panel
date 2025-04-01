@@ -827,5 +827,8 @@
   "claim": "Anspruch",
   "only_one_spot_available": "Nur ein Platz verfügbar",
   "edit": "Bearbeiten",
-  "snackbar.error": "Ein unbekannter Fehler ist aufgetreten."
+  "snackbar.error": "Ein unbekannter Fehler ist aufgetreten.",
+  "privacy_policy": "Datenschutzrichtlinie",
+  "terms_conditions": "Allgemeine Geschäftsbedingungen",
+  "contact": "Kontakt"
 }

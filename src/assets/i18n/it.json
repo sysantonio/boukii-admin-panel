@@ -826,5 +826,8 @@
   "claim": "Claim",
   "only_one_spot_available": "Solo un posto disponibile",
   "edit": "Modifica",
-  "snackbar.error": "Si è verificato un errore sconosciuto."
+  "snackbar.error": "Si è verificato un errore sconosciuto.",
+  "privacy_policy": "Informativa sulla privacy",
+  "terms_conditions": "Termini e condizioni",
+  "contact": "Contatto"
 }

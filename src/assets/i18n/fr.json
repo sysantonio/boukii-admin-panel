@@ -826,5 +826,8 @@
   "claim": "Revendiquer",
   "only_one_spot_available": "Une seule place disponible",
   "edit": "Modifier",
-  "snackbar.error": "Une erreur inconnue s'est produite."
+  "snackbar.error": "Une erreur inconnue s'est produite.",
+  "privacy_policy": "Politique de confidentialité",
+  "terms_conditions": "Termes et conditions",
+  "contact": "Contact"
 }
