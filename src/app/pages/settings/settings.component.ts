@@ -1,4 +1,14 @@
-import { Component, ElementRef, HostListener, NgZone, OnInit, QueryList, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostListener,
+  NgZone,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import { SalaryCreateUpdateModalComponent } from './salary-create-update-modal/salary-create-update-modal.component';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
@@ -113,7 +123,7 @@ export class SettingsComponent implements OnInit {
   cancellationInsurancePercent = 0;
   cancellationNoRem = 0;
   cancellationRem = 0;
-
+  loadedTabs: boolean[] = [];
   today = new Date();
 
   selectedFrom = null;
@@ -195,7 +205,8 @@ export class SettingsComponent implements OnInit {
   user: any;
   safeUrl: SafeResourceUrl;
 
-  constructor(private ngZone: NgZone, private fb: UntypedFormBuilder, private crudService: ApiCrudService, private snackbar: MatSnackBar,
+  constructor(private ngZone: NgZone, private fb: UntypedFormBuilder, private crudService: ApiCrudService,
+              private snackbar: MatSnackBar, private cdr: ChangeDetectorRef,
               private dialog: MatDialog, private schoolService: SchoolService,
               public layoutService: LayoutService, private sanitizer: DomSanitizer,
               private translateService: TranslateService, private dateAdapter: DateAdapter<Date>) {
@@ -208,7 +219,9 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
-
+    this.loadedTabs = this.Translate.map(() => false);
+    // Marca la primera pestaña como cargada
+    this.loadedTabs[0] = true;
     /*this.mockLevelData.forEach(element => {
       this.crudService.create('/degrees', element)
 
@@ -544,6 +557,12 @@ export class SettingsComponent implements OnInit {
     this.selectedIndex = event.index;
     this.setCurrentMailType();
   }
+
+  onTabLangsChange(index: number): void {
+    // Marca la pestaña actual como cargada
+    this.loadedTabs[index] = true;
+  }
+
 
   onFullTabChange(event: any) {
     if (event.index == 7) {
@@ -1082,7 +1101,6 @@ export class SettingsComponent implements OnInit {
         this.getData();
 
       })*/
-    debugger;
     const data = {
       taxes: {
         cancellation_insurance_percent: this.hasCancellationInsurance ? this.cancellationInsurancePercent : 0,
@@ -1115,10 +1133,19 @@ export class SettingsComponent implements OnInit {
       })
   }
 
+  trackLang(index: number, lang: any) {
+    return lang.Code;
+  }
+
   updateConditions(field: string, lang: string, value: any) {
-    const currentConditions = this.PageForm.Conditions.value;
-    currentConditions[field][lang] = value;
-    this.PageForm.Conditions.patchValue({ [field]: currentConditions[field] });
+    const currentConditions = { ...this.PageForm.Conditions.value };
+    if (!currentConditions[field]) {
+      currentConditions[field] = {};
+    }
+    currentConditions[field][lang] = value.target.innerHTML;
+
+    this.PageForm.Conditions.get(field)?.setValue(currentConditions[field], { emitEvent: false });
+    this.cdr.markForCheck();
   }
 
   updateTVAValue(event: any) {

@@ -702,35 +702,37 @@
           </mat-tab>
           <mat-tab label="{{ 'options' | translate }}">
             <div style="padding: 20px;">
-              <mat-tab-group [(selectedIndex)]="selectedTabIndex">
-                <mat-tab *ngFor="let lang of Translate; let i = index" [label]="lang.Name">
-                  <ng-container *ngIf="selectedTabIndex === i">
-                    <h3>{{ 'general_conditions' | translate }}</h3>
-                    <app-form-editor
-                      [required]="true"
-                      [value]="PageForm.Conditions.controls['terms'].value?.[lang.Code] || ''"
-                      (do)="updateConditions('terms', lang.Code, $event.data)"
-                      name="terms">
-                    </app-form-editor>
+              <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedIndexChange)="onTabLangsChange($event)">
+                <mat-tab *ngFor="let lang of Translate; let i = index; trackBy: trackLang" [label]="lang.Name">
+                  <!-- Solo renderizamos el contenido de la pestaña seleccionada o las que han sido visitadas -->
+                  <ng-container *ngIf="loadedTabs[i]">
+                    <div>
+                      <h3>{{ 'general_conditions' | translate }}</h3>
+                      <app-form-editor
+                        [required]="true"
+                        [value]="PageForm.Conditions.controls['terms'].value?.[lang.Code] || ''"
+                        (valueChange)="updateConditions('terms', lang.Code, $event)"
+                        name="terms">
+                      </app-form-editor>
 
-                    <h3>{{ 'privacy_policy' | translate }}</h3>
-                    <app-form-editor
-                      [required]="true"
-                      [value]="PageForm.Conditions.controls['privacy'].value?.[lang.Code] || ''"
-                      (do)="updateConditions('privacy', lang.Code, $event.data)"
-                      name="privacy">
-                    </app-form-editor>
+                      <h3>{{ 'privacy_policy' | translate }}</h3>
+                      <app-form-editor
+                        [required]="true"
+                        [value]="PageForm.Conditions.controls['privacy'].value?.[lang.Code] || ''"
+                        (valueChange)="updateConditions('privacy', lang.Code, $event)"
+                        name="privacy">
+                      </app-form-editor>
 
-                    <h3>{{ 'contact' | translate }}</h3>
-                    <app-form-editor
-                      [required]="true"
-                      [value]="PageForm.Conditions.controls['contact'].value?.[lang.Code] || ''"
-                      (do)="updateConditions('contact', lang.Code, $event.data)"
-                      name="contact">
-                    </app-form-editor>
+                      <h3>{{ 'contact' | translate }}</h3>
+                      <app-form-editor
+                        [required]="true"
+                        [value]="PageForm.Conditions.controls['contact'].value?.[lang.Code] || ''"
+                        (valueChange)="updateConditions('contact', lang.Code, $event)"
+                        name="contact">
+                      </app-form-editor>
+                    </div>
                   </ng-container>
                 </mat-tab>
-
               </mat-tab-group>
               <div class="paginaReserva">
                 <div style="width: 100%;">

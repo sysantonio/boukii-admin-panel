@@ -15,6 +15,7 @@ export class ComponenteInputComponent implements OnInit {
   @Input() form!: FormGroup
   @Input() required: boolean = false
   @Output() do = new EventEmitter()
+  @Output() valueChange = new EventEmitter<string>()
 
   get c(): { [key: string]: AbstractControl } { return this.form.controls; }
 
@@ -24,6 +25,10 @@ export class ComponenteInputComponent implements OnInit {
     if (this.form && this.control) {
       this.required = this.form.get(this.control)?.hasValidator(Validators.required) || false
     }
+  }
+
+  onEditorChange(event: any) {
+    this.valueChange.emit(event);
   }
 
   getErrorMessage(controlName: string): string {
