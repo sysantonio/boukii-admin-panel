@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import {AngularEditorConfig} from '@kolkov/angular-editor';
 
 @Component({
   selector: 'app-form-editor',
@@ -16,6 +17,33 @@ export class ComponenteInputComponent implements OnInit {
   @Input() required: boolean = false
   @Output() do = new EventEmitter()
   @Output() valueChange = new EventEmitter<string>()
+
+
+  config: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+
+    height: '80rem',
+    minHeight: '15rem',
+    placeholder: 'Enter text here...',
+    translate: 'no',
+    defaultParagraphSeparator: 'p',
+    customClasses: [
+      {
+        name: "quote",
+        class: "quote",
+      },
+      {
+        name: 'redText',
+        class: 'redText'
+      },
+      {
+        name: "titleText",
+        class: "titleText",
+        tag: "h1",
+      },
+    ]
+  };
 
   get c(): { [key: string]: AbstractControl } { return this.form.controls; }
 

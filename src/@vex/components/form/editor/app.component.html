@@ -2,10 +2,11 @@
      [formGroup]="form"
      style="margin: 10px 0;">
   <angular-editor *ngIf="control"
+                  [config]="config"
                   [formControlName]="control"
                   (input)="do.emit($event)"
                   (blur)="onEditorChange($event)"
-                  style="display: block !important;width: 100%"
+                  style="width: 100%"
                   placeholder="{{name | translate}}{{required?'*':''}}">
   </angular-editor>
   <mat-error *ngIf="c[control].touched && c[control].errors">
@@ -15,9 +16,10 @@
 <div *ngIf="!control"
      style="margin: 10px 0;">
   <angular-editor [ngModel]="value"
+                  [config]="config"
                   (input)="do.emit($event)"
                   (blur)="onEditorChange($event)"
-                  style="display: block !important;width: 100%"
+                  style="width: 100%"
                   placeholder="{{name | translate}}{{required?'*':''}}">
   </angular-editor>
 </div>

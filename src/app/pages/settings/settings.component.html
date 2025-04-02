@@ -700,14 +700,14 @@
               </div>
             </div>
           </mat-tab>
-          <mat-tab label="{{ 'options' | translate }}">
+          <mat-tab label="{{ 'sales' | translate }}">
             <div style="padding: 20px;">
               <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedIndexChange)="onTabLangsChange($event)">
                 <mat-tab *ngFor="let lang of Translate; let i = index; trackBy: trackLang" [label]="lang.Name">
                   <!-- Solo renderizamos el contenido de la pestaña seleccionada o las que han sido visitadas -->
                   <ng-container *ngIf="loadedTabs[i]">
-                    <div>
-                      <h3>{{ 'general_conditions' | translate }}</h3>
+                    <div class="mt-4">
+                      <h2 class="title m-0">{{ 'terms_conditions' | translate }}</h2>
                       <app-form-editor
                         [required]="true"
                         [value]="PageForm.Conditions.controls['terms'].value?.[lang.Code] || ''"
@@ -715,7 +715,7 @@
                         name="terms">
                       </app-form-editor>
 
-                      <h3>{{ 'privacy_policy' | translate }}</h3>
+                      <h2 class="title m-0">{{ 'privacy_policy' | translate }}</h2>
                       <app-form-editor
                         [required]="true"
                         [value]="PageForm.Conditions.controls['privacy'].value?.[lang.Code] || ''"
@@ -723,7 +723,7 @@
                         name="privacy">
                       </app-form-editor>
 
-                      <h3>{{ 'contact' | translate }}</h3>
+                      <h2 class="title m-0">{{ 'contact' | translate }}</h2>
                       <app-form-editor
                         [required]="true"
                         [value]="PageForm.Conditions.controls['contact'].value?.[lang.Code] || ''"
