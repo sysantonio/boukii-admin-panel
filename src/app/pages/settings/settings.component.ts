@@ -915,7 +915,7 @@ export class SettingsComponent implements OnInit {
       height: '36vh',
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
       data: isEdit ? extra : {
-        product: product,
+        product: '',
         name: '',
         price: '',
         tva: '',
@@ -925,15 +925,7 @@ export class SettingsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {
-        if (data.product === 'Forfait') {
-
-          this.addForfait(data, isEdit, idx);
-        } else if (data.product === 'Food') {
-          this.addFood(data, isEdit, idx);
-        } else if (data.product === 'Transport') {
-          this.addTransport(data, isEdit, idx);
-        }
-
+        this.addForfait(data, isEdit, idx);
         this.saveExtra();
       }
     });
@@ -953,7 +945,7 @@ export class SettingsComponent implements OnInit {
 
       this.dataSourceForfait.data.push({
         id: 'FOR-' + this.generateRandomNumber(),
-        product: 'Forfait',
+        product: data.product,
         name: data.name,
         price: data.price,
         tva: data.tva,
