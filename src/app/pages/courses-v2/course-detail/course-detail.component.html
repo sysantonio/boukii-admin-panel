@@ -58,34 +58,39 @@
 			</mat-tab>
 			<mat-tab label="{{'menu.stats' | translate}}">
         <div class="card" style="margin: 2% 0 2% 0;">
-          <div
-            class="px-4 border-b d-flex align-items-center justify-content-between">
+          <div class="px-4 border-b d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
               <h2 class="title m-0">{{'sales' | translate }}</h2>
             </div>
             <span class="total-price">{{ totalPriceSell }} {{detailData?.currency}}</span>
             <div class="datepickers-container d-flex align-items-center">
               <label for="dateFromSales">{{'from' | translate}}</label>
-              <input matInput id="dateFromSales"
-                     [matDatepicker]="pickerFromSales" (dateChange)="filterData()"
-                     [(ngModel)]="selectedFrom" [value]="selectedFrom" readonly
-                     (click)="pickerFromSales.open()">
-              <mat-datepicker-toggle matSuffix
-                                     [for]="pickerFromSales"></mat-datepicker-toggle>
-              <mat-datepicker #pickerFromSales
-                              [startAt]="selectedFrom"></mat-datepicker>
+              <mat-form-field appearance="outline" class="custom-date-field">
+                <input matInput id="dateFromSales"
+                       [matDatepicker]="pickerFromSales"
+                       (dateChange)="filterData()"
+                       [(ngModel)]="selectedFrom"
+                       [value]="selectedFrom"
+                       readonly
+                       (click)="pickerFromSales.open()">
+                <mat-datepicker-toggle matSuffix [for]="pickerFromSales"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFromSales [startAt]="selectedFrom"></mat-datepicker>
+              </mat-form-field>
 
               <label for="dateToSales">{{'to' | translate}}</label>
-              <input matInput id="dateToSales" [matDatepicker]="pickerToSales"
-                     (dateChange)="filterData()" [min]="selectedFrom"
-                     [(ngModel)]="selectedTo" [value]="selectedTo" readonly
-                     (click)="pickerToSales.open()">
-              <mat-datepicker-toggle matSuffix
-                                     [for]="pickerToSales"></mat-datepicker-toggle>
-              <mat-datepicker #pickerToSales
-                              [startAt]="selectedTo"></mat-datepicker>
+              <mat-form-field appearance="outline" class="custom-date-field">
+                <input matInput id="dateToSales"
+                       [matDatepicker]="pickerToSales"
+                       (dateChange)="filterData()"
+                       [min]="selectedFrom"
+                       [(ngModel)]="selectedTo"
+                       [value]="selectedTo"
+                       readonly
+                       (click)="pickerToSales.open()">
+                <mat-datepicker-toggle matSuffix [for]="pickerToSales"></mat-datepicker-toggle>
+                <mat-datepicker #pickerToSales [startAt]="selectedTo"></mat-datepicker>
+              </mat-form-field>
             </div>
-
           </div>
         </div>
         <vex-aio-table *ngIf="detailData && detailData?.course_type == 1" [columns]="columnsSalesCollective"
