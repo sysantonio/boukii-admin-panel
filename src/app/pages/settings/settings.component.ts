@@ -911,10 +911,9 @@ export class SettingsComponent implements OnInit {
 
   createExtra(product: string, isEdit: boolean, idx: number, extra: any) {
     const dialogRef = this.dialog.open(ExtraCreateUpdateModalComponent, {
-      width: '90vw',
-      height: '90vh',
+      width: '50vw',
+      height: '36vh',
       maxWidth: '100vw',  // Asegurarse de que no haya un ancho máximo
-      panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
       data: isEdit ? extra : {
         product: product,
         name: '',
