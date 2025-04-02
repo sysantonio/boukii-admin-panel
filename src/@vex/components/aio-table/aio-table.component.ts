@@ -86,6 +86,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() with: any = '';
   @Input() search: any = '';
   @Output() showDetailEvent = new EventEmitter<any>();
+  @Output() dataLoaded = new EventEmitter<any[]>();
   pageIndex = 1;
   pageSize = 10;
   filter = '';
@@ -357,6 +358,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
         this.pageIndex = pageIndex;
         this.pageSize = pageSize;
         this.data = response.data;
+        this.dataLoaded.emit(response.data); // Emitimos los datos al componente padre
         //this.dataSource.data = []; // Reinicializa el dataSource para eliminar los datos antiguos
         this.dataSource.data = response.data;
         this.dataSource.connect();

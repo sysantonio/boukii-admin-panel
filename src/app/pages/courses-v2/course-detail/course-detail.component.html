@@ -56,7 +56,56 @@
 			<mat-tab label="{{'bookings' | translate}}" style="overflow: auto;">
 				<vex-bookings-v2 [filterCourseId]="id"></vex-bookings-v2>
 			</mat-tab>
-			<mat-tab label="{{'menu.stats' | translate}}"></mat-tab>
+			<mat-tab label="{{'menu.stats' | translate}}">
+        <div class="card" style="margin: 2% 0 2% 0;">
+          <div
+            class="px-4 border-b d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+              <h2 class="title m-0">{{'sales' | translate }}</h2>
+            </div>
+            <span class="total-price">{{ totalPriceSell }} {{detailData?.currency}}</span>
+            <div class="datepickers-container d-flex align-items-center">
+              <label for="dateFromSales">{{'from' | translate}}</label>
+              <input matInput id="dateFromSales"
+                     [matDatepicker]="pickerFromSales" (dateChange)="filterData()"
+                     [(ngModel)]="selectedFrom" [value]="selectedFrom" readonly
+                     (click)="pickerFromSales.open()">
+              <mat-datepicker-toggle matSuffix
+                                     [for]="pickerFromSales"></mat-datepicker-toggle>
+              <mat-datepicker #pickerFromSales
+                              [startAt]="selectedFrom"></mat-datepicker>
+
+              <label for="dateToSales">{{'to' | translate}}</label>
+              <input matInput id="dateToSales" [matDatepicker]="pickerToSales"
+                     (dateChange)="filterData()" [min]="selectedFrom"
+                     [(ngModel)]="selectedTo" [value]="selectedTo" readonly
+                     (click)="pickerToSales.open()">
+              <mat-datepicker-toggle matSuffix
+                                     [for]="pickerToSales"></mat-datepicker-toggle>
+              <mat-datepicker #pickerToSales
+                              [startAt]="selectedTo"></mat-datepicker>
+            </div>
+
+          </div>
+        </div>
+        <vex-aio-table *ngIf="detailData && detailData?.course_type == 1" [columns]="columnsSalesCollective"
+                       [entity]="'/admin/courses/'+this.detailData?.id + '/sells'" [search]="filter"
+                       [title]="'menu.courses'" [showDetail]="false" [withHeader]="false"
+                       [route]="'courses'"
+                       [canDelete]="false" [canDeactivate]="false"
+                       [filterColumn]="'school_id'" [filterField]="user.schools[0].id"
+                       [sectionIcon]="icon"
+                       (dataLoaded)="calculateTotal($event)"
+        ></vex-aio-table>
+        <vex-aio-table *ngIf="detailData && detailData?.course_type != 1" [columns]="columnsSalesPrivate"
+                       [entity]="'/admin/courses/'+this.detailData?.id + '/sells'" [search]="filter"
+                       [title]="'menu.courses'" [showDetail]="false" [withHeader]="false"
+                       [route]="'courses'"
+                       [canDelete]="false" [canDeactivate]="false"
+                       [filterColumn]="'school_id'" [filterField]="user.schools[0].id"
+                       [sectionIcon]="icon"
+                       (dataLoaded)="calculateTotal($event)"></vex-aio-table>
+      </mat-tab>
 		</mat-tab-group>
 	</div>
 </div>

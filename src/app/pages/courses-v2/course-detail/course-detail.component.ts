@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CoursesService } from '../../../../service/courses.service';
 import { TranslateService } from '@ngx-translate/core';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
+import {MonitorsCreateUpdateComponent} from '../../monitors/monitors-create-update/monitors-create-update.component';
+import moment from 'moment';
 
 @Component({
   selector: 'vex-course-detail',
@@ -26,6 +28,12 @@ export class CourseDetailComponent implements OnInit {
   shortestDuration: string | null = null;
   sendEmailModal: boolean = false
   toggleClaimText: boolean = false
+  selectedFrom = null;
+  selectedTo = null;
+  selectedMonitorId = null;
+  filter = '';
+  totalPriceSell = 0;
+
   constructor(private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, public courses: CoursesService, public TranslateService: TranslateService) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.settings = JSON.parse(this.user.schools[0].settings);
@@ -82,6 +90,28 @@ export class CourseDetailComponent implements OnInit {
     this.crudService.update('/admin/courses', courseFormGroup, this.id).subscribe()
   }
 
+  filterData() {
+
+    let filter = '';
+
+    if (this.selectedFrom) {
+      filter = filter + '&start_date=' + moment(this.selectedFrom).format('YYYY-MM-DD');
+    }
+    if (this.selectedTo) {
+      filter = filter + '&end_date=' + moment(this.selectedTo).format('YYYY-MM-DD');
+    }
+    if (this.selectedMonitorId) {
+      filter = filter + '&monitor_id=' + this.selectedMonitorId;
+    }
+
+    this.filter = filter;
+
+  }
+
+  calculateTotal(data) {
+    this.totalPriceSell = data.reduce((sum, item) => sum + item.total_cost, 0);
+  }
+
   goTo(route: string, query: any = null) {
     this.router.navigate([route], { queryParams: query });
   }
@@ -107,4 +137,44 @@ export class CourseDetailComponent implements OnInit {
     { label: 'Actions', property: 'actions', type: 'button', visible: true }
   ];
 
+  columnsSalesCollective: TableColumn<any>[] = [
+    { label: 'type', property: 'icon', type: 'booking_users_image', visible: true },
+    { label: 'name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'level', property: 'group_name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'availability', property: 'available_places', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'sold', property: 'booked_places', type: 'text', visible: true },
+    { label: 'cash', property: 'cash', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'other', property: 'other', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'T.Boukii', property: 'boukii', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'T.Boukii Web', property: 'boukii_web', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Link', property: 'online', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'no_paid', property: 'no_paid', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'admin', property: 'admin', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'web', property: 'web', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'vouchers', property: 'vouchers', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'extras', property: 'extras', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'total', property: 'total_cost', type: 'price', visible: true },
+  ];
+
+  icon = '../../../assets/img/icons/cursos.svg';
+
+  columnsSalesPrivate: TableColumn<any>[] = [
+    { label: 'type', property: 'icon', type: 'booking_users_image', visible: true },
+    { label: 'name', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'availability', property: 'available_places', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'sold', property: 'booked_places', type: 'text', visible: true },
+    { label: 'cash', property: 'cash', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'other', property: 'other', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'T.Boukii', property: 'boukii', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'T.Boukii Web', property: 'boukii_web', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Link', property: 'online', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'no_paid', property: 'no_paid', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'admin', property: 'admin', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'web', property: 'web', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'vouchers', property: 'vouchers', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'extras', property: 'extras', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'total', property: 'total_cost', type: 'price', visible: true },
+  ];
+
+  protected readonly createComponent = MonitorsCreateUpdateComponent;
 }
