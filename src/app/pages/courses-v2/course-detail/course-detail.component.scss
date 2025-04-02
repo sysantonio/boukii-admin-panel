@@ -142,3 +142,14 @@ button {
   margin-left: 10px;
   font-size: 1.25rem;
 }
+
+.close-button {
+  position: absolute;
+  top: 10px;  /* Ajusta según sea necesario */
+  right: -75vw;  /* Coloca la X a la derecha */
+  background: none;
+  border: none;
+  color: var(--color-dark1);  /* Puedes cambiar el color de la X */
+  cursor: pointer;
+  font-size: 36px;  /* Ajusta el tamaño de la X */
+}

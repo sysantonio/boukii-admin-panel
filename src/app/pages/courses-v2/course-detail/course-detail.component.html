@@ -5,6 +5,9 @@
 {text: TranslateService.instant('courses.title')+' #'+id, subtitle: true}
 ]" class="flex">
 	</vex-breadcrumbs>
+  <button *ngIf="incData" (click)="dialog.closeAll()" class="close-button" aria-label="Close">
+    <span class="material-icons">close</span>
+  </button>
 </vex-secondary-toolbar>
 <div class="flex flex-col sm:flex-row gap-4" style="width: 100%; float: left;">
 	<div class="card flex-auto">

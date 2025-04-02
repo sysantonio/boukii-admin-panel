@@ -10,10 +10,14 @@
 									              <img class="icon24" src="assets/icons/icon/delete-white.png"
                                      style="display: inline-flex; cursor: pointer"
                                      (click)="deleteActivity.emit();">
-        <img
-                    (click)="goTo('/bookings')"
-                    src="assets/img/icons/close.svg"
-                    class="btn-close">
+        <img *ngIf="!isModal"
+          (click)="goTo('/bookings')"
+          src="assets/img/icons/close.svg"
+          class="btn-close">
+          <img *ngIf="isModal"
+            (click)="closeClick.emit()"
+            src="assets/img/icons/close.svg"
+            class="btn-close">
 								</span>
     </div>
     <div style="color:#868686;">
@@ -126,8 +130,8 @@
 
 
             <img  *ngIf="bookingData.status !== 2" (click)="sendMailInfo()"
-                 src="assets/img/icons/send-mail-black.svg" class="icon24"
-                 style="margin-left: 12rem; cursor: pointer;">
+                  src="assets/img/icons/send-mail-black.svg" class="icon24"
+                  style="margin-left: 12rem; cursor: pointer;">
             <!-- {{ "send" | translate }} {{ "mail" | translate }} -->
 
           </div>

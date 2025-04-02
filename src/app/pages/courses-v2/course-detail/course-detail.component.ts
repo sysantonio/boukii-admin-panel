@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit, Optional} from '@angular/core';
 import { ApiCrudService } from '../../../../service/crud.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoursesService } from '../../../../service/courses.service';
@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
 import {MonitorsCreateUpdateComponent} from '../../monitors/monitors-create-update/monitors-create-update.component';
 import moment from 'moment';
+import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'vex-course-detail',
@@ -34,7 +35,10 @@ export class CourseDetailComponent implements OnInit {
   filter = '';
   totalPriceSell = 0;
 
-  constructor(private crudService: ApiCrudService, private activatedRoute: ActivatedRoute, private router: Router, public courses: CoursesService, public TranslateService: TranslateService) {
+  constructor(private crudService: ApiCrudService, private activatedRoute: ActivatedRoute,
+              public dialog: MatDialog,
+              private router: Router, public courses: CoursesService, public TranslateService: TranslateService,
+              @Optional() @Inject(MAT_DIALOG_DATA) public incData: any) {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
     this.settings = JSON.parse(this.user.schools[0].settings);
     this.id = this.activatedRoute.snapshot.params.id;
@@ -43,6 +47,8 @@ export class CourseDetailComponent implements OnInit {
   detailData: any
 
   ngOnInit(): void {
+    if (!this.incData) this.id = this.activatedRoute.snapshot.params.id;
+    else this.id = this.incData.id;
     this.crudService.get('/admin/courses/' + this.id,
       ['courseGroups.degree', 'courseGroups.courseDates.courseSubgroups.bookingUsers.client',
         'sport' ,'courseExtras'])

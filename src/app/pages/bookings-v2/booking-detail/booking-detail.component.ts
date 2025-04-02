@@ -96,6 +96,10 @@ export class BookingDetailV2Component implements OnInit {
       });
   }
 
+  closeModal() {
+    this.dialog.closeAll();
+  }
+
   groupBookingUsersByGroupId(booking: any) {
     this.mainClient = booking.client_main;
     const groupedActivities = Object.values(booking.booking_users.reduce((acc: any, user: any) => {
