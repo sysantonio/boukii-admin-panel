@@ -415,10 +415,14 @@
 						<span>
               {{item.Name | translate}}
 						</span>
-            <mat-icon  *ngIf="courseFormGroup.controls['translations'].value[item.Code]?.name &&
-                              courseFormGroup.controls['translations'].value[item.Code]?.short_description &&
-                               courseFormGroup.controls['translations'].value[item.Code]?.description"
-                       class="check">check</mat-icon>
+            <mat-icon *ngIf="courseFormGroup.controls['translations'].value &&
+                 courseFormGroup.controls['translations'].value[item.Code] &&
+                 courseFormGroup.controls['translations'].value[item.Code].name &&
+                 courseFormGroup.controls['translations'].value[item.Code].short_description &&
+                 courseFormGroup.controls['translations'].value[item.Code].description"
+                      class="check">
+              check
+            </mat-icon>
           </div>
         </div>
       </div>

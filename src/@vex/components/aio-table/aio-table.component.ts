@@ -73,6 +73,7 @@ export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() sectionIcon: string;
   @Input() route: string;
   @Input() withHeader: boolean = true;
+  @Input() withFilters: boolean = true;
   @Input() canDelete: boolean = false;
   @Input() canDeactivate: boolean = false;
   @Input() canDuplicate: boolean = false;

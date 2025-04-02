@@ -1,7 +1,7 @@
 <vex-page-layout>
 
   <vex-page-layout-header  class="pb-16 flex flex-col items-start justify-center"
-                           style="height: 0;">
+                           style="height: 0;" *ngIf="withHeader">
     <!-- <div
          class="w-full flex flex-col sm:flex-row justify-between fullwidth">
       <div>
@@ -15,7 +15,7 @@
 
     <div class="card overflow-auto">
 
-      <ng-container *ngIf="withHeader">
+      <ng-container *ngIf="withFilters">
       <div *ngIf="openFilters" style="float:left; width: 100%; padding:2%;">
 
         <div *ngIf="entity.includes('bookings')" style="float:left; width: 30%">

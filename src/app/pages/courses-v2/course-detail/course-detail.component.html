@@ -90,7 +90,7 @@
         </div>
         <vex-aio-table *ngIf="detailData && detailData?.course_type == 1" [columns]="columnsSalesCollective"
                        [entity]="'/admin/courses/'+this.detailData?.id + '/sells'" [search]="filter"
-                       [title]="'menu.courses'" [showDetail]="false" [withHeader]="false"
+                       [title]="'menu.courses'" [showDetail]="false" [withFilters]="false"
                        [route]="'courses'"
                        [canDelete]="false" [canDeactivate]="false"
                        [filterColumn]="'school_id'" [filterField]="user.schools[0].id"
@@ -99,7 +99,7 @@
         ></vex-aio-table>
         <vex-aio-table *ngIf="detailData && detailData?.course_type != 1" [columns]="columnsSalesPrivate"
                        [entity]="'/admin/courses/'+this.detailData?.id + '/sells'" [search]="filter"
-                       [title]="'menu.courses'" [showDetail]="false" [withHeader]="false"
+                       [title]="'menu.courses'" [showDetail]="false" [withFilters]="false"
                        [route]="'courses'"
                        [canDelete]="false" [canDeactivate]="false"
                        [filterColumn]="'school_id'" [filterField]="user.schools[0].id"
