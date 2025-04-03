@@ -187,7 +187,7 @@ export class ClientCreateUpdateComponent implements OnInit {
   }
 
 
-  
+
   passwordValidator(formControl: FormControl) {
     const { value } = formControl;
     const hasUpperCase = /[A-Z]/.test(value);
@@ -398,7 +398,7 @@ export class ClientCreateUpdateComponent implements OnInit {
     this.crudService.create('/users', this.defaultsUser)
       .subscribe((user) => {
         this.defaults.user_id = user.data.id;
-        this.defaults.birth_date = this.formatDate(this.defaults.birth_date)
+       // this.defaults.birth_date = this.formatDate(this.defaults.birth_date)
 
         this.crudService.create('/clients', this.defaults)
           .subscribe((client) => {
