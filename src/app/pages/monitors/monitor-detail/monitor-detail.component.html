@@ -1727,7 +1727,7 @@
                   <mat-label>{{'price' | translate}} {{'paid_block' | translate}}</mat-label>
                   <input matInput type="number" min="0" step="0.01"
                          [(ngModel)]="monitorSchoolRel.block_price"
-                         placeholder="{{'price' | translate}}">
+                         placeholder="{{'price' | translate}} - {{currency || 'CHF'}}">
                 </mat-form-field>
                 <div class="flex flex-col sm:flex-row gap-2 sm:gap-6">
 
