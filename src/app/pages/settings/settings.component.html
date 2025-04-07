@@ -775,48 +775,38 @@
           </mat-tab>
           <mat-tab label="{{'paid_blocks' | translate}}">
             <vex-page-layout>
-              <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0">
+              <vex-page-layout-content class="-mt-6 fullwidth" style="margin: 1% 0 0 0;">
 
                 <div
-                  style="float: left; width: 100%;border: 1px solid #e6e6e6;padding: 1%;margin: 0 0 2% 0;">
-                  <h1 style="font-size:24px;float: left; width: 100%;">
-                    {{'blocks'
-                    | translate}}
+                  style="width: 100%; border: 1px solid #e6e6e6; padding: 1%; margin-bottom: 2%;">
+                  <h1 style="font-size: 24px; margin-bottom: 1rem;">
+                    {{ 'blocks' | translate }}
                   </h1>
-                  <p style="padding: 1%; ;float: left; width: 75%;">
-                    {{'settings.blocks.text1' | translate}}
-                    <br>
-                    {{'settings.blocks.text2' | translate}}
-                    <br>
+                  <p style="margin-bottom: 1rem;">
+                    {{ 'settings.blocks.text1' | translate }}<br>
+                    {{ 'settings.blocks.text2' | translate }}
                   </p>
                   <button (click)="saveBlockages()" class="btn-primary-accent">
-                    {{'save_changes' |
-                    translate}}
+                    {{ 'save_changes' | translate }}
                   </button>
                 </div>
 
                 <div class="p-6">
-                  <mat-form-field *ngFor="let item of blockages" appearance="outline"
-                                  class="flex-auto" style="width: 30%; margin: 0 2% 0 0">
-										<span [ngStyle]="{'background-color': item.color}" matPrefix
-                          class="square-prefix"></span>
-                    <input [value]="item.name" [(ngModel)]="item.name" matInput
-                           placeholder="Enter text">
-                  </mat-form-field>
+                  <div style="display: flex; flex-wrap: wrap; gap: 2%;">
+                    <div *ngFor="let item of blockages"
+                         style="width: 48%; display: flex; align-items: center; margin-bottom: 1rem;">
+                      <mat-form-field appearance="outline" style="flex: 1; margin-right: 1rem;">
+                        <span [ngStyle]="{'background-color': item.color}" matPrefix class="square-prefix"></span>
+                        <input [(ngModel)]="item.name" matInput placeholder="Nombre del color">
+                      </mat-form-field>
+
+                      <mat-form-field appearance="outline" style="width: 120px;">
+                        <input [(ngModel)]="item.price" matInput placeholder="Precio" type="number" min="0" step="0.01">
+                      </mat-form-field>
+                    </div>
+                  </div>
                 </div>
 
-                <!-- <div class="p-6">
-                    <div style="width: 100%; margin: 2% 0 0 0; float:left;border: 1px solid #e6e6e6;padding: 1%;">
-                      <div style="width: 5%; float:left;">
-                        <button class="add-date" mat-fab (click)="addBlockage()">
-                          <mat-icon svgIcon="mat:add" class="icon-date"></mat-icon>
-                        </button>
-                      </div>
-                      <div style="width: 95%; float:left;margin: 1% 0 0 0;">
-                        <p>Añadir bloqueo</p>
-                      </div>
-                    </div>
-                  </div> -->
               </vex-page-layout-content>
             </vex-page-layout>
           </mat-tab>

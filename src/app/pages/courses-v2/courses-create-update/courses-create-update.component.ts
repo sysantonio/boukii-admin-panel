@@ -434,6 +434,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   }
 
   async translateCourse(lang: string): Promise<void> {
+    this.loading = true;
     try {
       const translations = this.courses.courseFormGroup.controls['translations'].value || {};
       const currentTranslation = translations[lang] || {};
@@ -456,6 +457,8 @@ export class CoursesCreateUpdateComponent implements OnInit {
 
     } catch (error) {
       console.error(`Error translating to ${lang}:`, error);
+    } finally {
+      this.loading = false;
     }
   }
 

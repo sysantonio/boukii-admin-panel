@@ -61,6 +61,7 @@ export class StepFourComponent {
     private calendarService: CalendarService,
     protected utilsService: UtilsService
   ) {
+    debugger;
     this.selectedCourse = this.initialData?.selectedCourse;
     this.selectedDate = this.initialData?.selectedDate;
     this.minDate = new Date();

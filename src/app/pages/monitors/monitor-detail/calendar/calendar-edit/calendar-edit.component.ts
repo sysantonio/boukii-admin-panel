@@ -21,8 +21,8 @@ import * as moment from 'moment';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DateAdapter } from '@angular/material/core';
 import {
-  BookingsCreateUpdateComponent
-} from '../../../../bookings/bookings-create-update/bookings-create-update.component';
+  BookingsCreateUpdateV2Component
+} from '../../../../bookings-v2/bookings-create-update/bookings-create-update.component';
 
 @Component({
   selector: 'vex-calendar-edit',
@@ -286,7 +286,7 @@ export class CalendarEditComponent implements OnInit {
   }
 
   openCreateBooking() {
-    const dialogRef = this.dialog.open(BookingsCreateUpdateComponent, {
+    const dialogRef = this.dialog.open(BookingsCreateUpdateV2Component, {
       width: '50%',
       height: '1200px',
       maxWidth: '90vw',

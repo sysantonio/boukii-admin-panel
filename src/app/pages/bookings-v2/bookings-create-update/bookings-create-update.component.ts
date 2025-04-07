@@ -7,6 +7,7 @@ import {BookingService} from '../../../../service/bookings.service';
 import {ApiCrudService} from '../../../../service/crud.service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import moment from 'moment';
 
 @Component({
   selector: "bookings-create-update-v2",
@@ -158,22 +159,22 @@ export class BookingsCreateUpdateV2Component {
       '&school_id=' + user.schools[0].id + '&active=1')
       .subscribe((data) => {
         this.allLevels = data.data
-        if (this.externalData && this.externalData.mainClient) {
-
-          this.mainClient  = this.externalData.mainClient;
+        if (this.externalData) {
+          this.mainClient  = this.externalData?.mainClient;
           this.selectedIndexForm = null;
-          this.currentStep = 1;
-          const step1Controls = {mainClient: this.externalData.mainClient};
-          const step2Controls = {utilizers: this.externalData.utilizers};
+          debugger;
+          const step1Controls = {mainClient: this.externalData?.mainClient};
+          const step2Controls = {utilizers: this.externalData?.utilizers};
+          const step4Controls = {date: moment(this.externalData?.date)};
           this.selectedForm = this.fb.group({
             step1: this.fb.group(step1Controls),
             step2: this.fb.group(step2Controls),
             step3: this.fb.group({}),
-            step4: this.fb.group({}),
+            step4: this.fb.group(step4Controls),
             step5: this.fb.group({}),
             step6: this.fb.group({})
           });
-          this.forceStep = 1;
+          if(this.mainClient) this.forceStep = 1; this.currentStep = 1;
           this.cdr.detectChanges();
         }
       })

@@ -699,7 +699,7 @@ export class MonitorDetailComponent {
     return this.crudService.list('/monitors-schools', 1, 10000, 'desc', 'id', '&monitor_id=' + this.id + '&school_id=' + this.user.schools[0].id)
       .pipe(
         map((data) => {
-          this.monitorSchoolRel = data.data;
+          this.monitorSchoolRel = data.data[0];
         })
       )
   }
@@ -1122,9 +1122,10 @@ export class MonitorDetailComponent {
               monitor_id: monitor.data.id,
               school_id: this.user.schools[0].id,
               station_id: this.defaults.active_station,
-              active_school: this.defaultsUser.active
+              active_school: this.defaultsUser.active,
+              block_price: this.monitorSchoolRel.block_price
             }
-            this.crudService.update('/monitors-schools', schoolRel, this.monitorSchoolRel[0].id)
+            this.crudService.update('/monitors-schools', schoolRel, this.monitorSchoolRel.id)
               .subscribe((a) => { })
             // revisar a partir de aqui
             this.sportsData.data.forEach(element => {
