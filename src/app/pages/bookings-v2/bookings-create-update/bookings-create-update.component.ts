@@ -162,16 +162,24 @@ export class BookingsCreateUpdateV2Component {
         if (this.externalData) {
           this.mainClient  = this.externalData?.mainClient;
           this.selectedIndexForm = null;
-          debugger;
           const step1Controls = {mainClient: this.externalData?.mainClient};
           const step2Controls = {utilizers: this.externalData?.utilizers};
-          const step4Controls = {date: moment(this.externalData?.date)};
+          const step4Controls = {
+            selectedDate: this.externalData?.date ? this.externalData.date : null,
+            onlyPrivate: this.externalData?.onlyPrivate || false
+          };
+          const step5Controls = {
+            date: this.externalData?.date ? this.externalData.date : null,
+            hour: this.externalData?.hour || null,
+            monitorId: this.externalData?.monitorId || null,
+            monitor: this.externalData?.monitor || null,
+          }
           this.selectedForm = this.fb.group({
             step1: this.fb.group(step1Controls),
             step2: this.fb.group(step2Controls),
             step3: this.fb.group({}),
             step4: this.fb.group(step4Controls),
-            step5: this.fb.group({}),
+            step5: this.fb.group(step5Controls),
             step6: this.fb.group({})
           });
           if(this.mainClient) this.forceStep = 1; this.currentStep = 1;

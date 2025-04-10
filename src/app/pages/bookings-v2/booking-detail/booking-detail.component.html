@@ -9,13 +9,13 @@
                    class="booking-breadcrumb"></vex-breadcrumbs>
 </div>
 <div class="bookingDetailContainer">
-  <!-- <button (click)="openBookingDialog()"
+   <button (click)="openDetailBookingDialog()"
     style="margin-bottom: 0;"
     mat-button
     type="button"
     class="modalButton">
     {{ "bookings_page_descriptionModal_button" | translate }}
-  </button> -->
+  </button>
   <div class="left-column">
     <div class="activities" *ngIf="allLevels">
       <booking-detail-description-card *ngFor="let activity of groupedActivities; let i = index"

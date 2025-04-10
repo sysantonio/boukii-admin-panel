@@ -11,6 +11,7 @@ import {
   CancelPartialBookingModalComponent
 } from '../../bookings/cancel-partial-booking/cancel-partial-booking.component';
 import {CancelBookingModalComponent} from '../../bookings/cancel-booking/cancel-booking.component';
+import {BookingDetailDialogComponent} from './components/booking-dialog/booking-dialog.component';
 
 @Component({
   selector: 'booking-detail-v2',
@@ -25,6 +26,8 @@ export class BookingDetailV2Component implements OnInit {
   deleteIndex: number = 1
   mainClient: any;
   allLevels: any;
+  isMobile = false;
+  showMobileDetail = false;
   bookingData$ = new BehaviorSubject<any>(null);
   bookingData:any;
   groupedActivities: any[] = [];
@@ -58,12 +61,35 @@ export class BookingDetailV2Component implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isMobile = window.innerWidth <= 768;
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
     if (!this.incData) this.id = this.activatedRoute.snapshot.params.id;
     else this.id = this.incData.id;
     this.getDegrees();
     this.getBooking();
   }
+
+  openDetailBookingDialog() {
+    this.dialog.open(BookingDetailDialogComponent, {
+      height: "-webkit-fill-available",
+      panelClass: "customBookingDialog",
+      position: {
+        bottom: "24px",
+        right: "24px",
+        top: "24px",
+        left: "24px"
+      },
+      maxWidth: "-webkit-fill-available",
+      data: {
+        mainClient: this.mainClient,
+        groupedActivities: this.groupedActivities,
+        allLevels: this.allLevels,
+        bookingData$: this.bookingData$, // Si estás usando async pipe, pásalo tal cual
+        activitiesChanged$: this.activitiesChanged$,
+      },
+    });
+  }
+
 
   getDegrees() {
     const user = JSON.parse(localStorage.getItem("boukiiUser"))

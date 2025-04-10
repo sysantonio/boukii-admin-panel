@@ -61,7 +61,11 @@ export class StepFourComponent {
     private calendarService: CalendarService,
     protected utilsService: UtilsService
   ) {
-    debugger;
+
+
+  }
+
+  ngOnInit(): void {
     this.selectedCourse = this.initialData?.selectedCourse;
     this.selectedDate = this.initialData?.selectedDate;
     this.minDate = new Date();
@@ -69,10 +73,7 @@ export class StepFourComponent {
       ? moment(this.selectedDate)
       : moment(this.minDate);
     this.updateNextMonth();
-    this.autoSelectFirstDayIfCurrentMonth();
-  }
-
-  ngOnInit(): void {
+   // this.autoSelectFirstDayIfCurrentMonth();
     this.updateTabs();
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
     this.stepForm = this.fb.group({
@@ -114,10 +115,10 @@ export class StepFourComponent {
 
   updateTabs(): void {
     // Si utilizers tiene más de 1 usuario, eliminamos el tab "course_colective"
-    if (this.utilizers && this.utilizers.length > 1) {
+    if ((this.utilizers && this.utilizers.length > 1) || this.initialData?.onlyPrivate) {
       this.tabs = [
         { label: "course_private", courseTypeId: 2, class: "green" },
-        { label: "activity", courseTypeId: 3, class: "blue" }
+       /* { label: "activity", courseTypeId: 3, class: "blue" }*/
       ];
       this.courseTypeId = 2;
       this.selectedIndex = this.courseTypeId - 2;
@@ -125,8 +126,7 @@ export class StepFourComponent {
       // Si solo hay 1 user, mostramos las 3 tabs
       this.tabs = [
         { label: "course_colective", courseTypeId: 1, class: "yellow" },
-        { label: "course_private", courseTypeId: 2, class: "green" },
-        { label: "activity", courseTypeId: 3, class: "blue" }
+        { label: "course_private", courseTypeId: 2, class: "green" }
       ];
       this.selectedIndex = this.courseTypeId - 1;
     }
@@ -142,6 +142,9 @@ export class StepFourComponent {
 
   completeStep() {
     if (this.isFormValid()) {
+/*      if(this.initialData.selectedDate != this.selectedDate) {
+        this.selectedForm.get('step5').patchValue({})
+      }*/
       this.stepCompleted.emit(this.stepForm);
     }
   }

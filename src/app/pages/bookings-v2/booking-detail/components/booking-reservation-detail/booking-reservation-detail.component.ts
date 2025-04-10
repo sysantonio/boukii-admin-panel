@@ -23,7 +23,7 @@ import {ApiCrudService} from '../../../../../../service/crud.service';
 export class BookingReservationDetailComponent implements OnInit {
   @Input() client: any;
   @Input() activities: any;
-  @Input() isModal: false;
+  @Input() isModal = false;
   @Input() hideBotton = false;
   @Input() bookingData: any;
   @Input() allLevels: any;

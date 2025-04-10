@@ -40,14 +40,14 @@ export class BookingFormStepper implements OnChanges {
 
   constructor(private fb: FormBuilder) {
     // Inicializa el formulario vacío
-    this.stepperForm = this.fb.group({
+/*    this.stepperForm = this.fb.group({
       step1: {},
       step2: {},
       step3: {},
       step4: {},
       step5: {},
       step6: {},
-    });
+    });*/
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -91,7 +91,7 @@ export class BookingFormStepper implements OnChanges {
     this.stepperForm.setControl(`step${step}`, formGroup);
     if (step < this.STEPS_LENGTH) {
       for (let i = step + 1; i <= this.STEPS_LENGTH; i++) {
-        if(step != 6) {
+        if(step != 6 && step == i) {
           this.stepperForm.setControl(`step${i}`, this.fb.group({}));
         }
       }
