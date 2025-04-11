@@ -154,38 +154,45 @@ export class BookingsCreateUpdateV2Component {
   }
 
   getDegrees() {
-    const user = JSON.parse(localStorage.getItem("boukiiUser"))
-    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order',
-      '&school_id=' + user.schools[0].id + '&active=1')
+    const user = JSON.parse(localStorage.getItem("boukiiUser"));
+    const schoolId = user?.schools?.[0]?.id;
+
+    if (!schoolId) return;
+
+    this.crudService.list('/degrees', 1, 10000, 'asc', 'degree_order', `&school_id=${schoolId}&active=1`)
       .subscribe((data) => {
-        this.allLevels = data.data
-        if (this.externalData) {
-          this.mainClient  = this.externalData?.mainClient;
-          this.selectedIndexForm = null;
-          const step1Controls = {mainClient: this.externalData?.mainClient};
-          const step2Controls = {utilizers: this.externalData?.utilizers};
-          const step4Controls = {
-            selectedDate: this.externalData?.date ? this.externalData.date : null,
-            onlyPrivate: this.externalData?.onlyPrivate || false
-          };
-          const step5Controls = {
-            date: this.externalData?.date ? this.externalData.date : null,
-            hour: this.externalData?.hour || null,
-            monitorId: this.externalData?.monitorId || null,
-            monitor: this.externalData?.monitor || null,
-          }
-          this.selectedForm = this.fb.group({
-            step1: this.fb.group(step1Controls),
-            step2: this.fb.group(step2Controls),
-            step3: this.fb.group({}),
-            step4: this.fb.group(step4Controls),
-            step5: this.fb.group(step5Controls),
-            step6: this.fb.group({})
-          });
-          if(this.mainClient) this.forceStep = 1; this.currentStep = 1;
-          this.cdr.detectChanges();
-        }
-      })
+        this.allLevels = data.data;
+        this.mainClient = this.externalData?.mainClient || null;
+        this.selectedIndexForm = null;
+
+        const step1Controls = { mainClient: this.mainClient };
+        const step2Controls = { utilizers: this.externalData?.utilizers || [] };
+        const step4Controls = {
+          selectedDate: this.externalData?.date || null,
+          onlyPrivate: this.externalData?.onlyPrivate || false
+        };
+        const step5Controls = {
+          date: this.externalData?.date || null,
+          hour: this.externalData?.hour || null,
+          monitorId: this.externalData?.monitorId || null,
+          monitor: this.externalData?.monitor || null
+        };
+
+        this.selectedForm = this.fb.group({
+          step1: this.fb.group(step1Controls),
+          step2: this.fb.group(step2Controls),
+          step3: this.fb.group({}),
+          step4: this.fb.group(step4Controls),
+          step5: this.fb.group(step5Controls),
+          step6: this.fb.group({})
+        });
+
+        // Si hay mainClient, forzamos a step 1, si no, comenzamos desde el principio
+        this.forceStep = this.mainClient ? 1 : 0;
+        this.currentStep = this.forceStep;
+
+        this.cdr.detectChanges();
+      });
   }
 
   calculateTotal() {
