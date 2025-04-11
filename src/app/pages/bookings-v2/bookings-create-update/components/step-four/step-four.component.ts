@@ -67,13 +67,15 @@ export class StepFourComponent {
 
   ngOnInit(): void {
     this.selectedCourse = this.initialData?.selectedCourse;
-    this.selectedDate = this.initialData?.selectedDate;
+    this.selectedDate = this.initialData?.selectedDate || this.minDate;
     this.minDate = new Date();
     this.selectedDateMoment = this.selectedDate
       ? moment(this.selectedDate)
       : moment(this.minDate);
     this.updateNextMonth();
-   // this.autoSelectFirstDayIfCurrentMonth();
+    if(!this.initialData?.selectedDate) {
+      this.autoSelectFirstDayIfCurrentMonth();
+    }
     this.updateTabs();
     this.user = JSON.parse(localStorage.getItem("boukiiUser"));
     this.stepForm = this.fb.group({
