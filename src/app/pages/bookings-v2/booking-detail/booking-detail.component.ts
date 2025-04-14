@@ -70,7 +70,7 @@ export class BookingDetailV2Component implements OnInit {
   }
 
   openDetailBookingDialog() {
-    this.dialog.open(BookingDetailDialogComponent, {
+    const dialogRef = this.dialog.open(BookingDetailDialogComponent, {
       height: "-webkit-fill-available",
       panelClass: "customBookingDialog",
       position: {
@@ -87,6 +87,16 @@ export class BookingDetailV2Component implements OnInit {
         bookingData$: this.bookingData$, // Si estás usando async pipe, pásalo tal cual
         activitiesChanged$: this.activitiesChanged$,
       },
+    });
+
+    // Aquí escuchas eventos desde dentro del modal
+    dialogRef.componentInstance.deleteActivity.subscribe(() => {
+      // Aquí haces lo que necesites cuando se borra la actividad
+     this.processFullDelete()
+    });
+
+    dialogRef.componentInstance.closeClick.subscribe(() => {
+      dialogRef.close();
     });
   }
 

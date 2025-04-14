@@ -9,11 +9,11 @@
                    class="booking-breadcrumb"></vex-breadcrumbs>
 </div>
 <div class="bookingDetailContainer">
-   <button (click)="openDetailBookingDialog()"
-    style="margin-bottom: 0;"
-    mat-button
-    type="button"
-    class="modalButton">
+  <button (click)="openDetailBookingDialog()"
+          style="margin-bottom: 0;"
+          mat-button
+          type="button"
+          class="modalButton">
     {{ "bookings_page_descriptionModal_button" | translate }}
   </button>
   <div class="left-column">
@@ -53,7 +53,38 @@
     </booking-detail-reservation-detail>
   </div>
 </div>
+<div class="mobileFixe">
+  {{ "bookings_page.description.total" | translate }}
+  <ng-container>
+      <span class="totalPrice">
+        {{ bookingData.price_total  | number:'0.2-2'}}
+        {{ groupedActivities[0].course.currency }}
+      </span>
+  </ng-container>
+  <ng-container >
+    <span *ngIf="!bookingData.paid && bookingData.price_total - calculateTotalVoucherPrice() > 0">{{ "to_pay" | translate }}</span>
+  </ng-container>
+  <ng-container *ngIf="!bookingData.paid && bookingData.price_total - calculateTotalVoucherPrice() > 0">
+      <span class="totalPrice" *ngIf="bookingData.price_total - calculateTotalVoucherPrice() != 0">
+        {{ bookingData.price_total - calculateTotalVoucherPrice()  | number:'0.2-2' }}
+        {{ groupedActivities[0].course.currency}}
+      </span>
+  </ng-container>
 
+  <div style="width: 100%; display: flex; gap: 10px;">
+    <button
+      style="height: 38px; width: calc(100% - 5px); border-radius: 3px; margin-top: 16px;
+           color: white; font-size: 14px; font-family: DM Sans; font-weight: 600;
+           line-height: 18px; word-wrap: break-word"
+      color="primary"
+      mat-raised-button
+      type="button"
+      class="client-button"
+      [disabled]="bookingData.paid">
+      {{  (bookingData.paid ? "ispaid" : "to_pay") | translate }}
+    </button>
+  </div>
+</div>
 <vex-flux-modal *ngIf="deleteModal"
                 [width]="570"
                 (Close)="deleteModal=false"

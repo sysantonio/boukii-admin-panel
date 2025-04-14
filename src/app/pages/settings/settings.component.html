@@ -700,7 +700,7 @@
               </div>
             </div>
           </mat-tab>
-          <mat-tab label="{{ 'sales' | translate }}">
+          <mat-tab label="{{ 'legal' | translate }}">
             <div style="padding: 20px;">
               <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedIndexChange)="onTabLangsChange($event)">
                 <mat-tab *ngFor="let lang of Translate; let i = index; trackBy: trackLang" [label]="lang.Name">
