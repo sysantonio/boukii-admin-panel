@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {AbstractControl, FormArray, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import {map, forkJoin, mergeMap, throwError, catchError} from 'rxjs';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
@@ -72,6 +72,11 @@ export class CoursesCreateUpdateComponent implements OnInit {
   translateExpandedIndex: number = 0
   user: any;
   id: any = null;
+  // Array simple para intervalos
+  intervals: any[] = [];
+  useMultipleIntervals = false;
+  mustBeConsecutive = false;
+  mustStartFromFirst = false;
 
   constructor(private fb: UntypedFormBuilder, public dialog: MatDialog,
               private crudService: ApiCrudService, private activatedRoute: ActivatedRoute,
@@ -150,15 +155,72 @@ export class CoursesCreateUpdateComponent implements OnInit {
         this.detailData = response.data;
         this.detailData.station = this.detailData.station || null;
         this.mergeCourseExtras();
+        let hasMultipleIntervals = false;
+
+        if (this.detailData.settings) {
+          try {
+            const settings = typeof this.detailData.settings === 'string'
+              ? JSON.parse(this.detailData.settings)
+              : this.detailData.settings;
+
+            if (settings.multipleIntervals) {
+              hasMultipleIntervals = true;
+              this.useMultipleIntervals = true;
+              this.mustBeConsecutive = settings.mustBeConsecutive || false;
+              this.mustStartFromFirst = settings.mustStartFromFirst || false;
+            }
+          } catch (error) {
+            console.error("Error parsing settings:", error);
+          }
+        }
         if (this.detailData?.settings?.periods?.length > 1) {
           this.PeriodoFecha = 0;
         }
         this.courses.settcourseFormGroup(this.detailData);
         this.courses.courseFormGroup.patchValue({ extras: this.detailData.course_extras || [] });
         this.getDegrees();
+        // Si tiene intervalos múltiples, cargarlos
+        if (hasMultipleIntervals && this.detailData.course_type === 1) {
+          // Cargar los intervalos después de que el FormGroup esté listo
+          this.loadIntervalsFromCourse(this.detailData, this);
+        }
         this.loading = false
        // setTimeout(() => (this.loading = false), 0);
       });
+  }
+
+
+  /**
+   * Método seguro para obtener el array de intervalos desde el FormGroup principal
+   * Este método garantiza que siempre se devuelva un FormArray, incluso si aún no está inicializado
+   */
+  getIntervalsArray(): FormArray {
+    // Verificar si el FormGroup principal existe
+    if (!this.courses.courseFormGroup) {
+      console.warn('courseFormGroup no está inicializado. Devolviendo un FormArray vacío.');
+      return this.fb.array([]);
+    }
+
+    // Intentar obtener el FormArray de intervals_ui
+    const intervals = this.courses.courseFormGroup.get('intervals_ui');
+
+    // Si el control no existe o no es un FormArray, devolver uno vacío
+    if (!intervals || !(intervals instanceof FormArray)) {
+      console.warn('intervals_ui no está inicializado o no es un FormArray. Devolviendo un FormArray vacío.');
+
+      // Si el control no existe pero el FormGroup sí, podemos intentar inicializarlo
+      if (this.courses.courseFormGroup) {
+        const emptyArray = this.fb.array([]);
+        this.courses.courseFormGroup.setControl('intervals_ui', emptyArray);
+        return emptyArray;
+      }
+
+      // Como fallback, devolvemos un array vacío
+      return this.fb.array([]);
+    }
+
+    // Si todo está bien, devolver el FormArray
+    return intervals as FormArray;
   }
 
   private mergeCourseExtras() {
@@ -575,8 +637,36 @@ export class CoursesCreateUpdateComponent implements OnInit {
     }
   }
 
+  // Opción 3: Método genérico para obtener cualquier FormArray de un FormGroup
+  getFormArray(formGroup: AbstractControl, name: string): AbstractControl[] {
+    const formArray = formGroup?.get(name) as FormArray;
+    return formArray?.controls || [];
+  }
+
   endCourse() {
     const courseFormGroup = this.courses.courseFormGroup.getRawValue()
+    if (courseFormGroup.course_type === 1 && this.useMultipleIntervals) {
+      // Configurar los intervalos en settings
+      const intervals = [];
+
+      this.intervalsUI.controls.forEach((intervalControl) => {
+        const interval = intervalControl as FormGroup;
+        intervals.push({
+          id: interval.get('id').value,
+          name: interval.get('name').value
+        });
+      });
+
+      // Actualizar settings con la configuración de intervalos
+      courseFormGroup.settings = {
+        ...courseFormGroup.settings,
+        multipleIntervals: true,
+        intervals: intervals,
+        mustStartFromFirst: this.mustStartFromFirst,
+        mustBeConsecutive: this.mustBeConsecutive
+      };
+    }
+
     if (courseFormGroup.course_type === 1 && courseFormGroup.course_dates && courseFormGroup.levelGrop) {
       courseFormGroup.course_dates.forEach((courseDate: any) => {
         if (courseDate.course_groups) {
@@ -656,6 +746,308 @@ export class CoursesCreateUpdateComponent implements OnInit {
     course_date.push({ ...data, date: newDate })
     this.courses.courseFormGroup.patchValue({ course_dates: course_date })
   }
+  createIntervalUI(): FormGroup {
+    return this.fb.group({
+      id: [Date.now().toString()],
+      name: ['Intervalo ' + (this.intervalsUI.length + 1)], // Nombre predeterminado significativo
+      dates: this.fb.array([])
+    });
+  }
+
+  get intervalsUI(): FormArray {
+    return this.courses.courseFormGroup ?
+      (this.courses.courseFormGroup.get('intervals_ui') as FormArray) :
+      null;
+  }
+
+  createCourseDate(): FormGroup {
+    return this.fb.group({
+      date: [new Date().toISOString().split('T')[0], Validators.required],
+      hour: [this.courses.hours[0], Validators.required],
+      interval_id: [''],
+      order: [0]
+    });
+  }
+
+  updateDuration(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this.courses.courseFormGroup.patchValue({duration: value});
+    this.syncIntervalsToCourseFormGroup();
+  }
+
+  syncIntervalsToCourseDates() {
+    if (!this.useMultipleIntervals) return;
+
+    const courseDates = [];
+    const intervals = this.intervalsUI.controls;
+
+    intervals.forEach((intervalControl) => {
+      const interval = intervalControl as FormGroup;
+      const intervalId = interval.get('id').value;
+      const intervalName = interval.get('name').value;
+      const datesArray = interval.get('dates') as FormArray;
+
+      // Convertir las fechas del intervalo a course_dates
+      datesArray.controls.forEach((dateControl, j) => {
+        const date = dateControl.get('date').value;
+        const hour = dateControl.get('hour').value;
+
+        if (date && hour) {
+          courseDates.push({
+            date: date,
+            hour_start: hour,
+            hour_end: this.courses.addMinutesToTime(hour, this.courses.courseFormGroup.get('duration').value),
+            duration: this.courses.courseFormGroup.get('duration').value,
+            interval_id: intervalId,
+            interval_name: intervalName,
+            order: j + 1,
+            course_groups: this.getCourseDateGroups()
+          });
+        }
+      });
+    });
+
+    // Actualizar el course_dates en el formulario
+    if (courseDates.length > 0) {
+      this.courses.courseFormGroup.patchValue({ course_dates: courseDates });
+    }
+  }
+
+
+  onMultipleIntervalsChange() {
+    if (this.useMultipleIntervals) {
+      // Si no hay intervalos, inicializar con uno vacío
+      if (this.intervals.length === 0) {
+        this.addIntervalUI(0);
+      }
+    } else {
+      // Si se desactiva, mantener el array de course_dates normal y vaciar los intervalos
+      this.resetToSingleInterval();
+    }
+
+    // Sincronizar con course_dates
+    this.syncIntervalsToCourseFormGroup();
+  }
+
+  // Añadir un nuevo intervalo
+  addIntervalUI(i:number) {
+    const newInterval = {
+      id: Date.now().toString(),
+      name: `Intervalo ${this.intervals.length + 1}`,
+      dates: []
+    };
+
+    this.intervals.push(newInterval);
+
+    this.addCourseDateToInterval(i);
+
+  }
+
+  // Eliminar un intervalo
+  removeIntervalUI(index: number) {
+    if (index >= 0 && index < this.intervals.length) {
+      this.intervals.splice(index, 1);
+      this.syncIntervalsToCourseFormGroup();
+    }
+  }
+
+  // Añadir una fecha a un intervalo
+  addCourseDateToInterval(intervalIndex: number) {
+    if (intervalIndex < 0 || intervalIndex >= this.intervals.length) return;
+
+    const interval = this.intervals[intervalIndex];
+    const now = new Date();
+    let newDate = now.toISOString().split('T')[0];
+
+    // Si ya hay fechas, generar la siguiente fecha
+    if (interval.dates.length > 0) {
+      const lastDateStr = interval.dates[interval.dates.length - 1].date;
+      if (lastDateStr) {
+        const lastDate = new Date(lastDateStr);
+        lastDate.setDate(lastDate.getDate() + 1);
+        newDate = lastDate.toISOString().split('T')[0];
+      }
+    }
+
+    // Crear objeto de fecha
+    interval.dates.push({
+      date: newDate,
+      hour_start: this.courses.hours[0],
+      duration: this.courses.duration[0],
+      interval_id: interval.id,
+      order: interval.dates.length + 1
+    });
+
+    this.syncIntervalsToCourseFormGroup();
+  }
+
+  // Eliminar una fecha de un intervalo
+  removeCourseDateFromInterval(intervalIndex: number, dateIndex: number) {
+    if (intervalIndex < 0 || intervalIndex >= this.intervals.length) return;
+
+    const interval = this.intervals[intervalIndex];
+    if (dateIndex < 0 || dateIndex >= interval.dates.length) return;
+
+    interval.dates.splice(dateIndex, 1);
+    this.syncIntervalsToCourseFormGroup();
+  }
+
+  // Sincronizar datos de intervalos con el FormGroup del curso
+  syncIntervalsToCourseFormGroup() {
+    if (!this.useMultipleIntervals || !this.courses.courseFormGroup) return;
+
+    const courseDates = [];
+
+    // Recorrer todos los intervalos y sus fechas
+    for (const interval of this.intervals) {
+      for (const dateObj of interval.dates) {
+        if (dateObj.date && dateObj.hour_start) {
+          courseDates.push({
+            date: dateObj.date,
+            hour_start: dateObj.hour_start,
+            hour_end: this.courses.addMinutesToTime(dateObj.hour_start, dateObj.duration),
+            duration: dateObj.duration,
+            interval_id: interval.id,
+            order: dateObj.order,
+            course_groups: this.getCourseDateGroups(),
+            groups: this.getCourseDateGroups()
+          });
+        }
+      }
+    }
+
+    // Actualizar el curso con las fechas generadas
+    if (courseDates.length > 0) {
+      this.courses.courseFormGroup.patchValue({
+        course_dates: courseDates
+      });
+    }
+  }
+
+  // Obtener los grupos de curso para cada fecha nueva
+  getCourseDateGroups() {
+    const existingDates = this.courses.courseFormGroup.get('course_dates').value;
+    if (existingDates && existingDates.length > 0 && existingDates[0].course_groups) {
+      return JSON.parse(JSON.stringify(existingDates[0].course_groups));
+    }
+    return [];
+  }
+
+  // Resetear a un solo intervalo
+  resetToSingleInterval() {
+    // Limpiar los intervalos
+    this.intervals = [];
+
+    // Asegurarnos de que course_dates tiene al menos una fecha
+    const courseDates = this.courses.courseFormGroup.get('course_dates').value;
+    if (!courseDates || courseDates.length === 0) {
+      this.courses.courseFormGroup.patchValue({
+        course_dates: [{ ...this.courses.default_course_dates }]
+      });
+    }
+  }
+
+  // Cargar intervalos desde un curso existente
+  loadIntervalsFromCourse(courseData: any, component: any) {
+    // Comprobar si el curso tiene configuración de intervalos múltiples
+    if (courseData.settings) {
+      try {
+        const settings = courseData.settings;
+
+        // Si tiene configuración de intervalos múltiples
+        if (settings.multipleIntervals) {
+          // Activar el switch en el componente
+          component.useMultipleIntervals = true;
+          component.mustBeConsecutive = settings.mustBeConsecutive || false;
+          component.mustStartFromFirst = settings.mustStartFromFirst || false;
+
+          // Agrupar las fechas por intervalos
+          const courseDates = courseData.course_dates || [];
+          const intervalMap: { [key: string]: any } = {};
+
+          // Agrupar por interval_id
+          courseDates.forEach(date => {
+            const intervalId = date.interval_id || 'default';
+
+            if (!intervalMap[intervalId]) {
+              const matchingInterval = settings.intervals?.find(i => i.id === intervalId);
+
+              intervalMap[intervalId] = {
+                id: intervalId,
+                name: date.interval_name || matchingInterval?.name || 'Intervalo',
+                order: matchingInterval?.order || 0,
+                dates: []
+              };
+            }
+
+            intervalMap[intervalId].dates.push({
+              date: date.date,
+              hour_start: date.hour_start,
+              hour_end: date.hour_end,
+              duration: date.duration,
+              order: date.order || 0
+            });
+          });
+
+          // Convertir a array ordenado por `order`
+          const intervalGroups = Object.values(intervalMap).sort((a: any, b: any) => a.order - b.order);
+
+          // Actualizar el array de fechas en el formulario
+          const datesArray = this.courses.courseFormGroup.controls['course_dates'] as FormArray;
+
+          // Limpiar fechas actuales
+          while (datesArray.length > 0) {
+            datesArray.removeAt(0);
+          }
+
+          this.intervals = intervalGroups;
+
+          // Añadir fechas agrupadas por intervalos
+/*          Object.values(intervalGroups).forEach((group: any, groupIndex) => {
+            // Ordenar fechas por orden
+            const sortedDates = [...group.dates].sort((a, b) => a.order - b.order);
+
+            // Añadir cada fecha al FormArray
+            sortedDates.forEach((dateInfo, dateIndex) => {
+              // Crear un nuevo objeto de fecha
+              const newDate = {
+                date: typeof dateInfo.date === 'string' ? dateInfo.date : new Date(dateInfo.date).toISOString().split('T')[0],
+                hour_start: dateInfo.hour_start,
+                hour_end: dateInfo.hour_end,
+                interval_id: group.id,
+                order: dateInfo.order || dateIndex
+              };
+
+              // Añadir al FormArray
+              datesArray.push(this.fb.control(newDate));
+            });
+          });*/
+
+          // Actualizar settings en el formulario
+          const updatedSettings = {
+            ...this.courses.courseFormGroup.controls['settings'].value,
+            multipleIntervals: true,
+            mustBeConsecutive: component.mustBeConsecutive,
+            mustStartFromFirst: component.mustStartFromFirst,
+            intervals: Object.values(intervalGroups).map((group:any) => ({
+              id: group.id,
+              name: group.name
+            }))
+          };
+
+          this.courses.courseFormGroup.patchValue({
+            settings: updatedSettings
+          });
+        }
+      } catch (error) {
+        console.error("Error parsing course settings:", error);
+      }
+    } else {
+      // Si no tiene intervalos, inicializar con los valores por defecto
+      //this.initializeDefaultInterval();
+    }
+  }
+
 
   monitorSelect(event: any, level: any, j: number) {
     let course_dates = this.courses.courseFormGroup.controls['course_dates'].value

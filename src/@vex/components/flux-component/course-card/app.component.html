@@ -159,7 +159,7 @@
             {{'activity' | translate}}
           </ng-container>
           <ng-container *ngIf="courseFormGroup.controls['is_flexible'].value">
-          {{'flex' | uppercase |translate}}
+            {{'flex' | uppercase |translate}}
           </ng-container>
           <ng-container *ngIf="!courseFormGroup.controls['is_flexible'].value">
             {{'fix' | uppercase |translate}}
@@ -297,75 +297,233 @@
                class="editbutton icon24">
         </div>
       </div>
-      <div *ngIf="courseFormGroup.controls['course_dates'].value && courseFormGroup.controls['course_dates'].value.length>0" style="width: 100%;">
-        <div style="display: flex;">
-          <img src="assets/icons/icon/calendar.png" class="icon24">
-          <p class="label">
-            {{'bookings_page.description.date' |translate }}
-          </p>
+      <div *ngIf="groupedCourseDates && groupedCourseDates.size > 0" class="course-dates-container">
+        <div class="dates-header">
+          <div style="display: flex; align-items: center;">
+            <img src="assets/icons/icon/calendar.png" class="icon24">
+            <p class="label" style="margin: 0 0 0 8px;">
+              {{'bookings_page.description.date' | translate }}
+            </p>
+          </div>
+
+          <!-- Botones para expandir/colapsar todos los intervalos -->
+          <div class="expand-buttons" *ngIf="groupedCourseDates.size > 1">
+            <button type="button" (click)="expandAllIntervals()" class="text-button">
+              <mat-icon>unfold_more</mat-icon>
+              <span>{{'expand_all' | translate}}</span>
+            </button>
+            <button type="button" (click)="collapseAllIntervals()" class="text-button">
+              <mat-icon>unfold_less</mat-icon>
+              <span>{{'collapse_all' | translate}}</span>
+            </button>
+          </div>
         </div>
-        <p *ngIf="!courseFormGroup.controls['course_dates'].value" class="emptyText">
-        </p>
-        <ng-container *ngIf="courseFormGroup.controls['course_type'].value === 1; else singleDate">
-          <p *ngFor="let item of courseFormGroup.controls['course_dates'].value"
-             style="font-size: 14px; text-align-last: justify; display: flex; justify-content: space-between;">
-            <span><b>{{ item.date | date: 'dd-MM-yyyy' }}</b></span>
-            <span style="color: var(--color-grey1);">
-          {{ item.hour_start }}h - {{ item.hour_end }}h
+
+        <!-- Iteramos sobre los IDs de intervalo ordenados -->
+        <div *ngFor="let intervalId of getOrderedIntervalIds(groupedCourseDates)" class="interval-group">
+
+          <!-- Encabezado del intervalo con botón para expandir/colapsar -->
+          <div class="interval-header" (click)="toggleInterval(intervalId)">
+            <div class="interval-title">
+              <mat-icon>{{ isIntervalExpanded(intervalId) ? 'expand_more' : 'chevron_right' }}</mat-icon>
+              {{ intervalNames.get(intervalId) || 'Intervalo ' + intervalId }}
+            </div>
+
+            <!-- Resumen compacto del intervalo visible incluso cuando está colapsado -->
+            <div class="interval-brief">
+              <span class="date-count">{{ groupedCourseDates.get(intervalId).length }} {{'dates' | translate}}</span>
+              <span class="weekdays-brief" *ngIf="shouldShowCompactSummary(groupedCourseDates.get(intervalId))">
+          {{ getWeekdaysPattern(groupedCourseDates.get(intervalId)) }}
+        </span>
+            </div>
+          </div>
+
+          <!-- Contenido detallado del intervalo (expandible) -->
+          <div class="interval-content" *ngIf="isIntervalExpanded(intervalId)">
+            <!-- Si es curso colectivo (course_type === 1) -->
+            <ng-container *ngIf="courseFormGroup.controls['course_type'].value === 1">
+              <!-- Si debemos mostrar un resumen compacto -->
+              <ng-container *ngIf="shouldShowCompactSummary(groupedCourseDates.get(intervalId))">
+                <div class="interval-summary">
+                  <div class="summary-left">
+              <span class="date-range">
+                <b>{{ formatDateRange(groupedCourseDates.get(intervalId)) }}</b>
+              </span>
+                    <span class="weekdays">
+                {{ getWeekdaysPattern(groupedCourseDates.get(intervalId)) }}
+              </span>
+                  </div>
+                  <div class="summary-right">
+              <span class="time-schedule">
+                {{ getCommonTimeSchedule(groupedCourseDates.get(intervalId)) }}
+              </span>
+                    <span class="price" *ngIf="courseFormGroup.controls['is_flexible'].value">
+                {{ courseFormGroup.controls['price'].value | number: '0.2' }}&nbsp;{{ courseFormGroup.controls['currency'].value }}
+              </span>
+                  </div>
+                </div>
+
+                <!-- Botón para mostrar/ocultar todas las fechas individuales -->
+                <button type="button" (click)="toggleDetailedDates(intervalId)" class="show-details-button">
+                  {{ showDetailedDates(intervalId) ? ('hide_details' | translate) : ('show_all_dates' | translate) }}
+                </button>
+
+                <!-- Mostrar todas las fechas individuales si se ha pulsado "Mostrar detalles" -->
+                <div class="detailed-dates" *ngIf="showDetailedDates(intervalId)">
+                  <div *ngFor="let item of groupedCourseDates.get(intervalId)" class="date-item">
+                    <span class="date">{{ item.date | date: 'dd-MM-yyyy' }}</span>
+                    <span class="time">
+                {{ item.hour_start }}h - {{ item.hour_end }}h
+              </span>
+                    <span class="price" *ngIf="courseFormGroup.controls['is_flexible'].value">
+                {{ courseFormGroup.controls['price'].value | number: '0.2' }}&nbsp;{{ courseFormGroup.controls['currency'].value }}
+              </span>
+                  </div>
+                </div>
+              </ng-container>
+
+              <!-- Si no mostramos resumen, mostrar cada fecha individualmente -->
+              <ng-container *ngIf="!shouldShowCompactSummary(groupedCourseDates.get(intervalId))">
+                <div *ngFor="let item of groupedCourseDates.get(intervalId)" class="date-item">
+                  <span class="date">{{ item.date | date: 'dd-MM-yyyy' }}</span>
+                  <span class="time">
+              {{ item.hour_start }}h - {{ item.hour_end }}h
+            </span>
+                  <span class="price" *ngIf="courseFormGroup.controls['is_flexible'].value">
+              {{ courseFormGroup.controls['price'].value | number: '0.2' }}&nbsp;{{ courseFormGroup.controls['currency'].value }}
+            </span>
+                </div>
+              </ng-container>
+            </ng-container>
+
+            <!-- Si es curso privado o actividad (course_type !== 1) -->
+            <ng-container *ngIf="courseFormGroup.controls['course_type'].value !== 1">
+              <div *ngFor="let item of groupedCourseDates.get(intervalId)" class="date-item">
+          <span class="date">
+            {{ item.date | date: 'dd-MM-yyyy' }} - {{ item.date_end | date: 'dd-MM-yyyy' }}
           </span>
-            <span *ngIf="courseFormGroup.controls['is_flexible'].value">
-          {{ courseFormGroup.controls['price'].value | number: '0.2' }}&nbsp;{{ courseFormGroup.controls['currency'].value }}
-      </span>
-          </p>
-        </ng-container>
-
-        <ng-template #singleDate>
-          <p style="font-size: 14px; text-align-last: justify; display: flex; justify-content: space-between;" *ngFor="let item of courseFormGroup.controls['course_dates'].value">
-    <span><b>
-        {{ item.date | date: 'dd-MM-yyyy' }} -
-      {{ item.date_end | date: 'dd-MM-yyyy' }}
-    </b></span>
-            <span style="color: var(--color-grey1);">
-          {{  item.hour_start }}h - {{  item.hour_end }}h
-      </span>
-          </p>
-        </ng-template>
-
+                <span class="time">
+            {{ item.hour_start }}h - {{ item.hour_end }}h
+          </span>
+              </div>
+            </ng-container>
+          </div>
+        </div>
       </div>
-      <div *ngIf="courseFormGroup.controls['course_dates_prev'].value && courseFormGroup.controls['course_dates_prev'].value.length>0" style="width: 100%;">
-        <div style="display: flex;">
-          <img src="assets/icons/icon/calendar.png" class="icon24">
-          <p class="label">
-            {{'bookings_page.description.date' |translate }}
-          </p>
+
+      <!-- Sección para fechas previas, con el mismo formato -->
+      <div *ngIf="groupedCourseDatesPrev && groupedCourseDatesPrev.size > 0" class="course-dates-container prev-dates">
+        <div class="dates-header">
+          <div style="display: flex; align-items: center;">
+            <img src="assets/icons/icon/calendar.png" class="icon24">
+            <p class="label" style="margin: 0 0 0 8px;">
+              {{ 'previous_dates' | translate }}
+            </p>
+          </div>
+
+          <!-- Botones para expandir/colapsar todos los intervalos -->
+          <div class="expand-buttons" *ngIf="groupedCourseDatesPrev.size > 1">
+            <button type="button" (click)="expandAllIntervals()" class="text-button">
+              <mat-icon>unfold_more</mat-icon>
+              <span>{{'expand_all' | translate}}</span>
+            </button>
+            <button type="button" (click)="collapseAllIntervals()" class="text-button">
+              <mat-icon>unfold_less</mat-icon>
+              <span>{{'collapse_all' | translate}}</span>
+            </button>
+          </div>
         </div>
-        <p *ngIf="!courseFormGroup.controls['course_dates_prev'].value" class="emptyText">
-        </p>
-        <ng-container *ngIf="courseFormGroup.controls['course_type'].value === 1; else singleDate">
-          <p *ngFor="let item of courseFormGroup.controls['course_dates_prev'].value"
-             style="font-size: 14px; text-align-last: justify; display: flex; justify-content: space-between;">
-            <span><b>{{ item.date | date: 'dd-MM-yyyy' }}</b></span>
-            <span style="color: var(--color-grey1);">
-          {{ item.hour_start }}h - {{ item.hour_end }}h
+
+        <!-- Iteramos sobre los IDs de intervalo ordenados -->
+        <div *ngFor="let intervalId of getOrderedIntervalIds(groupedCourseDatesPrev); let i = index;" class="interval-group prev-interval">
+
+          <!-- Encabezado del intervalo con botón para expandir/colapsar -->
+          <div class="interval-header" (click)="toggleInterval(intervalId, true)">
+            <div class="interval-title">
+              <mat-icon>{{ isIntervalExpanded(intervalId, true) ? 'expand_more' : 'chevron_right' }}</mat-icon>
+              {{ intervalNamesPrev.get(intervalId) || 'Intervalo ' + i + 1 }}
+            </div>
+
+            <!-- Resumen compacto del intervalo visible incluso cuando está colapsado -->
+            <div class="interval-brief">
+              <span class="date-count">{{ groupedCourseDatesPrev.get(intervalId).length }} {{'dates' | translate}}</span>
+              <span class="weekdays-brief" *ngIf="shouldShowCompactSummary(groupedCourseDatesPrev.get(intervalId))">
+          {{ getWeekdaysPattern(groupedCourseDatesPrev.get(intervalId)) }}
+        </span>
+            </div>
+          </div>
+
+          <!-- Contenido detallado del intervalo (expandible) -->
+          <div class="interval-content" *ngIf="isIntervalExpanded(intervalId, true)">
+            <!-- Si es curso colectivo (course_type === 1) -->
+            <ng-container *ngIf="courseFormGroup.controls['course_type'].value === 1">
+              <!-- Si debemos mostrar un resumen compacto -->
+              <ng-container *ngIf="shouldShowCompactSummary(groupedCourseDatesPrev.get(intervalId))">
+                <div class="interval-summary">
+                  <div class="summary-left">
+              <span class="date-range">
+                <b>{{ formatDateRange(groupedCourseDatesPrev.get(intervalId)) }}</b>
+              </span>
+                    <span class="weekdays">
+                {{ getWeekdaysPattern(groupedCourseDatesPrev.get(intervalId)) }}
+              </span>
+                  </div>
+                  <div class="summary-right">
+              <span class="time-schedule">
+                {{ getCommonTimeSchedule(groupedCourseDatesPrev.get(intervalId)) }}
+              </span>
+                    <span class="price" *ngIf="courseFormGroup.controls['is_flexible'].value">
+                {{ courseFormGroup.controls['price'].value | number: '0.2' }}&nbsp;{{ courseFormGroup.controls['currency'].value }}
+              </span>
+                  </div>
+                </div>
+
+                <!-- Botón para mostrar/ocultar todas las fechas individuales -->
+                <button type="button" (click)="toggleDetailedDatesPrev(intervalId)" class="show-details-button">
+                  {{ showDetailedDatesPrev(intervalId) ? ('hide_details' | translate) : ('show_all_dates' | translate) }}
+                </button>
+
+                <!-- Mostrar todas las fechas individuales si se ha pulsado "Mostrar detalles" -->
+                <div class="detailed-dates" *ngIf="showDetailedDatesPrev(intervalId)">
+                  <div *ngFor="let item of groupedCourseDatesPrev.get(intervalId)" class="date-item">
+                    <span class="date">{{ item.date | date: 'dd-MM-yyyy' }}</span>
+                    <span class="time">
+                {{ item.hour_start }}h - {{ item.hour_end }}h
+              </span>
+                    <span class="price" *ngIf="courseFormGroup.controls['is_flexible'].value">
+                {{ courseFormGroup.controls['price'].value | number: '0.2' }}&nbsp;{{ courseFormGroup.controls['currency'].value }}
+              </span>
+                  </div>
+                </div>
+              </ng-container>
+
+              <!-- Si no mostramos resumen, mostrar cada fecha individualmente -->
+              <ng-container *ngIf="!shouldShowCompactSummary(groupedCourseDatesPrev.get(intervalId))">
+                <div *ngFor="let item of groupedCourseDatesPrev.get(intervalId)" class="date-item">
+                  <span class="date">{{ item.date | date: 'dd-MM-yyyy' }}</span>
+                  <span class="time">
+              {{ item.hour_start }}h - {{ item.hour_end }}h
+            </span>
+                  <span class="price" *ngIf="courseFormGroup.controls['is_flexible'].value">
+              {{ courseFormGroup.controls['price'].value | number: '0.2' }}&nbsp;{{ courseFormGroup.controls['currency'].value }}
+            </span>
+                </div>
+              </ng-container>
+            </ng-container>
+
+            <!-- Si es curso privado o actividad (course_type !== 1) -->
+            <ng-container *ngIf="courseFormGroup.controls['course_type'].value !== 1">
+              <div *ngFor="let item of groupedCourseDatesPrev.get(intervalId)" class="date-item">
+          <span class="date">
+            {{ item.date | date: 'dd-MM-yyyy' }} - {{ item.date_end | date: 'dd-MM-yyyy' }}
           </span>
-            <span *ngIf="courseFormGroup.controls['is_flexible'].value">
-          {{ courseFormGroup.controls['price'].value | number: '0.2' }}&nbsp;{{ courseFormGroup.controls['currency'].value }}
-      </span>
-          </p>
-        </ng-container>
-
-        <ng-template #singleDate>
-          <p style="font-size: 14px; text-align-last: justify; display: flex; justify-content: space-between;" *ngFor="let item of courseFormGroup.controls['course_dates_prev'].value">
-    <span><b>
-        {{ item.date | date: 'dd-MM-yyyy' }} -
-      {{ item.date_end | date: 'dd-MM-yyyy' }}
-    </b></span>
-            <span style="color: var(--color-grey1);">
-          {{  item.hour_start }}h - {{  item.hour_end }}h
-      </span>
-          </p>
-        </ng-template>
-
+                <span class="time">
+            {{ item.hour_start }}h - {{ item.hour_end }}h
+          </span>
+              </div>
+            </ng-container>
+          </div>
+        </div>
       </div>
       <ng-container
         *ngIf="courseFormGroup.controls['discounts'].value && courseFormGroup.controls['is_flexible'].value">

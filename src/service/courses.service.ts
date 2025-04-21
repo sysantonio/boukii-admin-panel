@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment';
 import { TranslateService } from '@ngx-translate/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {FormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 
 @Injectable({ providedIn: 'root' })
 
@@ -41,7 +41,28 @@ export class CoursesService {
       discounts: data.discounts,
       booking_users: data.booking_users,
     })
+    if (data.settings && typeof data.settings === 'string') {
+      try {
+        const settings = JSON.parse(data.settings);
+
+        // Aplicar configuración de intervalos al formulario
+        if (settings.multipleIntervals) {
+          this.courseFormGroup.patchValue({
+            settings: {
+              ...this.courseFormGroup.get('settings').value,
+              multipleIntervals: settings.multipleIntervals,
+              mustBeConsecutive: settings.mustBeConsecutive,
+              mustStartFromFirst: settings.mustStartFromFirst,
+              intervals: settings.intervals || []
+            }
+          });
+        }
+      } catch (error) {
+        console.error("Error parsing settings:", error);
+      }
+    }
   }
+
   private getCoursePeriod(data: any): any {
     if (data.course_dates?.length) {
       const dates = data.course_dates.map(d => new Date(d.date));
@@ -100,6 +121,7 @@ export class CoursesService {
       active: [true],
       online: [true],
       options: [true],
+      intervals_ui: this.fb.array([]), // no se envía al backend
       translations: [
         {
           es: { name: '', short_description: '', description: '' },
@@ -124,6 +146,10 @@ export class CoursesService {
       levelGrop: [[], Validators.required],
       settings: [
         {
+          multipleIntervals: false,
+          mustBeConsecutive: false,
+          mustStartFromFirst: false,
+          intervals: [],
           weekDays: { monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false },
           periods: [],
           groups: [{ ...this.default_activity_groups }]
@@ -344,6 +370,10 @@ export class CoursesService {
     const newMinutes = String(date.getMinutes()).padStart(2, "0");
     return `${newHours}:${newMinutes}`;
   }
+
+  //functions intervals course type 1
+
+
 
 }
 
