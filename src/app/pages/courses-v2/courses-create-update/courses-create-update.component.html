@@ -135,7 +135,7 @@
 
       </div>
       <!-- Sección para activar múltiples intervalos -->
-      <div class="form-check form-switch mb-3">
+      <div class="form-check form-switch mb-3" *ngIf="courses.courseFormGroup.controls['is_flexible'].value">
         <mat-checkbox [(ngModel)]="useMultipleIntervals" (change)="onMultipleIntervalsChange()">
           {{'multiple_intervals' | translate }}
         </mat-checkbox>

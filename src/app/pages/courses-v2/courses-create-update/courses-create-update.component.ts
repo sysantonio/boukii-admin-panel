@@ -661,7 +661,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       courseFormGroup.settings = {
         ...courseFormGroup.settings,
         multipleIntervals: true,
-        intervals: intervals,
+        intervals: this.intervals,
         mustStartFromFirst: this.mustStartFromFirst,
         mustBeConsecutive: this.mustBeConsecutive
       };
@@ -833,7 +833,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
   addIntervalUI(i:number) {
     const newInterval = {
       id: Date.now().toString(),
-      name: `Intervalo ${this.intervals.length + 1}`,
+      name: `${this.translateService.instant('interval')} ${this.intervals.length + 1}`,
       dates: []
     };
 
