@@ -684,7 +684,7 @@ export class CoursesCreateUpdateComponent implements OnInit {
       });
     }
     courseFormGroup.translations = JSON.stringify(this.courses.courseFormGroup.controls['translations'].value)
-    courseFormGroup.course_type === 1 ? delete courseFormGroup.settings : courseFormGroup.settings = this.courses.courseFormGroup.controls['settings'].value
+    courseFormGroup.course_type === 1 ? courseFormGroup.settings : courseFormGroup.settings = this.courses.courseFormGroup.controls['settings'].value
     if (this.mode === "create") {
       this.crudService.create('/admin/courses', courseFormGroup)
         .pipe(
