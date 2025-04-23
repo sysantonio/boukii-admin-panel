@@ -11,11 +11,16 @@ export class BookingDetailDialogComponent {
   @ViewChild(BookingReservationDetailComponent) reservationDetailComponent: BookingReservationDetailComponent;
 
   @Output() deleteActivity = new EventEmitter<void>();
+  @Output() payActivity = new EventEmitter<void>();
   @Output() closeClick = new EventEmitter<void>();
 
   ngAfterViewInit() {
     this.reservationDetailComponent.deleteActivity.subscribe(() => {
       this.deleteActivity.emit(); // Lo reemites hacia el `dialogRef.componentInstance`
+    });
+
+    this.reservationDetailComponent.payClick.subscribe(() => {
+      this.payActivity.emit(); // Lo reemites hacia el `dialogRef.componentInstance`
     });
 
     this.reservationDetailComponent.closeClick.subscribe(() => {

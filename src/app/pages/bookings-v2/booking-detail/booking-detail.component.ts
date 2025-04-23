@@ -70,29 +70,43 @@ export class BookingDetailV2Component implements OnInit {
   }
 
   openDetailBookingDialog() {
+    const isMobile = window.innerWidth < 768;
+
     const dialogRef = this.dialog.open(BookingDetailDialogComponent, {
-      height: "-webkit-fill-available",
-      panelClass: "customBookingDialog",
-      position: {
+      panelClass: ["customBookingDialog", isMobile ? "mobile-dialog" : ""],
+      position: isMobile ? {
+        bottom: "0",
+        right: "0",
+        top: "0",
+        left: "0"
+      } : {
         bottom: "24px",
         right: "24px",
         top: "24px",
         left: "24px"
       },
-      maxWidth: "-webkit-fill-available",
+      maxWidth: isMobile ? "100vw" : "900px", // En lugar de -webkit-fill-available
+      width: isMobile ? "100%" : "90%",
+      height: isMobile ? "100%" : "auto",
+      maxHeight: isMobile ? "100vh" : "90vh",
       data: {
         mainClient: this.mainClient,
         groupedActivities: this.groupedActivities,
         allLevels: this.allLevels,
-        bookingData$: this.bookingData$, // Si estás usando async pipe, pásalo tal cual
+        bookingData$: this.bookingData$,
         activitiesChanged$: this.activitiesChanged$,
+        isMobile: isMobile
       },
     });
 
-    // Aquí escuchas eventos desde dentro del modal
     dialogRef.componentInstance.deleteActivity.subscribe(() => {
-      // Aquí haces lo que necesites cuando se borra la actividad
-     this.processFullDelete()
+      dialogRef.close()
+      this.processFullDelete();
+    });
+
+    dialogRef.componentInstance.payActivity.subscribe(() => {
+      dialogRef.close()
+      this.payModal = true;
     });
 
     dialogRef.componentInstance.closeClick.subscribe(() => {

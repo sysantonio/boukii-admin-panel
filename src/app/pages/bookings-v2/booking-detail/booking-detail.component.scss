@@ -190,3 +190,41 @@
   line-height: 1.15rem;
   color: var(--color-dark1);
 }
+
+.modal-buttons-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.modal-action-button {
+  height: 38px;
+  min-width: 85px;
+  border-radius: 3px;
+  margin-top: 20px;
+}
+
+.secondary-button {
+  margin-right: 10px;
+}
+
+@media (max-width: 600px) {
+  .modal-buttons-container {
+    flex-direction: column;
+  }
+
+  .modal-action-button {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .secondary-button {
+    margin-right: 0;
+    order: 2; /* Cambiar orden en móvil */
+  }
+
+  .primary-button {
+    order: 1;
+  }
+}
+

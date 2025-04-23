@@ -80,7 +80,8 @@
       mat-raised-button
       type="button"
       class="client-button"
-      [disabled]="bookingData.paid">
+      [disabled]="bookingData.paid"
+      (click)="payModal = true">
       {{  (bookingData.paid ? "ispaid" : "to_pay") | translate }}
     </button>
   </div>
@@ -94,21 +95,19 @@
       {{"cancel_activity" | translate}} #{{("00"+deleteIndex+1).slice(-2)}}?
     </div>
   </div>
-  <div footer
-       style="display: flex;">
+  <div footer class="modal-buttons-container">
     <button (click)="deleteModal=false"
-            style="height: 38px; width: 85px;border-radius: 3px;margin-top: 20px; margin-left: auto;"
+            class="modal-action-button secondary-button"
             mat-raised-button
             type="button"
-            class="client-button">
+            >
       {{"cancel" | translate }}
     </button>
     <button (click)="cancelActivity(deleteIndex)"
-            style="height: 38px; width: 85px;border-radius: 3px;margin-top:20px;margin-left: 20px;"
+            class="modal-action-button primary-button"
             color="primary"
             mat-raised-button
-            type="button"
-            class="client-button">
+            type="button">
       {{ "yes_delete" | translate }}
     </button>
   </div>
@@ -122,21 +121,19 @@
       {{"bookings_page.cancelations.cancel_booking" | translate}} ?
     </div>
   </div>
-  <div footer
-       style="display: flex;">
+  <div footer class="modal-buttons-container">
     <button (click)="deleteFullModal=false"
-            style="height: 38px; width: 85px;border-radius: 3px;margin-top: 20px; margin-left: auto;"
+            class="modal-action-button secondary-button"
             mat-raised-button
             type="button"
-            class="client-button">
+            >
       {{"cancel" | translate }}
     </button>
-    <button (click)="cancelFull()"
-            style="height: 38px; width: 85px;border-radius: 3px;margin-top:20px;margin-left: 20px;"
+    <button (click)="cancelFull"
+            class="modal-action-button primary-button"
             color="primary"
             mat-raised-button
-            type="button"
-            class="client-button">
+            type="button">
       {{ "yes_delete" | translate }}
     </button>
   </div>
@@ -184,29 +181,19 @@
     </div>
 
   </div>
-
-  <div footer style="display: flex;">
-    <!-- Botón Cancelar -->
+  <div footer class="modal-buttons-container">
     <button (click)="cancelPaymentStep()"
-            style="height: 38px; width: 150px; border-radius: 3px; margin-top: 20px; margin-left: auto;"
-            mat-raised-button type="button" class="client-button">
+            class="modal-action-button secondary-button"
+            mat-raised-button
+            type="button">
       {{"cancel" | translate }}
     </button>
-
-    <!-- Botón Finalizar Pago o Finalizar Reserva -->
-    <button
-      (click)="finalizeBooking()"
-      style="height: 38px; width: 200px; border-radius: 3px; margin-top:20px; margin-left: 20px;"
-      color="primary" mat-raised-button type="button" class="client-button">
+    <button (click)="finalizeBooking()"
+            class="modal-action-button primary-button"
+            color="primary"
+            mat-raised-button
+            type="button">
       {{ paymentMethod === 3 || paymentMethod === 4 ? 'mails.type4' : 'end_reserve_pay' | translate }}
     </button>
-
-    <!--    &lt;!&ndash; Botón Cancelar (En cualquier paso) &ndash;&gt;
-        <button *ngIf="step === 2 && !isPaid"
-                (click)="cancelPaymentStep()"
-                style="height: 38px; width: 200px; border-radius: 3px; margin-top:20px; margin-left: 20px;"
-                mat-raised-button type="button" class="client-button">
-          {{"cancel" | translate }}
-        </button>-->
   </div>
 </vex-flux-modal>

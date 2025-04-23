@@ -110,7 +110,7 @@
                 : 'assets/img/avatar.png'
             " />
 
-        <div class="utilizersWrapper__description">
+        <!--<div class="utilizersWrapper__description">
           <h4>{{ client.first_name }} {{ client.last_name }}</h4>
           <span>{{ langService.getLanguage(client.language1_id) }} ·
             {{ utilsService.calculateYears(client.birth_date) }} &ensp;{{
@@ -132,10 +132,34 @@
             <img  *ngIf="bookingData.status !== 2" (click)="sendMailInfo()"
                   src="assets/img/icons/send-mail-black.svg" class="icon24"
                   style="margin-left: 12rem; cursor: pointer;">
-            <!-- {{ "send" | translate }} {{ "mail" | translate }} -->
+            &lt;!&ndash; {{ "send" | translate }} {{ "mail" | translate }} &ndash;&gt;
 
           </div>
 
+        </div>-->
+
+        <div class="utilizersWrapper__description">
+          <h4>{{ client.first_name }} {{ client.last_name }}</h4>
+          <span>{{ langService.getLanguage(client.language1_id) }} ·
+            {{ utilsService.calculateYears(client.birth_date) }} &ensp;{{
+              "years" | translate
+            }}
+            · {{ utilsService.getCountry(client.country) }}</span>
+          <div class="user-action-buttons">
+            <img src="assets/icons/icon/chat.png" class="icon24" />
+            <vex-icon src="mail"
+                      href="mailto:{{ client.email }}"
+                      title="{{ client.email }}"
+                      class="icon24" />
+            <vex-icon src="phone"
+                      href="tel:{{ client.phone }}"
+                      title="{{ client.phone }}"
+                      class="icon24" />
+            <img *ngIf="bookingData.status !== 2"
+                 (click)="sendMailInfo()"
+                 src="assets/img/icons/send-mail-black.svg"
+                 class="icon24 send-mail-icon">
+          </div>
         </div>
       </div>
     </div>
@@ -342,7 +366,15 @@
   </div>
 
 </div>
-<button *ngIf="!bookingData.paid" style="height: 56px; width: 400px;border-radius: 3px;margin-top: 16px;"
-        color="primary" mat-raised-button type="button" class="client-button" (click)="payClick.emit()">
+<button *ngIf="!bookingData.paid"
+        class="client-button mobile-pay-button"
+        color="primary"
+        mat-raised-button
+        type="button"
+        (click)="payClick.emit()">
   {{ "to_pay" | translate }}
 </button>
+<!--<button *ngIf="!bookingData.paid" style="height: 56px; width: 400px;border-radius: 3px;margin-top: 16px;"
+        color="primary" mat-raised-button type="button" class="client-button" (click)="payClick.emit()">
+  {{ "to_pay" | translate }}
+</button>-->
