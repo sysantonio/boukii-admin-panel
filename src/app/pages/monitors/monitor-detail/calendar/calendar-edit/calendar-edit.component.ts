@@ -67,6 +67,7 @@ export class CalendarEditComponent implements OnInit {
     range_dates: false,
     description: null,
     color: null,
+    price:null,
     user_nwd_subtype_id: null,
     default: false
   };
@@ -225,6 +226,18 @@ export class CalendarEditComponent implements OnInit {
       })
   }
 
+  onBlockageChange(selected: any) {
+    if (selected) {
+      this.defaults.color = selected.color;
+      this.defaults.description = selected.name;
+
+      // Si tiene un precio, lo asignamos
+      if (selected.price) {
+        this.defaults.price = selected.price;
+      }
+    }
+  }
+
   onTabChanged(event: any) {
 
     this.form.reset();
@@ -257,6 +270,7 @@ export class CalendarEditComponent implements OnInit {
           full_day: false,
           range_dates: false,
           description: null,
+          price: null,
           color: null,
           default: false,
           user_nwd_subtype_id: this.type,
