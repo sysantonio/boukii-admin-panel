@@ -179,8 +179,8 @@ export class CoursesService {
   ];
 
   duration: string[] = [
-    '15min', '30min', '45min', '1h 0min', '1h 15min', '1h 30min', '1h 45min',
-    '2h 0min', '2h 15min', '2h 30min', '2h 45min', '3h 0min', '3h 15min', '3h 30min', '3h 45min',
+    '15min', '20min', '30min', '45min', '1h 0min', '1h 15min', '1h 20min', '1h 30min', '1h 45min',
+    '2h 0min', '2h 15min', '2h 20min', '2h 30min', '2h 45min', '3h 0min', '3h 15min', '3h 20min', '3h 30min', '3h 45min',
     '4h 0min', '4h 15min', '4h 30min', '4h 45min', '5h 0min', '5h 15min', '5h 30min', '5h 45min',
     '6h 0min',
     //'6h 15min', '6h 30min', '6h 45min', '7h', '7h 15min', '7h 30min', '7h 45min'
