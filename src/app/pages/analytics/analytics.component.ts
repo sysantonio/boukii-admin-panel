@@ -114,6 +114,8 @@ export class AnalyticsComponent implements AfterViewInit, AfterViewChecked, OnDe
     { label: 'web', property: 'web', type: 'text', visible: true, cssClasses: ['font-medium'] },
     { label: 'vouchers', property: 'vouchers', type: 'price', visible: true, cssClasses: ['font-medium'] },
     { label: 'extras', property: 'extras', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'bookings_page.cancelations.refund', property: 'insurance', type: 'price', visible: true, cssClasses: ['font-medium'] },
+    { label: 'pending_payment', property: 'underpaid_count', type: 'price', visible: true, cssClasses: ['font-bold', 'text-red-600'] },
     { label: 'total', property: 'total_cost', type: 'price', visible: true },
   ];
 
