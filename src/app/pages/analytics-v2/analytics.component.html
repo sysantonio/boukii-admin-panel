@@ -1,0 +1,433 @@
+<vex-page-layout>
+  <vex-secondary-toolbar current>
+    <vex-breadcrumbs [crumbs]="[
+      {icon:'analytics'},
+      {text:'menu.analytics', title: true},
+      {text:'dashboard', subtitle: true}
+    ]" class="flex"></vex-breadcrumbs>
+
+    <div class="ml-auto flex items-center space-x-4">
+      <button mat-raised-button color="primary" (click)="onExportData()" class="text-sm">
+        <mat-icon>download</mat-icon>
+        {{ 'export_data' | translate }}
+      </button>
+    </div>
+  </vex-secondary-toolbar>
+
+  <vex-page-layout-content class="fullwidth">
+
+    <!-- Filters Section -->
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ 'filters' | translate }}</h3>
+
+      <form [formGroup]="filterForm" class="grid grid-cols-1 md:grid-cols-6 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'start_date' | translate }}</label>
+          <input type="date" formControlName="startDate"
+                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'end_date' | translate }}</label>
+          <input type="date" formControlName="endDate"
+                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'course_type' | translate }}</label>
+          <select formControlName="courseType"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">{{ 'all' | translate }}</option>
+            <option value="1">{{ 'collective' | translate }}</option>
+            <option value="2">{{ 'private' | translate }}</option>
+            <option value="3">{{ 'activity' | translate }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'source' | translate }}</label>
+          <select formControlName="source"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">{{ 'all' | translate }}</option>
+            <option value="web">{{ 'web' | translate }}</option>
+            <option value="admin">{{ 'admin' | translate }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'sport' | translate }}</label>
+          <select formControlName="sportId"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">{{ 'all' | translate }}</option>
+            <!-- Add sport options here -->
+          </select>
+        </div>
+
+        <div class="flex items-end">
+          <mat-checkbox formControlName="onlyWeekends" class="text-sm">
+            {{ 'weekends_only' | translate }}
+          </mat-checkbox>
+        </div>
+      </form>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div *ngIf="loading" class="flex justify-center items-center py-12">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <!-- Main Content -->
+    <div *ngIf="!loading">
+
+      <!-- Summary Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-8">
+        <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-green-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-gray-600">{{ 'total_revenue' | translate }}</p>
+              <p class="text-2xl font-bold text-gray-900">{{ formatCurrency(summary.totalPaid) }}</p>
+              <p class="text-xs text-gray-500 mt-1">{{ 'paid_bookings' | translate }}</p>
+            </div>
+            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <mat-icon class="text-green-600">payments</mat-icon>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-indigo-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-gray-600">{{ 'expected_revenue' | translate }}</p>
+              <p class="text-2xl font-bold text-gray-900">{{ formatCurrency(summary.expectedRevenue) }}</p>
+              <p class="text-xs text-gray-500 mt-1">{{ 'based_on_course_price' | translate }}</p>
+            </div>
+            <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+              <mat-icon class="text-indigo-600">calculate</mat-icon>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-gray-600">{{ 'net_revenue' | translate }}</p>
+              <p class="text-2xl font-bold text-gray-900">{{ formatCurrency(summary.netRevenue) }}</p>
+              <p class="text-xs text-gray-500 mt-1">{{ 'after_refunds' | translate }}</p>
+            </div>
+            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <mat-icon class="text-blue-600">trending_up</mat-icon>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-purple-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-gray-600">{{ 'active_bookings' | translate }}</p>
+              <p class="text-2xl font-bold text-gray-900">{{ summary.activeBookings | number }}</p>
+              <p class="text-xs text-gray-500 mt-1">{{ 'confirmed_bookings' | translate }}</p>
+            </div>
+            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+              <mat-icon class="text-purple-600">event_available</mat-icon>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-orange-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-gray-600">{{ 'with_insurance' | translate }}</p>
+              <p class="text-2xl font-bold text-gray-900">{{ summary.withInsurance | number }}</p>
+              <p class="text-xs text-gray-500 mt-1">{{ 'bookings_count' | translate }}</p>
+            </div>
+            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+              <mat-icon class="text-orange-600">security</mat-icon>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-pink-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-gray-600">{{ 'with_vouchers' | translate }}</p>
+              <p class="text-2xl font-bold text-gray-900">{{ summary.withVoucher | number }}</p>
+              <p class="text-xs text-gray-500 mt-1">{{ 'bookings_count' | translate }}</p>
+            </div>
+            <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center">
+              <mat-icon class="text-pink-600">card_giftcard</mat-icon>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-red-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-gray-600">{{ 'total_refunds' | translate }}</p>
+              <p class="text-2xl font-bold text-gray-900">{{ formatCurrency(summary.totalRefunds) }}</p>
+              <p class="text-xs text-gray-500 mt-1">{{ 'refunded_amount' | translate }}</p>
+            </div>
+            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+              <mat-icon class="text-red-600">money_off</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <mat-tab-group [(selectedIndex)]="activeTabIndex" (selectedTabChange)="onTabChange($event.tab.textLabel)">
+
+        <!-- Overview Tab -->
+        <mat-tab label="{{ 'overview' | translate }}">
+          <div class="py-6">
+            <!-- Charts Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+              <!-- Revenue Chart -->
+              <div class="bg-white rounded-xl shadow-sm p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ 'revenue_trend' | translate }}</h3>
+                <div id="revenueChart" class="h-96"></div>
+              </div>
+
+              <!-- Payment Methods Chart -->
+              <div class="bg-white rounded-xl shadow-sm p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ 'payment_methods' | translate }}</h3>
+                <div id="paymentMethodsChart" class="h-96"></div>
+              </div>
+            </div>
+
+            <!-- Course Type Performance -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ 'course_type_performance' | translate }}</h3>
+              <div id="courseTypeChart" class="h-96"></div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Course Analytics Tab -->
+        <mat-tab label="{{ 'course_analytics' | translate }}">
+          <div class="py-6">
+            <div class="bg-white rounded-xl shadow-sm">
+              <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">{{ 'course_performance' | translate }}</h3>
+                <p class="text-sm text-gray-600 mt-1">{{ 'detailed_course_analytics' | translate }}</p>
+              </div>
+
+              <!-- Course Analytics Table -->
+              <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-50">
+                  <tr>
+                    <th *ngFor="let column of courseColumns"
+                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {{ column.label | translate }}
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {{ 'actions' | translate }}
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                  <tr *ngFor="let course of courseAnalytics" class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {{ course.courseName }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                              [ngClass]="{
+                                'bg-blue-100 text-blue-800': course.courseType === 1,
+                                'bg-green-100 text-green-800': course.courseType === 2,
+                                'bg-purple-100 text-purple-800': course.courseType === 3
+                              }">
+                          {{ getCourseTypeName(course.courseType) }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {{ formatCurrency(course.totalRevenue) }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {{ course.totalBookings | number }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {{ formatCurrency(course.averagePrice) }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <div class="flex items-center">
+                        <div class="flex-1 bg-gray-200 rounded-full h-2 mr-2">
+                          <div class="bg-green-500 h-2 rounded-full"
+                               [style.width.%]="course.completionRate * 100"></div>
+                        </div>
+                        <span class="text-xs">{{ formatPercentage(course.completionRate) }}</span>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <button mat-button color="primary" class="text-xs">
+                        {{ 'view_details' | translate }}
+                      </button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Revenue Analytics Tab -->
+        <mat-tab label="{{ 'revenue_analytics' | translate }}">
+          <div class="py-6">
+            <div class="bg-white rounded-xl shadow-sm">
+              <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">{{ 'revenue_by_period' | translate }}</h3>
+                <p class="text-sm text-gray-600 mt-1">{{ 'detailed_revenue_breakdown' | translate }}</p>
+              </div>
+
+              <!-- Revenue Analytics Table -->
+              <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {{ 'date' | translate }}
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {{ 'gross_revenue' | translate }}
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {{ 'refunds' | translate }}
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {{ 'net_revenue' | translate }}
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {{ 'bookings_count' | translate }}
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {{ 'payment_breakdown' | translate }}
+                    </th>
+                  </tr>
+                  </thead>
+                  <tbody class="bg-white divide-y divide-gray-200">
+                  <tr *ngFor="let revenue of revenueAnalytics" class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {{ revenue.date | date:'shortDate' }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {{ formatCurrency(revenue.revenue) }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">
+                      -{{ formatCurrency(revenue.refunds) }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold"
+                        [ngClass]="getStatusClass(revenue.netRevenue)">
+                      {{ formatCurrency(revenue.netRevenue) }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {{ revenue.bookings | number }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <div class="flex space-x-2">
+                          <span *ngIf="revenue.paymentMethods.cash > 0"
+                                class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                            {{ 'cash' | translate }}: {{ formatCurrency(revenue.paymentMethods.cash) }}
+                          </span>
+                        <span *ngIf="revenue.paymentMethods.card > 0"
+                              class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
+                            {{ 'card' | translate }}: {{ formatCurrency(revenue.paymentMethods.card) }}
+                          </span>
+                        <span *ngIf="revenue.paymentMethods.online > 0"
+                              class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-orange-100 text-orange-800">
+                            {{ 'online' | translate }}: {{ formatCurrency(revenue.paymentMethods.online) }}
+                          </span>
+                        <span *ngIf="revenue.paymentMethods.vouchers > 0"
+                              class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-purple-100 text-purple-800">
+                            {{ 'vouchers' | translate }}: {{ formatCurrency(revenue.paymentMethods.vouchers) }}
+                          </span>
+                        <span *ngIf="revenue.paymentMethods.pending > 0"
+                              class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-red-100 text-red-800">
+                            {{ 'pending' | translate }}: {{ formatCurrency(revenue.paymentMethods.pending) }}
+                          </span>
+                      </div>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Payment Details Tab -->
+        <mat-tab label="{{ 'payment_details' | translate }}">
+          <div class="py-6">
+            <!-- Payment Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+              <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-green-500">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-sm font-medium text-gray-600">{{ 'cash_payments' | translate }}</p>
+                    <p class="text-2xl font-bold text-gray-900">
+                      {{ formatCurrency(getTotalByPaymentMethod('cash')) }}
+                    </p>
+                  </div>
+                  <mat-icon class="text-green-600">payments</mat-icon>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-500">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-sm font-medium text-gray-600">{{ 'card_payments' | translate }}</p>
+                    <p class="text-2xl font-bold text-gray-900">
+                      {{ formatCurrency(getTotalByPaymentMethod('card')) }}
+                    </p>
+                  </div>
+                  <mat-icon class="text-blue-600">credit_card</mat-icon>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-orange-500">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-sm font-medium text-gray-600">{{ 'online_payments' | translate }}</p>
+                    <p class="text-2xl font-bold text-gray-900">
+                      {{ formatCurrency(getTotalByPaymentMethod('online')) }}
+                    </p>
+                  </div>
+                  <mat-icon class="text-orange-600">computer</mat-icon>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-purple-500">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-sm font-medium text-gray-600">{{ 'voucher_payments' | translate }}</p>
+                    <p class="text-2xl font-bold text-gray-900">
+                      {{ formatCurrency(getTotalByPaymentMethod('vouchers')) }}
+                    </p>
+                  </div>
+                  <mat-icon class="text-purple-600">card_giftcard</mat-icon>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pending Payments Alert -->
+            <div *ngIf="getTotalByPaymentMethod('pending') > 0"
+                 class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+              <div class="flex items-center">
+                <mat-icon class="text-red-600 mr-2">warning</mat-icon>
+                <div>
+                  <h4 class="text-red-800 font-medium">{{ 'pending_payments_alert' | translate }}</h4>
+                  <p class="text-red-700 text-sm mt-1">
+                    {{ 'pending_amount_message' | translate }}: {{ formatCurrency(getTotalByPaymentMethod('pending')) }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+      </mat-tab-group>
+
+    </div>
+
+  </vex-page-layout-content>
+</vex-page-layout>
