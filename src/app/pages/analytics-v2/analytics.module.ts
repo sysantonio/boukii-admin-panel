@@ -30,43 +30,58 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatTableModule} from '@angular/material/table';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatMenuModule} from '@angular/material/menu';
+import { KpisCardComponent } from './kpis-card/kpis-card.component';
+import { FiltersComponent } from './filters/filters.component';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { MonitorsLegacyComponent } from './monitors-legacy/monitors-legacy.component';
 
 @NgModule({
-  declarations: [AnalyticsComponent],
-    imports: [
-        CommonModule,
-        LayoutModule,
-        PageLayoutModule,
-        BreadcrumbsModule,
-        RouterModule,
-        AnalyticsRoutingModule,
-        SecondaryToolbarModule,
-        MatIconModule,
-        ChartModule,
-        WidgetQuickLineChartModule,
-        WidgetQuickValueCenterModule,
-        WidgetQuickValueStartModule,
-        WidgetLargeGoalChartModule,
-        WidgetAssistantModule,
-        WidgetLargeChartModule,
-        WidgetTableModule,
-        //LanguageCreateUpdateModule,
-        MatDialogModule,
-        ComponentsModule,
-        MatTabsModule,
-        TranslateModule,
-        MatCardModule,
-        MatDividerModule,
-        MatDatepickerModule,
-        MatFormFieldModule,
-        MatInputModule,
-        ReactiveFormsModule,
-        FormsModule,
-        MatOptionModule,
-        MatSelectModule,
-        MatButtonModule,
-        MatCheckboxModule
-    ]
+  declarations: [AnalyticsComponent, KpisCardComponent, FiltersComponent, MonitorsLegacyComponent],
+  imports: [
+    CommonModule,
+    LayoutModule,
+    PageLayoutModule,
+    BreadcrumbsModule,
+    RouterModule,
+    AnalyticsRoutingModule,
+    SecondaryToolbarModule,
+    MatIconModule,
+    ChartModule,
+    WidgetQuickLineChartModule,
+    WidgetQuickValueCenterModule,
+    WidgetQuickValueStartModule,
+    WidgetLargeGoalChartModule,
+    WidgetAssistantModule,
+    WidgetLargeChartModule,
+    WidgetTableModule,
+    //LanguageCreateUpdateModule,
+    MatDialogModule,
+    ComponentsModule,
+    MatTabsModule,
+    TranslateModule,
+    MatCardModule,
+    MatDividerModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatProgressSpinnerModule,
+    MatTableModule,
+    MatProgressBarModule,
+    MatMenuModule,
+    MatChipsModule,
+    MatTooltipModule
+  ]
 })
 export class AnalyticsModule {
 }

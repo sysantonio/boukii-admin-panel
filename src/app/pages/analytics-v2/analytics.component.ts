@@ -1,136 +1,300 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { MatTableDataSource } from '@angular/material/table';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import moment from 'moment';
 import Plotly from 'plotly.js-dist-min';
 
 import { ApiCrudService } from '../../../service/crud.service';
-import { TableColumn } from '../../../@vex/interfaces/table-column.interface';
 
-// Interfaces para mejor tipado
+// ==================== INTERFACES ====================
+
+interface SeasonDashboardData {
+  season_info: {
+    season_name: string;
+    date_range: {
+      start: string;
+      end: string;
+      total_days: number;
+    };
+    total_bookings: number;
+    booking_classification: {
+      total_bookings: number;
+      production_count: number;
+      test_count: number;
+      cancelled_count: number;
+      production_revenue: number;
+      test_revenue: number;
+      cancelled_revenue: number;
+    };
+  };
+  executive_kpis: {
+    total_production_bookings: number;
+    total_clients: number;
+    total_participants: number;
+    revenue_expected: number;
+    revenue_received: number;
+    revenue_pending: number;
+    collection_efficiency: number;
+    consistency_rate: number;
+    average_booking_value: number;
+  };
+  booking_sources: {
+    total_bookings: number;
+    source_breakdown: Array<{
+      source: string;
+      bookings: number;
+      percentage: number;
+      unique_clients: number;
+      revenue: number;
+      avg_booking_value: number;
+      consistency_rate: number;
+    }>;
+  };
+  payment_methods: {
+    total_payments: number;
+    total_revenue: number;
+    methods: Array<{
+      method: string;
+      display_name: string;
+      count: number;
+      percentage: number;
+      revenue: number;
+      revenue_percentage: number;
+      avg_payment_amount: number;
+    }>;
+    online_vs_offline: {
+      online: {
+        revenue: number;
+        count: number;
+        revenue_percentage: number;
+        count_percentage: number;
+      };
+      offline: {
+        revenue: number;
+        count: number;
+        revenue_percentage: number;
+        count_percentage: number;
+      };
+    };
+  };
+  booking_status_analysis: {
+    [key: string]: {
+      count: number;
+      percentage: number;
+      expected_revenue: number;
+      received_revenue: number;
+      pending_revenue: number;
+      collection_efficiency: number;
+      issues: number;
+    };
+  };
+  financial_summary: {
+    revenue_breakdown: {
+      total_expected: number;
+      total_received: number;
+      total_pending: number;
+      total_refunded: number;
+    };
+    consistency_metrics: {
+      consistent_bookings: number;
+      inconsistent_bookings: number;
+      consistency_rate: number;
+      major_discrepancies: number;
+    };
+    voucher_usage: {
+      total_vouchers_used: number;
+      total_voucher_amount: number;
+      unique_vouchers: number;
+    };
+  };
+  courses: Array<{
+    id: number;
+    name: string;
+    type: number;
+    sport: string;
+    revenue: number;
+    participants: number;
+    bookings: number;
+    average_price: number;
+    payment_methods: any;
+    status_breakdown: any;
+    source_breakdown: any;
+  }>;
+  critical_issues: {
+    [key: string]: {
+      count: number;
+      items: Array<any>;
+    };
+  };
+  executive_alerts: Array<{
+    level: string;
+    type: string;
+    title: string;
+    description: string;
+    impact: string;
+    action_required: boolean;
+  }>;
+  priority_recommendations: Array<{
+    priority: string;
+    category: string;
+    title: string;
+    description: string;
+    impact: string;
+    effort: string;
+    timeline: string;
+    actions: string[];
+    expected_benefit: string;
+  }>;
+  trend_analysis: {
+    monthly_breakdown: Array<{
+      month: string;
+      bookings: number;
+      revenue: number;
+      unique_clients: number;
+      consistency_rate: number;
+      avg_booking_value: number;
+    }>;
+    booking_velocity: {
+      recent_production_bookings: number;
+      bookings_per_week: number;
+      trend_direction: string;
+      quality_trend: string;
+    };
+  };
+  performance_metrics: {
+    execution_time_ms: number;
+    total_bookings_analyzed: number;
+    production_bookings_count: number;
+    test_bookings_excluded: number;
+    cancelled_bookings_count: number;
+  };
+}
+
 interface AnalyticsFilters {
   startDate: string | null;
   endDate: string | null;
-  courseType: number | null;
-  source: string | null;
-  sportId: number | null;
+  presetRange: string | null;
+  courseType: number[] | null;
+  source: string[] | null;
+  paymentMethod: string[] | null;
+  sportId: number[] | null;
   onlyWeekends: boolean;
+  onlyPaidBookings: boolean;
+  includeRefunds: boolean;
+  includeTestDetection: boolean;
+  includePayrexxAnalysis: boolean;
+  optimizationLevel: string;
 }
 
-interface AnalyticsSummary {
-  totalPaid: number;
-  activeBookings: number;
-  withInsurance: number;
-  withVoucher: number;
-  totalRefunds: number;
-  netRevenue: number;
-  expectedRevenue: number;
-}
-
-interface PaymentMethodBreakdown {
-  cash: number;
-  card: number;
-  online: number;
-  vouchers: number;
-  pending: number;
-}
-
-interface CourseAnalytics {
-  courseId: number;
-  courseName: string;
-  courseType: number;
-  totalRevenue: number;
-  totalBookings: number;
-  averagePrice: number;
-  completionRate: number;
-  paymentMethods: PaymentMethodBreakdown;
-}
-
-interface RevenueAnalytics {
-  date: string;
-  revenue: number;
-  bookings: number;
-  refunds: number;
-  netRevenue: number;
-  expectedRevenue: number;
-  paymentMethods: PaymentMethodBreakdown;
-}
+// ==================== COMPONENT ====================
 
 @Component({
   selector: 'vex-analytics',
   templateUrl: './analytics.component.html',
-  styleUrls: ['./analytics.component.scss']
+  styleUrls: ['./analytics.component.scss'],
+  animations: [
+    trigger('slideDown', [
+      state('in', style({height: '*'})),
+      transition(':enter', [
+        style({height: 0, opacity: 0}),
+        animate('300ms ease-in-out', style({height: '*', opacity: 1}))
+      ]),
+      transition(':leave', [
+        animate('300ms ease-in-out', style({height: 0, opacity: 0}))
+      ])
+    ])
+  ]
 })
 export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  // Form controls
+  // ==================== VIEW CHILDREN ====================
+  @ViewChild('revenueChart', { static: false }) revenueChartRef!: ElementRef;
+  @ViewChild('courseTypeRevenueChart', { static: false }) courseTypeRevenueChartRef!: ElementRef;
+  @ViewChild('paymentMethodsChart', { static: false }) paymentMethodsChartRef!: ElementRef;
+  @ViewChild('paymentTrendsChart', { static: false }) paymentTrendsChartRef!: ElementRef;
+  @ViewChild('topCoursesChart', { static: false }) topCoursesChartRef!: ElementRef;
+  @ViewChild('completionRatesChart', { static: false }) completionRatesChartRef!: ElementRef;
+  @ViewChild('sourcesChart', { static: false }) sourcesChartRef!: ElementRef;
+  @ViewChild('sourcePerformanceChart', { static: false }) sourcePerformanceChartRef!: ElementRef;
+  @ViewChild('comparisonChart', { static: false }) comparisonChartRef!: ElementRef;
+
+  // ==================== FORM CONTROLS ====================
   filterForm: FormGroup;
 
-  // Data properties
-  summary: AnalyticsSummary = {
-    totalPaid: 0,
-    activeBookings: 0,
-    withInsurance: 0,
-    withVoucher: 0,
-    totalRefunds: 0,
-    netRevenue: 0,
-    expectedRevenue: 0
-  };
+  // ==================== DATA PROPERTIES ====================
+  dashboardData: SeasonDashboardData | null = null;
+  revenueTableData = new MatTableDataSource<any>([]);
+  coursesTableData = new MatTableDataSource<any>([]);
 
-  courseAnalytics: CourseAnalytics[] = [];
-  revenueAnalytics: RevenueAnalytics[] = [];
-
-  // UI State
+  // ==================== UI STATE ====================
   loading = false;
-  activeTab = 'overview';
+  activeTab = 'revenue'; // ← AÑADIR ESTA LÍNEA
   activeTabIndex = 0;
+  showAdvancedFilters = false;
 
-  // User data
+  // ==================== USER DATA ====================
   user: any;
   currency = 'CHF';
+  allSports: any[] = [];
 
-  // Destroy subject for cleanup
+  // ==================== TABLE COLUMNS ====================
+  revenueDisplayedColumns: string[] = ['month', 'revenue', 'bookings', 'averageValue', 'clients', 'consistencyRate'];
+  coursesDisplayedColumns: string[] = ['courseName', 'courseType', 'totalRevenue', 'totalBookings', 'averagePrice', 'participants', 'actions'];
+
+  // ==================== CHART COLORS ====================
+  chartColors = {
+    primary: '#3A57A7',
+    secondary: '#FCB859',
+    success: '#4CAF50',
+    warning: '#FF9800',
+    danger: '#F44336',
+    info: '#2196F3',
+    gradient: ['#3A57A7', '#FCB859', '#4CAF50', '#FF9800', '#F44336', '#2196F3']
+  };
+
+  // ==================== DESTROY SUBJECT ====================
   private destroy$ = new Subject<void>();
 
-  // Table columns for course analytics
-  courseColumns: TableColumn<CourseAnalytics>[] = [
-    { label: 'course_name', property: 'courseName', type: 'text', visible: true },
-    { label: 'course_type', property: 'courseType', type: 'course_type_data', visible: true },
-    { label: 'total_revenue', property: 'totalRevenue', type: 'price', visible: true },
-    { label: 'total_bookings', property: 'totalBookings', type: 'text', visible: true },
-    { label: 'average_price', property: 'averagePrice', type: 'price', visible: true },
-    { label: 'completion_rate', property: 'completionRate', type: 'text', visible: true }
+  // ==================== TABS CONFIGURATION (ACTUALIZADO) ====================
+  tabs = [
+    { id: 'revenue', label: 'Análisis de Ingresos', icon: 'monetization_on' },
+    { id: 'payments', label: 'Métodos de Pago', icon: 'payment' },
+    { id: 'courses', label: 'Análisis de Cursos', icon: 'school' },
+    { id: 'sources', label: 'Fuentes de Reserva', icon: 'source' },
+    { id: 'monitors', label: 'Monitores', icon: 'person' }, // ← NUEVA
+    { id: 'comparative', label: 'Análisis Comparativo', icon: 'compare_arrows' },
+    { id: 'alerts', label: 'Alertas y Recomendaciones', icon: 'warning' }
   ];
 
-  // Table columns for revenue analytics
-  revenueColumns: TableColumn<RevenueAnalytics>[] = [
-    { label: 'date', property: 'date', type: 'date', visible: true },
-    { label: 'revenue', property: 'revenue', type: 'price', visible: true },
-    { label: 'bookings', property: 'bookings', type: 'text', visible: true },
-    { label: 'refunds', property: 'refunds', type: 'price', visible: true },
-    { label: 'net_revenue', property: 'netRevenue', type: 'price', visible: true }
-  ];
-
+  // ==================== CONSTRUCTOR ====================
   constructor(
     private fb: FormBuilder,
-    private crudService: ApiCrudService,
+    private cdr: ChangeDetectorRef,
     private router: Router,
     private translateService: TranslateService,
-    private cdr: ChangeDetectorRef
+    private apiService: ApiCrudService
   ) {
-    this.user = JSON.parse(localStorage.getItem('boukiiUser') || '{}');
     this.initializeForm();
+    this.loadUserData();
+    this.loadMasterData();
+
+    this.activeTab = this.tabs[0].id; // Inicializar con primera pestaña
   }
 
+  // ==================== LIFECYCLE METHODS ====================
+
   ngOnInit(): void {
-    this.setupFormSubscriptions();
-    this.loadInitialData();
+    this.setupFilterSubscriptions();
+    this.loadAnalyticsData();
   }
 
   ngAfterViewInit(): void {
-    // Initialize charts after view is ready
+    // Los gráficos se crearán cuando los datos estén disponibles
   }
 
   ngOnDestroy(): void {
@@ -138,584 +302,637 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  // ==================== INITIALIZATION ====================
+
   private initializeForm(): void {
-    // Set default date range (current month)
-    const startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
-    const endOfMonth = moment().endOf('month').format('YYYY-MM-DD');
+    const today = moment();
+    const currentMonth = today.month(); // 0 = enero, 10 = noviembre
+
+    let startDate: string;
+    let endDate: string;
+
+    if (currentMonth >= 5 && currentMonth <= 9) {
+      // Junio a Octubre → temporada pasada fue Nov (año anterior) - Mayo (este año)
+      startDate = moment().subtract(1, 'year').month(10).startOf('month').format('YYYY-MM-DD');
+      endDate = moment().month(4).endOf('month').format('YYYY-MM-DD');
+    } else {
+      // Noviembre a Mayo → temporada pasada fue Nov (2 años atrás) - Mayo (año pasado)
+      startDate = moment().subtract(2, 'year').month(10).startOf('month').format('YYYY-MM-DD');
+      endDate = moment().subtract(1, 'year').month(4).endOf('month').format('YYYY-MM-DD');
+    }
 
     this.filterForm = this.fb.group({
-      startDate: [startOfMonth],
-      endDate: [endOfMonth],
-      courseType: [null],
-      source: [null],
-      sportId: [null],
-      onlyWeekends: [false]
+      startDate: new FormControl(startDate),
+      endDate: new FormControl(endDate),
+      presetRange: new FormControl(''),
+      courseType: new FormControl([]),
+      source: new FormControl([]),
+      paymentMethod: new FormControl([]),
+      sportId: new FormControl([]),
+      onlyWeekends: new FormControl(false),
+      onlyPaidBookings: new FormControl(false),
+      includeRefunds: new FormControl(true),
+      includeTestDetection: new FormControl(true),
+      includePayrexxAnalysis: new FormControl(false),
+      optimizationLevel: new FormControl('balanced')
     });
   }
 
-  private setupFormSubscriptions(): void {
-    // Debounce form changes to avoid too many API calls
-    this.filterForm.valueChanges
-      .pipe(
-        debounceTime(500),
-        distinctUntilChanged(),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(() => {
+  private loadUserData(): void {
+    const userStr = localStorage.getItem('boukiiUser');
+    if (userStr) {
+      this.user = JSON.parse(userStr);
+      this.currency = this.user?.school?.currency || 'CHF';
+    }
+  }
+
+  private loadMasterData(): void {
+    // Cargar deportes
+    this.apiService.get('/sports').subscribe({
+      next: (response) => {
+        this.allSports = response.data || [];
+      },
+      error: (error) => console.error('Error loading sports:', error)
+    });
+  }
+
+  private setupFilterSubscriptions(): void {
+    // Escuchar cambios en los filtros con debounce
+    this.filterForm.valueChanges.pipe(
+      debounceTime(1000),
+      distinctUntilChanged(),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      if (!this.loading) {
         this.loadAnalyticsData();
-      });
+      }
+    });
   }
 
-  private loadInitialData(): void {
-    this.loadAnalyticsData();
-  }
+  // ==================== DATA LOADING ====================
 
-  private loadAnalyticsData(): void {
+  public loadAnalyticsData(): void {
     this.loading = true;
-    const filters = this.getFilters();
+    const filters = this.buildFiltersObject();
 
-    // Load all analytics data
-    Promise.all([
-      this.loadSummaryData(filters),
-      this.loadCourseAnalytics(filters),
-      this.loadRevenueAnalytics(filters)
-    ]).then(() => {
-      this.loading = false;
-      this.updateCharts();
-      this.cdr.detectChanges();
-    }).catch(error => {
-      console.error('Error loading analytics data:', error);
-      this.loading = false;
+    console.log('🔍 Loading analytics data with filters:', filters);
+
+    // Usar principalmente el endpoint season-dashboard
+    this.apiService.get('/admin/finance/season-dashboard', [], filters).subscribe({
+      next: (response) => {
+        console.log('✅ Season dashboard data received:', response);
+        this.processSeasonDashboardData(response.data);
+        this.loading = false;
+        this.cdr.detectChanges();
+
+        // Crear gráficos después de que los datos estén listos
+        setTimeout(() => this.createAllCharts(), 100);
+      },
+      error: (error) => {
+        console.error('❌ Error loading analytics data:', error);
+        this.loading = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
-  private getFilters(): AnalyticsFilters {
+  private buildFiltersObject(): any {
     const formValue = this.filterForm.value;
-    return {
-      startDate: formValue.startDate,
-      endDate: formValue.endDate,
-      courseType: formValue.courseType,
-      source: formValue.source,
-      sportId: formValue.sportId,
-      onlyWeekends: formValue.onlyWeekends
+
+    const filters: any = {
+      start_date: formValue.startDate,
+      end_date: formValue.endDate,
+      include_test_detection: formValue.includeTestDetection,
+      include_payrexx_analysis: formValue.includePayrexxAnalysis,
+      optimization_level: formValue.optimizationLevel
     };
-  }
 
-  private async loadSummaryData(filters: AnalyticsFilters): Promise<void> {
-    try {
-      const response = await this.getAnalyticsSummary(filters).toPromise();
-      this.summary = response.data;
-    } catch (error) {
-      console.error('Error loading summary data:', error);
+    // Filtros opcionales
+    if (formValue.courseType?.length) {
+      filters.course_type = formValue.courseType.join(',');
     }
-  }
-
-  private async loadCourseAnalytics(filters: AnalyticsFilters): Promise<void> {
-    try {
-      const response = await this.getCourseAnalytics(filters).toPromise();
-      this.courseAnalytics = response.data;
-    } catch (error) {
-      console.error('Error loading course analytics:', error);
+    if (formValue.source?.length) {
+      filters.source = formValue.source.join(',');
     }
-  }
-
-  private async loadRevenueAnalytics(filters: AnalyticsFilters): Promise<void> {
-    try {
-      const response = await this.getRevenueAnalytics(filters).toPromise();
-      this.revenueAnalytics = response.data;
-    } catch (error) {
-      console.error('Error loading revenue analytics:', error);
+    if (formValue.paymentMethod?.length) {
+      filters.payment_method = formValue.paymentMethod.join(',');
     }
-  }
-
-  // API Methods
-  private getAnalyticsSummary(filters: AnalyticsFilters): Observable<any> {
-    const params = this.buildQueryParams(filters);
-    return this.crudService.list('/admin/analytics/summary', 1, 1, 'desc', 'id', params);
-  }
-
-  private getCourseAnalytics(filters: AnalyticsFilters): Observable<any> {
-    const params = this.buildQueryParams(filters);
-    return this.crudService.list('/admin/analytics/courses', 1, 1000, 'desc', 'totalRevenue', params);
-  }
-
-  private getRevenueAnalytics(filters: AnalyticsFilters): Observable<any> {
-    const params = this.buildQueryParams(filters);
-    return this.crudService.list('/admin/analytics/revenue', 1, 1000, 'asc', 'date', params);
-  }
-
-  private buildQueryParams(filters: AnalyticsFilters): string {
-    let params = `&school_id=${this.user.schools[0].id}`;
-
-    if (filters.startDate) {
-      params += `&start_date=${filters.startDate}`;
+    if (formValue.sportId?.length) {
+      filters.sport_id = formValue.sportId.join(',');
+    }
+    if (formValue.onlyWeekends) {
+      filters.only_weekends = true;
+    }
+    if (formValue.onlyPaidBookings) {
+      filters.only_paid = true;
+    }
+    if (!formValue.includeRefunds) {
+      filters.exclude_refunds = true;
     }
 
-    if (filters.endDate) {
-      params += `&end_date=${filters.endDate}`;
-    }
-
-    if (filters.courseType) {
-      params += `&course_type=${filters.courseType}`;
-    }
-
-    if (filters.source) {
-      params += `&source=${filters.source}`;
-    }
-
-    if (filters.sportId) {
-      params += `&sport_id=${filters.sportId}`;
-    }
-
-    if (filters.onlyWeekends) {
-      params += `&only_weekends=true`;
-    }
-
-    return params;
+    return filters;
   }
 
-  // Chart Methods
-  private updateCharts(): void {
-    this.updateRevenueChart();
-    this.updatePaymentMethodsChart();
-    this.updateCourseTypeChart();
+  private processSeasonDashboardData(data: SeasonDashboardData): void {
+    console.log('📊 Processing season dashboard data:', data);
+
+    this.dashboardData = data;
+
+    // Actualizar datos de las tablas
+    this.updateTableData();
+
+    console.log('✅ Dashboard data processed successfully');
   }
 
-  private updateRevenueChart(): void {
-    if (!this.revenueAnalytics.length) return;
+  private updateTableData(): void {
+    if (!this.dashboardData) return;
 
-    const dates = this.revenueAnalytics.map(item => item.date);
-    const revenues = this.revenueAnalytics.map(item => item.revenue);
-    const refunds = this.revenueAnalytics.map(item => item.refunds);
-    const netRevenues = this.revenueAnalytics.map(item => item.netRevenue);
+    // Tabla de revenue (usar trend_analysis.monthly_breakdown)
+    this.revenueTableData.data = this.dashboardData.trend_analysis?.monthly_breakdown || [];
 
-    const traces = [
-      {
-        x: dates,
-        y: revenues,
-        type: 'scatter',
-        mode: 'lines+markers',
-        name: this.translateService.instant('revenue'),
-        line: { color: '#2E7D32' },
-        fill: 'tonexty'
-      },
-      {
-        x: dates,
-        y: refunds,
-        type: 'scatter',
-        mode: 'lines+markers',
-        name: this.translateService.instant('refunds'),
-        line: { color: '#D32F2F' }
-      },
-      {
-        x: dates,
-        y: netRevenues,
-        type: 'scatter',
-        mode: 'lines+markers',
-        name: this.translateService.instant('net_revenue'),
-        line: { color: '#1976D2', width: 3 }
-      }
-    ];
-    const expected = this.revenueAnalytics.map(item => item.expectedRevenue); // <- nuevo backend
-    traces.push({
-      mode: 'lines+markers',
-      x: dates,
-      y: expected,
-      type: 'scatter',
-      name: this.translateService.instant('expected'),
-      line: { color: '#9E9E9E' }
+    // Tabla de cursos
+    this.coursesTableData.data = this.dashboardData.courses || [];
+
+    console.log('📋 Tables updated:', {
+      revenueRows: this.revenueTableData.data.length,
+      coursesRows: this.coursesTableData.data.length
     });
-
-    const layout = {
-      title: this.translateService.instant('revenue_over_time'),
-      xaxis: { title: this.translateService.instant('date') },
-      yaxis: { title: this.translateService.instant('amount') + ` (${this.currency})` },
-      showlegend: true,
-      height: 400
-    };
-
-    Plotly.newPlot('revenueChart', traces, layout, { responsive: true });
   }
 
-  private updatePaymentMethodsChart(): void {
-    if (!this.summary) return;
+  // ==================== CHART CREATION ====================
 
-    // Aggregate payment methods from course analytics
-    const totalPayments = this.courseAnalytics.reduce((acc, course) => {
-      acc.cash += course.paymentMethods.cash;
-      acc.card += course.paymentMethods.card;
-      acc.online += course.paymentMethods.online;
-      acc.vouchers += course.paymentMethods.vouchers;
-      acc.pending += course.paymentMethods.pending;
+  private createAllCharts(): void {
+    if (!this.dashboardData) return;
+
+    try {
+      this.createRevenueChart();
+      this.createCourseTypeRevenueChart();
+      this.createPaymentMethodsChart();
+      this.createPaymentTrendsChart();
+      this.createTopCoursesChart();
+      this.createCompletionRatesChart();
+      this.createSourcesChart();
+      this.createSourcePerformanceChart();
+      this.createComparisonChart();
+    } catch (error) {
+      console.error('❌ Error creating charts:', error);
+    }
+  }
+
+  private createRevenueChart(): void {
+    if (!this.revenueChartRef?.nativeElement || !this.dashboardData) return;
+
+    const data = this.dashboardData.trend_analysis?.monthly_breakdown || [];
+
+    const trace = {
+      x: data.map(d => d.month),
+      y: data.map(d => d.revenue),
+      type: 'scatter',
+      mode: 'lines+markers',
+      name: 'Revenue',
+      line: { color: this.chartColors.primary, width: 3 },
+      marker: { color: this.chartColors.primary, size: 6 }
+    };
+
+    const layout = {
+      title: false,
+      xaxis: { title: 'Month' },
+      yaxis: { title: `Revenue (${this.currency})` },
+      margin: { l: 60, r: 20, t: 20, b: 40 },
+      plot_bgcolor: 'rgba(0,0,0,0)',
+      paper_bgcolor: 'rgba(0,0,0,0)'
+    };
+
+    Plotly.newPlot(this.revenueChartRef.nativeElement, [trace], layout, { responsive: true });
+  }
+
+  private createCourseTypeRevenueChart(): void {
+    if (!this.courseTypeRevenueChartRef?.nativeElement || !this.dashboardData) return;
+
+    const courses = this.dashboardData.courses || [];
+
+    // Agrupar por tipo de curso
+    const typeRevenue = courses.reduce((acc, course) => {
+      const typeName = this.getCourseTypeName(course.type);
+      acc[typeName] = (acc[typeName] || 0) + course.revenue;
       return acc;
-    }, { cash: 0, card: 0, online: 0, vouchers: 0, pending: 0 });
+    }, {} as { [key: string]: number });
 
-    const data = [{
-      values: [
-        totalPayments.cash,
-        totalPayments.card,
-        totalPayments.online,
-        totalPayments.vouchers,
-        totalPayments.pending
-      ],
-      labels: [
-        this.translateService.instant('cash'),
-        this.translateService.instant('card'),
-        this.translateService.instant('online'),
-        this.translateService.instant('vouchers'),
-        this.translateService.instant('pending')
-      ],
+    const trace = {
+      values: Object.values(typeRevenue),
+      labels: Object.keys(typeRevenue),
       type: 'pie',
-      marker: {
-        colors: ['#4CAF50', '#2196F3', '#FF9800', '#9C27B0', '#F44336']
-      }
-    }];
-
-    const layout = {
-      title: this.translateService.instant('payment_methods_distribution'),
-      height: 400
+      marker: { colors: this.chartColors.gradient }
     };
 
-    Plotly.newPlot('paymentMethodsChart', data, layout, { responsive: true });
+    const layout = {
+      title: false,
+      margin: { l: 20, r: 20, t: 20, b: 20 },
+      plot_bgcolor: 'rgba(0,0,0,0)',
+      paper_bgcolor: 'rgba(0,0,0,0)'
+    };
+
+    Plotly.newPlot(this.courseTypeRevenueChartRef.nativeElement, [trace], layout, { responsive: true });
   }
 
-  private updateCourseTypeChart(): void {
-    if (!this.courseAnalytics.length) return;
+  private createPaymentMethodsChart(): void {
+    if (!this.paymentMethodsChartRef?.nativeElement || !this.dashboardData) return;
 
-    // Group by course type
-    const courseTypeData = this.courseAnalytics.reduce((acc, course) => {
-      const type = course.courseType;
-      if (!acc[type]) {
-        acc[type] = { revenue: 0, bookings: 0 };
-      }
-      acc[type].revenue += course.totalRevenue;
-      acc[type].bookings += course.totalBookings;
-      return acc;
-    }, {} as any);
+    const methods = this.dashboardData.payment_methods?.methods || [];
 
-    const types = Object.keys(courseTypeData);
-    const revenues = types.map(type => courseTypeData[type].revenue);
-    const bookings = types.map(type => courseTypeData[type].bookings);
+    const trace = {
+      values: methods.map(m => m.revenue),
+      labels: methods.map(m => m.display_name),
+      type: 'pie',
+      marker: { colors: this.chartColors.gradient }
+    };
+
+    const layout = {
+      title: false,
+      margin: { l: 20, r: 20, t: 20, b: 20 },
+      plot_bgcolor: 'rgba(0,0,0,0)',
+      paper_bgcolor: 'rgba(0,0,0,0)'
+    };
+
+    Plotly.newPlot(this.paymentMethodsChartRef.nativeElement, [trace], layout, { responsive: true });
+  }
+
+  private createPaymentTrendsChart(): void {
+    if (!this.paymentTrendsChartRef?.nativeElement || !this.dashboardData) return;
+
+    const onlineVsOffline = this.dashboardData.payment_methods?.online_vs_offline;
+
+    if (!onlineVsOffline) return;
+
+    const trace = {
+      x: ['Online', 'Offline'],
+      y: [onlineVsOffline.online.revenue, onlineVsOffline.offline.revenue],
+      type: 'bar',
+      marker: { color: [this.chartColors.info, this.chartColors.secondary] }
+    };
+
+    const layout = {
+      title: false,
+      xaxis: { title: 'Payment Type' },
+      yaxis: { title: `Revenue (${this.currency})` },
+      margin: { l: 60, r: 20, t: 20, b: 40 },
+      plot_bgcolor: 'rgba(0,0,0,0)',
+      paper_bgcolor: 'rgba(0,0,0,0)'
+    };
+
+    Plotly.newPlot(this.paymentTrendsChartRef.nativeElement, [trace], layout, { responsive: true });
+  }
+
+  private createTopCoursesChart(): void {
+    if (!this.topCoursesChartRef?.nativeElement || !this.dashboardData) return;
+
+    const courses = this.dashboardData.courses || [];
+    const topCourses = courses
+      .sort((a, b) => b.revenue - a.revenue)
+      .slice(0, 10);
+
+    const trace = {
+      x: topCourses.map(c => c.revenue),
+      y: topCourses.map(c => c.name),
+      type: 'bar',
+      orientation: 'h',
+      marker: { color: this.chartColors.success }
+    };
+
+    const layout = {
+      title: false,
+      xaxis: { title: `Revenue (${this.currency})` },
+      margin: { l: 150, r: 20, t: 20, b: 40 },
+      plot_bgcolor: 'rgba(0,0,0,0)',
+      paper_bgcolor: 'rgba(0,0,0,0)'
+    };
+
+    Plotly.newPlot(this.topCoursesChartRef.nativeElement, [trace], layout, { responsive: true });
+  }
+
+  private createCompletionRatesChart(): void {
+    if (!this.completionRatesChartRef?.nativeElement || !this.dashboardData) return;
+
+    // Para completion rates, podríamos usar los status_breakdown de los cursos
+    const courses = this.dashboardData.courses?.slice(0, 10) || [];
+
+    const trace = {
+      x: courses.map(c => c.name),
+      y: courses.map(c => {
+        const statusBreakdown = c.status_breakdown || {};
+        const total = Number(Object.values(statusBreakdown).reduce(
+          (sum: number, count: unknown) => sum + Number(count ?? 0),
+          0
+        ));
+        const completed = Number(statusBreakdown[1] ?? 0); // 1 = activa
+        return total > 0 ? (completed / total) * 100 : 0;
+      }),
+      type: 'bar',
+      marker: { color: this.chartColors.info }
+    };
+
+    const layout = {
+      title: false,
+      xaxis: { title: 'Courses' },
+      yaxis: { title: 'Completion Rate (%)' },
+      margin: { l: 60, r: 20, t: 20, b: 100 },
+      plot_bgcolor: 'rgba(0,0,0,0)',
+      paper_bgcolor: 'rgba(0,0,0,0)'
+    };
+
+    Plotly.newPlot(this.completionRatesChartRef.nativeElement, [trace], layout, { responsive: true });
+  }
+
+  private createSourcesChart(): void {
+    if (!this.sourcesChartRef?.nativeElement || !this.dashboardData) return;
+
+    const sources = this.dashboardData.booking_sources?.source_breakdown || [];
+
+    const trace = {
+      values: sources.map(s => s.revenue),
+      labels: sources.map(s => s.source),
+      type: 'pie',
+      marker: { colors: this.chartColors.gradient }
+    };
+
+    const layout = {
+      title: false,
+      margin: { l: 20, r: 20, t: 20, b: 20 },
+      plot_bgcolor: 'rgba(0,0,0,0)',
+      paper_bgcolor: 'rgba(0,0,0,0)'
+    };
+
+    Plotly.newPlot(this.sourcesChartRef.nativeElement, [trace], layout, { responsive: true });
+  }
+
+  private createSourcePerformanceChart(): void {
+    if (!this.sourcePerformanceChartRef?.nativeElement || !this.dashboardData) return;
+
+    const sources = this.dashboardData.booking_sources?.source_breakdown || [];
+
+    const trace = {
+      x: sources.map(s => s.source),
+      y: sources.map(s => s.consistency_rate),
+      type: 'bar',
+      marker: { color: this.chartColors.warning }
+    };
+
+    const layout = {
+      title: false,
+      xaxis: { title: 'Source' },
+      yaxis: { title: 'Consistency Rate (%)' },
+      margin: { l: 60, r: 20, t: 20, b: 40 },
+      plot_bgcolor: 'rgba(0,0,0,0)',
+      paper_bgcolor: 'rgba(0,0,0,0)'
+    };
+
+    Plotly.newPlot(this.sourcePerformanceChartRef.nativeElement, [trace], layout, { responsive: true });
+  }
+
+  private createComparisonChart(): void {
+    if (!this.comparisonChartRef?.nativeElement || !this.dashboardData) return;
+
+    const kpis = this.dashboardData.executive_kpis;
+    const classification = this.dashboardData.season_info.booking_classification;
 
     const trace1 = {
-      x: types.map(type => this.getCourseTypeName(parseInt(type))),
-      y: revenues,
+      x: ['Production', 'Test', 'Cancelled'],
+      y: [classification.production_count, classification.test_count, classification.cancelled_count],
+      name: 'Bookings Count',
       type: 'bar',
-      name: this.translateService.instant('revenue'),
-      yaxis: 'y',
-      marker: { color: '#2196F3' }
+      marker: { color: this.chartColors.primary }
     };
 
     const trace2 = {
-      x: types.map(type => this.getCourseTypeName(parseInt(type))),
-      y: bookings,
+      x: ['Production', 'Test', 'Cancelled'],
+      y: [classification.production_revenue, classification.test_revenue, classification.cancelled_revenue],
+      name: 'Revenue',
       type: 'bar',
-      name: this.translateService.instant('bookings'),
       yaxis: 'y2',
-      marker: { color: '#4CAF50' }
+      marker: { color: this.chartColors.secondary }
     };
 
     const layout = {
-      title: this.translateService.instant('performance_by_course_type'),
-      xaxis: { title: this.translateService.instant('course_type') },
-      yaxis: {
-        title: this.translateService.instant('revenue') + ` (${this.currency})`,
-        side: 'left'
-      },
-      yaxis2: {
-        title: this.translateService.instant('bookings'),
-        side: 'right',
-        overlaying: 'y'
-      },
-      height: 400
+      title: false,
+      xaxis: { title: 'Booking Type' },
+      yaxis: { title: 'Count', side: 'left' },
+      yaxis2: { title: 'Revenue', side: 'right', overlaying: 'y' },
+      margin: { l: 60, r: 60, t: 20, b: 40 },
+      plot_bgcolor: 'rgba(0,0,0,0)',
+      paper_bgcolor: 'rgba(0,0,0,0)'
     };
 
-    Plotly.newPlot('courseTypeChart', [trace1, trace2], layout, { responsive: true });
+    Plotly.newPlot(this.comparisonChartRef.nativeElement, [trace1, trace2], layout, { responsive: true });
   }
 
-  public getCourseTypeName(type: number): string {
-    switch (type) {
-      case 1: return this.translateService.instant('collective');
-      case 2: return this.translateService.instant('private');
-      case 3: return this.translateService.instant('activity');
-      default: return 'Unknown';
+  // ==================== EVENT HANDLERS ====================
+
+  // ==================== TAB MANAGEMENT (ACTUALIZADO) ====================
+
+  onTabChange(event: MatTabChangeEvent): void {
+    this.activeTabIndex = event.index;
+    this.activeTab = this.tabs[event.index].id; // ← ESTO YA ESTABA
+
+    // Cargar datos específicos de la pestaña
+    switch (this.activeTab) {
+      case 'revenue':
+        // Ya se carga con loadAnalyticsData()
+        console.log('Revenue tab selected');
+        break;
+      case 'payments':
+        // Ya se carga con loadAnalyticsData()
+        console.log('Payments tab selected');
+        break;
+      case 'courses':
+        // Ya se carga con loadAnalyticsData()
+        console.log('Courses tab selected');
+        break;
+      case 'sources':
+        // Ya se carga con loadAnalyticsData()
+        console.log('Sources tab selected');
+        break;
+      case 'comparative':
+        // Ya se carga con loadAnalyticsData()
+        console.log('Comparative tab selected');
+        break;
+      case 'alerts':
+        // Ya se carga con loadAnalyticsData()
+        console.log('Alerts tab selected');
+        break;
+      case 'monitors': // ← NUEVO CASE PARA MONITORES
+        console.log('Monitors tab selected');
+        // El componente MonitorsLegacy maneja su propia carga
+        break;
+      default:
+        console.log('Default tab selected:', this.activeTab);
+        break;
     }
+
+    // Los gráficos se crean automáticamente con createAllCharts()
+    // No necesitamos createTabSpecificCharts() porque no está implementado
   }
 
-  // Event handlers
-  onTabChange(tabName: string): void {
-    this.activeTab = tabName;
+  public onPresetRangeChange(event: any): void {
+    const value = event.value;
+    if (!value) return;
 
-    // Reload data when switching to a new tab
-    setTimeout(() => {
-      this.updateCharts();
-    }, 100);
-  }
+    let startDate: moment.Moment;
+    let endDate: moment.Moment = moment();
 
-  onExportData(): void {
-    // Implement export functionality
-    const data = {
-      summary: this.summary,
-      courseAnalytics: this.courseAnalytics,
-      revenueAnalytics: this.revenueAnalytics,
-      filters: this.getFilters(),
-      exportDate: new Date().toISOString()
-    };
-
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `analytics-${moment().format('YYYY-MM-DD')}.json`;
-    link.click();
-    window.URL.revokeObjectURL(url);
-  }
-
-  // Utility methods
-  formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('de-DE', {
-      style: 'currency',
-      currency: this.currency
-    }).format(amount);
-  }
-
-  formatPercentage(value: number): string {
-    return `${(value * 100).toFixed(1)}%`;
-  }
-
-  getStatusClass(value: number, threshold: number = 0): string {
-    return value >= threshold ? 'text-green-600' : 'text-red-600';
-  }
-
-  getTotalByPaymentMethod(method: string): number {
-    return this.courseAnalytics.reduce((total, course) => {
-      return total + (course.paymentMethods[method] || 0);
-    }, 0);
-  }
-
-  // Additional API methods for enhanced analytics
-  getFinancialDashboard(filters: AnalyticsFilters): Observable<any> {
-    const params = this.buildQueryParams(filters);
-    return this.crudService.list('/admin/analytics/financial-dashboard', 1, 1, 'desc', 'id', params);
-  }
-
-  getPendingPayments(filters: AnalyticsFilters): Observable<any> {
-    const params = this.buildQueryParams(filters);
-    return this.crudService.list('/admin/analytics/pending-payments', 1, 1000, 'asc', 'urgency_level', params);
-  }
-
-  getPerformanceComparison(filters: AnalyticsFilters): Observable<any> {
-    const params = this.buildQueryParams(filters);
-    return this.crudService.list('/admin/analytics/performance-comparison', 1, 1, 'desc', 'id', params);
-  }
-
-  getPaymentDetails(filters: AnalyticsFilters): Observable<any> {
-    const params = this.buildQueryParams(filters);
-    return this.crudService.list('/admin/analytics/payment-details', 1, 1000, 'desc', 'booking_date', params);
-  }
-
-  // Enhanced chart methods
-  private updateComparisonChart(): void {
-    // Load performance comparison data
-    this.getPerformanceComparison(this.getFilters()).subscribe(response => {
-      const data = response.data;
-
-      const traces = [{
-        x: ['Revenue', 'Bookings', 'Avg. Value'],
-        y: [
-          data.comparison.revenue_change_percent,
-          data.comparison.bookings_change_percent,
-          ((data.current_period.data.avg_booking_value - data.previous_period.data.avg_booking_value) /
-            data.previous_period.data.avg_booking_value) * 100
-        ],
-        type: 'bar',
-        marker: {
-          color: ['#4CAF50', '#2196F3', '#FF9800']
-        },
-        text: ['%', '%', '%'],
-        textposition: 'auto'
-      }];
-
-      const layout = {
-        title: this.translateService.instant('period_comparison'),
-        yaxis: { title: this.translateService.instant('percentage_change') },
-        height: 300
-      };
-
-      Plotly.newPlot('comparisonChart', traces, layout, { responsive: true });
-    });
-  }
-
-  private updatePendingPaymentsChart(): void {
-    this.getPendingPayments(this.getFilters()).subscribe(response => {
-      const groupedData = response.data.grouped_by_urgency;
-
-      const data = [{
-        values: [
-          groupedData.overdue.length,
-          groupedData.urgent.length,
-          groupedData.due_soon.length,
-          groupedData.normal.length
-        ],
-        labels: [
-          this.translateService.instant('overdue'),
-          this.translateService.instant('urgent'),
-          this.translateService.instant('due_soon'),
-          this.translateService.instant('normal')
-        ],
-        type: 'pie',
-        marker: {
-          colors: ['#F44336', '#FF9800', '#FFC107', '#4CAF50']
-        }
-      }];
-
-      const layout = {
-        title: this.translateService.instant('pending_payments_by_urgency'),
-        height: 300
-      };
-
-      Plotly.newPlot('pendingPaymentsChart', data, layout, { responsive: true });
-    });
-  }
-
-  // Method to refresh all data
-  refreshAllData(): void {
-    this.loadAnalyticsData();
-  }
-
-  // Method to set preset date ranges
-  setDateRange(range: string): void {
-    let startDate: string, endDate: string;
-
-    switch (range) {
+    switch (value) {
       case 'today':
-        startDate = endDate = moment().format('YYYY-MM-DD');
+        startDate = moment().startOf('day');
+        endDate = moment().endOf('day');
         break;
       case 'yesterday':
-        startDate = endDate = moment().subtract(1, 'day').format('YYYY-MM-DD');
+        startDate = moment().subtract(1, 'day').startOf('day');
+        endDate = moment().subtract(1, 'day').endOf('day');
         break;
       case 'this_week':
-        startDate = moment().startOf('week').format('YYYY-MM-DD');
-        endDate = moment().endOf('week').format('YYYY-MM-DD');
+        startDate = moment().startOf('week');
         break;
       case 'last_week':
-        startDate = moment().subtract(1, 'week').startOf('week').format('YYYY-MM-DD');
-        endDate = moment().subtract(1, 'week').endOf('week').format('YYYY-MM-DD');
+        startDate = moment().subtract(1, 'week').startOf('week');
+        endDate = moment().subtract(1, 'week').endOf('week');
         break;
       case 'this_month':
-        startDate = moment().startOf('month').format('YYYY-MM-DD');
-        endDate = moment().endOf('month').format('YYYY-MM-DD');
+        startDate = moment().startOf('month');
         break;
       case 'last_month':
-        startDate = moment().subtract(1, 'month').startOf('month').format('YYYY-MM-DD');
-        endDate = moment().subtract(1, 'month').endOf('month').format('YYYY-MM-DD');
+        startDate = moment().subtract(1, 'month').startOf('month');
+        endDate = moment().subtract(1, 'month').endOf('month');
+        break;
+      case 'this_quarter':
+        startDate = moment().startOf('quarter');
+        break;
+      case 'last_quarter':
+        startDate = moment().subtract(1, 'quarter').startOf('quarter');
+        endDate = moment().subtract(1, 'quarter').endOf('quarter');
         break;
       case 'this_year':
-        startDate = moment().startOf('year').format('YYYY-MM-DD');
-        endDate = moment().endOf('year').format('YYYY-MM-DD');
+        startDate = moment().startOf('year');
         break;
       case 'last_year':
-        startDate = moment().subtract(1, 'year').startOf('year').format('YYYY-MM-DD');
-        endDate = moment().subtract(1, 'year').endOf('year').format('YYYY-MM-DD');
+        startDate = moment().subtract(1, 'year').startOf('year');
+        endDate = moment().subtract(1, 'year').endOf('year');
         break;
       default:
         return;
     }
 
     this.filterForm.patchValue({
-      startDate,
-      endDate
+      startDate: startDate.format('YYYY-MM-DD'),
+      endDate: endDate.format('YYYY-MM-DD')
     });
   }
 
-  // Export methods
-  onExportToCSV(): void {
-    const csvData = this.prepareCsvData();
-    const blob = new Blob([csvData], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `analytics-${moment().format('YYYY-MM-DD')}.csv`;
-    link.click();
-    window.URL.revokeObjectURL(url);
-  }
-
-  private prepareCsvData(): string {
-    const headers = [
-      'Date',
-      'Course Name',
-      'Course Type',
-      'Revenue',
-      'Bookings',
-      'Average Price',
-      'Completion Rate'
-    ];
-
-    const rows = this.courseAnalytics.map(course => [
-      new Date().toISOString().split('T')[0],
-      course.courseName,
-      this.getCourseTypeName(course.courseType),
-      course.totalRevenue,
-      course.totalBookings,
-      course.averagePrice,
-      course.completionRate
-    ]);
-
-    return [headers, ...rows].map(row => row.join(',')).join('\n');
-  }
-
-  onExportToPDF(): void {
-    // Implement PDF export functionality
-    // This would typically use a library like jsPDF
-    console.log('PDF export functionality would be implemented here');
-  }
-
-  // Real-time updates (if needed)
-  startRealTimeUpdates(): void {
-    // Set up periodic updates every 5 minutes
-    setInterval(() => {
-      if (this.activeTab === 'overview') {
-        this.loadSummaryData(this.getFilters());
-      }
-    }, 5 * 60 * 1000); // 5 minutes
-  }
-
-  // Error handling
-  private handleError(error: any): void {
-    console.error('Analytics error:', error);
-    // Implement user-friendly error handling
-    // Show toast notification or error message
-  }
-
-  // Performance optimization
-  private debounceSearch = this.debounce((filters: AnalyticsFilters) => {
+  public applyFilters(): void {
     this.loadAnalyticsData();
-  }, 300);
+  }
 
-  private debounce(func: Function, wait: number) {
-    let timeout: any;
-    return function executedFunction(...args: any[]) {
-      const later = () => {
-        clearTimeout(timeout);
-        func.apply(this, args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
+  public refreshData(): void {
+    this.loadAnalyticsData();
+  }
+
+  public toggleAdvancedFilters(): void {
+    this.showAdvancedFilters = !this.showAdvancedFilters;
+  }
+
+  public onExportData(): void {
+    if (!this.dashboardData) return;
+
+    const filters = this.buildFiltersObject();
+    const exportFilters = {
+      ...filters,
+      format: 'csv',
+      sections: ['executive_summary', 'financial_kpis', 'booking_analysis', 'critical_issues']
+    };
+
+    this.apiService.get('/admin/finance/season-dashboard/export', [], exportFilters).subscribe({
+      next: (response) => {
+        console.log('✅ Export successful:', response);
+        if (response.data?.download_url) {
+          window.open(response.data.download_url, '_blank');
+        }
+      },
+      error: (error) => console.error('❌ Export error:', error)
+    });
+  }
+
+  public filterCourses(event: any): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.coursesTableData.filter = filterValue.trim().toLowerCase();
+  }
+
+  public viewCourseDetails(course: any): void {
+    this.router.navigate(['/admin/courses', course.id]);
+  }
+
+  public exportCourseData(course: any): void {
+    const filters = { ...this.buildFiltersObject(), course_id: course.id };
+    this.apiService.get('/admin/finance/season-dashboard', [], filters).subscribe({
+      next: (response) => {
+        console.log('✅ Course export successful:', response);
+      },
+      error: (error) => console.error('❌ Course export error:', error)
+    });
+  }
+
+  // ==================== GETTERS FOR TEMPLATE ====================
+
+  get analyticsData() {
+    if (!this.dashboardData) return null;
+
+    const kpis = this.dashboardData.executive_kpis;
+    const classification = this.dashboardData.season_info.booking_classification;
+
+    return {
+      totalRevenue: kpis.revenue_expected,
+      totalBookings: kpis.total_production_bookings,
+      totalParticipants: kpis.total_participants,
+      averageBookingValue: kpis.average_booking_value,
+      collectionEfficiency: kpis.collection_efficiency,
+      pendingRevenue: kpis.revenue_pending,
+      paymentMethods: this.dashboardData.payment_methods?.methods || [],
+      bookingSources: this.dashboardData.booking_sources?.source_breakdown || [],
+      courseAnalytics: this.dashboardData.courses || [],
+      revenueOverTime: this.dashboardData.trend_analysis?.monthly_breakdown || []
     };
   }
 
-  // Cache management
-  private cacheKey(filters: AnalyticsFilters): string {
-    return JSON.stringify(filters);
+  // ==================== UTILITY METHODS ====================
+
+  public getTrend(current: number, previous?: number): 'up' | 'down' | 'stable' {
+    if (!previous || previous === 0) return 'stable';
+    if (current > previous) return 'up';
+    if (current < previous) return 'down';
+    return 'stable';
   }
 
-  private getCachedData(key: string): any {
-    // Implement caching logic if needed
-    return null;
+  public getTrendValue(current: number, previous?: number): number {
+    if (!previous || previous === 0) return 0;
+    return Math.abs(((current - previous) / previous) * 100);
   }
 
-  private setCachedData(key: string, data: any): void {
-    // Implement caching logic if needed
+  public getCourseTypeName(type: number): string {
+    switch (type) {
+      case 1: return 'collective';
+      case 2: return 'private';
+      case 3: return 'activity';
+      default: return 'unknown';
+    }
   }
 
+  public getComparisonClass(current: number, previous?: number): string {
+    const trend = this.getTrend(current, previous);
+    return trend === 'up' ? 'positive' : trend === 'down' ? 'negative' : 'neutral';
+  }
+
+  public getComparisonValue(current: number, previous?: number): string {
+    if (!previous || previous === 0) return 'N/A';
+    const diff = current - previous;
+    const percentage = (diff / previous) * 100;
+    const sign = diff >= 0 ? '+' : '';
+    return `${sign}${percentage.toFixed(1)}%`;
+  }
 }
