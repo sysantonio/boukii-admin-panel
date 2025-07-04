@@ -175,113 +175,121 @@
       <div class="kpis-section">
         <h2 class="section-title">{{ 'executive_summary' | translate }}</h2>
         <div class="kpis-grid">
+
+          <!-- <app-kpis-card
+             [kpiData]="{
+               title: 'average_booking_value' | translate,
+               value: dashboardData.executive_kpis.average_booking_value,
+               format: 'currency',
+               currency: currency,
+               trend: getTrend(dashboardData.executive_kpis.average_booking_value, 0),
+               trendValue: getTrendValue(dashboardData.executive_kpis.average_booking_value, 0),
+               icon: 'trending_up',
+               color: 'success'
+             }"
+             [showTrend]="false">
+           </app-kpis-card>-->
+
+          <!-- <app-kpis-card
+             [kpiData]="{
+               title: 'collection_efficiency' | translate,
+               value: dashboardData.executive_kpis.collection_efficiency,
+               format: 'percentage',
+               trend: getTrend(dashboardData.executive_kpis.collection_efficiency, 0),
+               trendValue: getTrendValue(dashboardData.executive_kpis.collection_efficiency, 0),
+               icon: 'account_balance',
+               color: 'info'
+             }"
+             [showTrend]="false">
+           </app-kpis-card>-->
+
+          <!-- 1. TOTAL REVENUE (sin cambios) -->
           <app-kpis-card
             [kpiData]="{
-              title: 'total_revenue' | translate,
-              value: dashboardData.executive_kpis.revenue_expected,
-              format: 'currency',
-              currency: currency,
-              trend: getTrend(dashboardData.executive_kpis.revenue_expected, 0),
-              trendValue: getTrendValue(dashboardData.executive_kpis.revenue_expected, 0),
-              icon: 'monetization_on',
-              color: 'primary'
-            }"
+        title: 'total_revenue' | translate,
+        value: dashboardData.executive_kpis.revenue_expected,
+        format: 'currency',
+        currency: currency,
+        trend: getTrend(dashboardData.executive_kpis.revenue_expected, 0),
+        trendValue: getTrendValue(dashboardData.executive_kpis.revenue_expected, 0),
+        icon: 'monetization_on',
+        color: 'primary'
+      }"
             [showTrend]="false">
           </app-kpis-card>
 
+          <!-- 2. TOTAL BOOKINGS (CORREGIDO - usar season_info.total_bookings) -->
           <app-kpis-card
             [kpiData]="{
-              title: 'total_bookings' | translate,
-              value: dashboardData.executive_kpis.total_production_bookings,
-              format: 'number',
-              trend: getTrend(dashboardData.executive_kpis.total_production_bookings, 0),
-              trendValue: getTrendValue(dashboardData.executive_kpis.total_production_bookings, 0),
-              icon: 'book_online',
-              color: 'secondary'
-            }"
+        title: 'total_bookings' | translate,
+        value: dashboardData.season_info.total_bookings,
+        format: 'number',
+        trend: getTrend(dashboardData.season_info.total_bookings, 0),
+        trendValue: getTrendValue(dashboardData.season_info.total_bookings, 0),
+        icon: 'book_online',
+        color: 'secondary'
+      }"
             [showTrend]="false">
           </app-kpis-card>
 
+          <!-- 3. PENDING REVENUE (CLICKEABLE) -->
           <app-kpis-card
             [kpiData]="{
-              title: 'average_booking_value' | translate,
-              value: dashboardData.executive_kpis.average_booking_value,
-              format: 'currency',
-              currency: currency,
-              trend: getTrend(dashboardData.executive_kpis.average_booking_value, 0),
-              trendValue: getTrendValue(dashboardData.executive_kpis.average_booking_value, 0),
-              icon: 'trending_up',
-              color: 'success'
-            }"
+        title: 'pending_revenue' | translate,
+        value: dashboardData.executive_kpis.revenue_pending,
+        format: 'currency',
+        currency: currency,
+        trend: getTrend(dashboardData.executive_kpis.revenue_pending, 0),
+        trendValue: getTrendValue(dashboardData.executive_kpis.revenue_pending, 0),
+        icon: 'schedule',
+        color: 'warning'
+      }"
+            [showTrend]="false"
+            class="clickeable"
+            (click)="onPendingRevenueClick()">
+          </app-kpis-card>
+
+          <!-- 4. TOTAL PARTICIPANTS (CORREGIDO) -->
+          <app-kpis-card
+            [kpiData]="{
+        title: 'total_participants' | translate,
+        value: dashboardData.executive_kpis.total_participants,
+        format: 'number',
+        trend: getTrend(dashboardData.executive_kpis.total_participants, 0),
+        trendValue: getTrendValue(dashboardData.executive_kpis.total_participants, 0),
+        icon: 'group',
+        color: 'primary'
+      }"
             [showTrend]="false">
           </app-kpis-card>
 
+          <!-- 5. TOTAL CLIENTS (CORREGIDO) -->
           <app-kpis-card
             [kpiData]="{
-              title: 'collection_efficiency' | translate,
-              value: dashboardData.executive_kpis.collection_efficiency,
-              format: 'percentage',
-              trend: getTrend(dashboardData.executive_kpis.collection_efficiency, 0),
-              trendValue: getTrendValue(dashboardData.executive_kpis.collection_efficiency, 0),
-              icon: 'account_balance',
-              color: 'info'
-            }"
+        title: 'total_clients' | translate,
+        value: dashboardData.executive_kpis.total_clients,
+        format: 'number',
+        trend: getTrend(dashboardData.executive_kpis.total_clients, 0),
+        trendValue: getTrendValue(dashboardData.executive_kpis.total_clients, 0),
+        icon: 'people',
+        color: 'info'
+      }"
             [showTrend]="false">
           </app-kpis-card>
 
-          <app-kpis-card
-            [kpiData]="{
-              title: 'pending_revenue' | translate,
-              value: dashboardData.executive_kpis.revenue_pending,
-              format: 'currency',
-              currency: currency,
-              trend: getTrend(dashboardData.executive_kpis.revenue_pending, 0),
-              trendValue: getTrendValue(dashboardData.executive_kpis.revenue_pending, 0),
-              icon: 'schedule',
-              color: 'warning'
-            }"
-            [showTrend]="false">
-          </app-kpis-card>
-
-          <app-kpis-card
-            [kpiData]="{
-              title: 'total_participants' | translate,
-              value: dashboardData.executive_kpis.total_participants,
-              format: 'number',
-              trend: getTrend(dashboardData.executive_kpis.total_participants, 0),
-              trendValue: getTrendValue(dashboardData.executive_kpis.total_participants, 0),
-              icon: 'group',
-              color: 'primary'
-            }"
-            [showTrend]="false">
-          </app-kpis-card>
-
-          <app-kpis-card
-            [kpiData]="{
-              title: 'consistency_rate' | translate,
-              value: dashboardData.executive_kpis.consistency_rate,
-              format: 'percentage',
-              trend: getTrend(dashboardData.executive_kpis.consistency_rate, 0),
-              trendValue: getTrendValue(dashboardData.executive_kpis.consistency_rate, 0),
-              icon: 'verified',
-              color: dashboardData.executive_kpis.consistency_rate >= 95 ? 'success' :
-                    dashboardData.executive_kpis.consistency_rate >= 80 ? 'warning' : 'danger'
-            }"
-            [showTrend]="false">
-          </app-kpis-card>
-
-          <app-kpis-card
-            [kpiData]="{
-              title: 'total_clients' | translate,
-              value: dashboardData.executive_kpis.total_clients,
-              format: 'number',
-              trend: getTrend(dashboardData.executive_kpis.total_clients, 0),
-              trendValue: getTrendValue(dashboardData.executive_kpis.total_clients, 0),
-              icon: 'people',
-              color: 'info'
-            }"
-            [showTrend]="false">
-          </app-kpis-card>
+          <!--          <app-kpis-card
+                      [kpiData]="{
+                        title: 'consistency_rate' | translate,
+                        value: dashboardData.executive_kpis.consistency_rate,
+                        format: 'percentage',
+                        trend: getTrend(dashboardData.executive_kpis.consistency_rate, 0),
+                        trendValue: getTrendValue(dashboardData.executive_kpis.consistency_rate, 0),
+                        icon: 'verified',
+                        color: dashboardData.executive_kpis.consistency_rate >= 95 ? 'success' :
+                              dashboardData.executive_kpis.consistency_rate >= 80 ? 'warning' : 'danger'
+                      }"
+                      [showTrend]="false">
+                    </app-kpis-card>-->
         </div>
       </div>
 
@@ -289,43 +297,51 @@
       <div class="classification-section" *ngIf="dashboardData.season_info.booking_classification">
         <h2 class="section-title">{{ 'booking_classification' | translate }}</h2>
         <div class="classification-grid">
+
+          <!-- TOTAL BOOKINGS -->
           <app-kpis-card
             [kpiData]="{
-              title: 'production_bookings' | translate,
-              value: dashboardData.season_info.booking_classification.production_count,
-              format: 'number',
-              subtitle: (dashboardData.season_info.booking_classification.production_revenue | currency:currency),
-              icon: 'check_circle',
-              color: 'success'
-            }"
+        title: 'total_bookings' | translate,
+        value: dashboardData.season_info.booking_classification.total_bookings,
+        format: 'number',
+        subtitle: 'Todas las reservas analizadas',
+        icon: 'analytics',
+        color: 'primary'
+      }"
             [showTrend]="false">
           </app-kpis-card>
 
+          <!-- RESERVAS PRODUCTIVAS -->
           <app-kpis-card
             [kpiData]="{
-              title: 'test_bookings' | translate,
-              value: dashboardData.season_info.booking_classification.test_count,
-              format: 'number',
-              subtitle: 'Excluded: ' + (dashboardData.season_info.booking_classification.test_revenue | currency:currency),
-              icon: 'science',
-              color: 'warning'
-            }"
+        title: 'production_bookings' | translate,
+        value: dashboardData.season_info.booking_classification.production_count,
+        format: 'number',
+        subtitle: (dashboardData.season_info.booking_classification.production_revenue | currency:currency),
+        icon: 'check_circle',
+        color: 'success'
+      }"
             [showTrend]="false">
           </app-kpis-card>
 
+          <!-- RESERVAS CANCELADAS (CLICKEABLE) -->
           <app-kpis-card
             [kpiData]="{
-              title: 'cancelled_bookings' | translate,
-              value: dashboardData.season_info.booking_classification.cancelled_count,
-              format: 'number',
-              subtitle: 'Processed: ' + (dashboardData.season_info.booking_classification.cancelled_revenue | currency:currency),
-              icon: 'cancel',
-              color: 'danger'
-            }"
-            [showTrend]="false">
+        title: 'cancelled_bookings' | translate,
+        value: dashboardData.season_info.booking_classification.cancelled_count,
+        format: 'number',
+        subtitle: (dashboardData.season_info.booking_classification.cancelled_revenue | currency:currency),
+        icon: 'cancel',
+        color: 'danger'
+      }"
+            [showTrend]="false"
+            class="clickeable"
+            (click)="onCancelledBookingsClick()">
           </app-kpis-card>
+
         </div>
       </div>
+
 
       <!-- Analytics Tabs -->
       <mat-tab-group class="analytics-tabs" [(selectedIndex)]="activeTabIndex" (selectedTabChange)="onTabChange($event)">
@@ -601,23 +617,23 @@
           <div class="tab-content monitors-tab">
 
             <!-- Placeholder temporal mientras implementamos MonitorsLegacyComponent -->
-<!--            <div class="monitors-placeholder">
-              <mat-card>
-                <mat-card-header>
-                  <mat-card-title>
-                    <mat-icon>person</mat-icon>
-                    Análisis de Monitores
-                  </mat-card-title>
-                  <mat-card-subtitle>Próximamente disponible</mat-card-subtitle>
-                </mat-card-header>
-                <mat-card-content>
-                  <p>La funcionalidad de análisis de monitores estará disponible próximamente.</p>
-                  <div style="text-align: center; padding: 40px;">
-                    <mat-icon style="font-size: 64px; width: 64px; height: 64px; color: #ccc;">person</mat-icon>
-                  </div>
-                </mat-card-content>
-              </mat-card>
-            </div>-->
+            <!--            <div class="monitors-placeholder">
+                          <mat-card>
+                            <mat-card-header>
+                              <mat-card-title>
+                                <mat-icon>person</mat-icon>
+                                Análisis de Monitores
+                              </mat-card-title>
+                              <mat-card-subtitle>Próximamente disponible</mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                              <p>La funcionalidad de análisis de monitores estará disponible próximamente.</p>
+                              <div style="text-align: center; padding: 40px;">
+                                <mat-icon style="font-size: 64px; width: 64px; height: 64px; color: #ccc;">person</mat-icon>
+                              </div>
+                            </mat-card-content>
+                          </mat-card>
+                        </div>-->
 
             <!-- Aquí irá el componente MonitorsLegacy cuando esté listo -->
 

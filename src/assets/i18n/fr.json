@@ -1024,5 +1024,16 @@
   "revenue": "Revenus",
   "average_value": "Valeur Moyenne",
   "unique_clients": "Clients Uniques",
-  "consistency_rate": "Taux de Cohérence"
+  "consistency_rate": "Taux de Cohérence",
+  "executive_summary": "Résumé Exécutif",
+  "all_bookings_analyzed": "Toutes les réservations analysées",
+  "pending_revenue_modal_title": "Réservations avec revenus en attente",
+  "cancelled_bookings_modal_title": "Réservations annulées",
+  "booking_id": "ID Réservation",
+  "client_name": "Nom du Client",
+  "pending_amount": "Montant en attente",
+  "booking_date": "Date de Réservation",
+  "actions": "Actions",
+  "close": "Fermer",
+  "unique_participants": "Participants Uniques"
 }

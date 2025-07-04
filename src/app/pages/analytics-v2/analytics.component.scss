@@ -1201,3 +1201,261 @@ $transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
     }
   }
 }
+
+// Estilos adicionales para analytics.component.scss
+
+// ==================== ESTILOS ADICIONALES PARA MODAL EN analytics.component.scss ====================
+
+// Cards clickeables mejoradas
+.kpi-card.clickeable {
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &:active {
+    transform: translateY(-2px);
+    transition-duration: 0.1s;
+  }
+
+  // Efecto de fondo sutil
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  // Indicador visual sutil
+  &::after {
+    content: '👆';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 14px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  &:hover::after {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+
+  // Ocultar en móvil
+  @media (max-width: 768px) {
+    &::after {
+      display: none;
+    }
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+// Estilos específicos para classification cards clickeables
+.classification-grid .kpi-card.clickeable {
+  &:hover {
+    &.success {
+      box-shadow: 0 8px 24px rgba(76, 175, 80, 0.2) !important;
+    }
+
+    &.danger {
+      box-shadow: 0 8px 24px rgba(244, 67, 54, 0.2) !important;
+    }
+
+    &.warning {
+      box-shadow: 0 8px 24px rgba(255, 152, 0, 0.2) !important;
+    }
+  }
+}
+
+// Snackbar custom styles
+::ng-deep {
+  .snackbar-success {
+    background-color: #4caf50 !important;
+    color: white !important;
+  }
+
+  .snackbar-error {
+    background-color: #f44336 !important;
+    color: white !important;
+  }
+
+  .snackbar-warning {
+    background-color: #ff9800 !important;
+    color: white !important;
+  }
+
+  .snackbar-info {
+    background-color: #2196f3 !important;
+    color: white !important;
+  }
+
+  // Modal personalizado
+  .booking-list-modal {
+    .mat-dialog-container {
+      padding: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 24px 38px 3px rgba(0,0,0,0.14),
+      0 9px 46px 8px rgba(0,0,0,0.12),
+      0 11px 15px -7px rgba(0,0,0,0.20);
+    }
+
+    .mat-dialog-content {
+      margin: 0;
+      padding: 0;
+      max-height: none;
+    }
+
+    .mat-dialog-actions {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+// Loading states para cards
+.kpi-card {
+  &.loading {
+    opacity: 0.7;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255,255,255,0.4) 50%,
+        transparent 100%);
+      animation: shimmer 2s infinite;
+      z-index: 1;
+    }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// Mejoras de accesibilidad
+.clickeable {
+  &:focus {
+    outline: 2px solid #2196f3;
+    outline-offset: 2px;
+  }
+
+  &[aria-pressed="true"] {
+    background-color: rgba(33, 150, 243, 0.1);
+  }
+}
+
+// Estados de hover para diferentes tipos de datos
+.kpi-card {
+  &[data-type="revenue"]:hover {
+    border-left-color: #4caf50;
+  }
+
+  &[data-type="bookings"]:hover {
+    border-left-color: #2196f3;
+  }
+
+  &[data-type="pending"]:hover {
+    border-left-color: #ff9800;
+  }
+
+  &[data-type="clients"]:hover {
+    border-left-color: #9c27b0;
+  }
+}
+
+// Responsive improvements
+@media (max-width: 1200px) {
+  .kpi-card.clickeable {
+    &::after {
+      font-size: 12px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .kpi-card.clickeable {
+    &:hover {
+      transform: none;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+    }
+  }
+}
+
+// Dark mode support (if needed)
+@media (prefers-color-scheme: dark) {
+  .kpi-card.clickeable {
+    &::before {
+      background: linear-gradient(45deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+    }
+
+    &:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+    }
+  }
+}
+
+// Print styles (hide interactive elements)
+@media print {
+  .clickeable {
+    cursor: default !important;
+
+    &::after {
+      display: none !important;
+    }
+
+    &:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .kpi-card.clickeable {
+    border: 2px solid;
+
+    &:hover {
+      border-width: 3px;
+    }
+
+    &::after {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+}

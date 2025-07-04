@@ -1024,6 +1024,17 @@
   "revenue_details": "Umsatzdetails",
   "revenue": "Umsatz",
   "average_value": "Durchschnittswert",
-  "unique_clients": "Einzigartige Kunden",
-  "consistency_rate": "Konsistenzrate"
+  "consistency_rate": "Konsistenzrate",
+  "executive_summary": "Executive Summary",
+  "all_bookings_analyzed": "Alle Buchungen analysiert",
+  "pending_revenue_modal_title": "Buchungen mit ausstehenden Einnahmen",
+  "cancelled_bookings_modal_title": "Stornierte Buchungen",
+  "booking_id": "Buchungs-ID",
+  "client_name": "Kundenname",
+  "pending_amount": "Ausstehender Betrag",
+  "booking_date": "Buchungsdatum",
+  "actions": "Aktionen",
+  "close": "Schließen",
+  "unique_participants": "Einzigartige Teilnehmer",
+  "unique_clients": "Einzigartige Kunden"
 }

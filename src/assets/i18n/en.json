@@ -1023,6 +1023,17 @@
   "revenue_details": "Revenue Details",
   "revenue": "Revenue",
   "average_value": "Average Value",
-  "unique_clients": "Unique Clients",
-  "consistency_rate": "Consistency Rate"
+  "consistency_rate": "Consistency Rate",
+  "executive_summary": "Executive Summary",
+  "all_bookings_analyzed": "All bookings analyzed",
+  "pending_revenue_modal_title": "Bookings with Pending Revenue",
+  "cancelled_bookings_modal_title": "Cancelled Bookings",
+  "booking_id": "Booking ID",
+  "client_name": "Client Name",
+  "pending_amount": "Pending Amount",
+  "booking_date": "Booking Date",
+  "actions": "Actions",
+  "close": "Close",
+  "unique_participants": "Unique Participants",
+  "unique_clients": "Unique Clients"
 }

@@ -1024,5 +1024,16 @@
   "revenue": "Ricavi",
   "average_value": "Valore Medio",
   "unique_clients": "Clienti Unici",
-  "consistency_rate": "Tasso di Coerenza"
+  "consistency_rate": "Tasso di Coerenza",
+  "executive_summary": "Riepilogo Esecutivo",
+  "all_bookings_analyzed": "Tutte le prenotazioni analizzate",
+  "pending_revenue_modal_title": "Prenotazioni con Ricavi in Attesa",
+  "cancelled_bookings_modal_title": "Prenotazioni Annullate",
+  "booking_id": "ID Prenotazione",
+  "client_name": "Nome Cliente",
+  "pending_amount": "Importo in Attesa",
+  "booking_date": "Data Prenotazione",
+  "actions": "Azioni",
+  "close": "Chiudi",
+  "unique_participants": "Partecipanti Unici"
 }

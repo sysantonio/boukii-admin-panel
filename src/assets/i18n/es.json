@@ -989,6 +989,22 @@
   "revenue_details": "Detalles de Ingresos",
   "revenue": "Ingresos",
   "average_value": "Valor Promedio",
-  "unique_clients": "Clientes Únicos",
-  "consistency_rate": "Tasa de Consistencia"
+  "total_bookings": "Total Reservas",
+  "pending_revenue": "Ingresos Pendientes",
+  "total_participants": "Total Participantes",
+  "total_clients": "Total Clientes",
+  "consistency_rate": "Tasa de Consistencia",
+
+  "executive_summary": "Resumen Ejecutivo",
+  "all_bookings_analyzed": "Todas las reservas analizadas",
+  "pending_revenue_modal_title": "Reservas con Ingresos Pendientes",
+  "cancelled_bookings_modal_title": "Reservas Canceladas",
+  "booking_id": "ID Reserva",
+  "client_name": "Nombre Cliente",
+  "pending_amount": "Importe Pendiente",
+  "booking_date": "Fecha Reserva",
+  "actions": "Acciones",
+  "close": "Cerrar",
+  "unique_participants": "Participantes Únicos",
+  "unique_clients": "Clientes Únicos"
 }

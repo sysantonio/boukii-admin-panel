@@ -39,9 +39,11 @@ import { FiltersComponent } from './filters/filters.component';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { MonitorsLegacyComponent } from './monitors-legacy/monitors-legacy.component';
+import { BookingListModalComponent } from './booking-list-modal/booking-list-modal.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
-  declarations: [AnalyticsComponent, KpisCardComponent, FiltersComponent, MonitorsLegacyComponent],
+  declarations: [AnalyticsComponent, KpisCardComponent, FiltersComponent, MonitorsLegacyComponent, BookingListModalComponent],
   imports: [
     CommonModule,
     LayoutModule,
@@ -80,7 +82,8 @@ import { MonitorsLegacyComponent } from './monitors-legacy/monitors-legacy.compo
     MatProgressBarModule,
     MatMenuModule,
     MatChipsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatPaginatorModule
   ]
 })
 export class AnalyticsModule {

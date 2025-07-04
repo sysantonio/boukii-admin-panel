@@ -10,6 +10,9 @@ import moment from 'moment';
 import Plotly from 'plotly.js-dist-min';
 
 import { ApiCrudService } from '../../../service/crud.service';
+import {BookingListModalComponent} from './booking-list-modal/booking-list-modal.component';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 // ==================== INTERFACES ====================
 
@@ -271,13 +274,23 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
     { id: 'alerts', label: 'Alertas y Recomendaciones', icon: 'warning' }
   ];
 
+  // ==================== MODAL PROPERTIES ====================
+  showPendingModal = false;
+  showCancelledModal = false;
+  pendingBookings: any[] = [];
+  cancelledBookings: any[] = [];
+  loadingPendingBookings = false;
+  loadingCancelledBookings = false;
+
   // ==================== CONSTRUCTOR ====================
   constructor(
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
     private router: Router,
     private translateService: TranslateService,
-    private apiService: ApiCrudService
+    private apiService: ApiCrudService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {
     this.initializeForm();
     this.loadUserData();
@@ -725,7 +738,361 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
     Plotly.newPlot(this.comparisonChartRef.nativeElement, [trace1, trace2], layout, { responsive: true });
   }
 
-  // ==================== EVENT HANDLERS ====================
+  public onPendingRevenueClick(): void {
+    if (!this.dashboardData?.executive_kpis?.revenue_pending ||
+      this.dashboardData.executive_kpis.revenue_pending <= 0) {
+      this.showMessage('No hay reservas con pagos pendientes', 'info');
+      return;
+    }
+
+    this.showMessage('Cargando reservas pendientes...', 'info');
+    this.loadPendingBookingsDetailed();
+  }
+
+  // 📋 CARGAR RESERVAS PENDIENTES CON DETALLE
+  private loadPendingBookingsDetailed(): void {
+    const filters = this.buildFiltersObject();
+    filters.only_pending = true;
+
+    this.apiService.get('/admin/finance/booking-details', [], filters).subscribe({
+      next: (response) => {
+        if (!response.data?.bookings?.length) {
+          this.showMessage('No se encontraron reservas pendientes', 'warning');
+          return;
+        }
+
+        const pendingBookingsData = {
+          title: `Reservas con Pagos Pendientes (${response.data.bookings.length})`,
+          type: 'pending',
+          bookings: response.data.bookings,
+          currency: this.currency
+        };
+
+        this.openBookingListModal(pendingBookingsData);
+      },
+      error: (error) => {
+        console.error('Error cargando reservas pendientes:', error);
+        this.showMessage('Error cargando reservas pendientes', 'error');
+      }
+    });
+  }
+
+  public onCancelledBookingsClick(): void {
+    if (!this.dashboardData?.season_info?.booking_classification?.cancelled_count ||
+      this.dashboardData.season_info.booking_classification.cancelled_count <= 0) {
+      this.showMessage('No hay reservas canceladas', 'info');
+      return;
+    }
+
+    this.showMessage('Cargando reservas canceladas...', 'info');
+    this.loadCancelledBookingsDetailed();
+  }
+
+  private loadCancelledBookingsDetailed(): void {
+    const filters = this.buildFiltersObject();
+    filters.only_cancelled = true;
+
+    this.apiService.get('/admin/finance/booking-details', [], filters).subscribe({
+      next: (response) => {
+        if (!response.data?.bookings?.length) {
+          this.showMessage('No se encontraron reservas canceladas', 'warning');
+          return;
+        }
+
+        const cancelledBookingsData = {
+          title: `Reservas Canceladas (${response.data.bookings.length})`,
+          type: 'cancelled',
+          bookings: response.data.bookings,
+          currency: this.currency
+        };
+
+        this.openBookingListModal(cancelledBookingsData);
+      },
+      error: (error) => {
+        console.error('Error cargando reservas canceladas:', error);
+        this.showMessage('Error cargando reservas canceladas', 'error');
+      }
+    });
+  }
+
+  private openBookingListModal(data: any): void {
+    const dialogRef = this.dialog.open(BookingListModalComponent, {
+      width: '95vw',
+      maxWidth: '1400px',
+      height: '85vh',
+      maxHeight: '800px',
+      data: data,
+      panelClass: 'booking-list-modal',
+      disableClose: false,
+      autoFocus: false
+    });
+
+    // Manejar acciones del modal
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.handleModalAction(result);
+      }
+    });
+  }
+
+// 🎬 MANEJAR ACCIONES DEL MODAL
+  private handleModalAction(result: any): void {
+    switch (result.action) {
+      case 'export':
+        this.handleExportAllBookings(result);
+        break;
+
+      case 'export_single':
+        this.handleExportSingleBooking(result);
+        break;
+
+      case 'view_details':
+        this.handleViewBookingDetails(result);
+        break;
+
+      default:
+        console.log('Acción no reconocida:', result.action);
+    }
+  }
+
+// 📤 MANEJAR EXPORTACIÓN DE TODAS LAS RESERVAS
+  private handleExportAllBookings(result: any): void {
+    const exportType = result.type === 'pending' ? 'pending' : 'cancelled';
+    const fileName = `reservas_${exportType}_${this.getCurrentDateString()}`;
+
+    this.showMessage(`Exportando ${result.data.length} reservas...`, 'info');
+
+    const filters = {
+      ...this.buildFiltersObject(),
+      [`only_${exportType}`]: true,
+      format: 'csv'
+    };
+
+    const endpoint = exportType === 'pending'
+      ? '/admin/finance/export-pending-bookings'
+      : '/admin/finance/export-cancelled-bookings';
+
+    this.apiService.get(endpoint, [], filters).subscribe({
+      next: (response) => {
+        if (response.data?.download_url) {
+          window.open(response.data.download_url, '_blank');
+          this.showMessage(`Exportación de ${result.data.length} reservas completada`, 'success');
+        } else {
+          this.showMessage('Error en la exportación', 'error');
+        }
+      },
+      error: (error) => {
+        console.error('Error exportando reservas:', error);
+        this.showMessage('Error exportando reservas', 'error');
+      }
+    });
+  }
+
+// 📤 MANEJAR EXPORTACIÓN DE RESERVA INDIVIDUAL
+  private handleExportSingleBooking(result: any): void {
+    const booking = result.booking;
+
+    this.showMessage(`Exportando reserva #${booking.id}...`, 'info');
+
+    // Crear un mini CSV para la reserva individual
+    const csvContent = this.createSingleBookingCsv(booking, result.type);
+    const fileName = `reserva_${booking.id}_${this.getCurrentDateString()}.csv`;
+
+    this.downloadCsvContent(csvContent, fileName);
+    this.showMessage(`Reserva #${booking.id} exportada`, 'success');
+  }
+
+// 👁️ MANEJAR VER DETALLES DE RESERVA
+  private handleViewBookingDetails(result: any): void {
+    const booking = result.booking;
+
+    if (booking.id) {
+      // Navegar al detalle de la reserva
+      this.router.navigate(['/admin/bookings', booking.id]);
+    } else {
+      this.showMessage('ID de reserva no disponible', 'warning');
+    }
+  }
+
+// 📄 CREAR CSV PARA RESERVA INDIVIDUAL
+  private createSingleBookingCsv(booking: any, type: string): string {
+    let csvContent = '\xEF\xBB\xBF'; // BOM for UTF-8
+
+    csvContent += `DETALLE DE RESERVA #${booking.id}\n`;
+    csvContent += `Generado: ${new Date().toLocaleString('es-ES')}\n\n`;
+
+    // Headers
+    if (type === 'pending') {
+      csvContent += '"Campo","Valor"\n';
+      csvContent += `"ID","${booking.id}"\n`;
+      csvContent += `"Cliente","${booking.client_name}"\n`;
+      csvContent += `"Email","${booking.client_email}"\n`;
+      csvContent += `"Fecha","${booking.booking_date}"\n`;
+      csvContent += `"Importe Total","${this.formatCurrencyForCsv(booking.amount)}"\n`;
+      csvContent += `"Importe Recibido","${this.formatCurrencyForCsv(booking.received_amount)}"\n`;
+      csvContent += `"Importe Pendiente","${this.formatCurrencyForCsv(booking.pending_amount)}"\n`;
+      csvContent += `"Estado","${booking.status}"\n`;
+    } else {
+      csvContent += '"Campo","Valor"\n';
+      csvContent += `"ID","${booking.id}"\n`;
+      csvContent += `"Cliente","${booking.client_name}"\n`;
+      csvContent += `"Email","${booking.client_email}"\n`;
+      csvContent += `"Fecha","${booking.booking_date}"\n`;
+      csvContent += `"Importe","${this.formatCurrencyForCsv(booking.amount)}"\n`;
+      csvContent += `"Estado","${booking.status}"\n`;
+    }
+
+    return csvContent;
+  }
+
+// 💰 FORMATEAR CURRENCY PARA CSV
+  private formatCurrencyForCsv(amount: number | null | undefined): string {
+    if (amount === null || amount === undefined || isNaN(amount)) {
+      return '0,00 EUR';
+    }
+    return `${amount.toFixed(2).replace('.', ',')} EUR`;
+  }
+
+// 📅 OBTENER FECHA ACTUAL COMO STRING
+  private getCurrentDateString(): string {
+    return new Date().toISOString().split('T')[0].replace(/-/g, '');
+  }
+
+// 💾 DESCARGAR CONTENIDO CSV
+  private downloadCsvContent(content: string, fileName: string): void {
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8' });
+    const link = document.createElement('a');
+
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', fileName);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+  }
+
+// 💬 MOSTRAR MENSAJE AL USUARIO
+  private showMessage(message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info'): void {
+    const config = {
+      duration: 4000,
+      horizontalPosition: 'end' as const,
+      verticalPosition: 'top' as const,
+      panelClass: [`snackbar-${type}`]
+    };
+
+    this.snackBar.open(message, 'Cerrar', config);
+  }
+
+// 6. EXPORTAR RESERVAS PENDIENTES
+  private exportPendingBookings(): void {
+    const filters = { ...this.buildFiltersObject(), only_pending: true, format: 'csv' };
+
+    this.apiService.get('/admin/finance/export-pending-bookings', [], filters).subscribe({
+      next: (response) => {
+        if (response.data?.download_url) {
+          window.open(response.data.download_url, '_blank');
+        }
+      },
+      error: (error) => console.error('Error exportando reservas pendientes:', error)
+    });
+  }
+
+// 7. EXPORTAR RESERVAS CANCELADAS
+  private exportCancelledBookings(): void {
+    const filters = { ...this.buildFiltersObject(), only_cancelled: true, format: 'csv' };
+
+    this.apiService.get('/admin/finance/export-cancelled-bookings', [], filters).subscribe({
+      next: (response) => {
+        if (response.data?.download_url) {
+          window.open(response.data.download_url, '_blank');
+        }
+      },
+      error: (error) => console.error('Error exportando reservas canceladas:', error)
+    });
+  }
+
+
+  private loadPendingBookings(): void {
+    this.loadingPendingBookings = true;
+
+    // Simular carga de datos - esto se conectará al backend más tarde
+    setTimeout(() => {
+      this.pendingBookings = [
+        {
+          id: 12345,
+          client_name: 'Juan Pérez',
+          client_email: 'juan@example.com',
+          booking_date: '2024-12-15',
+          amount: 150.00,
+          pending_amount: 75.00,
+          status: 'active'
+        },
+        {
+          id: 12346,
+          client_name: 'María García',
+          client_email: 'maria@example.com',
+          booking_date: '2024-12-16',
+          amount: 200.00,
+          pending_amount: 200.00,
+          status: 'active'
+        }
+      ];
+      this.loadingPendingBookings = false;
+    }, 1000);
+  }
+
+  private loadCancelledBookings(): void {
+    this.loadingCancelledBookings = true;
+
+    // Simular carga de datos - esto se conectará al backend más tarde
+    setTimeout(() => {
+      this.cancelledBookings = [
+        {
+          id: 12340,
+          client_name: 'Carlos López',
+          client_email: 'carlos@example.com',
+          booking_date: '2024-12-10',
+          amount: 180.00,
+          status: 'cancelled'
+        },
+        {
+          id: 12341,
+          client_name: 'Ana Martínez',
+          client_email: 'ana@example.com',
+          booking_date: '2024-12-11',
+          amount: 95.00,
+          status: 'cancelled'
+        }
+      ];
+      this.loadingCancelledBookings = false;
+    }, 1000);
+  }
+
+  // ==================== MODAL EVENT HANDLERS ====================
+
+  public onViewBookingDetails(booking: any): void {
+    console.log('Viewing booking details:', booking);
+    // TODO: Navegar al detalle de la reserva
+  }
+
+  public onEditBooking(booking: any): void {
+    console.log('Editing booking:', booking);
+    // TODO: Abrir formulario de edición
+  }
+
+  public onExportBooking(booking: any): void {
+    console.log('Exporting booking:', booking);
+    // TODO: Exportar reserva individual
+  }
+
+  public onExportAllBookings(bookings: any[]): void {
+    console.log('Exporting all bookings:', bookings.length);
+    // TODO: Exportar todas las reservas del modal
+  }
 
   // ==================== TAB MANAGEMENT (ACTUALIZADO) ====================
 
