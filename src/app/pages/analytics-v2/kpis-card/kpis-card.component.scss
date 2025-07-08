@@ -19,18 +19,37 @@
       transform: translateY(-3px);
     }
 
-    .click-indicator {
+    .click-hint {
       position: absolute;
-      top: 16px;
-      right: 16px;
-      opacity: 0.3;
-      transition: opacity 0.3s ease;
+      bottom: 12px;
+      right: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: 20px;
+      color: #3A57A7;
+      background: rgba(58, 87, 167, 0.08);
+      backdrop-filter: blur(3px);
+      z-index: 5;
+      pointer-events: none;
+
+      .hint-icon {
+        font-size: 18px;
+      }
     }
 
-    &:hover .click-indicator {
-      opacity: 0.7;
+    // Alternativa si fondo claro: usar dark hint
+    &.kpi-card--primary .click-hint,
+    &.kpi-card--warning .click-hint,
+    &.kpi-card--success .click-hint {
+      color: white;
+      background: rgba(255, 255, 255, 0.2);
     }
   }
+
 
   &--compact {
     padding: 16px;
@@ -244,4 +263,26 @@
 
 .kpi-value.animate:hover {
   animation: kpiValuePulse 0.6s ease-in-out;
+}
+
+.click-hint {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 16px;
+  color: white;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  z-index: 2;
+  pointer-events: none;
+
+  .hint-icon {
+    font-size: 16px;
+  }
 }

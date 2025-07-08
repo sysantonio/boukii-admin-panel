@@ -171,41 +171,51 @@
     <!-- Main Analytics Content -->
     <div *ngIf="!loading && dashboardData" class="analytics-content">
 
-      <!-- Executive Summary KPIs -->
-      <div class="kpis-section">
-        <h2 class="section-title">{{ 'executive_summary' | translate }}</h2>
-        <div class="kpis-grid">
 
-          <!-- <app-kpis-card
-             [kpiData]="{
-               title: 'average_booking_value' | translate,
-               value: dashboardData.executive_kpis.average_booking_value,
-               format: 'currency',
-               currency: currency,
-               trend: getTrend(dashboardData.executive_kpis.average_booking_value, 0),
-               trendValue: getTrendValue(dashboardData.executive_kpis.average_booking_value, 0),
-               icon: 'trending_up',
-               color: 'success'
-             }"
-             [showTrend]="false">
-           </app-kpis-card>-->
 
-          <!-- <app-kpis-card
-             [kpiData]="{
-               title: 'collection_efficiency' | translate,
-               value: dashboardData.executive_kpis.collection_efficiency,
-               format: 'percentage',
-               trend: getTrend(dashboardData.executive_kpis.collection_efficiency, 0),
-               trendValue: getTrendValue(dashboardData.executive_kpis.collection_efficiency, 0),
-               icon: 'account_balance',
-               color: 'info'
-             }"
-             [showTrend]="false">
-           </app-kpis-card>-->
 
-          <!-- 1. TOTAL REVENUE (sin cambios) -->
-          <app-kpis-card
-            [kpiData]="{
+      <!-- Analytics Tabs -->
+      <mat-tab-group class="analytics-tabs" [(selectedIndex)]="activeTabIndex" (selectedTabChange)="onTabChange($event)">
+
+        <!-- Revenue Analysis Tab -->
+        <mat-tab label="{{ 'revenue_analysis' | translate }}">
+          <div class="tab-content">
+
+            <!-- Executive Summary KPIs -->
+            <div class="kpis-section">
+              <h2 class="section-title">{{ 'executive_summary' | translate }}</h2>
+              <div class="kpis-grid">
+
+                <!-- <app-kpis-card
+                   [kpiData]="{
+                     title: 'average_booking_value' | translate,
+                     value: dashboardData.executive_kpis.average_booking_value,
+                     format: 'currency',
+                     currency: currency,
+                     trend: getTrend(dashboardData.executive_kpis.average_booking_value, 0),
+                     trendValue: getTrendValue(dashboardData.executive_kpis.average_booking_value, 0),
+                     icon: 'trending_up',
+                     color: 'success'
+                   }"
+                   [showTrend]="false">
+                 </app-kpis-card>-->
+
+                <!-- <app-kpis-card
+                   [kpiData]="{
+                     title: 'collection_efficiency' | translate,
+                     value: dashboardData.executive_kpis.collection_efficiency,
+                     format: 'percentage',
+                     trend: getTrend(dashboardData.executive_kpis.collection_efficiency, 0),
+                     trendValue: getTrendValue(dashboardData.executive_kpis.collection_efficiency, 0),
+                     icon: 'account_balance',
+                     color: 'info'
+                   }"
+                   [showTrend]="false">
+                 </app-kpis-card>-->
+
+                <!-- 1. TOTAL REVENUE (sin cambios) -->
+                <app-kpis-card
+                  [kpiData]="{
         title: 'total_revenue' | translate,
         value: dashboardData.executive_kpis.revenue_expected,
         format: 'currency',
@@ -215,12 +225,12 @@
         icon: 'monetization_on',
         color: 'primary'
       }"
-            [showTrend]="false">
-          </app-kpis-card>
+                  [showTrend]="false">
+                </app-kpis-card>
 
-          <!-- 2. TOTAL BOOKINGS (CORREGIDO - usar season_info.total_bookings) -->
-          <app-kpis-card
-            [kpiData]="{
+                <!-- 2. TOTAL BOOKINGS (CORREGIDO - usar season_info.total_bookings) -->
+                <app-kpis-card
+                  [kpiData]="{
         title: 'total_bookings' | translate,
         value: dashboardData.season_info.total_bookings,
         format: 'number',
@@ -229,12 +239,12 @@
         icon: 'book_online',
         color: 'secondary'
       }"
-            [showTrend]="false">
-          </app-kpis-card>
+                  [showTrend]="false">
+                </app-kpis-card>
 
-          <!-- 3. PENDING REVENUE (CLICKEABLE) -->
-          <app-kpis-card
-            [kpiData]="{
+                <!-- 3. PENDING REVENUE (CLICKEABLE) -->
+                <app-kpis-card
+                  [kpiData]="{
         title: 'pending_revenue' | translate,
         value: dashboardData.executive_kpis.revenue_pending,
         format: 'currency',
@@ -242,16 +252,17 @@
         trend: getTrend(dashboardData.executive_kpis.revenue_pending, 0),
         trendValue: getTrendValue(dashboardData.executive_kpis.revenue_pending, 0),
         icon: 'schedule',
-        color: 'warning'
+        color: 'warning',
+        clickable: true
       }"
-            [showTrend]="false"
-            class="clickeable"
-            (click)="onPendingRevenueClick()">
-          </app-kpis-card>
+                  [showTrend]="false"
+                  class="clickeable"
+                  (click)="onPendingRevenueClick()">
+                </app-kpis-card>
 
-          <!-- 4. TOTAL PARTICIPANTS (CORREGIDO) -->
-          <app-kpis-card
-            [kpiData]="{
+                <!-- 4. TOTAL PARTICIPANTS (CORREGIDO) -->
+                <app-kpis-card
+                  [kpiData]="{
         title: 'total_participants' | translate,
         value: dashboardData.executive_kpis.total_participants,
         format: 'number',
@@ -260,12 +271,12 @@
         icon: 'group',
         color: 'primary'
       }"
-            [showTrend]="false">
-          </app-kpis-card>
+                  [showTrend]="false">
+                </app-kpis-card>
 
-          <!-- 5. TOTAL CLIENTS (CORREGIDO) -->
-          <app-kpis-card
-            [kpiData]="{
+                <!-- 5. TOTAL CLIENTS (CORREGIDO) -->
+                <app-kpis-card
+                  [kpiData]="{
         title: 'total_clients' | translate,
         value: dashboardData.executive_kpis.total_clients,
         format: 'number',
@@ -274,33 +285,33 @@
         icon: 'people',
         color: 'info'
       }"
-            [showTrend]="false">
-          </app-kpis-card>
+                  [showTrend]="false">
+                </app-kpis-card>
 
-          <!--          <app-kpis-card
-                      [kpiData]="{
-                        title: 'consistency_rate' | translate,
-                        value: dashboardData.executive_kpis.consistency_rate,
-                        format: 'percentage',
-                        trend: getTrend(dashboardData.executive_kpis.consistency_rate, 0),
-                        trendValue: getTrendValue(dashboardData.executive_kpis.consistency_rate, 0),
-                        icon: 'verified',
-                        color: dashboardData.executive_kpis.consistency_rate >= 95 ? 'success' :
-                              dashboardData.executive_kpis.consistency_rate >= 80 ? 'warning' : 'danger'
-                      }"
-                      [showTrend]="false">
-                    </app-kpis-card>-->
-        </div>
-      </div>
+                <!--          <app-kpis-card
+                            [kpiData]="{
+                              title: 'consistency_rate' | translate,
+                              value: dashboardData.executive_kpis.consistency_rate,
+                              format: 'percentage',
+                              trend: getTrend(dashboardData.executive_kpis.consistency_rate, 0),
+                              trendValue: getTrendValue(dashboardData.executive_kpis.consistency_rate, 0),
+                              icon: 'verified',
+                              color: dashboardData.executive_kpis.consistency_rate >= 95 ? 'success' :
+                                    dashboardData.executive_kpis.consistency_rate >= 80 ? 'warning' : 'danger'
+                            }"
+                            [showTrend]="false">
+                          </app-kpis-card>-->
+              </div>
+            </div>
 
-      <!-- Booking Classification Section -->
-      <div class="classification-section" *ngIf="dashboardData.season_info.booking_classification">
-        <h2 class="section-title">{{ 'booking_classification' | translate }}</h2>
-        <div class="classification-grid">
+            <!-- Booking Classification Section -->
+            <div class="classification-section" *ngIf="dashboardData.season_info.booking_classification">
+              <h2 class="section-title">{{ 'booking_classification' | translate }}</h2>
+              <div class="classification-grid">
 
-          <!-- TOTAL BOOKINGS -->
-          <app-kpis-card
-            [kpiData]="{
+                <!-- TOTAL BOOKINGS -->
+                <app-kpis-card
+                  [kpiData]="{
         title: 'total_bookings' | translate,
         value: dashboardData.season_info.booking_classification.total_bookings,
         format: 'number',
@@ -308,12 +319,12 @@
         icon: 'analytics',
         color: 'primary'
       }"
-            [showTrend]="false">
-          </app-kpis-card>
+                  [showTrend]="false">
+                </app-kpis-card>
 
-          <!-- RESERVAS PRODUCTIVAS -->
-          <app-kpis-card
-            [kpiData]="{
+                <!-- RESERVAS PRODUCTIVAS -->
+                <app-kpis-card
+                  [kpiData]="{
         title: 'production_bookings' | translate,
         value: dashboardData.season_info.booking_classification.production_count,
         format: 'number',
@@ -321,34 +332,27 @@
         icon: 'check_circle',
         color: 'success'
       }"
-            [showTrend]="false">
-          </app-kpis-card>
+                  [showTrend]="false">
+                </app-kpis-card>
 
-          <!-- RESERVAS CANCELADAS (CLICKEABLE) -->
-          <app-kpis-card
-            [kpiData]="{
+                <!-- RESERVAS CANCELADAS (CLICKEABLE) -->
+                <app-kpis-card
+                  [kpiData]="{
         title: 'cancelled_bookings' | translate,
         value: dashboardData.season_info.booking_classification.cancelled_count,
         format: 'number',
         subtitle: (dashboardData.season_info.booking_classification.cancelled_revenue | currency:currency),
         icon: 'cancel',
-        color: 'danger'
+        color: 'danger',
+                clickable: true
       }"
-            [showTrend]="false"
-            class="clickeable"
-            (click)="onCancelledBookingsClick()">
-          </app-kpis-card>
+                  [showTrend]="false"
+                  class="clickeable"
+                  (click)="onCancelledBookingsClick()">
+                </app-kpis-card>
 
-        </div>
-      </div>
-
-
-      <!-- Analytics Tabs -->
-      <mat-tab-group class="analytics-tabs" [(selectedIndex)]="activeTabIndex" (selectedTabChange)="onTabChange($event)">
-
-        <!-- Revenue Analysis Tab -->
-        <mat-tab label="{{ 'revenue_analysis' | translate }}">
-          <div class="tab-content">
+              </div>
+            </div>
 
             <!-- Revenue Charts -->
             <div class="charts-grid">
@@ -424,7 +428,71 @@
         <mat-tab label="{{ 'payment_methods' | translate }}">
           <div class="tab-content">
 
-            <!-- Payment Methods Charts -->
+            <!-- Payment Overview KPIs (NUEVO - usando tu diseño) -->
+            <div class="payment-overview-section">
+              <h2 class="section-title">{{ 'payment_overview' | translate }}</h2>
+              <div class="payment-methods-summary">
+
+                <!-- Total Revenue -->
+                <div class="payment-method-card">
+                  <div class="payment-icon">
+                    <mat-icon [style.color]="chartColors.primary">monetization_on</mat-icon>
+                  </div>
+                  <div class="payment-details">
+                    <h3>{{ 'total_revenue' | translate }}</h3>
+                    <div class="payment-amount">{{ dashboardData.executive_kpis.revenue_expected | currency:currency }}</div>
+                    <div class="payment-count">{{ dashboardData.payment_methods?.total_payments || 0 }} {{ 'transactions' | translate }}</div>
+                    <div class="payment-percentage">100%</div>
+                  </div>
+                </div>
+
+                <!-- Revenue Received -->
+                <div class="payment-method-card">
+                  <div class="payment-icon">
+                    <mat-icon [style.color]="chartColors.success">check_circle</mat-icon>
+                  </div>
+                  <div class="payment-details">
+                    <h3>{{ 'revenue_received' | translate }}</h3>
+                    <div class="payment-amount">{{ dashboardData.executive_kpis.revenue_received | currency:currency }}</div>
+                    <div class="payment-count">{{ 'collected' | translate }}</div>
+                    <div class="payment-percentage">{{ (dashboardData.executive_kpis.collection_efficiency | number:'1.0-0') }}%</div>
+                  </div>
+                </div>
+
+                <!-- Revenue Pending (clickeable) -->
+                <div class="payment-method-card clickeable-card" (click)="onPendingRevenueClick()">
+                  <div class="payment-icon">
+                    <mat-icon [style.color]="chartColors.warning">schedule</mat-icon>
+                  </div>
+                  <div class="payment-details">
+                    <h3>{{ 'revenue_pending' | translate }}</h3>
+                    <div class="payment-amount">{{ dashboardData.executive_kpis.revenue_pending | currency:currency }}</div>
+                    <div class="payment-count">{{ 'pending_collection' | translate }}</div>
+                    <div class="payment-percentage">{{ ((dashboardData.executive_kpis.revenue_pending / dashboardData.executive_kpis.revenue_expected) * 100 | number:'1.0-0') }}%</div>
+                  </div>
+                  <div  class="click-hint">
+                    <mat-icon class="hint-icon">visibility</mat-icon>
+                    <span class="hint-text">{{ 'view_details' | translate }}</span>
+                  </div>
+                </div>
+
+                <!-- Average Booking Value -->
+                <div class="payment-method-card">
+                  <div class="payment-icon">
+                    <mat-icon [style.color]="chartColors.info">assessment</mat-icon>
+                  </div>
+                  <div class="payment-details">
+                    <h3>{{ 'average_booking_value' | translate }}</h3>
+                    <div class="payment-amount">{{ dashboardData.executive_kpis.average_booking_value | currency:currency }}</div>
+                    <div class="payment-count">{{ 'per_booking' | translate }}</div>
+                    <div class="payment-percentage">{{ 'avg' | translate }}</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- TU CÓDIGO ORIGINAL - Payment Methods Charts -->
             <div class="charts-grid">
               <mat-card class="chart-card">
                 <mat-card-header>
@@ -447,7 +515,7 @@
               </mat-card>
             </div>
 
-            <!-- Payment Methods Summary Cards -->
+            <!-- TU CÓDIGO ORIGINAL - Payment Methods Summary Cards -->
             <div class="payment-methods-summary" *ngIf="dashboardData.payment_methods?.methods">
               <div class="payment-method-card" *ngFor="let method of dashboardData.payment_methods.methods">
                 <div class="payment-icon">
@@ -514,7 +582,10 @@
                     <ng-container matColumnDef="courseType">
                       <th mat-header-cell *matHeaderCellDef>{{ 'type' | translate }}</th>
                       <td mat-cell *matCellDef="let element">
-                        <span class="course-type-badge" [ngClass]="'type-' + element.type">
+                        <span class="course-type-badge"
+                              [ngClass]="'type-' + element.type"
+                              [style.background-color]="getCourseTypeColor(element.type)"
+                              [style.color]="'white'">
                           {{ getCourseTypeName(element.type) | translate }}
                         </span>
                       </td>
@@ -542,22 +613,49 @@
 
                     <ng-container matColumnDef="actions">
                       <th mat-header-cell *matHeaderCellDef>{{ 'actions' | translate }}</th>
-                      <td mat-cell *matCellDef="let element">
-                        <button mat-icon-button [matMenuTriggerFor]="courseMenu">
+                      <td mat-cell *matCellDef="let element" class="actions-cell">
+
+                        <!-- Botón principal de ver detalles -->
+                        <button
+                          mat-raised-button
+                          color="primary"
+                          (click)="viewCourseDetails(element)"
+                          class="course-details-button"
+                          matTooltip="{{ 'view_detailed_statistics' | translate }}">
+                          <mat-icon>analytics</mat-icon>
+                          {{ 'details' | translate }}
+                        </button>
+
+                        <!-- Menú de acciones adicionales -->
+                        <button
+                          mat-icon-button
+                          [matMenuTriggerFor]="courseMenu"
+                          class="course-menu-button"
+                          matTooltip="{{ 'more_options' | translate }}">
                           <mat-icon>more_vert</mat-icon>
                         </button>
+
                         <mat-menu #courseMenu="matMenu">
                           <button mat-menu-item (click)="viewCourseDetails(element)">
                             <mat-icon>visibility</mat-icon>
-                            {{ 'view_details' | translate }}
+                            <span>{{ 'view_details' | translate }}</span>
                           </button>
+
                           <button mat-menu-item (click)="exportCourseData(element)">
                             <mat-icon>download</mat-icon>
-                            {{ 'export_data' | translate }}
+                            <span>{{ 'export_data' | translate }}</span>
+                          </button>
+
+                          <mat-divider></mat-divider>
+
+                          <button mat-menu-item (click)="navigateToCourseEdit(element)">
+                            <mat-icon>edit</mat-icon>
+                            <span>{{ 'edit_course' | translate }}</span>
                           </button>
                         </mat-menu>
                       </td>
                     </ng-container>
+
 
                     <tr mat-header-row *matHeaderRowDef="coursesDisplayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: coursesDisplayedColumns;"></tr>

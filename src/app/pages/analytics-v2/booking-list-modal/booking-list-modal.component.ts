@@ -174,7 +174,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
     }
 
     .dialog-content {
-      max-height: 60vh;
+      max-height: 46vh;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -473,7 +473,13 @@ export class BookingListModalComponent {
   // 🏷️ OBTENER NOMBRE DEL ESTADO
   getStatusName(status: string): string {
     const statusMap: { [key: string]: string } = {
+      // ✅ NUEVOS ESTADOS REALES
       'active': 'Activa',
+      'partial_cancel': 'Parcialmente Cancelada',
+      'total_cancel': 'Cancelada Totalmente',
+      'finished': 'Finalizada',
+
+      // ✅ MANTENER COMPATIBILIDAD CON ESTADOS ANTIGUOS
       'cancelled': 'Cancelada',
       'partial': 'Parcial',
       '1': 'Activa',
@@ -487,7 +493,13 @@ export class BookingListModalComponent {
   // 🎨 OBTENER CLASE CSS DEL ESTADO
   getStatusClass(status: string): string {
     const statusClassMap: { [key: string]: string } = {
+      // ✅ NUEVOS ESTADOS REALES
       'active': 'status-active',
+      'partial_cancel': 'status-partial',
+      'total_cancel': 'status-cancelled',
+      'finished': 'status-finished',
+
+      // ✅ MANTENER COMPATIBILIDAD
       'cancelled': 'status-cancelled',
       'partial': 'status-partial',
       '1': 'status-active',

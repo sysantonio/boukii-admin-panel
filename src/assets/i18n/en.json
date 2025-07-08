@@ -1035,5 +1035,19 @@
   "actions": "Actions",
   "close": "Close",
   "unique_participants": "Unique Participants",
-  "unique_clients": "Unique Clients"
+  "unique_clients": "Unique Clients",
+  "months": {
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December"
+  }
 }

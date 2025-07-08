@@ -1035,5 +1035,19 @@
   "booking_date": "Date de Réservation",
   "actions": "Actions",
   "close": "Fermer",
-  "unique_participants": "Participants Uniques"
+  "unique_participants": "Participants Uniques",
+  "months": {
+    "january": "Janvier",
+    "february": "Février",
+    "march": "Mars",
+    "april": "Avril",
+    "may": "Mai",
+    "june": "Juin",
+    "july": "Juillet",
+    "august": "Août",
+    "september": "Septembre",
+    "october": "Octobre",
+    "november": "Novembre",
+    "december": "Décembre"
+  }
 }

@@ -1,18 +1,19 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
-import { MatTabChangeEvent } from '@angular/material/tabs';
-import { MatTableDataSource } from '@angular/material/table';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {Router} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
+import {debounceTime, distinctUntilChanged, Subject, takeUntil} from 'rxjs';
+import {MatTabChangeEvent} from '@angular/material/tabs';
+import {MatTableDataSource} from '@angular/material/table';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 import moment from 'moment';
 import Plotly from 'plotly.js-dist-min';
 
-import { ApiCrudService } from '../../../service/crud.service';
+import {ApiCrudService} from '../../../service/crud.service';
 import {BookingListModalComponent} from './booking-list-modal/booking-list-modal.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {CourseStatisticsModalComponent} from './course-statistics-modal/course-statistics-modal.component';
 
 // ==================== INTERFACES ====================
 
@@ -260,6 +261,17 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
     gradient: ['#3A57A7', '#FCB859', '#4CAF50', '#FF9800', '#F44336', '#2196F3']
   };
 
+  // ==================== COURSE TYPE COLORS CONFIGURATION ====================
+
+  private readonly courseTypeColors = {
+    1: '#FAC710', // Colectivo - Amarillo/Dorado
+    2: '#8FD14F', // Privado - Verde
+    3: '#00beff', // Actividad - Azul
+    collective: '#FAC710',
+    private: '#8FD14F',
+    activity: '#00beff'
+  };
+
   // ==================== DESTROY SUBJECT ====================
   private destroy$ = new Subject<void>();
 
@@ -382,6 +394,45 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  // ==================== COLOR HELPER METHODS ====================
+
+  /**
+   * 🎨 Obtener color por tipo de curso (número)
+   */
+  public getCourseTypeColor(courseType: number): string {
+    return this.courseTypeColors[courseType] || this.chartColors.primary;
+  }
+
+  /**
+   * 🎨 Obtener color por nombre de tipo de curso
+   */
+  private getCourseTypeColorByName(typeName: string): string {
+    const typeMap: { [key: string]: number } = {
+      'collective': 1,
+      'course_colective': 1,
+      'colectivo': 1,
+      'private': 2,
+      'course_private': 2,
+      'privado': 2,
+      'activity': 3,
+      'actividad': 3
+    };
+
+    const courseType = typeMap[typeName.toLowerCase()];
+    return courseType ? this.courseTypeColors[courseType] : this.chartColors.primary;
+  }
+
+  /**
+   * 🎨 Obtener array de colores para gráficos de tipos de curso
+   */
+  private getCourseTypeColorsArray(): string[] {
+    return [
+      this.courseTypeColors[1], // Colectivo
+      this.courseTypeColors[2], // Privado
+      this.courseTypeColors[3]  // Actividad
+    ];
+  }
+
   // ==================== DATA LOADING ====================
 
   public loadAnalyticsData(): void {
@@ -460,10 +511,14 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
   private updateTableData(): void {
     if (!this.dashboardData) return;
 
-    // Tabla de revenue (usar trend_analysis.monthly_breakdown)
-    this.revenueTableData.data = this.dashboardData.trend_analysis?.monthly_breakdown || [];
+    // ✅ Procesar datos de revenue con fechas formateadas
+    this.revenueTableData.data = (this.dashboardData.trend_analysis?.monthly_breakdown || []).map(item => ({
+      ...item,
+      month: this.formatDateWithMonthName(item.month), // ✅ FORMATEAR MES AQUÍ
+      month_original: item.month // Mantener original para ordenamiento si es necesario
+    }));
 
-    // Tabla de cursos
+    // Tabla de cursos (sin cambios)
     this.coursesTableData.data = this.dashboardData.courses || [];
 
     console.log('📋 Tables updated:', {
@@ -497,9 +552,16 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const data = this.dashboardData.trend_analysis?.monthly_breakdown || [];
 
+    // ✅ ARREGLO: Procesar las fechas correctamente
+    const processedData = data.map(item => ({
+      ...item,
+      month_formatted: this.formatDateWithMonthName(item.month), // Agregar versión formateada
+      month_original: item.month // Mantener original para ordenamiento
+    }));
+
     const trace = {
-      x: data.map(d => d.month),
-      y: data.map(d => d.revenue),
+      x: processedData.map(d => d.month_formatted), // ✅ Usar fechas formateadas
+      y: processedData.map(d => d.revenue),
       type: 'scatter',
       mode: 'lines+markers',
       name: 'Revenue',
@@ -509,9 +571,12 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const layout = {
       title: false,
-      xaxis: { title: 'Month' },
+      xaxis: {
+        title: this.translateService.instant('dates'),
+        tickangle: -45 // ✅ Rotar etiquetas para mejor legibilidad
+      },
       yaxis: { title: `Revenue (${this.currency})` },
-      margin: { l: 60, r: 20, t: 20, b: 40 },
+      margin: { l: 60, r: 20, t: 20, b: 80 }, // ✅ Más margen abajo para fechas rotadas
       plot_bgcolor: 'rgba(0,0,0,0)',
       paper_bgcolor: 'rgba(0,0,0,0)'
     };
@@ -531,11 +596,16 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
       return acc;
     }, {} as { [key: string]: number });
 
+    // ✅ APLICAR COLORES CONSISTENTES
+    const colors = Object.keys(typeRevenue).map(typeName =>
+      this.getCourseTypeColorByName(typeName)
+    );
+
     const trace = {
       values: Object.values(typeRevenue),
-      labels: Object.keys(typeRevenue),
+      labels: Object.keys(typeRevenue).map(type => this.translateService.instant(type)),
       type: 'pie',
-      marker: { colors: this.chartColors.gradient }
+      marker: { colors: colors } // ✅ USAR COLORES ESPECÍFICOS
     };
 
     const layout = {
@@ -604,12 +674,15 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
       .sort((a, b) => b.revenue - a.revenue)
       .slice(0, 10);
 
+    // ✅ APLICAR COLORES POR TIPO DE CURSO
+    const colors = topCourses.map(course => this.getCourseTypeColor(course.type));
+
     const trace = {
       x: topCourses.map(c => c.revenue),
       y: topCourses.map(c => c.name),
       type: 'bar',
       orientation: 'h',
-      marker: { color: this.chartColors.success }
+      marker: { color: colors } // ✅ COLORES POR TIPO
     };
 
     const layout = {
@@ -626,8 +699,10 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
   private createCompletionRatesChart(): void {
     if (!this.completionRatesChartRef?.nativeElement || !this.dashboardData) return;
 
-    // Para completion rates, podríamos usar los status_breakdown de los cursos
     const courses = this.dashboardData.courses?.slice(0, 10) || [];
+
+    // ✅ APLICAR COLORES POR TIPO DE CURSO
+    const colors = courses.map(course => this.getCourseTypeColor(course.type));
 
     const trace = {
       x: courses.map(c => c.name),
@@ -637,11 +712,11 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
           (sum: number, count: unknown) => sum + Number(count ?? 0),
           0
         ));
-        const completed = Number(statusBreakdown[1] ?? 0); // 1 = activa
+        const completed = Number(statusBreakdown[1] ?? 0);
         return total > 0 ? (completed / total) * 100 : 0;
       }),
       type: 'bar',
-      marker: { color: this.chartColors.info }
+      marker: { color: colors } // ✅ COLORES POR TIPO
     };
 
     const layout = {
@@ -958,6 +1033,68 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
     return new Date().toISOString().split('T')[0].replace(/-/g, '');
   }
 
+  /**
+   * Procesar fechas para mostrar nombres de meses
+   */
+  private processDateLabels(dates: string[]): string[] {
+    return dates.map(date => this.formatDateWithMonthName(date));
+  }
+
+  /**
+   * Crear configuración de eje X con fechas traducidas
+   */
+  private createTranslatedXAxisConfig(dates: string[]) {
+    const translatedLabels = this.processDateLabels(dates);
+
+    return {
+      title: this.translateService.instant('dates'),
+      tickmode: 'array',
+      tickvals: dates,
+      ticktext: translatedLabels,
+      tickangle: -45, // Rotar las etiquetas para mejor legibilidad
+    };
+  }
+
+  /**
+   * Formatear fechas con nombres de meses traducidos
+   */
+  private formatDateWithMonthName(dateString: string): string {
+    if (!dateString) return '';
+
+    try {
+      const date = moment(dateString);
+
+      // Si el formato es "YYYY-MM", procesarlo correctamente
+      if (dateString.match(/^\d{4}-\d{2}$/)) {
+        const year = date.format('YYYY');
+        const monthNumber = date.format('MM');
+
+        // Mapear número de mes a nombre
+        const monthNames = [
+          'january', 'february', 'march', 'april', 'may', 'june',
+          'july', 'august', 'september', 'october', 'november', 'december'
+        ];
+
+        const monthIndex = parseInt(monthNumber, 10) - 1;
+        const monthKey = monthNames[monthIndex];
+
+        const translatedMonth = this.translateService.instant(`months.${monthKey}`);
+        return `${translatedMonth} ${year}`;
+      }
+
+      // Para otros formatos, usar moment
+      const monthKey = date.format('MMMM').toLowerCase();
+      const year = date.format('YYYY');
+      const translatedMonth = this.translateService.instant(`months.${monthKey}`);
+
+      return `${translatedMonth} ${year}`;
+
+    } catch (error) {
+      console.warn('Error formatting date:', dateString, error);
+      return dateString; // Fallback al original
+    }
+  }
+
 // 💾 DESCARGAR CONTENIDO CSV
   private downloadCsvContent(content: string, fileName: string): void {
     const blob = new Blob([content], { type: 'text/csv;charset=utf-8' });
@@ -1217,6 +1354,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.apiService.get('/admin/finance/season-dashboard/export', [], exportFilters).subscribe({
       next: (response) => {
+        debugger;
         console.log('✅ Export successful:', response);
         if (response.data?.download_url) {
           window.open(response.data.download_url, '_blank');
@@ -1232,20 +1370,123 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public viewCourseDetails(course: any): void {
-    this.router.navigate(['/admin/courses', course.id]);
-  }
+    if (!course?.id) {
+      this.showMessage('ID de curso no disponible', 'warning');
+      return;
+    }
 
-  public exportCourseData(course: any): void {
-    const filters = { ...this.buildFiltersObject(), course_id: course.id };
-    this.apiService.get('/admin/finance/season-dashboard', [], filters).subscribe({
-      next: (response) => {
-        console.log('✅ Course export successful:', response);
-      },
-      error: (error) => console.error('❌ Course export error:', error)
+    // Preparar datos para el modal
+    const modalData = {
+      courseId: course.id,
+      courseName: course.name || `Curso #${course.id}`,
+      courseType: course.type,
+      sport: course.sport,
+      dateRange: this.filterForm.value.startDate && this.filterForm.value.endDate ? {
+        start: this.filterForm.value.startDate,
+        end: this.filterForm.value.endDate
+      } : undefined
+    };
+
+    // Abrir modal
+    const dialogRef = this.dialog.open(CourseStatisticsModalComponent, {
+      width: '85vw',
+      maxWidth: '1200px',
+      height: '80vh',
+      maxHeight: '800px',
+      data: modalData,
+      panelClass: 'course-statistics-modal-overlay',
+      disableClose: false,
+      autoFocus: false,
+      restoreFocus: true,
+      hasBackdrop: true,
+      backdropClass: 'modal-backdrop'
+    });
+
+    // Manejar el cierre del modal
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.handleCourseModalAction(result, course);
+      }
     });
   }
 
-  // ==================== GETTERS FOR TEMPLATE ====================
+  private handleCourseModalAction(result: any, course: any): void {
+    switch (result.action) {
+      case 'export':
+        this.exportSingleCourseStatistics(result.courseId, course);
+        break;
+
+      case 'refresh':
+        // Refrescar datos del dashboard
+        this.loadAnalyticsData();
+        break;
+
+      default:
+        console.log('Acción no reconocida desde modal de curso:', result.action);
+    }
+  }
+
+  private exportSingleCourseStatistics(courseId: number, course: any): void {
+    this.showMessage(`Exportando estadísticas de ${course.name}...`, 'info');
+
+    const filters = {
+      ...this.buildFiltersObject(),
+      course_id: courseId,
+      format: 'csv'
+    };
+
+    this.apiService.get(`/admin/finance/courses/${courseId}/statistics/export`, [], filters).subscribe({
+      next: (response) => {
+        if (response.data?.download_url) {
+          window.open(response.data.download_url, '_blank');
+          this.showMessage(`Estadísticas de ${course.name} exportadas correctamente`, 'success');
+        } else {
+          this.showMessage('Error en la exportación', 'error');
+        }
+      },
+      error: (error) => {
+        console.error('Error exportando estadísticas del curso:', error);
+        this.showMessage('Error exportando estadísticas', 'error');
+      }
+    });
+  }
+
+  public exportCourseData(course: any): void {
+    this.exportSingleCourseStatistics(course.id, course);
+  }
+
+// Agregar estos métodos al analytics.component.ts
+
+  public navigateToCourseBookings(course: any): void {
+    if (course?.id) {
+      this.router.navigate(['/admin/bookings'], {
+        queryParams: { courseId: course.id }
+      });
+    }
+  }
+
+  public navigateToCourseEdit(course: any): void {
+    if (course?.id) {
+      this.router.navigate(['/admin/courses', course.id, 'edit']);
+    }
+  }
+
+// Método helper para formatear monedas
+  public formatCurrency(amount: number): string {
+    if (amount === null || amount === undefined || isNaN(amount)) {
+      return `0.00 ${this.currency}`;
+    }
+
+    return new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: this.currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(amount);
+  }
+
+
+// ==================== GETTERS FOR TEMPLATE ====================
 
   get analyticsData() {
     if (!this.dashboardData) return null;
@@ -1267,7 +1508,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
     };
   }
 
-  // ==================== UTILITY METHODS ====================
+// ==================== UTILITY METHODS ====================
 
   public getTrend(current: number, previous?: number): 'up' | 'down' | 'stable' {
     if (!previous || previous === 0) return 'stable';
@@ -1301,5 +1542,129 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
     const percentage = (diff / previous) * 100;
     const sign = diff >= 0 ? '+' : '';
     return `${sign}${percentage.toFixed(1)}%`;
+  }
+
+  getTotalRevenue(): number {
+    if (!this.dashboardData?.payment_methods?.total_revenue) {
+      // Fallback: calcular desde el array de methods
+      const methods = this.dashboardData?.payment_methods?.methods || [];
+      return methods.reduce((total: number, method: any) => total + (method.revenue || 0), 0);
+    }
+
+    return this.dashboardData.payment_methods.total_revenue;
+  }
+
+  getTotalTransactions(): number {
+    if (!this.dashboardData?.payment_methods?.total_payments) {
+      // Fallback: calcular desde el array de methods
+      const methods = this.dashboardData?.payment_methods?.methods || [];
+      return methods.reduce((total: number, method: any) => total + (method.count || 0), 0);
+    }
+
+    return this.dashboardData.payment_methods.total_payments;
+  }
+
+  getMostUsedPaymentMethod(): string {
+    const methods = this.dashboardData?.payment_methods?.methods || [];
+    if (methods.length === 0) return 'N/A';
+
+    let maxRevenue = 0;
+    let mostUsedMethod = 'N/A';
+
+    methods.forEach((method: any) => {
+      if (method.revenue > maxRevenue) {
+        maxRevenue = method.revenue;
+        mostUsedMethod = method.display_name || this.getPaymentMethodDisplayName(method.method);
+      }
+    });
+
+    return mostUsedMethod;
+  }
+
+  getMostUsedPaymentPercentage(): number {
+    const methods = this.dashboardData?.payment_methods?.methods || [];
+    if (methods.length === 0) return 0;
+
+    let maxRevenuePercentage = 0;
+    methods.forEach((method: any) => {
+      if (method.revenue_percentage > maxRevenuePercentage) {
+        maxRevenuePercentage = method.revenue_percentage;
+      }
+    });
+
+    return Math.round(maxRevenuePercentage);
+  }
+
+  getPaymentMethodsArray(): any[] {
+    const methods = this.dashboardData?.payment_methods?.methods || [];
+
+    return methods.map((method: any) => ({
+      key: method.method,
+      display_name: method.display_name || this.getPaymentMethodDisplayName(method.method),
+      revenue: method.revenue || 0,
+      count: method.count || 0,
+      revenue_percentage: method.revenue_percentage || 0
+    }));
+  }
+
+  /**
+   * Get display name for payment method
+   */
+  getPaymentMethodDisplayName(method: string): string {
+    const displayNames: { [key: string]: string } = {
+      'cash': 'Efectivo',
+      'card': 'Tarjeta',
+      'online': 'Online',
+      'vouchers': 'Vouchers',
+      'pending': 'Pendiente',
+      'bank_transfer': 'Transferencia',
+      'paypal': 'PayPal'
+    };
+
+    return displayNames[method] || method.charAt(0).toUpperCase() + method.slice(1);
+  }
+
+  /**
+   * Get icon for payment method
+   */
+  getPaymentMethodIcon(method: string): string {
+    const icons: { [key: string]: string } = {
+      'cash': 'payments',
+      'card': 'credit_card',
+      'online': 'language',
+      'vouchers': 'card_giftcard',
+      'pending': 'schedule',
+      'bank_transfer': 'account_balance',
+      'paypal': 'payment'
+    };
+
+    return icons[method] || 'payment';
+  }
+
+  /**
+   * Get CSS class for payment method icon
+   */
+  getPaymentMethodIconClass(method: string): string {
+    return `mat-icon ${method}-icon`;
+  }
+
+  /**
+   * Get CSS class for revenue bar
+   */
+  getPaymentMethodBarClass(method: string): string {
+    return `${method}-bar`;
+  }
+
+  /**
+   * Format percentage
+   */
+  formatPercentage(value: number): string {
+    if (!value && value !== 0) return '0%';
+
+    return new Intl.NumberFormat('es-ES', {
+      style: 'percent',
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1
+    }).format(value / 100);
   }
 }

@@ -69,10 +69,11 @@
       </span>
     </div>
 
-    <!-- Click Indicator -->
-    <mat-icon
-      *ngIf="kpiData.clickable"
-      class="click-indicator">open_in_new</mat-icon>
+  </div>
 
+
+  <div *ngIf="kpiData.clickable" class="click-hint">
+    <mat-icon class="hint-icon">visibility</mat-icon>
+    <span class="hint-text">{{ 'view_details' | translate }}</span>
   </div>
 </mat-card>

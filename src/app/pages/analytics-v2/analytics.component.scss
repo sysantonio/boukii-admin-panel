@@ -1211,7 +1211,8 @@ $transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
   cursor: pointer !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  border: 2px solid transparent;
 
   &:hover {
     transform: translateY(-4px);
@@ -1457,5 +1458,641 @@ $transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
       font-size: 16px;
       font-weight: bold;
     }
+  }
+}
+
+
+.course-type-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: white;
+
+  // Colores de respaldo por si falla el style binding
+  &.type-1 {
+    background-color: #FAC710; // Colectivo
+  }
+
+  &.type-2 {
+    background-color: #8FD14F; // Privado
+  }
+
+  &.type-3 {
+    background-color: #00beff; // Actividad
+  }
+}
+
+::ng-deep .modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+::ng-deep .course-statistics-modal-overlay {
+  .mat-dialog-container {
+    padding: 0 !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+
+    @media (max-width: 768px) {
+      width: 95vw !important;
+      height: 90vh !important;
+      max-width: none !important;
+      max-height: none !important;
+      margin: 2.5vw !important;
+    }
+  }
+}
+
+/* Mejorar el botón de detalles en la tabla */
+.course-details-button {
+  background: linear-gradient(135deg, #3A57A7 0%, #2c4490 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(58, 87, 167, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+/* Estilos para la tabla de cursos */
+.courses-table-container {
+  .course-type-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: white;
+
+    &.type-1 {
+      background-color: #FAC710;
+    }
+
+    &.type-2 {
+      background-color: #8FD14F;
+    }
+
+    &.type-3 {
+      background-color: #00beff;
+    }
+  }
+}
+
+.actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .course-details-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 100px;
+    height: 36px;
+    font-size: 0.875rem;
+
+    mat-icon {
+      font-size: 1.125rem;
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+  }
+
+  .course-menu-button {
+    width: 36px;
+    height: 36px;
+    color: #666666;
+
+    &:hover {
+      color: #3A57A7;
+      background-color: rgba(58, 87, 167, 0.08);
+    }
+  }
+}
+
+// Mejorar el badge de tipo de curso
+.course-type-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &.type-1 {
+    background: linear-gradient(135deg, #FAC710 0%, #f0b90b 100%);
+  }
+
+  &.type-2 {
+    background: linear-gradient(135deg, #8FD14F 0%, #7cb342 100%);
+  }
+
+  &.type-3 {
+    background: linear-gradient(135deg, #00beff 0%, #0099cc 100%);
+  }
+}
+
+// Mejorar la tabla general
+.table-container {
+  .mat-table {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    .mat-header-row {
+      background-color: #f8f9fa;
+
+      .mat-header-cell {
+        font-weight: 600;
+        color: #374151;
+        border-bottom: 2px solid #e5e7eb;
+      }
+    }
+
+    .mat-row {
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #f8f9fa;
+      }
+    }
+  }
+}
+
+/* Payment Methods Tab Styles */
+.payments-tab {
+  padding: 20px;
+}
+
+/* Payment KPIs Section */
+.payment-kpis-grid {
+  margin-bottom: 30px;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.revenue-total-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.distribution-card {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+/* Payment Charts Section */
+.payment-charts-section {
+  margin-bottom: 30px;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 8px;
+}
+
+/* Payment Methods Grid */
+.payment-methods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.payment-method-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-left: 4px solid #e5e7eb;
+}
+
+.payment-method-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Payment Method Header */
+.payment-method-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.method-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #374151;
+  text-transform: capitalize;
+}
+
+/* Payment Stats */
+.payment-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.stat.primary {
+  border-bottom: 1px solid #e5e7eb;
+  font-weight: 600;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-weight: 600;
+  color: #111827;
+}
+
+.stat.primary .stat-value {
+  color: #059669;
+  font-size: 1.125rem;
+}
+
+.stat.percentage .stat-value {
+  color: #7c3aed;
+  font-weight: 700;
+}
+
+/* Revenue Bar Visualization */
+.revenue-bar-container {
+  width: 100%;
+  height: 6px;
+  background-color: #f3f4f6;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.revenue-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.8s ease;
+}
+
+/* Payment Method Specific Styles */
+.payment-method-card[data-method="cash"] {
+  border-left-color: #059669;
+}
+
+.payment-method-card[data-method="card"] {
+  border-left-color: #3b82f6;
+}
+
+.payment-method-card[data-method="online"] {
+  border-left-color: #f59e0b;
+}
+
+.payment-method-card[data-method="vouchers"] {
+  border-left-color: #8b5cf6;
+}
+
+.payment-method-card[data-method="pending"] {
+  border-left-color: #ef4444;
+}
+
+/* Revenue Bar Colors */
+.revenue-bar.cash-bar {
+  background: linear-gradient(90deg, #059669, #10b981);
+}
+
+.revenue-bar.card-bar {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+}
+
+.revenue-bar.online-bar {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+.revenue-bar.vouchers-bar {
+  background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+}
+
+.revenue-bar.pending-bar {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+/* Icon Colors */
+.mat-icon.cash-icon {
+  color: #059669;
+}
+
+.mat-icon.card-icon {
+  color: #3b82f6;
+}
+
+.mat-icon.online-icon {
+  color: #f59e0b;
+}
+
+.mat-icon.vouchers-icon {
+  color: #8b5cf6;
+}
+
+.mat-icon.pending-icon {
+  color: #ef4444;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .payment-methods-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .payments-tab {
+    padding: 15px;
+  }
+}
+
+/* Chart Container */
+.chart-container {
+  height: 300px;
+  width: 100%;
+}
+
+/* Estilos globales para todas las cards clickeables del dashboard */
+
+/* Para las KPI cards clickeables (pending revenue, cancelled bookings, etc.) */
+.kpi-card.clickeable {
+  cursor: pointer !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: visible;
+  border: 2px solid transparent;
+}
+
+.kpi-card.clickeable:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+  border-color: rgba(58, 87, 167, 0.3);
+}
+
+/* Icono de ojo permanente para KPI cards */
+.kpi-card.clickeable::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 28px;
+  height: 28px;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'/%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'/%3e%3c/svg%3e");
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.kpi-card.clickeable:hover::before {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Badge de acción para KPI cards */
+.kpi-card.clickeable::after {
+  content: 'Ver detalles';
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 3px 6px;
+  border-radius: 8px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+.kpi-card.clickeable:hover::after {
+  opacity: 1;
+}
+
+/* Para cards de clasificación (cancelled bookings, etc.) */
+.classification-grid .kpi-card.clickeable::before {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23374151'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'/%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'/%3e%3c/svg%3e");
+}
+
+.classification-grid .kpi-card.clickeable::after {
+  background: rgba(58, 87, 167, 0.1);
+  color: #3A57A7;
+}
+
+.classification-grid .kpi-card.clickeable:hover::after {
+  background: rgba(58, 87, 167, 0.2);
+}
+
+/* Indicador adicional para accesibilidad */
+.clickeable-card:focus,
+.kpi-card.clickeable:focus {
+  outline: 2px solid #3A57A7;
+  outline-offset: 2px;
+}
+
+/* Estados de hover específicos por tipo */
+.kpi-card.clickeable[data-type="warning"]:hover {
+  border-color: rgba(255, 152, 0, 0.4);
+}
+
+.kpi-card.clickeable[data-type="danger"]:hover {
+  border-color: rgba(244, 67, 54, 0.4);
+}
+
+.kpi-card.clickeable[data-type="success"]:hover {
+  border-color: rgba(76, 175, 80, 0.4);
+}
+
+/* Responsive: ocultar indicadores en móvil */
+@media (max-width: 768px) {
+  .kpi-card.clickeable::before,
+  .clickeable-card::before {
+    display: none;
+  }
+
+  .kpi-card.clickeable::after,
+  .clickeable-card::after {
+    font-size: 8px;
+    padding: 2px 4px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .kpi-card.clickeable::before {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23e5e7eb'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'/%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'/%3e%3c/svg%3e");
+  }
+}
+
+/* Print: ocultar indicadores de interactividad */
+@media print {
+  .kpi-card.clickeable::before,
+  .kpi-card.clickeable::after,
+  .clickeable-card::before,
+  .clickeable-card::after {
+    display: none !important;
+  }
+
+  .kpi-card.clickeable,
+  .clickeable-card {
+    cursor: default !important;
+    transform: none !important;
+    border: 1px solid #ccc !important;
+  }
+}
+
+/* ===== CARDS CLICKEABLES - ESTILOS GLOBALES ===== *
+/* Para cards de clasificación (cancelled bookings, etc.) */
+.classification-grid app-kpis-card.clickeable::before {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23374151'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 12a3 3 0 11-6 0 3 3 0 616 0z'/%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'/%3e%3c/svg%3e");
+}
+
+.classification-grid app-kpis-card.clickeable::after {
+  background: rgba(58, 87, 167, 0.1);
+  color: #3A57A7;
+}
+
+/* Para payment method cards (.payment-method-card.clickeable-card) */
+.payment-method-card.clickeable-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  border: 2px solid transparent;
+}
+
+.payment-method-card.clickeable-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border-color: rgba(58, 87, 167, 0.3);
+}
+
+/* Icono de ojo para payment cards */
+.payment-method-card.clickeable-card::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 12a3 3 0 11-6 0 3 3 0 616 0z'/%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'/%3e%3c/svg%3e");
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.payment-method-card.clickeable-card:hover::before {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Badge para payment cards */
+.payment-method-card.clickeable-card::after {
+  content: '👁️';
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(58, 87, 167, 0.1);
+  color: #3A57A7;
+  font-size: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payment-method-card.clickeable-card:hover::after {
+  background: rgba(58, 87, 167, 0.2);
+  opacity: 1;
+  transform: scale(1.1);
+}
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+.clickeable, .clickeable-card {
+  position: relative;
+
+  .click-hint {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 20px;
+    color: #3A57A7;
+    background: rgba(58, 87, 167, 0.1);
+    backdrop-filter: blur(6px);
+    z-index: 10;
+    pointer-events: none;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+
+    .hint-icon {
+      font-size: 18px;
+    }
+  }
+
+  &.kpi-card--primary .click-hint,
+  &.kpi-card--warning .click-hint,
+  &.kpi-card--success .click-hint {
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
   }
 }

@@ -1035,5 +1035,19 @@
   "booking_date": "Data Prenotazione",
   "actions": "Azioni",
   "close": "Chiudi",
-  "unique_participants": "Partecipanti Unici"
+  "unique_participants": "Partecipanti Unici",
+  "months": {
+    "january": "Gennaio",
+    "february": "Febbraio",
+    "march": "Marzo",
+    "april": "Aprile",
+    "may": "Maggio",
+    "june": "Giugno",
+    "july": "Luglio",
+    "august": "Agosto",
+    "september": "Settembre",
+    "october": "Ottobre",
+    "november": "Novembre",
+    "december": "Dicembre"
+  }
 }

@@ -446,6 +446,14 @@ export class MonitorsLegacyComponent implements OnInit, OnDestroy {
     totalPriceSell: 0
   };
 
+  // ==================== COURSE TYPE COLORS CONFIGURATION ====================
+
+  private readonly courseTypeColors = {
+    1: '#FAC710', // Colectivo - Amarillo/Dorado
+    2: '#8FD14F', // Privado - Verde
+    3: '#00beff'  // Actividad - Azul
+  };
+
   // ==================== TABLE CONFIGURATION ====================
   displayedColumns: string[] = [
     'monitor', 'sport', 'hours_collective', 'hours_private',
@@ -559,6 +567,42 @@ export class MonitorsLegacyComponent implements OnInit, OnDestroy {
           this.selectMonitor(this.selectedMonitor);
         }
       });
+  }
+
+  /**
+   * Formatear fechas con nombres de meses traducidos
+   */
+  private formatDateWithMonthName(dateString: string): string {
+    const date = new Date(dateString);
+    const month = date.toLocaleString('default', { month: 'long' }).toLowerCase();
+    const year = date.getFullYear();
+
+    // Traducir el nombre del mes
+    const translatedMonth = this.translateService.instant(`months.${month}`);
+
+    return `${translatedMonth} ${year}`;
+  }
+
+  /**
+   * Procesar fechas para mostrar nombres de meses
+   */
+  private processDateLabels(dates: string[]): string[] {
+    return dates.map(date => this.formatDateWithMonthName(date));
+  }
+
+  /**
+   * Crear configuración de eje X con fechas traducidas
+   */
+  private createTranslatedXAxisConfig(dates: string[]) {
+    const translatedLabels = this.processDateLabels(dates);
+
+    return {
+      title: this.translateService.instant('dates'),
+      tickmode: 'array',
+      tickvals: dates,
+      ticktext: translatedLabels,
+      tickangle: -45,
+    };
   }
 
   // ==================== DATA LOADING (USING LEGACY ENDPOINTS) ====================
@@ -718,6 +762,13 @@ export class MonitorsLegacyComponent implements OnInit, OnDestroy {
 
   private processAvailableSports(): void {
     this.availableSports = [...new Set(this.monitorsData.map(m => m.sport))];
+  }
+
+  /**
+   * 🎨 Obtener color por tipo de curso
+   */
+  private getCourseTypeColor(courseType: number): string {
+    return this.courseTypeColors[courseType] || '#3A57A7';
   }
 
   // ==================== UTILITY METHODS ====================
@@ -883,27 +934,27 @@ export class MonitorsLegacyComponent implements OnInit, OnDestroy {
         y: dates.map(date => this.hoursTypeData[date]?.[1] || 0),
         mode: 'lines+markers',
         name: 'Cursos Colectivos',
-        line: { color: '#FAC710' }
+        line: { color: this.courseTypeColors[1] } // ✅ COLOR CONSISTENTE
       },
       {
         x: dates,
         y: dates.map(date => this.hoursTypeData[date]?.[2] || 0),
         mode: 'lines+markers',
         name: 'Cursos Privados',
-        line: { color: '#8FD14F' }
+        line: { color: this.courseTypeColors[2] } // ✅ COLOR CONSISTENTE
       },
       {
         x: dates,
         y: dates.map(date => this.hoursTypeData[date]?.[3] || 0),
         mode: 'lines+markers',
         name: 'Actividades',
-        line: { color: '#00beff' }
+        line: { color: this.courseTypeColors[3] } // ✅ COLOR CONSISTENTE
       }
     ];
 
     const layout = {
       title: 'Distribución de Horas por Tipo de Curso',
-      xaxis: { title: 'Fecha' },
+      xaxis: this.createTranslatedXAxisConfig(dates),
       yaxis: { title: 'Horas' },
       paper_bgcolor: 'rgba(0,0,0,0)',
       plot_bgcolor: 'rgba(0,0,0,0)',
@@ -938,7 +989,7 @@ export class MonitorsLegacyComponent implements OnInit, OnDestroy {
 
     const layout = {
       title: 'Horas Trabajadas por Deporte',
-      xaxis: { title: 'Fecha' },
+      xaxis: this.createTranslatedXAxisConfig(dates), // ✅ CAMBIO PRINCIPAL
       yaxis: { title: 'Horas' },
       paper_bgcolor: 'rgba(0,0,0,0)',
       plot_bgcolor: 'rgba(0,0,0,0)',
