@@ -127,6 +127,7 @@ interface SeasonDashboardData {
     average_price: number;
     revenue_received: number;
     sales_conversion_rate: number;
+    courses_sold: number;
     payment_methods: any;
     status_breakdown: any;
     source_breakdown: any;
@@ -237,7 +238,6 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
   revenueTableData = new MatTableDataSource<any>([]);
   coursesTableData = new MatTableDataSource<any>([]);
   public courseTypeBookingsSummary: any[] = [];
-
   // ==================== UI STATE ====================
   loading = false;
   activeTab = 'revenue'; // ← AÑADIR ESTA LÍNEA
@@ -639,7 +639,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
       typeStats[typeName].participants += course.participants || 0;
       typeStats[typeName].revenue_received += course.revenue_received || 0;
       typeStats[typeName].conversion_rate_sum += course.sales_conversion_rate || 0;
-      typeStats[typeName].course_count++;
+      typeStats[typeName].course_count += course.courses_sold || 0;
     }
 
     console.log('📈 Estadísticas por tipo:', typeStats);
@@ -676,10 +676,13 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
       // Preparar datos adicionales para mostrar bookings
       const bookingsData = Object.values(typeStats).map(stat => stat.bookings);
       const totalBookings = bookingsData.reduce((sum, bookings) => sum + bookings, 0);
+      const coursesSoldData = Object.values(typeStats).map(stat => stat.course_count); // ← NUEVA LÍNEA
       const totalRevenue = values.reduce((sum, revenue) => sum + revenue, 0);
+      const totalCoursesSold = coursesSoldData.reduce((sum, courses) => sum + courses, 0); // ← NUEVA LÍNEA
 
       console.log('📊 Totales:');
       console.log(`   - Total Bookings: ${totalBookings}`);
+      console.log(`   - Total Cursos Vendidos: ${totalCoursesSold}`); // ← NUEVA LÍNEA
       console.log(`   - Total Revenue: ${totalRevenue.toFixed(2)} €`);
 
       // Configurar el gráfico
@@ -690,13 +693,43 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
         marker: { colors },
         textinfo: 'label+percent',
         texttemplate: '%{label}<br>%{percent}',
-        hovertemplate: '<b>%{label}</b><br>' +
-          'Revenue: %{value:,.2f} €<br>' +
-          'Bookings: %{customdata} reservas<br>' +
-          'Porcentaje: %{percent}<br>' +
-          '<extra></extra>',
-        customdata: bookingsData
+
+        // ✅ Crear hover text manual (100% funcional)
+        hovertemplate: '%{hovertext}<extra></extra>',
+        hovertext: Object.values(typeStats).map((stats: any) => {
+          const typeName = this.translateService.instant(stats.typeName);
+          return `<b>${typeName}</b><br>` +
+            `💰 Revenue: ${stats.revenue.toFixed(2)} €<br>` +
+            `📋 Reservas: ${stats.bookings} bookings<br>` +
+            `📚 Cursos vendidos: ${stats.course_count} cursos<br>` +
+            `👥 Participantes: ${stats.participants}`;
+        })
       };
+
+// 🔧 CAMBIO ADICIONAL: Asegurar que typeStats tenga el campo typeName
+// Modifica esta parte en tu loop de procesamiento:
+
+      for (const course of courses) {
+        console.log('🎯 Procesando curso:', course);
+
+        const typeName = this.getCourseTypeName(course.type);
+        const revenue = course.revenue || 0;
+
+        console.log(`   - Tipo: ${typeName}, Revenue: ${revenue}`);
+
+        if (!typeStats[typeName]) {
+          typeStats[typeName] = {
+            typeName,        // ← ASEGURAR QUE ESTE CAMPO ESTÉ AQUÍ
+            revenue: 0,
+            bookings: 0,
+            participants: 0,
+            revenue_received: 0,
+            conversion_rate_sum: 0,
+            course_count: 0
+          };
+        }
+      }
+
 
       const layout = {
         title: {
@@ -729,7 +762,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
         config
       ).then(() => {
         console.log('✅ Gráfico creado exitosamente');
-        this.displayBookingsSummary(typeStats, totalBookings, totalRevenue);
+        this.displayBookingsSummary(typeStats, totalBookings, totalRevenue, totalCoursesSold);
       }).catch(error => {
         console.error('❌ Error al crear el gráfico:', error);
       });
@@ -744,36 +777,41 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // Método para mostrar resumen detallado de bookings y revenue
-  private displayBookingsSummary(typeStats: any, totalBookings: number, totalRevenue: number): void {
+  private displayBookingsSummary(typeStats: any, totalBookings: number, totalRevenue: number, totalCoursesSold: number): void {
     console.log('\n📊 ===== RESUMEN DETALLADO POR TIPO DE CURSO =====');
-    console.log(`📈 TOTAL GENERAL: ${totalBookings} reservas | ${totalRevenue.toFixed(2)} € revenue\n`);
+    console.log(`📈 TOTAL GENERAL: ${totalBookings} reservas | ${totalCoursesSold} cursos vendidos | ${totalRevenue.toFixed(2)} € revenue\n`);
 
     Object.entries(typeStats).forEach(([typeName, stats]: [string, any]) => {
       const bookingPercentage = totalBookings > 0 ? ((stats.bookings / totalBookings) * 100).toFixed(1) : '0';
+      const coursePercentage = totalCoursesSold > 0 ? ((stats.course_count / totalCoursesSold) * 100).toFixed(1) : '0';
       const revenuePercentage = totalRevenue > 0 ? ((stats.revenue / totalRevenue) * 100).toFixed(1) : '0';
       const avgRevenuePerBooking = stats.bookings > 0 ? (stats.revenue / stats.bookings).toFixed(2) : '0';
+      const avgRevenuePerCourse = stats.course_count > 0 ? (stats.revenue / stats.course_count).toFixed(2) : '0';
 
       console.log(`🎯 ${typeName.toUpperCase()}:`);
       console.log(`   📋 Reservas: ${stats.bookings} (${bookingPercentage}% del total)`);
+      console.log(`   📚 Cursos vendidos: ${stats.course_count} (${coursePercentage}% del total)`); // ← NUEVA LÍNEA
       console.log(`   💰 Revenue: ${stats.revenue.toFixed(2)} € (${revenuePercentage}% del total)`);
       console.log(`   👥 Participantes: ${stats.participants}`);
       console.log(`   💵 Revenue recibido: ${stats.revenue_received.toFixed(2)} €`);
       console.log(`   📊 Revenue promedio por reserva: ${avgRevenuePerBooking} €`);
-      console.log(`   🎓 Número de cursos: ${stats.course_count}`);
+      console.log(`   🎯 Revenue promedio por curso: ${avgRevenuePerCourse} €`); // ← NUEVA LÍNEA
       console.log('   ─────────────────────────────────────────────────');
     });
 
-    // También crear un array para uso en el template si lo necesitas
+    // También crear el array para uso en el template si lo necesitas
     this.courseTypeBookingsSummary = Object.entries(typeStats).map(([typeName, stats]: [string, any]) => ({
       type: typeName,
       typeName: this.translateService.instant(typeName),
       bookings: stats.bookings,
+      courses_sold: stats.course_count, // ← NUEVA LÍNEA
       revenue: stats.revenue,
       participants: stats.participants,
       revenueReceived: stats.revenue_received,
-      courseCount: stats.course_count,
       avgRevenuePerBooking: stats.bookings > 0 ? stats.revenue / stats.bookings : 0,
+      avgRevenuePerCourse: stats.course_count > 0 ? stats.revenue / stats.course_count : 0, // ← NUEVA LÍNEA
       bookingPercentage: totalBookings > 0 ? (stats.bookings / totalBookings) * 100 : 0,
+      coursePercentage: totalCoursesSold > 0 ? (stats.course_count / totalCoursesSold) * 100 : 0, // ← NUEVA LÍNEA
       revenuePercentage: totalRevenue > 0 ? (stats.revenue / totalRevenue) * 100 : 0
     }));
 
