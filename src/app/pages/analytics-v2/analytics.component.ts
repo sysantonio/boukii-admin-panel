@@ -125,6 +125,8 @@ interface SeasonDashboardData {
     participants: number;
     bookings: number;
     average_price: number;
+    revenue_received: number;
+    sales_conversion_rate: number;
     payment_methods: any;
     status_breakdown: any;
     source_breakdown: any;
@@ -234,6 +236,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
   dashboardData: SeasonDashboardData | null = null;
   revenueTableData = new MatTableDataSource<any>([]);
   coursesTableData = new MatTableDataSource<any>([]);
+  public courseTypeBookingsSummary: any[] = [];
 
   // ==================== UI STATE ====================
   loading = false;
@@ -585,39 +588,236 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private createCourseTypeRevenueChart(): void {
-    if (!this.courseTypeRevenueChartRef?.nativeElement || !this.dashboardData) return;
+    console.log('🔍 Iniciando createCourseTypeRevenueChart...');
+
+    // Verificación del elemento DOM
+    if (!this.courseTypeRevenueChartRef?.nativeElement) {
+      console.error('❌ Elemento DOM del gráfico no está disponible');
+      return;
+    }
+
+    // Verificación de datos principales
+    if (!this.dashboardData) {
+      console.error('❌ dashboardData no está disponible');
+      return;
+    }
 
     const courses = this.dashboardData.courses || [];
+    console.log('📊 Datos de cursos:', courses);
 
-    // Agrupar por tipo de curso
-    const typeRevenue = courses.reduce((acc, course) => {
+    if (courses.length === 0) {
+      console.warn('⚠️ No hay cursos disponibles');
+      this.showEmptyChart();
+      return;
+    }
+
+    const typeStats: { [typeName: string]: any } = {};
+
+    // Procesar datos con logging detallado
+    for (const course of courses) {
+      console.log('🎯 Procesando curso:', course);
+
       const typeName = this.getCourseTypeName(course.type);
-      acc[typeName] = (acc[typeName] || 0) + course.revenue;
-      return acc;
-    }, {} as { [key: string]: number });
+      const revenue = course.revenue || 0;
 
-    // ✅ APLICAR COLORES CONSISTENTES
-    const colors = Object.keys(typeRevenue).map(typeName =>
-      this.getCourseTypeColorByName(typeName)
-    );
+      console.log(`   - Tipo: ${typeName}, Revenue: ${revenue}`);
+
+      if (!typeStats[typeName]) {
+        typeStats[typeName] = {
+          typeName,
+          revenue: 0,
+          bookings: 0,
+          participants: 0,
+          revenue_received: 0,
+          conversion_rate_sum: 0,
+          course_count: 0
+        };
+      }
+
+      typeStats[typeName].revenue += revenue;
+      typeStats[typeName].bookings += course.bookings || 0;
+      typeStats[typeName].participants += course.participants || 0;
+      typeStats[typeName].revenue_received += course.revenue_received || 0;
+      typeStats[typeName].conversion_rate_sum += course.sales_conversion_rate || 0;
+      typeStats[typeName].course_count++;
+    }
+
+    console.log('📈 Estadísticas por tipo:', typeStats);
+
+    // Verificar que tenemos datos válidos
+    const hasValidData = Object.values(typeStats).some(stat => stat.revenue > 0);
+
+    if (!hasValidData) {
+      console.warn('⚠️ No hay datos de revenue válidos para mostrar');
+      this.showEmptyChart();
+      return;
+    }
+
+    // Preparar datos para el gráfico
+    try {
+      const labels = Object.keys(typeStats).map(type => {
+        const translated = this.translateService.instant(type);
+        console.log(`🌐 Traducción: ${type} -> ${translated}`);
+        return translated;
+      });
+
+      const values = Object.values(typeStats).map(stat => stat.revenue);
+      const colors = Object.keys(typeStats).map(type => {
+        const color = this.getCourseTypeColorByName(type);
+        console.log(`🎨 Color para ${type}: ${color}`);
+        return color;
+      });
+
+      console.log('📊 Datos finales del gráfico:');
+      console.log('   - Labels:', labels);
+      console.log('   - Values:', values);
+      console.log('   - Colors:', colors);
+
+      // Preparar datos adicionales para mostrar bookings
+      const bookingsData = Object.values(typeStats).map(stat => stat.bookings);
+      const totalBookings = bookingsData.reduce((sum, bookings) => sum + bookings, 0);
+      const totalRevenue = values.reduce((sum, revenue) => sum + revenue, 0);
+
+      console.log('📊 Totales:');
+      console.log(`   - Total Bookings: ${totalBookings}`);
+      console.log(`   - Total Revenue: ${totalRevenue.toFixed(2)} €`);
+
+      // Configurar el gráfico
+      const trace = {
+        values,
+        labels,
+        type: 'pie',
+        marker: { colors },
+        textinfo: 'label+percent',
+        texttemplate: '%{label}<br>%{percent}',
+        hovertemplate: '<b>%{label}</b><br>' +
+          'Revenue: %{value:,.2f} €<br>' +
+          'Bookings: %{customdata} reservas<br>' +
+          'Porcentaje: %{percent}<br>' +
+          '<extra></extra>',
+        customdata: bookingsData
+      };
+
+      const layout = {
+        title: {
+          text: this.translateService.instant('revenue_by_course_type'),
+          font: { size: 16 }
+        },
+        margin: { l: 20, r: 20, t: 40, b: 20 },
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        showlegend: true,
+        legend: {
+          orientation: 'v',
+          x: 1.02,
+          y: 0.5
+        }
+      };
+
+      const config = {
+        responsive: true,
+        displayModeBar: false,
+        displaylogo: false
+      };
+
+      console.log('🚀 Creando gráfico con Plotly...');
+
+      Plotly.newPlot(
+        this.courseTypeRevenueChartRef.nativeElement,
+        [trace],
+        layout,
+        config
+      ).then(() => {
+        console.log('✅ Gráfico creado exitosamente');
+        this.displayBookingsSummary(typeStats, totalBookings, totalRevenue);
+      }).catch(error => {
+        console.error('❌ Error al crear el gráfico:', error);
+      });
+
+      // Opcional: Almacenar las estadísticas para uso posterior
+     // this.courseTypeStats = typeStats;
+
+    } catch (error) {
+      console.error('❌ Error durante la creación del gráfico:', error);
+      this.showEmptyChart();
+    }
+  }
+
+  // Método para mostrar resumen detallado de bookings y revenue
+  private displayBookingsSummary(typeStats: any, totalBookings: number, totalRevenue: number): void {
+    console.log('\n📊 ===== RESUMEN DETALLADO POR TIPO DE CURSO =====');
+    console.log(`📈 TOTAL GENERAL: ${totalBookings} reservas | ${totalRevenue.toFixed(2)} € revenue\n`);
+
+    Object.entries(typeStats).forEach(([typeName, stats]: [string, any]) => {
+      const bookingPercentage = totalBookings > 0 ? ((stats.bookings / totalBookings) * 100).toFixed(1) : '0';
+      const revenuePercentage = totalRevenue > 0 ? ((stats.revenue / totalRevenue) * 100).toFixed(1) : '0';
+      const avgRevenuePerBooking = stats.bookings > 0 ? (stats.revenue / stats.bookings).toFixed(2) : '0';
+
+      console.log(`🎯 ${typeName.toUpperCase()}:`);
+      console.log(`   📋 Reservas: ${stats.bookings} (${bookingPercentage}% del total)`);
+      console.log(`   💰 Revenue: ${stats.revenue.toFixed(2)} € (${revenuePercentage}% del total)`);
+      console.log(`   👥 Participantes: ${stats.participants}`);
+      console.log(`   💵 Revenue recibido: ${stats.revenue_received.toFixed(2)} €`);
+      console.log(`   📊 Revenue promedio por reserva: ${avgRevenuePerBooking} €`);
+      console.log(`   🎓 Número de cursos: ${stats.course_count}`);
+      console.log('   ─────────────────────────────────────────────────');
+    });
+
+    // También crear un array para uso en el template si lo necesitas
+    this.courseTypeBookingsSummary = Object.entries(typeStats).map(([typeName, stats]: [string, any]) => ({
+      type: typeName,
+      typeName: this.translateService.instant(typeName),
+      bookings: stats.bookings,
+      revenue: stats.revenue,
+      participants: stats.participants,
+      revenueReceived: stats.revenue_received,
+      courseCount: stats.course_count,
+      avgRevenuePerBooking: stats.bookings > 0 ? stats.revenue / stats.bookings : 0,
+      bookingPercentage: totalBookings > 0 ? (stats.bookings / totalBookings) * 100 : 0,
+      revenuePercentage: totalRevenue > 0 ? (stats.revenue / totalRevenue) * 100 : 0
+    }));
+
+    console.log('\n💾 Datos guardados en this.courseTypeBookingsSummary para uso en template');
+  }
+
+// Método auxiliar para mostrar un gráfico vacío con mensaje
+  private showEmptyChart(): void {
+    if (!this.courseTypeRevenueChartRef?.nativeElement) return;
 
     const trace = {
-      values: Object.values(typeRevenue),
-      labels: Object.keys(typeRevenue).map(type => this.translateService.instant(type)),
+      values: [1],
+      labels: [this.translateService.instant('no_data_available')],
       type: 'pie',
-      marker: { colors: colors } // ✅ USAR COLORES ESPECÍFICOS
+      marker: { colors: ['#E0E0E0'] },
+      textinfo: 'label',
+      hoverinfo: 'none'
     };
 
     const layout = {
-      title: false,
-      margin: { l: 20, r: 20, t: 20, b: 20 },
+      title: {
+        text: this.translateService.instant('revenue_by_course_type'),
+        font: { size: 16 }
+      },
+      margin: { l: 20, r: 20, t: 40, b: 20 },
       plot_bgcolor: 'rgba(0,0,0,0)',
-      paper_bgcolor: 'rgba(0,0,0,0)'
+      paper_bgcolor: 'rgba(0,0,0,0)',
+      showlegend: false,
+      annotations: [{
+        text: this.translateService.instant('no_data_to_display'),
+        x: 0.5,
+        y: 0.5,
+        showarrow: false,
+        font: { size: 14, color: '#666' }
+      }]
     };
 
-    Plotly.newPlot(this.courseTypeRevenueChartRef.nativeElement, [trace], layout, { responsive: true });
+    Plotly.newPlot(
+      this.courseTypeRevenueChartRef.nativeElement,
+      [trace],
+      layout,
+      { responsive: true, displayModeBar: false }
+    );
   }
-
   private createPaymentMethodsChart(): void {
     if (!this.paymentMethodsChartRef?.nativeElement || !this.dashboardData) return;
 
