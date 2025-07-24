@@ -102,6 +102,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   showEditMonitor: boolean = false;
   editedMonitor: any;
+  saveMonitorAttempted: boolean = false;
+  savingMonitor: boolean = false;
   moveTask: boolean = false;
   moving: boolean = false;
   taskMoved: any;
@@ -1699,9 +1701,16 @@ export class TimelineComponent implements OnInit, OnDestroy {
   hideEditMonitor() {
     this.editedMonitor = null;
     this.showEditMonitor = false;
+    this.saveMonitorAttempted = false;
   }
 
   saveEditedMonitor() {
+    this.saveMonitorAttempted = true;
+    if (!this.editedMonitor) {
+      return;
+    }
+
+    this.savingMonitor = true;
     let data: any;
     let all_booking_users = [];
     let subgroup_id = [];
@@ -1739,7 +1748,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
     this.crudService.post('/admin/planner/monitors/transfer', data)
       .subscribe((data) => {
-
+        this.savingMonitor = false;
         this.editedMonitor = null;
         this.showEditMonitor = false;
         this.hideDetail();
@@ -1747,6 +1756,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
         this.snackbar.open(this.translateService.instant('snackbar.monitor.update'), 'OK', { duration: 3000 });
       },
         (error) => {
+          this.savingMonitor = false;
           // Error handling code
           console.error('Error occurred:', error);
           if (error.error && error.error.message && error.error.message == "Overlap detected. Monitor cannot be transferred.") {

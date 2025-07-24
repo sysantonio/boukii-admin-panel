@@ -1051,8 +1051,9 @@
               </div>
               <mat-form-field appearance="outline" class="flex-auto"
                               style="width: 100%;" *ngIf="!loadingMonitors">
-                <mat-select placeholder="{{'new_monitor' | translate}}"
-                            [(ngModel)]="editedMonitor">
+                <mat-select placeholder="{{'new_monitor' | translate}}" required
+                            #monitorSelect="ngModel"
+                            [(ngModel)]="editedMonitor" [disabled]="savingMonitor">
                   <mat-option *ngIf="taskDetail.monitor_id"
                               [value]="nullMonitor">
                     {{'no_monitor_choose' | translate}}
@@ -1060,19 +1061,24 @@
                   <ng-container *ngFor="let monitor of monitorsForm">
                     <mat-option *ngIf="monitor.id != taskDetail.monitor_id"
                                 [value]="monitor">
-                      {{ monitor.first_name }} {{ monitor.last_name }}
+                      {{ monitor.first_name }} {{ monitor.last_name }} -
+                      {{ getLanguageById(monitor.language1_id) }}
                     </mat-option>
                   </ng-container>
                 </mat-select>
+                <mat-error *ngIf="saveMonitorAttempted && !editedMonitor">
+                  {{ 'required' | translate }}
+                </mat-error>
               </mat-form-field>
 
               <div class="actions flex items-center justify-end gap-2">
                 <button (click)="hideEditMonitor()" mat-button
-                        type="button">{{'cancel' | translate}}</button>
+                        type="button" [disabled]="savingMonitor">{{'cancel' | translate}}</button>
                 <button (click)="saveEditedMonitor()"
-                        [disabled]="!editedMonitor" color="primary" mat-raised-button
+                        [disabled]="savingMonitor || !editedMonitor" color="primary" mat-raised-button
                         matStepperNext>
                   {{'save' | translate}}
+                  <mat-spinner diameter="20" *ngIf="savingMonitor" style="margin-left:8px"></mat-spinner>
                 </button>
               </div>
             </ng-container>
