@@ -131,8 +131,11 @@ export class CalendarComponent {
 
   handleEvent(action: string, event: CalendarEvent): void {
     const dialogRef = this.dialog.open(CalendarEditComponent, {
-      data: event
+      data: event,
+      disableClose: false
     });
+
+    dialogRef.backdropClick().subscribe(() => dialogRef.close());
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {

@@ -261,8 +261,11 @@ export class CourseDetailModalComponent implements OnInit {
       height: '1200px',
       maxWidth: '90vw',  // Asegurarse de que no haya un ancho máximo
       panelClass: 'full-screen-dialog',  // Si necesitas estilos adicionales
-      data: {id: this.id}
+      data: {id: this.id},
+      disableClose: false
     });
+
+    dialogRef.backdropClick().subscribe(() => dialogRef.close());
 
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data) {

@@ -2008,8 +2008,11 @@ export class MonitorDetailComponent {
       panelClass: 'full-screen-dialog',
       data: {
         id: this.taskDetailTimeline.course.id
-      }
+      },
+      disableClose: false
     });
+
+    dialogRef.backdropClick().subscribe(() => dialogRef.close());
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) { }
@@ -2073,8 +2076,11 @@ export class MonitorDetailComponent {
         date_param: dateInfo.date_format,
         hour_start: dateInfo.hour,
         monitor: this.defaults
-      }
+      },
+      disableClose: false
     });
+
+    dialogRef.backdropClick().subscribe(() => dialogRef.close());
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
