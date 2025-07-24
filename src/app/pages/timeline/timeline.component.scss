@@ -238,6 +238,17 @@
 .grid-row:last-child .grid-cell {
   border-bottom: none;
 }
+
+.monitors-viewport {
+  height: calc(100vh - 200px);
+  width: 100%;
+}
+
+.tasks-viewport {
+  height: calc(100vh - 200px);
+  width: 100%;
+  overflow: auto;
+}
 .grid-cell:last-child {
   border-right: none;
 }

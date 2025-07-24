@@ -72,6 +72,10 @@ export class TimelineComponent implements OnInit, OnDestroy {
   allMonitorsTimeline: any[] = [];
   filteredMonitors: any[] = [];
   plannerTasks: any[] = [];
+  page: number = 1;
+  pageSize: number = 50;
+  moreData: boolean = true;
+  loadingMore: boolean = false;
   vacationDays: any[];
 
   user: any = null;
@@ -375,13 +379,16 @@ export class TimelineComponent implements OnInit, OnDestroy {
   }
 
   loadBookings(date: Date) {
+    this.page = 1;
+    this.moreData = true;
+    this.plannerTasks = [];
     let firstDate, lastDate;
     if (this.timelineView === 'week') {
       const startOfWeekDate = startOfWeek(date, { weekStartsOn: 1 });
       const endOfWeekDate = endOfWeek(date, { weekStartsOn: 1 });
       firstDate = moment(startOfWeekDate).format('YYYY-MM-DD');
       lastDate = moment(endOfWeekDate).format('YYYY-MM-DD');
-      this.searchBookings(firstDate, lastDate);
+      this.searchBookings(firstDate, lastDate, this.page);
 
       /*this.filteredTasks = this.tasksCalendarStyle.filter(task => {
         const taskDate = new Date(task.date);
@@ -392,7 +399,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
       const endMonth = endOfMonth(date);
       firstDate = moment(startMonth).format('YYYY-MM-DD');
       lastDate = moment(endMonth).format('YYYY-MM-DD');
-      this.searchBookings(firstDate, lastDate);
+      this.searchBookings(firstDate, lastDate, this.page);
 
       /*this.filteredTasks = this.tasksCalendarStyle.filter(task => {
         const taskDate = new Date(task.date);
@@ -402,14 +409,14 @@ export class TimelineComponent implements OnInit, OnDestroy {
       const dateStr = date.toLocaleString().split('T')[0];
       firstDate = moment(date).format('YYYY-MM-DD');
       lastDate = firstDate;
-      this.searchBookings(firstDate, lastDate);
+      this.searchBookings(firstDate, lastDate, this.page);
       /*this.filteredTasks = this.tasksCalendarStyle.filter(task => task.date === dateStr);*/
     }
 
   }
 
-  searchBookings(firstDate: string, lastDate: string) {
-    let params = '/admin/getPlanner?date_start=' + firstDate + '&date_end=' + lastDate + '&school_id=' + this.activeSchool + '&perPage=' + 99999;
+  searchBookings(firstDate: string, lastDate: string, page: number = 1) {
+    let params = '/admin/getPlanner?date_start=' + firstDate + '&date_end=' + lastDate + '&school_id=' + this.activeSchool + '&perPage=' + this.pageSize + '&page=' + page;
     if (this.selectedLanguages.length) {
       this.selectedLanguages.forEach(id => {
         params += `&languages[]=${id}`;
@@ -417,11 +424,41 @@ export class TimelineComponent implements OnInit, OnDestroy {
     }
     this.crudService.get(params).subscribe(
       (data: any) => {
-        this.processData(data.data);
+        if (page === 1) {
+          this.processData(data.data);
+        } else {
+          this.processData(data.data, true);
+        }
+        this.moreData = data.data && data.data.length === this.pageSize;
+        this.loadingMore = false;
       },
       error => {
+        this.loadingMore = false;
       }
     );
+  }
+
+  onTasksScroll(index: number) {
+    if (this.moreData && !this.loadingMore && index + 10 >= this.plannerTasks.length) {
+      this.loadingMore = true;
+      this.page++;
+      let firstDate, lastDate;
+      if (this.timelineView === 'week') {
+        const startOfWeekDate = startOfWeek(this.currentDate, { weekStartsOn: 1 });
+        const endOfWeekDate = endOfWeek(this.currentDate, { weekStartsOn: 1 });
+        firstDate = moment(startOfWeekDate).format('YYYY-MM-DD');
+        lastDate = moment(endOfWeekDate).format('YYYY-MM-DD');
+      } else if (this.timelineView === 'month') {
+        const startMonth = startOfMonth(this.currentDate);
+        const endMonth = endOfMonth(this.currentDate);
+        firstDate = moment(startMonth).format('YYYY-MM-DD');
+        lastDate = moment(endMonth).format('YYYY-MM-DD');
+      } else {
+        firstDate = moment(this.currentDate).format('YYYY-MM-DD');
+        lastDate = firstDate;
+      }
+      this.searchBookings(firstDate, lastDate, this.page);
+    }
   }
 
   normalizeToArray(data: any) {
@@ -435,17 +472,14 @@ export class TimelineComponent implements OnInit, OnDestroy {
     return [];
   }
 
-  processData(data: any) {
-    this.allMonitors = [{
-      id: null
-    }];
-    if (this.filterMonitor) {
-      this.filteredMonitors = [];
-    }
-    else {
-      this.filteredMonitors = [{
-        id: null
-      }];
+  processData(data: any, append: boolean = false) {
+    if (!append) {
+      this.allMonitors = [{ id: null }];
+      if (this.filterMonitor) {
+        this.filteredMonitors = [];
+      } else {
+        this.filteredMonitors = [{ id: null }];
+      }
     }
     let allNwds = [];
     let allBookings = [];
@@ -1131,7 +1165,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
     );
 
     // Combine adjusted tasks with the rest
-    this.plannerTasks = [...filteredPlannerTasks, ...Object.values(groupedByDate).flat()];
+    const newTasks = [...filteredPlannerTasks, ...Object.values(groupedByDate).flat()];
+    this.plannerTasks = append ? [...this.plannerTasks, ...newTasks] : newTasks;
     this.loading = false;
   }
 

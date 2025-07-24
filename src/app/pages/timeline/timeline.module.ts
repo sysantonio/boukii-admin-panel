@@ -34,6 +34,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmUnmatchMonitorModule } from './confirm-unmatch-monitor/confirm-unmatch-monitor.module';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { IconComponent } from 'src/@vex/components/icon/app.component';
 import { EditDateComponent } from './edit-date/edit-date.component';
 
@@ -75,7 +76,8 @@ import { EditDateComponent } from './edit-date/edit-date.component';
     TranslateModule,
     MatDatepickerModule,
     ConfirmUnmatchMonitorModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    ScrollingModule
   ]
 })
 export class TimelineModule {
