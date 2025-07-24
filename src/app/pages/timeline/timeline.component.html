@@ -166,7 +166,8 @@
         <div class="schedule-container"
              *ngIf="filteredMonitors && filteredMonitors.length && timelineView != 'month'">
           <div class="monitors-column">
-            <ng-container *ngFor="let monitor of filteredMonitors">
+            <cdk-virtual-scroll-viewport itemSize="100" class="monitors-viewport">
+              <ng-container *cdkVirtualFor="let monitor of filteredMonitors">
               <div class="monitor">
                 <ng-container *ngIf="monitor.id">
                   <div class="monitor-left">
@@ -237,7 +238,8 @@
                   </div>
                 </ng-container>
               </div>
-            </ng-container>
+              </ng-container>
+            </cdk-virtual-scroll-viewport>
           </div>
           <div class="hours-container">
             <div class="hours-row" *ngIf="timelineView == 'day'">
@@ -278,7 +280,8 @@
               </div>
 
               <!--TASKS-->
-              <ng-container *ngFor="let task of plannerTasks">
+              <cdk-virtual-scroll-viewport itemSize="100" class="tasks-viewport" (scrolledIndexChange)="onTasksScroll($event)">
+                <ng-container *cdkVirtualFor="let task of plannerTasks">
                 <!--DAY-->
                 <div *ngIf="timelineView == 'day'"
                      (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)"
@@ -408,7 +411,8 @@
                     </div>
                   </ng-container>
                 </div>
-              </ng-container>
+                </ng-container>
+              </cdk-virtual-scroll-viewport>
 
             </div>
           </div>
@@ -417,8 +421,9 @@
         <div class="schedule-container"
              *ngIf="filteredMonitors && filteredMonitors.length && timelineView == 'month'">
           <div class="monitors-column">
-            <ng-container
-              *ngFor="let monitor of filteredMonitors; let monitorIndex = index">
+            <cdk-virtual-scroll-viewport itemSize="100" class="monitors-viewport">
+              <ng-container
+              *cdkVirtualFor="let monitor of filteredMonitors; let monitorIndex = index">
               <ng-container
                 *ngFor="let week of weeksInMonth; let weekIndex = index">
                 <div class="monitor"
@@ -497,7 +502,7 @@
 
                 </div>
               </ng-container>
-            </ng-container>
+            </cdk-virtual-scroll-viewport>
           </div>
           <div class="hours-container">
             <div class="hours-row">
@@ -532,7 +537,8 @@
               </ng-container>
 
               <!--TASKS-->
-              <ng-container *ngFor="let task of plannerTasks">
+              <cdk-virtual-scroll-viewport itemSize="100" class="tasks-viewport" (scrolledIndexChange)="onTasksScroll($event)">
+                <ng-container *cdkVirtualFor="let task of plannerTasks">
                 <!--MONTH-->
                 <div class="task-wrapper-week cursor-pointer"
                      (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)"
@@ -584,7 +590,8 @@
                     </div>
                   </ng-container>
                 </div>
-              </ng-container>
+                </ng-container>
+              </cdk-virtual-scroll-viewport>
 
             </div>
           </div>
