@@ -77,6 +77,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   user: any = null;
   activeSchool: any = null;
   languages: any[] = [];
+  selectedLanguages: number[] = [];
   sports: any[] = [];
   sportsReceived: any[] = [];
   degrees: any[] = [];
@@ -406,7 +407,13 @@ export class TimelineComponent implements OnInit, OnDestroy {
   }
 
   searchBookings(firstDate: string, lastDate: string) {
-    this.crudService.get('/admin/getPlanner?date_start=' + firstDate + '&date_end=' + lastDate + '&school_id=' + this.activeSchool + '&perPage=' + 99999).subscribe(
+    let params = '/admin/getPlanner?date_start=' + firstDate + '&date_end=' + lastDate + '&school_id=' + this.activeSchool + '&perPage=' + 99999;
+    if (this.selectedLanguages.length) {
+      this.selectedLanguages.forEach(id => {
+        params += `&languages[]=${id}`;
+      });
+    }
+    this.crudService.get(params).subscribe(
       (data: any) => {
         this.processData(data.data);
       },
@@ -2060,6 +2067,16 @@ export class TimelineComponent implements OnInit, OnDestroy {
     }
   }
 
+  onLanguageChange(langId: number, isChecked: boolean) {
+    if (isChecked) {
+      if (!this.selectedLanguages.includes(langId)) {
+        this.selectedLanguages.push(langId);
+      }
+    } else {
+      this.selectedLanguages = this.selectedLanguages.filter(id => id !== langId);
+    }
+  }
+
   areAllChecked() {
     return this.checkedSports.size === this.sports.length;
   }
@@ -2072,7 +2089,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
     return !(this.areAllChecked() && this.filterMonitor == null && this.filterBookingUser == null &&
       this.filterFree && !this.filterOccupied &&
       this.filterCollective && this.filterPrivate && this.filterNwd && this.filterActivity &&
-      this.filterBlockPayed && this.filterBlockNotPayed);
+      this.filterBlockPayed && this.filterBlockNotPayed && this.selectedLanguages.length === 0);
   }
 
   applyFilters() {
@@ -2094,6 +2111,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
       filterNwd: this.filterNwd,
       filterBlockPayed: this.filterBlockPayed,
       filterBlockNotPayed: this.filterBlockNotPayed,
+      selectedLanguages: this.selectedLanguages,
     };
 
     localStorage.setItem('filterOptions', JSON.stringify(filterOptions));
@@ -2115,6 +2133,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
       this.filterNwd = options.filterNwd;
       this.filterBlockPayed = options.filterBlockPayed;
       this.filterBlockNotPayed = options.filterBlockNotPayed;
+      this.selectedLanguages = options.selectedLanguages || [];
     }
   }
 
@@ -2131,6 +2150,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.filterNwd = true;
     this.filterBlockPayed = true;
     this.filterBlockNotPayed = true;
+    this.selectedLanguages = [];
 
     //Remove saved filters
     localStorage.removeItem('filterOptions');

@@ -149,6 +149,15 @@
               {{ sport.name }}
             </mat-checkbox>
           </div>
+
+          <div class="filter-container-column">
+            <span>{{ 'language' | translate | uppercase }}</span>
+            <mat-checkbox *ngFor="let lang of languages" color="primary"
+                          [checked]="selectedLanguages.includes(lang.id)"
+                          (change)="onLanguageChange(lang.id, $event.checked)">
+              {{ lang.code.toUpperCase() }}
+            </mat-checkbox>
+          </div>
         </div>
       </div>
 
