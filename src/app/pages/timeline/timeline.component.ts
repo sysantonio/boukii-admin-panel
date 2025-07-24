@@ -1844,8 +1844,11 @@ export class TimelineComponent implements OnInit, OnDestroy {
         date_param: dateInfo.date_format,
         hour_start: dateInfo.hour,
         monitor: this.allMonitorsTimeline.find((m) => m.id === monitor_id)
-      }
+      },
+      disableClose: false
     });
+
+    dialogRef.backdropClick().subscribe(() => dialogRef.close());
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -1973,8 +1976,11 @@ export class TimelineComponent implements OnInit, OnDestroy {
       data: {
         block_general: true,
         date_param: currentDateFormat,
-      }
+      },
+      disableClose: false
     });
+
+    dialogRef.backdropClick().subscribe(() => dialogRef.close());
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {

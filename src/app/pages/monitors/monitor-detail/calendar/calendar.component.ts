@@ -143,8 +143,11 @@ export class CalendarComponent implements OnInit {
 
   handleEvent(action: string, event: CalendarEvent): void {
     const dialogRef = this.dialog.open(CalendarEditComponent, {
-      data: event
+      data: event,
+      disableClose: false
     });
+
+    dialogRef.backdropClick().subscribe(() => dialogRef.close());
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -159,8 +162,11 @@ export class CalendarComponent implements OnInit {
 
   handleUpdateEvent(action: string, event: CalendarEvent): void {
     const dialogRef = this.dialog.open(CalendarEditComponent, {
-      data: event
+      data: event,
+      disableClose: false
     });
+
+    dialogRef.backdropClick().subscribe(() => dialogRef.close());
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -201,8 +207,11 @@ export class CalendarComponent implements OnInit {
 
   handleDbClickEvent(action: string, event: any): void {
     const dialogRef = this.dialog.open(CalendarEditComponent, {
-      data: event
+      data: event,
+      disableClose: false
     });
+
+    dialogRef.backdropClick().subscribe(() => dialogRef.close());
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
