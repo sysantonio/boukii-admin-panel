@@ -1135,6 +1135,11 @@
                           href="tel:{{client.client.phone}}"
                           title="{{client.client.phone}}">
                         </vex-icon>
+                        <button mat-icon-button
+                                [routerLink]="'/clients/update/' + client.client.id"
+                                matTooltip="View client">
+                          <mat-icon svgIcon="mat:person"></mat-icon>
+                        </button>
                       </div>
                       <div>
                         <span style="float:left;cursor:pointer"
