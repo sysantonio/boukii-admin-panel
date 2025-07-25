@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {
   addDays,
   addMonths,
@@ -38,6 +38,7 @@ import {DateAdapter} from '@angular/material/core';
 import {Router} from '@angular/router';
 import {EditDateComponent} from './edit-date/edit-date.component';
 import {BookingDetailV2Component} from '../bookings-v2/booking-detail/booking-detail.component';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 moment.locale('fr');
 
@@ -77,6 +78,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
   pageSize: number = 50;
   moreData: boolean = true;
   loadingMore: boolean = false;
+  @ViewChild('monitorsViewport') monitorsViewport!: CdkVirtualScrollViewport;
+  @ViewChild('tasksViewport') tasksViewport!: CdkVirtualScrollViewport;
   vacationDays: any[];
 
   user: any = null;
@@ -460,6 +463,11 @@ export class TimelineComponent implements OnInit, OnDestroy {
       }
       this.searchBookings(firstDate, lastDate, this.page);
     }
+  }
+
+  onTasksScrolled(): void {
+    const offset = this.tasksViewport.measureScrollOffset();
+    this.monitorsViewport.scrollToOffset(offset);
   }
 
   normalizeToArray(data: any) {
