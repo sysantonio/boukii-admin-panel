@@ -4,15 +4,16 @@
 1. [Introducción](#introducción)
 2. [Autenticación](#autenticación)
 3. [Wizard Inteligente](#wizard-inteligente)
-4. [Gestión de Clientes](#gestión-de-clientes)
-5. [Disponibilidad y Horarios](#disponibilidad-y-horarios)
-6. [Pricing Dinámico](#pricing-dinámico)
-7. [Inteligencia Artificial](#inteligencia-artificial)
-8. [Edición de Reservas](#edición-de-reservas)
-9. [Analytics y Métricas](#analytics-y-métricas)
-10. [Comunicaciones](#comunicaciones)
-11. [Operaciones Masivas](#operaciones-masivas)
-12. [Webhooks y Tiempo Real](#webhooks-y-tiempo-real)
+4. [Gestión de Reservas](#gestión-de-reservas)
+5. [Gestión de Clientes](#gestión-de-clientes)
+6. [Disponibilidad y Horarios](#disponibilidad-y-horarios)
+7. [Pricing Dinámico](#pricing-dinámico)
+8. [Inteligencia Artificial](#inteligencia-artificial)
+9. [Edición de Reservas](#edición-de-reservas)
+10. [Analytics y Métricas](#analytics-y-métricas)
+11. [Comunicaciones](#comunicaciones)
+12. [Operaciones Masivas](#operaciones-masivas)
+13. [Webhooks y Tiempo Real](#webhooks-y-tiempo-real)
 
 ---
 
@@ -204,6 +205,108 @@ POST /bookings/validate-step
     warnings: ValidationError[];
     suggestions: ValidationSuggestion[];
     nextStepPreload?: any; // Datos para precargar siguiente paso
+  };
+}
+```
+
+---
+
+## 📚 **Gestión de Reservas**
+
+### **41. Listar Reservas**
+```http
+GET /bookings?type={tipo}&status={status}&page={page}&perPage={perPage}
+```
+
+**Query Parameters:**
+- `type`: `cursos` | `actividades` | `material`
+- `status`: Estado de la reserva
+- `page`: Número de página
+- `perPage`: Registros por página
+
+**Response Example:**
+```typescript
+{
+  success: boolean;
+  data: {
+    bookings: Booking[];
+    meta: PaginationMeta;
+  };
+}
+```
+
+### **42. Crear Reserva**
+```http
+POST /bookings
+```
+
+**Request Body:**
+```typescript
+{
+  client_id: number;
+  course_id: number;
+  start_date: string;
+  end_date: string;
+  participants: number;
+  notes?: string;
+}
+```
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  data: Booking;
+  message: string;
+}
+```
+
+### **43. Cancelar Reserva**
+```http
+POST /bookings/{id}/cancel
+```
+
+**Request Body:**
+```typescript
+{
+  reason: string;
+  notifyClient: boolean;
+}
+```
+
+**Response:**
+```typescript
+{
+  success: boolean;
+  data: {
+    bookingId: number;
+    status: 'canceled';
+    refundAmount?: number;
+  };
+  message: string;
+}
+```
+
+### **44. Obtener KPIs de Reservas**
+```http
+GET /bookings/kpis?type={tipo}&start_date={start}&end_date={end}
+```
+
+**Query Parameters:**
+- `type`: `cursos` | `actividades` | `material`
+- `start_date`: Fecha inicial
+- `end_date`: Fecha final
+
+**Response Example:**
+```typescript
+{
+  success: boolean;
+  data: {
+    total: number;
+    confirmed: number;
+    canceled: number;
+    revenueExpected: number;
+    revenueReceived: number;
   };
 }
 ```
