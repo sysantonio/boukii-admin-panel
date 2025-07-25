@@ -168,76 +168,76 @@
           <div class="monitors-column">
             <cdk-virtual-scroll-viewport itemSize="100" class="monitors-viewport">
               <ng-container *cdkVirtualFor="let monitor of filteredMonitors">
-              <div class="monitor">
-                <ng-container *ngIf="monitor.id">
-                  <div class="monitor-left">
+                <div class="monitor">
+                  <ng-container *ngIf="monitor.id">
+                    <div class="monitor-left">
 
-                    <ng-container
-                      *ngFor="let sport of monitor.sports; let i = index">
-                      <ng-container *ngIf="monitor.sport_degrees_check === i">
-                        <app-level-user
-                          *ngIf="sport.authorized_degree_id && sport.degrees_sport && sport.degrees_sport.length"
-                          [allLevels]="sport.degrees_sport"
-                          [selectLevel]="sport.authorized_degree_id" [size]="56"
-                          [userImage]="monitor.image ? monitor.image : 'assets/img/avatar.png'"></app-level-user>
+                      <ng-container
+                        *ngFor="let sport of monitor.sports; let i = index">
+                        <ng-container *ngIf="monitor.sport_degrees_check === i">
+                          <app-level-user
+                            *ngIf="sport.authorized_degree_id && sport.degrees_sport && sport.degrees_sport.length"
+                            [allLevels]="sport.degrees_sport"
+                            [selectLevel]="sport.authorized_degree_id" [size]="56"
+                            [userImage]="monitor.image ? monitor.image : 'assets/img/avatar.png'"></app-level-user>
 
-                        <div *ngIf="!sport.authorized_degree_id"
-                             class="monitor-img-wrapper">
-                          <img
-                            [src]="monitor.image ? monitor.image : 'assets/img/avatar.png'" />
-                        </div>
+                          <div *ngIf="!sport.authorized_degree_id"
+                               class="monitor-img-wrapper">
+                            <img
+                              [src]="monitor.image ? monitor.image : 'assets/img/avatar.png'" />
+                          </div>
+                        </ng-container>
                       </ng-container>
-                    </ng-container>
 
-                    <div class="monitor-text">
-                      <div class="monitor-lang">
-                        <ng-container *ngIf="monitor.language1_id">
-                          {{getLanguageById(monitor.language1_id)}}
-                        </ng-container>
-                        <ng-container *ngIf="monitor.language2_id">
-                          · {{getLanguageById(monitor.language2_id)}}
-                        </ng-container>
-                        <ng-container *ngIf="monitor.language3_id">
-                          · {{getLanguageById(monitor.language3_id)}}
-                        </ng-container>
-                      </div>
-                      <div class="monitor-title">
-                        {{ monitor.first_name }} {{ monitor.last_name }}
-                      </div>
-                      <div class="monitor-icons">
-                        <img src="assets/img/icons/icon-message-grey.png" />
-                        <a href="mailto:{{monitor.email}}"
-                           title="{{monitor.email}}"><img
-                          src="assets/img/icons/icon-mail-grey.png" /></a>
-                        <a href="tel:{{monitor.phone}}"
-                           title="{{monitor.phone}}"><img
-                          src="assets/img/icons/icon-phone-grey.png" /></a>
-                        <img src="assets/img/icons/icon-calendar-grey.png"
-                             (click)="goToTimeline(monitor)"
-                             style="cursor: pointer;" />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="monitor-right">
-                    <div *ngFor="let sport of monitor.sports; let i = index"
-                         class="monitor-sport"
-                         [ngClass]="{'full-opacity': monitor.sport_degrees_check === i}"
-                         (click)="monitor.sport_degrees_check !== i && changeMonitorDegree(monitor, i)">
-                      <img [src]="sport.icon_selected" [title]="sport.name" />
-                    </div>
-                  </div>
-                </ng-container>
-                <ng-container *ngIf="!monitor.id">
-                  <div class="monitor-left">
-                    <div class="monitor-img-wrapper"></div>
-                    <div class="monitor-text">
-                      <div class="monitor-title">
-                        {{'no_monitor' | translate}}
+                      <div class="monitor-text">
+                        <div class="monitor-lang">
+                          <ng-container *ngIf="monitor.language1_id">
+                            {{getLanguageById(monitor.language1_id)}}
+                          </ng-container>
+                          <ng-container *ngIf="monitor.language2_id">
+                            · {{getLanguageById(monitor.language2_id)}}
+                          </ng-container>
+                          <ng-container *ngIf="monitor.language3_id">
+                            · {{getLanguageById(monitor.language3_id)}}
+                          </ng-container>
+                        </div>
+                        <div class="monitor-title">
+                          {{ monitor.first_name }} {{ monitor.last_name }}
+                        </div>
+                        <div class="monitor-icons">
+                          <img src="assets/img/icons/icon-message-grey.png" />
+                          <a href="mailto:{{monitor.email}}"
+                             title="{{monitor.email}}"><img
+                            src="assets/img/icons/icon-mail-grey.png" /></a>
+                          <a href="tel:{{monitor.phone}}"
+                             title="{{monitor.phone}}"><img
+                            src="assets/img/icons/icon-phone-grey.png" /></a>
+                          <img src="assets/img/icons/icon-calendar-grey.png"
+                               (click)="goToTimeline(monitor)"
+                               style="cursor: pointer;" />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </ng-container>
-              </div>
+                    <div class="monitor-right">
+                      <div *ngFor="let sport of monitor.sports; let i = index"
+                           class="monitor-sport"
+                           [ngClass]="{'full-opacity': monitor.sport_degrees_check === i}"
+                           (click)="monitor.sport_degrees_check !== i && changeMonitorDegree(monitor, i)">
+                        <img [src]="sport.icon_selected" [title]="sport.name" />
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="!monitor.id">
+                    <div class="monitor-left">
+                      <div class="monitor-img-wrapper"></div>
+                      <div class="monitor-text">
+                        <div class="monitor-title">
+                          {{'no_monitor' | translate}}
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
               </ng-container>
             </cdk-virtual-scroll-viewport>
           </div>
@@ -282,12 +282,12 @@
               <!--TASKS-->
               <cdk-virtual-scroll-viewport itemSize="100" class="tasks-viewport" (scrolledIndexChange)="onTasksScroll($event)">
                 <ng-container *cdkVirtualFor="let task of plannerTasks">
-                <!--DAY-->
-                <div *ngIf="timelineView == 'day'"
-                     (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)"
-                     (contextmenu)="task.grouped_tasks && task.grouped_tasks.length > 1 ?
+                  <!--DAY-->
+                  <div *ngIf="timelineView == 'day'"
+                       (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)"
+                       (contextmenu)="task.grouped_tasks && task.grouped_tasks.length > 1 ?
                      $event.preventDefault() : toggleDetailMove(task, $event)"
-                     class="task-wrapper cursor-pointer" [ngClass]="[
+                       class="task-wrapper cursor-pointer" [ngClass]="[
                                 (task.booking_id && ((idDetail == task.booking_id &&
                                 hourDetail == task.hour_start && dateDetail == task.date
                                  && monitorDetail == task.monitor_id ) || (idGroupedTasks == task.booking_id
@@ -297,73 +297,73 @@
                                 task.class,
                                 (task.block_id && idBlock == task.block_id) ? 'border-selected' : ''
                             ]" [ngStyle]="task.style">
-                  <div class="task-text">
-                    <img
-                      *ngIf="(task.type=='collective' || task.type=='private' || task.type=='activity') && task.sport"
-                      [src]="task.sport.icon_selected" />
-                    <div
-                      *ngIf="task.type === 'block_personal' || task.type === 'block_payed' || task.type === 'block_no_payed'">
-                      <ng-container
-                        *ngIf="task.type === 'block_payed'">BP&nbsp;</ng-container>
-                      <ng-container
-                        *ngIf="task.type === 'block_no_payed'">BNP&nbsp;</ng-container>
-                      {{ task.name }}
+                    <div class="task-text">
+                      <img
+                        *ngIf="(task.type=='collective' || task.type=='private' || task.type=='activity') && task.sport"
+                        [src]="task.sport.icon_selected" />
+                      <div
+                        *ngIf="task.type === 'block_personal' || task.type === 'block_payed' || task.type === 'block_no_payed'">
+                        <ng-container
+                          *ngIf="task.type === 'block_payed'">BP&nbsp;</ng-container>
+                        <ng-container
+                          *ngIf="task.type === 'block_no_payed'">BNP&nbsp;</ng-container>
+                        {{ task.name }}
+                      </div>
+                      <div *ngIf="task.type === 'collective'">{{ task.name
+                        }}</div>
+                      <div
+                        *ngIf="(task.type === 'private' || task.type === 'activity')">{{
+                          task.all_clients[0].client.first_name}} {{
+                          task.all_clients[0].client.last_name}}</div>
+                      <div
+                        *ngIf="(task.type === 'private' || task.type === 'activity')">{{getLanguageById(task.all_clients[0].client.language1_id)}}
+                        ·{{getBirthYears(task.all_clients[0].client.birth_date)}}
+                        {{'years' |translate}}</div>
                     </div>
-                    <div *ngIf="task.type === 'collective'">{{ task.name
-                      }}</div>
                     <div
-                      *ngIf="(task.type === 'private' || task.type === 'activity')">{{
-                        task.all_clients[0].client.first_name}} {{
-                        task.all_clients[0].client.last_name}}</div>
-                    <div
-                      *ngIf="(task.type === 'private' || task.type === 'activity')">{{getLanguageById(task.all_clients[0].client.language1_id)}}
-                      ·{{getBirthYears(task.all_clients[0].client.birth_date)}}
-                      {{'years' |translate}}</div>
-                  </div>
-                  <div
-                    *ngIf="task.type=='collective' || task.type=='private' || task.type=='activity'"
-                    class="task-blocks"
-                    [ngStyle]="{'min-width': (task.type === 'private' || task.type === 'activity') ? '0px' : '54px',
+                      *ngIf="task.type=='collective' || task.type=='private' || task.type=='activity'"
+                      class="task-blocks"
+                      [ngStyle]="{'min-width': (task.type === 'private' || task.type === 'activity') ? '0px' : '54px',
                               'width': (task.type === 'private' || task.type === 'activity') ? '34px' : '54px'}">
-                    <!-- PENDING LEVEL -->
+                      <!-- PENDING LEVEL -->
+                      <ng-container
+                        *ngIf="!task.grouped_tasks || !(task.grouped_tasks.length > 1)">
+                        <div class="task-block-level"
+                             *ngIf="task.degree && task.type !== 'activity'"
+                             [ngStyle]="{'background': task.degree.color}">{{task.degree.annotation}}
+                          {{task.subgroup_number}}</div>
+                        <div *ngIf="task.type=='collective'"
+                             class="task-block-people">{{task.clients_number}}/{{task.max_participants}}</div>
+                      </ng-container>
+                      <ng-container
+                        *ngIf="task.grouped_tasks && task.grouped_tasks.length > 1">
+                        <div class="task-block-grouped">+
+                          {{task.grouped_tasks.length}}</div>
+                      </ng-container>
+                    </div>
+                    <!--PRIVATE BOOKING COLOR-->
                     <ng-container
-                      *ngIf="!task.grouped_tasks || !(task.grouped_tasks.length > 1)">
-                      <div class="task-block-level"
-                           *ngIf="task.degree && task.type !== 'activity'"
-                           [ngStyle]="{'background': task.degree.color}">{{task.degree.annotation}}
-                        {{task.subgroup_number}}</div>
-                      <div *ngIf="task.type=='collective'"
-                           class="task-block-people">{{task.clients_number}}/{{task.max_participants}}</div>
-                    </ng-container>
-                    <ng-container
-                      *ngIf="task.grouped_tasks && task.grouped_tasks.length > 1">
-                      <div class="task-block-grouped">+
-                        {{task.grouped_tasks.length}}</div>
-                    </ng-container>
-                  </div>
-                  <!--PRIVATE BOOKING COLOR-->
-                  <ng-container
-                    *ngIf="(task.type === 'private' || task.type === 'activity')">
-                    <div
-                      *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')"
-                      [ngClass]="{
+                      *ngIf="(task.type === 'private' || task.type === 'activity')">
+                      <div
+                        *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')"
+                        [ngClass]="{
                                             'private-color-green': task.booking_color === 'green',
                                             'private-color-yellow': task.booking_color === 'yellow',
                                             'private-color-red': task.booking_color === 'red'
                                         }">
-                    </div>
-                    <!-- ICONO DE WARNING SI ACCEPTED ES FALSE -->
-                    <div *ngIf="task.type === 'private' && task.accepted === false" class="warning-icon-container">
-                      <mat-icon color="warn" class="warning-icon">warning</mat-icon>
+                      </div>
+                      <!-- ICONO DE WARNING SI ACCEPTED ES FALSE -->
+                      <div *ngIf="task.type === 'private' && task.accepted === false" class="warning-icon-container">
+                        <mat-icon color="warn" class="warning-icon">warning</mat-icon>
 
-                    </div>
-                  </ng-container>
-                </div>
-                <!--WEEK-->
-                <div *ngIf="timelineView == 'week'"
-                     (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)"
-                     (contextmenu)="task.grouped_tasks && task.grouped_tasks.length > 1 ? $event.preventDefault() : toggleDetailMove(task, $event)"
-                     class="task-wrapper-week cursor-pointer" [ngClass]="[
+                      </div>
+                    </ng-container>
+                  </div>
+                  <!--WEEK-->
+                  <div *ngIf="timelineView == 'week'"
+                       (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)"
+                       (contextmenu)="task.grouped_tasks && task.grouped_tasks.length > 1 ? $event.preventDefault() : toggleDetailMove(task, $event)"
+                       class="task-wrapper-week cursor-pointer" [ngClass]="[
                                 (task.booking_id && ((idDetail == task.booking_id && hourDetail == task.hour_start
                                 && dateDetail == task.date && monitorDetail == task.monitor_id )
                                 || (idGroupedTasks == task.booking_id && hourGrouped == task.hour_start && dateGrouped == task.date))) ?
@@ -372,45 +372,45 @@
                                 task.class,
                                 (task.block_id && idBlock == task.block_id) ? 'border-selected' : ''
                             ]" [ngStyle]="task.styleWeek">
-                  <img class="sport-img-week"
-                       *ngIf="(!task.styleWeek.height || (task.styleWeek.height && task.styleWeek.height == '100px')) && ((task.type=='collective' || task.type=='private' || task.type=='activity') && task.sport)"
-                       [src]="task.sport.icon_selected" />
-                  <div
-                    *ngIf="task.type=='collective' || task.type=='private' || task.type=='activity'"
-                    class="task-blocks-week">
-                    <!-- PENDING LEVEL -->
-                    <ng-container
-                      *ngIf="!task.grouped_tasks || !(task.grouped_tasks.length > 1)">
-                      <div class="task-block-level-week" *ngIf="task.degree"
-                           [ngStyle]="{'background': task.degree.color}">{{task.degree.annotation}}
-                        {{task.subgroup_number}}</div>
-                      <div *ngIf="task.type=='collective'"
-                           class="task-block-people-week">{{task.clients_number}}/{{task.max_participants}}</div>
-                    </ng-container>
-                    <ng-container
-                      *ngIf="task.grouped_tasks && task.grouped_tasks.length > 1">
-                      <div class="task-block-grouped-week">+
-                        {{task.grouped_tasks.length}}</div>
-                    </ng-container>
-                  </div>
-                  <!--PRIVATE BOOKING COLOR-->
-                  <ng-container
-                    *ngIf="(task.type === 'private' || task.type === 'activity')">
+                    <img class="sport-img-week"
+                         *ngIf="(!task.styleWeek.height || (task.styleWeek.height && task.styleWeek.height == '100px')) && ((task.type=='collective' || task.type=='private' || task.type=='activity') && task.sport)"
+                         [src]="task.sport.icon_selected" />
                     <div
-                      *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')"
-                      [ngClass]="{
+                      *ngIf="task.type=='collective' || task.type=='private' || task.type=='activity'"
+                      class="task-blocks-week">
+                      <!-- PENDING LEVEL -->
+                      <ng-container
+                        *ngIf="!task.grouped_tasks || !(task.grouped_tasks.length > 1)">
+                        <div class="task-block-level-week" *ngIf="task.degree"
+                             [ngStyle]="{'background': task.degree.color}">{{task.degree.annotation}}
+                          {{task.subgroup_number}}</div>
+                        <div *ngIf="task.type=='collective'"
+                             class="task-block-people-week">{{task.clients_number}}/{{task.max_participants}}</div>
+                      </ng-container>
+                      <ng-container
+                        *ngIf="task.grouped_tasks && task.grouped_tasks.length > 1">
+                        <div class="task-block-grouped-week">+
+                          {{task.grouped_tasks.length}}</div>
+                      </ng-container>
+                    </div>
+                    <!--PRIVATE BOOKING COLOR-->
+                    <ng-container
+                      *ngIf="(task.type === 'private' || task.type === 'activity')">
+                      <div
+                        *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')"
+                        [ngClass]="{
                                             'private-color-green': task.booking_color === 'green',
                                             'private-color-yellow': task.booking_color === 'yellow',
                                             'private-color-red': task.booking_color === 'red'
                                         }">
-                    </div>
-                    <!-- ICONO DE WARNING SI ACCEPTED ES FALSE -->
-                    <div *ngIf="task.type === 'private' && task.accepted === false" class="warning-icon-container">
-                      <mat-icon color="warn" class="warning-icon">warning</mat-icon>
+                      </div>
+                      <!-- ICONO DE WARNING SI ACCEPTED ES FALSE -->
+                      <div *ngIf="task.type === 'private' && task.accepted === false" class="warning-icon-container">
+                        <mat-icon color="warn" class="warning-icon">warning</mat-icon>
 
-                    </div>
-                  </ng-container>
-                </div>
+                      </div>
+                    </ng-container>
+                  </div>
                 </ng-container>
               </cdk-virtual-scroll-viewport>
 
@@ -423,84 +423,85 @@
           <div class="monitors-column">
             <cdk-virtual-scroll-viewport itemSize="100" class="monitors-viewport">
               <ng-container
-              *cdkVirtualFor="let monitor of filteredMonitors; let monitorIndex = index">
-              <ng-container
-                *ngFor="let week of weeksInMonth; let weekIndex = index">
-                <div class="monitor"
-                     [ngClass]="{'big-border': weekIndex === 0 && monitorIndex !== 0}">
-                  <ng-container *ngIf="weekIndex === 0">
-                    <ng-container *ngIf="monitor.id">
-                      <div class="monitor-left">
+                *cdkVirtualFor="let monitor of filteredMonitors; let monitorIndex = index">
+                <ng-container
+                  *ngFor="let week of weeksInMonth; let weekIndex = index">
+                  <div class="monitor"
+                       [ngClass]="{'big-border': weekIndex === 0 && monitorIndex !== 0}">
+                    <ng-container *ngIf="weekIndex === 0">
+                      <ng-container *ngIf="monitor.id">
+                        <div class="monitor-left">
 
-                        <ng-container
-                          *ngFor="let sport of monitor.sports; let i = index">
                           <ng-container
-                            *ngIf="monitor.sport_degrees_check === i">
-                            <app-level-user
-                              *ngIf="sport.authorized_degree_id && sport.degrees_sport && sport.degrees_sport.length"
-                              [allLevels]="sport.degrees_sport"
-                              [selectLevel]="sport.authorized_degree_id"
-                              [size]="56"
-                              [userImage]="monitor.image ? monitor.image : 'assets/img/avatar.png'"></app-level-user>
+                            *ngFor="let sport of monitor.sports; let i = index">
+                            <ng-container
+                              *ngIf="monitor.sport_degrees_check === i">
+                              <app-level-user
+                                *ngIf="sport.authorized_degree_id && sport.degrees_sport && sport.degrees_sport.length"
+                                [allLevels]="sport.degrees_sport"
+                                [selectLevel]="sport.authorized_degree_id"
+                                [size]="56"
+                                [userImage]="monitor.image ? monitor.image : 'assets/img/avatar.png'"></app-level-user>
 
-                            <div *ngIf="!sport.authorized_degree_id"
-                                 class="monitor-img-wrapper">
-                              <img
-                                [src]="monitor.image ? monitor.image : 'assets/img/avatar.png'" />
-                            </div>
+                              <div *ngIf="!sport.authorized_degree_id"
+                                   class="monitor-img-wrapper">
+                                <img
+                                  [src]="monitor.image ? monitor.image : 'assets/img/avatar.png'" />
+                              </div>
+                            </ng-container>
                           </ng-container>
-                        </ng-container>
 
-                        <div class="monitor-text">
-                          <div class="monitor-lang">
-                            FR · EN · ES
-                          </div>
-                          <div class="monitor-title">
-                            {{ monitor.first_name }} {{ monitor.last_name }}
-                          </div>
-                          <div class="monitor-icons">
-                            <img src="assets/img/icons/icon-message-grey.png" />
-                            <a href="mailto:{{monitor.email}}"
-                               title="{{monitor.email}}"><img
-                              src="assets/img/icons/icon-mail-grey.png" /></a>
-                            <a href="tel:{{monitor.phone}}"
-                               title="{{monitor.phone}}"><img
-                              src="assets/img/icons/icon-phone-grey.png" /></a>
-                            <a href="/monitors/update/{{monitor.id}}"><img
-                              src="assets/img/icons/icon-calendar-grey.png" /></a>
+                          <div class="monitor-text">
+                            <div class="monitor-lang">
+                              FR · EN · ES
+                            </div>
+                            <div class="monitor-title">
+                              {{ monitor.first_name }} {{ monitor.last_name }}
+                            </div>
+                            <div class="monitor-icons">
+                              <img src="assets/img/icons/icon-message-grey.png" />
+                              <a href="mailto:{{monitor.email}}"
+                                 title="{{monitor.email}}"><img
+                                src="assets/img/icons/icon-mail-grey.png" /></a>
+                              <a href="tel:{{monitor.phone}}"
+                                 title="{{monitor.phone}}"><img
+                                src="assets/img/icons/icon-phone-grey.png" /></a>
+                              <a href="/monitors/update/{{monitor.id}}"><img
+                                src="assets/img/icons/icon-calendar-grey.png" /></a>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="monitor-right">
-                        <div *ngFor="let sport of monitor.sports; let i = index"
-                             class="monitor-sport"
-                             [ngClass]="{'full-opacity': monitor.sport_degrees_check === i}"
-                             (click)="monitor.sport_degrees_check !== i && changeMonitorDegree(monitor, i)">
-                          <img [src]="sport.icon_selected"
-                               [title]="sport.name" />
+                        <div class="monitor-right">
+                          <div *ngFor="let sport of monitor.sports; let i = index"
+                               class="monitor-sport"
+                               [ngClass]="{'full-opacity': monitor.sport_degrees_check === i}"
+                               (click)="monitor.sport_degrees_check !== i && changeMonitorDegree(monitor, i)">
+                            <img [src]="sport.icon_selected"
+                                 [title]="sport.name" />
+                          </div>
                         </div>
-                      </div>
+                      </ng-container>
+                      <ng-container *ngIf="!monitor.id">
+                        <div class="monitor-left">
+                          <div class="monitor-img-wrapper"></div>
+                          <div class="monitor-text">
+                            <div class="monitor-title">
+                              {{ 'no_monitor' | translate}}
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
                     </ng-container>
-                    <ng-container *ngIf="!monitor.id">
-                      <div class="monitor-left">
-                        <div class="monitor-img-wrapper"></div>
-                        <div class="monitor-text">
-                          <div class="monitor-title">
-                            {{ 'no_monitor' | translate}}
-                          </div>
-                        </div>
-                      </div>
-                    </ng-container>
-                  </ng-container>
 
-                  <div class="day-start-week">
-                    {{ week.startDay }}
-                  </div>
-                  <div class="day-end-week">
-                    {{ week.endDay }}
-                  </div>
+                    <div class="day-start-week">
+                      {{ week.startDay }}
+                    </div>
+                    <div class="day-end-week">
+                      {{ week.endDay }}
+                    </div>
 
-                </div>
+                  </div>
+                </ng-container>
               </ng-container>
             </cdk-virtual-scroll-viewport>
           </div>
@@ -539,11 +540,11 @@
               <!--TASKS-->
               <cdk-virtual-scroll-viewport itemSize="100" class="tasks-viewport" (scrolledIndexChange)="onTasksScroll($event)">
                 <ng-container *cdkVirtualFor="let task of plannerTasks">
-                <!--MONTH-->
-                <div class="task-wrapper-week cursor-pointer"
-                     (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)"
-                     (contextmenu)="task.grouped_tasks && task.grouped_tasks.length > 1 ? $event.preventDefault() : toggleDetailMove(task, $event)"
-                     [ngClass]="[
+                  <!--MONTH-->
+                  <div class="task-wrapper-week cursor-pointer"
+                       (click)="task.block_id ? toggleBlock(task) : toggleDetail(task)"
+                       (contextmenu)="task.grouped_tasks && task.grouped_tasks.length > 1 ? $event.preventDefault() : toggleDetailMove(task, $event)"
+                       [ngClass]="[
                                 (task.booking_id && ((idDetail == task.booking_id && hourDetail == task.hour_start
                                 && dateDetail == task.date && monitorDetail == task.monitor_id )
                                 || (idGroupedTasks == task.booking_id && hourGrouped == task.hour_start && dateGrouped == task.date))) ?
@@ -552,44 +553,44 @@
                                 task.class,
                                 (task.block_id && idBlock == task.block_id) ? 'border-selected' : ''
                             ]" [ngStyle]="task.styleMonth">
-                  <img class="sport-img-week"
-                       *ngIf="(!task.styleMonth.height || (task.styleMonth.height && task.styleMonth.height == '100px')) && ((task.type=='collective' || task.type=='private' || task.type=='activity') && task.sport)"
-                       [src]="task.sport.icon_selected" />
-                  <div
-                    *ngIf="task.type=='collective' || task.type=='private' || task.type=='activity'"
-                    class="task-blocks-week">
-                    <!-- PENDING LEVEL -->
-                    <ng-container
-                      *ngIf="!task.grouped_tasks || !(task.grouped_tasks.length > 1)">
-                      <div class="task-block-level-week" *ngIf="task.degree"
-                           [ngStyle]="{'background': task.degree.color}">{{task.degree.annotation}}
-                        {{task.subgroup_number}}</div>
-                      <div *ngIf="task.type=='collective'"
-                           class="task-block-people-week">{{task.clients_number}}/{{task.max_participants}}</div>
-                    </ng-container>
-                    <ng-container
-                      *ngIf="task.grouped_tasks && task.grouped_tasks.length > 1">
-                      <div class="task-block-grouped-week">+
-                        {{task.grouped_tasks.length}}</div>
-                    </ng-container>
-                  </div>
-                  <!--PRIVATE BOOKING COLOR-->
-                  <ng-container
-                    *ngIf="(task.type === 'private' || task.type === 'activity')">
+                    <img class="sport-img-week"
+                         *ngIf="(!task.styleMonth.height || (task.styleMonth.height && task.styleMonth.height == '100px')) && ((task.type=='collective' || task.type=='private' || task.type=='activity') && task.sport)"
+                         [src]="task.sport.icon_selected" />
                     <div
-                      *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')"
-                      [ngClass]="{
+                      *ngIf="task.type=='collective' || task.type=='private' || task.type=='activity'"
+                      class="task-blocks-week">
+                      <!-- PENDING LEVEL -->
+                      <ng-container
+                        *ngIf="!task.grouped_tasks || !(task.grouped_tasks.length > 1)">
+                        <div class="task-block-level-week" *ngIf="task.degree"
+                             [ngStyle]="{'background': task.degree.color}">{{task.degree.annotation}}
+                          {{task.subgroup_number}}</div>
+                        <div *ngIf="task.type=='collective'"
+                             class="task-block-people-week">{{task.clients_number}}/{{task.max_participants}}</div>
+                      </ng-container>
+                      <ng-container
+                        *ngIf="task.grouped_tasks && task.grouped_tasks.length > 1">
+                        <div class="task-block-grouped-week">+
+                          {{task.grouped_tasks.length}}</div>
+                      </ng-container>
+                    </div>
+                    <!--PRIVATE BOOKING COLOR-->
+                    <ng-container
+                      *ngIf="(task.type === 'private' || task.type === 'activity')">
+                      <div
+                        *ngIf="task.booking_color && (task.booking_color === 'green' || task.booking_color === 'yellow' || task.booking_color === 'red')"
+                        [ngClass]="{
                                             'private-color-green': task.booking_color === 'green',
                                             'private-color-yellow': task.booking_color === 'yellow',
                                             'private-color-red': task.booking_color === 'red'
                                         }">
-                    </div>
-                    <!-- ICONO DE WARNING SI ACCEPTED ES FALSE -->
-                    <div *ngIf="task.type === 'private' && task.accepted === false" class="warning-icon-container">
-                      <mat-icon color="warn" class="warning-icon">warning</mat-icon>
-                    </div>
-                  </ng-container>
-                </div>
+                      </div>
+                      <!-- ICONO DE WARNING SI ACCEPTED ES FALSE -->
+                      <div *ngIf="task.type === 'private' && task.accepted === false" class="warning-icon-container">
+                        <mat-icon color="warn" class="warning-icon">warning</mat-icon>
+                      </div>
+                    </ng-container>
+                  </div>
                 </ng-container>
               </cdk-virtual-scroll-viewport>
 

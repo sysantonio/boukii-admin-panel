@@ -43,6 +43,16 @@ const childrenRoutes: VexRoutes = [
         canActivate: [AuthGuard],
       },
       {
+        path: 'bookings-v3',
+        loadChildren: () => import('./bookings-v3/bookings-v3.module').then(m => m.BookingsV3Module),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'skipro',
+        loadChildren: () => import('./bookings-v3/skipro.module').then(m => m.SkiProModule),
+        canActivate: [AuthGuard],
+      },
+      {
         path: 'courses',
         loadChildren: () => import('./pages/courses-v2/courses.module').then(m => m.CoursesModule),
         canActivate: [AuthGuard],

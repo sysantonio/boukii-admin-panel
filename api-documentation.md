@@ -624,8 +624,16 @@ Content-Type: application/json
 
 #### Obtener Datos de Planificación
 ```http
-GET /api/admin/getPlanner?school_id=1&date_start=2025-01-01&date_end=2025-01-31
+GET /api/admin/getPlanner?school_id=1&date_start=2025-01-01&date_end=2025-01-31&languages=1,2
 ```
+Opcionalmente puede enviarse el parámetro `languages` con IDs separados por coma o como array para filtrar por los idiomas de los monitores.
+
+The booking objects returned by this endpoint now include a `user_id` value representing the booking creator.
+
+Responses for this endpoint are cached for up to 10 minutes. The cache key is built
+from `school_id`, `date_start`, `date_end`, `monitor_id` and `languages` parameters.
+
+Clear the cache or wait for expiration if planner data has changed.
 
 #### Transferir Asignaciones de Monitor
 ```http

@@ -1,0 +1,546 @@
+<div class="client-selection-container">
+  
+  <!-- Header con búsqueda inteligente -->
+  <div class="client-search-header">
+    <div class="search-section">
+      <h3 class="section-title">
+        <mat-icon>person_search</mat-icon>
+        Seleccionar Cliente
+      </h3>
+      <p class="section-subtitle">
+        Busca un cliente existente o crea uno nuevo con sugerencias inteligentes
+      </p>
+      
+      <!-- Barra de búsqueda -->
+      <form [formGroup]="searchForm" class="search-form">
+        <mat-form-field 
+          appearance="outline" 
+          class="search-input"
+          [@searchPulse]="searchAnimationState">
+          <mat-label>Buscar cliente por nombre, email o teléfono</mat-label>
+          <input 
+            matInput 
+            formControlName="searchTerm"
+            placeholder="Escribe para buscar..."
+            (keydown)="onSearchKeyDown($event)"
+            autocomplete="off">
+          <mat-icon matPrefix>search</mat-icon>
+          <mat-spinner 
+            *ngIf="isSearching()" 
+            matSuffix 
+            diameter="20">
+          </mat-spinner>
+          <button 
+            *ngIf="searchTerm?.value && !isSearching()" 
+            matSuffix 
+            mat-icon-button 
+            type="button"
+            (click)="searchTerm?.setValue('')">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-form-field>
+      </form>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="client-content" [ngSwitch]="viewMode">
+    
+    <!-- ================ RESULTADOS DE BÚSQUEDA ================ -->
+    <div *ngSwitchCase="'search'" class="search-results-section">
+      <div class="results-header">
+        <h4>
+          <mat-icon>search</mat-icon>
+          Resultados de búsqueda ({{ searchResults().length }})
+        </h4>
+      </div>
+      
+      <div class="clients-grid" [@listAnimation]="searchResults().length">
+        <div 
+          *ngFor="let suggestion of searchResults(); trackBy: trackByClientId"
+          class="client-card search-result"
+          [@clientCardEnter]
+          (click)="selectClient(suggestion.client)"
+          (keydown)="onClientCardKeyDown($event, suggestion.client)"
+          tabindex="0"
+          matRipple>
+          
+          <div class="client-card-header">
+            <img 
+              class="client-avatar" 
+              [src]="getClientAvatarUrl(suggestion.client)"
+              [alt]="suggestion.client.firstName + ' ' + suggestion.client.lastName">
+            
+            <div class="client-info">
+              <h5 class="client-name">
+                {{ suggestion.client.firstName }} {{ suggestion.client.lastName }}
+              </h5>
+              <p class="client-email">{{ suggestion.client.email }}</p>
+              <p class="client-phone">{{ formatPhoneNumber(suggestion.client.phone) }}</p>
+            </div>
+            
+            <div class="client-badges">
+              <mat-chip-set>
+                <mat-chip 
+                  [style.background-color]="getClientLevelColor(suggestion.client.level)"
+                  class="level-chip">
+                  <mat-icon matChipAvatar>{{ getClientLevelIcon(suggestion.client.level) }}</mat-icon>
+                  {{ suggestion.client.level }}
+                </mat-chip>
+                
+                <mat-chip 
+                  *ngIf="suggestion.client.loyaltyTier !== 'Bronze'"
+                  class="loyalty-chip">
+                  <mat-icon matChipAvatar>{{ getLoyaltyIcon(suggestion.client.loyaltyTier) }}</mat-icon>
+                  {{ suggestion.client.loyaltyTier }}
+                </mat-chip>
+              </mat-chip-set>
+            </div>
+          </div>
+          
+          <div class="client-card-body">
+            <!-- Match Score -->
+            <div class="match-score">
+              <div class="score-bar">
+                <div 
+                  class="score-fill" 
+                  [style.width.%]="suggestion.matchScore">
+                </div>
+              </div>
+              <span class="score-text">{{ suggestion.matchScore }}% compatibilidad</span>
+            </div>
+            
+            <!-- Match Reasons -->
+            <div class="match-reasons">
+              <span 
+                *ngFor="let reason of suggestion.matchReasons; let i = index"
+                class="match-reason"
+                [matTooltip]="reason">
+                <mat-icon>{{ getMatchReasonIcon(reason) }}</mat-icon>
+              </span>
+            </div>
+          </div>
+          
+          <div class="client-card-stats">
+            <div class="stat">
+              <mat-icon>event</mat-icon>
+              <span>{{ suggestion.client.totalBookings }} reservas</span>
+            </div>
+            <div class="stat">
+              <mat-icon>euro</mat-icon>
+              <span>{{ formatCurrency(suggestion.client.totalSpent) }}</span>
+            </div>
+            <div class="stat">
+              <mat-icon>star</mat-icon>
+              <span>{{ suggestion.client.averageRating | number:'1.1-1' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- No hay resultados -->
+      <div *ngIf="!isSearching() && searchResults().length === 0" class="no-results">
+        <mat-icon>search_off</mat-icon>
+        <h4>No se encontraron clientes</h4>
+        <p>¿El cliente es nuevo? Puedes crear uno ahora.</p>
+        <button 
+          mat-raised-button 
+          color="primary"
+          (click)="showCreateClientForm()">
+          <mat-icon>person_add</mat-icon>
+          Crear Nuevo Cliente
+        </button>
+      </div>
+    </div>
+
+    <!-- ================ SUGERENCIAS (RECIENTES/FAVORITOS) ================ -->
+    <div *ngSwitchCase="'suggestions'" class="suggestions-section">
+      
+      <!-- Clientes Favoritos -->
+      <div *ngIf="favoriteClients().length > 0" class="client-group">
+        <div class="group-header">
+          <h4>
+            <mat-icon>star</mat-icon>
+            Clientes Favoritos
+          </h4>
+          <mat-chip class="count-chip">{{ favoriteClients().length }}</mat-chip>
+        </div>
+        
+        <div class="clients-list horizontal">
+          <div 
+            *ngFor="let client of favoriteClients(); trackBy: trackByClientId"
+            class="client-card favorite"
+            [@clientCardEnter]
+            (click)="selectClient(client)"
+            (keydown)="onClientCardKeyDown($event, client)"
+            tabindex="0"
+            matRipple>
+            
+            <div class="client-card-compact">
+              <img 
+                class="client-avatar small" 
+                [src]="getClientAvatarUrl(client)"
+                [alt]="client.firstName + ' ' + client.lastName">
+              
+              <div class="client-info">
+                <h6 class="client-name">{{ client.firstName }} {{ client.lastName }}</h6>
+                <p class="client-level">{{ client.level }}</p>
+              </div>
+              
+              <mat-icon class="favorite-icon">star</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <mat-divider *ngIf="favoriteClients().length > 0 && recentClients().length > 0"></mat-divider>
+      
+      <!-- Clientes Recientes -->
+      <div *ngIf="recentClients().length > 0" class="client-group">
+        <div class="group-header">
+          <h4>
+            <mat-icon>history</mat-icon>
+            Clientes Recientes
+          </h4>
+          <mat-chip class="count-chip">{{ recentClients().length }}</mat-chip>
+        </div>
+        
+        <div class="clients-list vertical">
+          <div 
+            *ngFor="let client of recentClients(); trackBy: trackByClientId"
+            class="client-card recent"
+            [@clientCardEnter]
+            (click)="selectClient(client)"
+            (keydown)="onClientCardKeyDown($event, client)"
+            tabindex="0"
+            matRipple>
+            
+            <div class="client-card-header">
+              <img 
+                class="client-avatar" 
+                [src]="getClientAvatarUrl(client)"
+                [alt]="client.firstName + ' ' + client.lastName">
+              
+              <div class="client-info">
+                <h5 class="client-name">{{ client.firstName }} {{ client.lastName }}</h5>
+                <p class="client-contact">{{ client.email }}</p>
+                <p class="client-last-booking">
+                  <mat-icon>schedule</mat-icon>
+                  Última reserva: {{ formatDate(client.lastBooking!) }}
+                </p>
+              </div>
+              
+              <div class="client-quick-stats">
+                <span class="stat-item">
+                  <mat-icon>event</mat-icon>
+                  {{ client.totalBookings }}
+                </span>
+                <span class="stat-item">
+                  <mat-icon>star</mat-icon>
+                  {{ client.averageRating | number:'1.1-1' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Call to Action -->
+      <div class="cta-section">
+        <div class="cta-content">
+          <mat-icon>person_add</mat-icon>
+          <h4>¿Cliente nuevo?</h4>
+          <p>Crea un perfil de cliente con información completa y preferencias.</p>
+          <button 
+            mat-raised-button 
+            color="primary"
+            (click)="showCreateClientForm()">
+            <mat-icon>add</mat-icon>
+            Crear Nuevo Cliente
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================ CLIENTE SELECCIONADO ================ -->
+    <div *ngSwitchCase="'selected'" class="selected-client-section">
+      <div class="selected-client-card" [@selectedGlow]="'selected'">
+        <div class="card-header">
+          <div class="client-main-info">
+            <img 
+              class="client-avatar large" 
+              [src]="getClientAvatarUrl(selectedClient()!)"
+              [alt]="selectedClient()!.firstName + ' ' + selectedClient()!.lastName">
+            
+            <div class="client-details">
+              <h3 class="client-name-large">
+                {{ selectedClient()!.firstName }} {{ selectedClient()!.lastName }}
+              </h3>
+              <p class="client-email-large">{{ selectedClient()!.email }}</p>
+              <p class="client-phone-large">{{ formatPhoneNumber(selectedClient()!.phone) }}</p>
+              
+              <div class="client-main-badges">
+                <mat-chip 
+                  [style.background-color]="getClientLevelColor(selectedClient()!.level)"
+                  class="level-chip large">
+                  <mat-icon matChipAvatar>{{ getClientLevelIcon(selectedClient()!.level) }}</mat-icon>
+                  {{ selectedClient()!.level }}
+                </mat-chip>
+                
+                <mat-chip class="loyalty-chip large">
+                  <mat-icon matChipAvatar>{{ getLoyaltyIcon(selectedClient()!.loyaltyTier) }}</mat-icon>
+                  {{ selectedClient()!.loyaltyTier }}
+                </mat-chip>
+              </div>
+            </div>
+          </div>
+          
+          <div class="client-actions">
+            <button 
+              mat-icon-button 
+              class="change-client-btn"
+              matTooltip="Cambiar cliente"
+              (click)="deselectClient()">
+              <mat-icon>swap_horiz</mat-icon>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Client Stats -->
+        <div class="client-stats-grid">
+          <div class="stat-card">
+            <mat-icon>event</mat-icon>
+            <div class="stat-content">
+              <span class="stat-value">{{ selectedClient()!.totalBookings }}</span>
+              <span class="stat-label">Reservas Totales</span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <mat-icon>euro</mat-icon>
+            <div class="stat-content">
+              <span class="stat-value">{{ formatCurrency(selectedClient()!.totalSpent) }}</span>
+              <span class="stat-label">Gasto Total</span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <mat-icon>star</mat-icon>
+            <div class="stat-content">
+              <span class="stat-value">{{ selectedClient()!.averageRating | number:'1.1-1' }}</span>
+              <span class="stat-label">Rating Promedio</span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <mat-icon>schedule</mat-icon>
+            <div class="stat-content">
+              <span class="stat-value">{{ formatDate(selectedClient()!.lastBooking!) }}</span>
+              <span class="stat-label">Última Reserva</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Client Insights -->
+        <div *ngIf="clientInsights()" class="client-insights">
+          <h5>
+            <mat-icon>psychology</mat-icon>
+            Insights del Cliente
+          </h5>
+          
+          <div class="insights-grid">
+            <!-- Historial de Reservas -->
+            <div class="insight-card">
+              <h6>Historial Reciente</h6>
+              <div class="booking-history">
+                <div 
+                  *ngFor="let booking of clientInsights().bookingHistory.slice(0, 3)"
+                  class="booking-item">
+                  <mat-icon class="booking-status">{{ getBookingStatusIcon(booking.status) }}</mat-icon>
+                  <div class="booking-info">
+                    <span class="booking-course">{{ booking.courseName }}</span>
+                    <span class="booking-date">{{ formatDate(booking.date) }}</span>
+                  </div>
+                  <span class="booking-amount">{{ formatCurrency(booking.amount) }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Preferencias -->
+            <div class="insight-card" *ngIf="clientInsights().preferences">
+              <h6>Preferencias</h6>
+              <div class="preferences-list">
+                <div class="preference-item" *ngFor="let sport of clientInsights().preferences.preferredSports.slice(0, 3)">
+                  <mat-icon>sports_ski</mat-icon>
+                  <span>{{ sport.name }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Cursos Sugeridos -->
+            <div class="insight-card" *ngIf="clientInsights().suggestedCourseTypes">
+              <h6>Cursos Recomendados</h6>
+              <div class="suggested-courses">
+                <mat-chip-set>
+                  <mat-chip 
+                    *ngFor="let suggestion of clientInsights().suggestedCourseTypes.slice(0, 3)"
+                    class="course-suggestion"
+                    [matTooltip]="suggestion.reason">
+                    {{ suggestion.courseType.name }}
+                    <mat-icon matChipTrailingIcon>trending_up</mat-icon>
+                  </mat-chip>
+                </mat-chip-set>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================ CREAR NUEVO CLIENTE ================ -->
+    <div *ngSwitchCase="'create'" class="create-client-section">
+      <div class="create-client-card">
+        <div class="card-header">
+          <h3>
+            <mat-icon>person_add</mat-icon>
+            Crear Nuevo Cliente
+          </h3>
+          <p>Completa la información básica del cliente</p>
+          
+          <button 
+            mat-icon-button 
+            class="close-create-btn"
+            (click)="hideCreateClientForm()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        
+        <form [formGroup]="newClientForm" class="create-client-form">
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Nombre</mat-label>
+              <input matInput formControlName="firstName" autocomplete="given-name">
+              <mat-error *ngIf="firstName?.hasError('required')">
+                El nombre es requerido
+              </mat-error>
+              <mat-error *ngIf="firstName?.hasError('minlength')">
+                Mínimo 2 caracteres
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Apellidos</mat-label>
+              <input matInput formControlName="lastName" autocomplete="family-name">
+              <mat-error *ngIf="lastName?.hasError('required')">
+                Los apellidos son requeridos
+              </mat-error>
+              <mat-error *ngIf="lastName?.hasError('minlength')">
+                Mínimo 2 caracteres
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" type="email" autocomplete="email">
+              <mat-icon matPrefix>email</mat-icon>
+              <mat-error *ngIf="email?.hasError('required')">
+                El email es requerido
+              </mat-error>
+              <mat-error *ngIf="email?.hasError('email')">
+                Email no válido
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+              <mat-label>Teléfono</mat-label>
+              <input matInput formControlName="phone" type="tel" autocomplete="tel">
+              <mat-icon matPrefix>phone</mat-icon>
+              <mat-error *ngIf="phone?.hasError('required')">
+                El teléfono es requerido
+              </mat-error>
+              <mat-error *ngIf="phone?.hasError('pattern')">
+                Formato de teléfono no válido
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Nivel</mat-label>
+              <mat-select formControlName="level">
+                <mat-option value="Principiante">
+                  <mat-icon>trending_up</mat-icon>
+                  Principiante
+                </mat-option>
+                <mat-option value="Intermedio">
+                  <mat-icon>star_half</mat-icon>
+                  Intermedio
+                </mat-option>
+                <mat-option value="Avanzado">
+                  <mat-icon>star</mat-icon>
+                  Avanzado
+                </mat-option>
+                <mat-option value="Experto">
+                  <mat-icon>military_tech</mat-icon>
+                  Experto
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Notas adicionales (opcional)</mat-label>
+            <textarea 
+              matInput 
+              formControlName="notes" 
+              rows="3"
+              placeholder="Preferencias, restricciones médicas, etc.">
+            </textarea>
+          </mat-form-field>
+          
+          <div class="form-actions">
+            <button 
+              type="button"
+              mat-button
+              (click)="hideCreateClientForm()">
+              Cancelar
+            </button>
+            <button 
+              type="button"
+              mat-raised-button 
+              color="primary"
+              [disabled]="!newClientForm.valid"
+              (click)="createNewClient()">
+              <mat-icon>person_add</mat-icon>
+              Crear Cliente
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Indicator -->
+  <div class="step-progress">
+    <div class="progress-info">
+      <mat-icon [class.completed]="canProceed()">
+        {{ canProceed() ? 'check_circle' : 'radio_button_unchecked' }}
+      </mat-icon>
+      <span class="progress-text">
+        {{ canProceed() ? 'Cliente seleccionado' : 'Selecciona o crea un cliente' }}
+      </span>
+    </div>
+    
+    <button 
+      *ngIf="canProceed()"
+      mat-raised-button 
+      color="primary"
+      class="continue-btn"
+      (click)="nextStep.emit()">
+      Continuar
+      <mat-icon>arrow_forward</mat-icon>
+    </button>
+  </div>
+</div>
