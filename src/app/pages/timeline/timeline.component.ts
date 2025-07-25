@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {
   addDays,
   addMonths,
@@ -38,7 +38,6 @@ import {DateAdapter} from '@angular/material/core';
 import {Router} from '@angular/router';
 import {EditDateComponent} from './edit-date/edit-date.component';
 import {BookingDetailV2Component} from '../bookings-v2/booking-detail/booking-detail.component';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 moment.locale('fr');
 
@@ -78,8 +77,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
   pageSize: number = 50;
   moreData: boolean = true;
   loadingMore: boolean = false;
-  @ViewChild('monitorsViewport') monitorsViewport!: CdkVirtualScrollViewport;
-  @ViewChild('tasksViewport') tasksViewport!: CdkVirtualScrollViewport;
   vacationDays: any[];
 
   user: any = null;
@@ -419,8 +416,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   }
 
-  searchBookings(firstDate: string, lastDate: string, page: number = 1) {
-    let params = '/admin/getPlanner?date_start=' + firstDate + '&date_end=' + lastDate + '&school_id=' + this.activeSchool + '&perPage=' + this.pageSize + '&page=' + page;
+  searchBookings(firstDate: string, lastDate: string) {
+    let params = '/admin/getPlanner?date_start=' + firstDate + '&date_end=' + lastDate + '&school_id=' + this.activeSchool + '&perPage=99999';
     if (this.selectedLanguages.length) {
       this.selectedLanguages.forEach(id => {
         params += `&languages[]=${id}`;
@@ -428,58 +425,13 @@ export class TimelineComponent implements OnInit, OnDestroy {
     }
     this.crudService.get(params).subscribe(
       (data: any) => {
-        if (page === 1) {
-          this.processData(data.data);
-        } else {
-          this.processData(data.data, true);
-        }
-        this.moreData = data.data && data.data.length === this.pageSize;
-        this.loadingMore = false;
+        this.processData(data.data);
       },
       error => {
-        this.loadingMore = false;
       }
     );
   }
 
-  onTasksScroll(index: number) {
-    if (this.moreData && !this.loadingMore && index + 10 >= this.plannerTasks.length) {
-      this.loadingMore = true;
-      this.page++;
-      let firstDate, lastDate;
-      if (this.timelineView === 'week') {
-        const startOfWeekDate = startOfWeek(this.currentDate, { weekStartsOn: 1 });
-        const endOfWeekDate = endOfWeek(this.currentDate, { weekStartsOn: 1 });
-        firstDate = moment(startOfWeekDate).format('YYYY-MM-DD');
-        lastDate = moment(endOfWeekDate).format('YYYY-MM-DD');
-      } else if (this.timelineView === 'month') {
-        const startMonth = startOfMonth(this.currentDate);
-        const endMonth = endOfMonth(this.currentDate);
-        firstDate = moment(startMonth).format('YYYY-MM-DD');
-        lastDate = moment(endMonth).format('YYYY-MM-DD');
-      } else {
-        firstDate = moment(this.currentDate).format('YYYY-MM-DD');
-        lastDate = firstDate;
-      }
-      this.searchBookings(firstDate, lastDate, this.page);
-    }
-  }
-
-  onTasksScrolled(): void {
-    const offset = this.tasksViewport.measureScrollOffset();
-    this.monitorsViewport.scrollToOffset(offset);
-  }
-
-  onMonitorsScrolled(): void {
-    const offset = this.monitorsViewport.measureScrollOffset();
-    this.tasksViewport.scrollToOffset(offset);
-  }
-
-  onMonitorsWheel(event: WheelEvent): void {
-    event.preventDefault();
-    const offset = this.tasksViewport.measureScrollOffset();
-    this.tasksViewport.scrollToOffset(offset + event.deltaY);
-  }
 
   normalizeToArray(data: any) {
     //Nwds sometimes as object sometimes as array
