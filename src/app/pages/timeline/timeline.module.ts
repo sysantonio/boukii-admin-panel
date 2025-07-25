@@ -35,7 +35,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmUnmatchMonitorModule } from './confirm-unmatch-monitor/confirm-unmatch-monitor.module';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { IconComponent } from 'src/@vex/components/icon/app.component';
 import { EditDateComponent } from './edit-date/edit-date.component';
 import {MatLegacyChipsModule} from '@angular/material/legacy-chips';
@@ -79,7 +78,6 @@ import {MatLegacyChipsModule} from '@angular/material/legacy-chips';
     MatDatepickerModule,
     ConfirmUnmatchMonitorModule,
     MatAutocompleteModule,
-    ScrollingModule,
     MatChipsModule,
     MatLegacyChipsModule
   ]

@@ -68,6 +68,8 @@
 
 .schedule-container {
   display: flex;
+  height: calc(100vh - 200px);
+  overflow-y: auto;
 }
 .monitors-column {
   flex-shrink: 0;
@@ -239,17 +241,6 @@
   border-bottom: none;
 }
 
-.monitors-viewport {
-  height: calc(100vh - 200px);
-  width: 100%;
-  overflow: hidden;
-}
-
-.tasks-viewport {
-  height: calc(100vh - 200px);
-  width: 100%;
-  overflow: auto;
-}
 .grid-cell:last-child {
   border-right: none;
 }
