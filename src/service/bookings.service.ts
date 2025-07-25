@@ -477,6 +477,14 @@ export class BookingService {
     );
   }
 
+  listBookings(filters: any = {}): Observable<any> {
+    return this.crudService.get("/bookings", [], filters);
+  }
+
+  getBookingsKpis(filters: any = {}): Observable<any> {
+    return this.crudService.get("/bookings/kpis", [], filters);
+  }
+
   private generateRandomNumber(): string {
     return Math.random().toString(36).substring(2, 15);
   }
