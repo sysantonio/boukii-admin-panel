@@ -1,35 +1,37 @@
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
-
-// Mock Services
-import { MockDataService } from '../services/mock/mock-data.service';
-import { SmartBookingServiceMock } from '../services/mock/smart-booking.service.mock';
+import { SMART_BOOKING_SERVICE, SMART_CLIENT_SERVICE, ACTIVITY_SELECTION_SERVICE, SCHEDULE_SELECTION_SERVICE, PARTICIPANT_DETAILS_SERVICE, PRICING_CONFIRMATION_SERVICE } from '../services/service.factory';
+import { WizardStateService } from './wizard-state.service';
 
 @Component({
   selector: 'app-booking-wizard',
   template: `
-    <div class="p-6">
-      <h1 class="text-2xl font-bold mb-4">🚀 Booking Wizard V3</h1>
-      <p class="text-gray-600 mb-4">El wizard completo se implementará próximamente.</p>
-      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h3 class="font-semibold text-blue-800 mb-2">Componente en Desarrollo</h3>
-        <p class="text-blue-700 text-sm">
-          Este es el wizard inteligente de 6 pasos con IA, pricing dinámico y validaciones en tiempo real.
-          Por ahora, puedes probar las funcionalidades en la página de demo.
-        </p>
-        <button 
-          (click)="goToDemo()" 
-          class="inline-block mt-3 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
-          Ir al Demo
-        </button>
+    <div class="p-6 space-y-4">
+      <h2 class="text-xl font-semibold">Booking Wizard</h2>
+      <ng-container [ngSwitch]="wizard.currentStep">
+        <app-client-selection-step *ngSwitchCase="1" (complete)="next()"></app-client-selection-step>
+        <app-activity-selection-step *ngSwitchCase="2" (complete)="next()"></app-activity-selection-step>
+        <app-schedule-selection-step *ngSwitchCase="3" (complete)="next()"></app-schedule-selection-step>
+        <app-participant-details-step *ngSwitchCase="4" (complete)="next()"></app-participant-details-step>
+        <app-pricing-confirmation-step *ngSwitchCase="5" (complete)="next()"></app-pricing-confirmation-step>
+        <app-final-review-step *ngSwitchCase="6" (complete)="reset()"></app-final-review-step>
+      </ng-container>
+      <div class="flex justify-between pt-4">
+        <button mat-button (click)="prev()" [disabled]="wizard.currentStep === 1">Back</button>
+        <span>Step {{ wizard.currentStep }} / {{ wizard.getState().totalSteps }}</span>
       </div>
     </div>
   `
 })
 export class BookingWizardComponent {
-  private router = inject(Router);
+  wizard = inject(WizardStateService);
+  bookingService = inject(SMART_BOOKING_SERVICE);
+  clientService = inject(SMART_CLIENT_SERVICE);
+  activityService = inject(ACTIVITY_SELECTION_SERVICE);
+  scheduleService = inject(SCHEDULE_SELECTION_SERVICE);
+  participantService = inject(PARTICIPANT_DETAILS_SERVICE);
+  pricingService = inject(PRICING_CONFIRMATION_SERVICE);
 
-  goToDemo() {
-    this.router.navigate(['/bookings-v3/demo']);
-  }
+  next() { this.wizard.nextStep(); }
+  prev() { this.wizard.prevStep(); }
+  reset() { this.wizard.reset(); }
 }

@@ -41,6 +41,11 @@ import { BookingsV3RoutingModule } from './bookings-v3-routing.module';
 import { BookingWizardComponent } from './wizard/booking-wizard.component';
 import { BookingWizardDemoComponent } from './wizard/booking-wizard-demo.component';
 import { ClientSelectionStepComponent } from './wizard/steps/client-selection/client-selection-step.component';
+import { ActivitySelectionStepComponent } from './wizard/steps/activity-selection/activity-selection-step.component';
+import { ScheduleSelectionStepComponent } from './wizard/steps/schedule-selection/schedule-selection-step.component';
+import { ParticipantDetailsStepComponent } from './wizard/steps/participant-details/participant-details-step.component';
+import { PricingConfirmationStepComponent } from './wizard/steps/pricing-confirmation/pricing-confirmation-step.component';
+import { FinalReviewStepComponent } from './wizard/steps/final-review/final-review-step.component';
 
 // Services Mock (para desarrollo)
 import { MockDataService } from './services/mock/mock-data.service';
@@ -50,7 +55,12 @@ import { BOOKING_V3_PROVIDERS } from './services/service.factory';
   declarations: [
     BookingWizardComponent,
     BookingWizardDemoComponent,
-    ClientSelectionStepComponent
+    ClientSelectionStepComponent,
+    ActivitySelectionStepComponent,
+    ScheduleSelectionStepComponent,
+    ParticipantDetailsStepComponent,
+    PricingConfirmationStepComponent,
+    FinalReviewStepComponent
   ],
   imports: [
     CommonModule,
