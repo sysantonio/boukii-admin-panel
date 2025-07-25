@@ -137,6 +137,26 @@ reservas con filtros y creación inteligente:
 | `GET`  | `/clients/smart-search` | Búsqueda avanzada de clientes |
 | `POST` | `/pricing/calculate-dynamic` | Calcular precio dinámico |
 
+#### Ejemplo de creación de reserva inteligente
+```http
+POST /bookings/smart-create
+{
+  "client_id": 1,
+  "course_id": 2,
+  "dates": ["2024-01-05"],
+  "participants": 2
+}
+```
+
+#### Ejemplo de cancelación
+```http
+POST /bookings/123/cancel
+{
+  "reason": "client_request",
+  "notifyClient": true
+}
+```
+
 #### Crear log de reserva
 - **Endpoint**: `POST /booking-logs`
 - **Request**:

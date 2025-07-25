@@ -88,9 +88,20 @@ export const environment = {
     intelligentBooking: true,
     realTimePricing: true,
     conflictDetection: true,
-    aiRecommendations: true
+  aiRecommendations: true
   }
 };
+
+### **Activar Servicios Reales en Desarrollo**
+
+1. Cambia `useRealServices` a `true` en `src/environments/environment.ts`.
+2. Ajusta `apiUrl` al dominio de tu backend real si es necesario.
+3. Inicia la aplicación en modo producción para usar este entorno:
+
+```bash
+ng serve --configuration=production
+```
+
 
 // src/environments/environment.prod.ts
 export const environment = {

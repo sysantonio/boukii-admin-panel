@@ -63,6 +63,15 @@ En la página de demo puedes:
 - Calcula precios con factores múltiples
 - Ve breakdown de precios y descuentos
 
+### **4. Activar Servicios Reales**
+1. Edita `src/environments/environment.ts` y cambia `useRealServices` a `true`.
+2. Verifica que `apiUrl` apunte al backend real.
+3. Ejecuta la app en modo producción:
+
+```bash
+ng serve --configuration=production
+```
+
 ---
 
 ## **📊 Datos de Prueba Disponibles**
