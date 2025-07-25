@@ -29,6 +29,8 @@ import { SkiProWizardComponent } from './components/skipro-wizard/skipro-wizard.
 import { SkiProClientePerfilComponent } from './components/skipro-cliente-perfil/skipro-cliente-perfil.component';
 import { SkiProWizardInlineComponent } from './components/skipro-wizard-inline/skipro-wizard-inline.component';
 import { SkiProClientePerfilInlineComponent } from './components/skipro-cliente-perfil-inline/skipro-cliente-perfil-inline.component';
+import { SkiProReservaDetallesComponent } from './components/skipro-reserva-detalles/skipro-reserva-detalles.component';
+import { SkiProCancelarReservaComponent } from './components/skipro-cancelar-reserva/skipro-cancelar-reserva.component';
 
 // Services
 import { SkiProMockDataService } from './services/mock/skipro-mock-data.service';
@@ -40,7 +42,9 @@ import { MockDataService } from './services/mock/mock-data.service';
     SkiProWizardComponent,
     SkiProClientePerfilComponent,
     SkiProWizardInlineComponent,
-    SkiProClientePerfilInlineComponent
+    SkiProClientePerfilInlineComponent,
+    SkiProReservaDetallesComponent,
+    SkiProCancelarReservaComponent
   ],
   imports: [
     CommonModule,

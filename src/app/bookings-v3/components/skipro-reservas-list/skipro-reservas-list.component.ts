@@ -24,7 +24,7 @@ import {
           <div class="flex gap-4 mt-4 sm:mt-0">
             <span class="text-sm text-secondary">{{ reservas().length }} reservas</span>
             <span class="text-sm text-secondary">1 pendiente</span>
-            <button mat-raised-button color="primary" (click)="mostrarWizard = true">
+            <button mat-raised-button color="primary" (click)="abrirWizardNuevaReserva()">
               <mat-icon>add</mat-icon>
               Nueva reserva
             </button>
@@ -259,7 +259,8 @@ import {
 
     <!-- Modal Wizard Nueva Reserva -->
     <div *ngIf="mostrarWizard" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <app-skipro-wizard-inline 
+      <app-skipro-wizard-inline
+        [clientePreseleccionado]="clienteParaWizard"
         (cerrar)="mostrarWizard = false"
         (reservaCreada)="onReservaCreada($event)">
       </app-skipro-wizard-inline>
@@ -267,11 +268,28 @@ import {
 
     <!-- Modal Perfil Cliente -->
     <div *ngIf="clienteSeleccionado" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <app-skipro-cliente-perfil-inline 
+      <app-skipro-cliente-perfil-inline
         [cliente]="clienteSeleccionado"
         (cerrar)="clienteSeleccionado = null"
         (nuevaReserva)="abrirWizardParaCliente($event)">
       </app-skipro-cliente-perfil-inline>
+    </div>
+
+    <!-- Modal Detalles Reserva -->
+    <div *ngIf="reservaDetalle" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <app-skipro-reserva-detalles
+        [reserva]="reservaDetalle"
+        (cerrar)="reservaDetalle = null">
+      </app-skipro-reserva-detalles>
+    </div>
+
+    <!-- Modal Cancelar Reserva -->
+    <div *ngIf="reservaParaCancelar" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <app-skipro-cancelar-reserva
+        [reserva]="reservaParaCancelar"
+        (cancelar)="confirmarCancelacion()"
+        (cerrar)="reservaParaCancelar = null">
+      </app-skipro-cancelar-reserva>
     </div>
   `,
   styles: [`
@@ -309,6 +327,9 @@ export class SkiProReservasListComponent implements OnInit {
   public displayedColumns = ['id', 'cliente', 'tipo', 'reserva', 'fechas', 'estado', 'precio', 'acciones'];
   public mostrarWizard = false;
   public clienteSeleccionado: SkiProCliente | null = null;
+  public clienteParaWizard: SkiProCliente | null = null;
+  public reservaDetalle: SkiProBooking | null = null;
+  public reservaParaCancelar: SkiProBooking | null = null;
 
   ngOnInit() {
     this.cargarDatos();
@@ -366,18 +387,18 @@ export class SkiProReservasListComponent implements OnInit {
 
   abrirWizardNuevaReserva() {
     console.log('✨ Abriendo wizard nueva reserva');
+    this.clienteParaWizard = null;
     this.mostrarWizard = true;
   }
 
   verDetallesReserva(reserva: SkiProBooking) {
     console.log('👁️ Ver detalles reserva:', reserva.id);
-    // TODO: Abrir modal de detalles
+    this.reservaDetalle = reserva;
   }
 
   editarReserva(reserva: SkiProBooking) {
     console.log('✏️ Editar reserva:', reserva.id);
-    // TODO: Abrir wizard en modo edición
-    this.mostrarWizard = true;
+    this.router.navigate(['/bookings-v3/skipro/wizard', reserva.id]);
   }
 
   async verPerfilCliente(cliente: any) {
@@ -400,7 +421,7 @@ export class SkiProReservasListComponent implements OnInit {
 
   cancelarReserva(reserva: SkiProBooking) {
     console.log('❌ Cancelar reserva:', reserva.id);
-    // TODO: Implementar cancelación
+    this.reservaParaCancelar = reserva;
   }
 
   formatearHora(fecha: Date): string {
@@ -420,7 +441,14 @@ export class SkiProReservasListComponent implements OnInit {
   abrirWizardParaCliente(cliente: SkiProCliente) {
     console.log('✨ Abriendo wizard para cliente:', cliente.nombre);
     this.clienteSeleccionado = null;
+    this.clienteParaWizard = cliente;
     this.mostrarWizard = true;
-    // TODO: Pre-seleccionar cliente en wizard
+  }
+
+  async confirmarCancelacion() {
+    if (!this.reservaParaCancelar) return;
+    await this.skipro.cancelarReserva(this.reservaParaCancelar.id).toPromise();
+    this.reservaParaCancelar = null;
+    this.cargarDatos();
   }
 }
