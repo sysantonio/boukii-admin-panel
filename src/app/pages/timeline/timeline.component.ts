@@ -484,6 +484,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   processData(data: any, append: boolean = false) {
     if (!append) {
       this.allMonitors = [{ id: null }];
+      this.allMonitorsTimeline = [];
       if (this.filterMonitor) {
         this.filteredMonitors = [];
       } else {
@@ -523,7 +524,13 @@ export class TimelineComponent implements OnInit, OnDestroy {
             }
           });
         }
-        this.allMonitors.push(item.monitor);
+        if (append) {
+          if (!this.allMonitors.some(m => m.id === item.monitor.id)) {
+            this.allMonitors.push(item.monitor);
+          }
+        } else {
+          this.allMonitors.push(item.monitor);
+        }
       }
 
       // Process 'monitor' field
@@ -531,16 +538,24 @@ export class TimelineComponent implements OnInit, OnDestroy {
       if (item.monitor && (this.filterFree && !item.monitor?.hasFullDayNwd) || (this.filterOccupied && item.monitor?.hasFullDayNwd)) {
         if (this.filterMonitor) {
           if (item.monitor && item.monitor.id == this.filterMonitor && hasAtLeastOne && item.monitor.sports.length > 0) {
-            this.filteredMonitors.push(item.monitor);
+            if (!append || !this.filteredMonitors.some(m => m.id === item.monitor.id)) {
+              this.filteredMonitors.push(item.monitor);
+            }
           }
           if (item.monitor && hasAtLeastOne && item.monitor.sports.length > 0) {
-            this.allMonitorsTimeline.push(item.monitor);
+            if (!append || !this.allMonitorsTimeline.some(m => m.id === item.monitor.id)) {
+              this.allMonitorsTimeline.push(item.monitor);
+            }
           }
         }
         else {
           if (item.monitor && hasAtLeastOne && item.monitor.sports.length > 0) {
-            this.filteredMonitors.push(item.monitor);
-            this.allMonitorsTimeline.push(item.monitor);
+            if (!append || !this.filteredMonitors.some(m => m.id === item.monitor.id)) {
+              this.filteredMonitors.push(item.monitor);
+            }
+            if (!append || !this.allMonitorsTimeline.some(m => m.id === item.monitor.id)) {
+              this.allMonitorsTimeline.push(item.monitor);
+            }
           }
         }
       }
@@ -972,6 +987,24 @@ export class TimelineComponent implements OnInit, OnDestroy {
   }
 
   async calculateTaskPositions(tasks: any, append:any) {
+    const monitorIds = Array.from(new Set(tasks
+      .map(t => t.monitor_id)
+      .filter(id => id !== null && id !== undefined)));
+
+    monitorIds.forEach(id => {
+      if (!this.filteredMonitors.some(m => m.id === id)) {
+        const monitor = this.allMonitorsTimeline.find(m => m.id === id) ||
+          this.allMonitors.find(m => m.id === id) || { id };
+        this.filteredMonitors.push(monitor);
+      }
+    });
+
+    this.filteredMonitors = this.filteredMonitors.sort((a: any, b: any) => {
+      if (a.id === null && b.id !== null) return -1;
+      if (b.id === null && a.id !== null) return 1;
+      return (a.first_name + a.last_name).localeCompare(b.first_name + b.last_name);
+    });
+
     const pixelsPerMinute = 150 / 60;
     const pixelsPerMinuteWeek = 300 / ((this.hoursRange.length - 1) * 60);
     let plannerTasks = tasks
