@@ -186,6 +186,13 @@ interface VoucherData {
 
 **Servicio**: `BookingService`
 
+#### Wizard Inteligente V3
+- **Crear reserva inteligente**: `POST /bookings/smart-create`
+- **Guardar borrador**: `POST /bookings/drafts`
+- **Validar paso**: `POST /bookings/validate-step`
+- **Obtener sugerencias**: `GET /ai/smart-suggestions`
+- **Detectar conflictos**: `POST /bookings/detect-conflicts`
+
 ### 7. Analytics Profesional
 
 #### Dashboard de temporada
