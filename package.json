@@ -11,6 +11,9 @@
     "e2e": "ng e2e"
   },
   "private": true,
+  "engines": {
+    "node": ">=16 <17"
+  },
   "dependencies": {
     "@angular-material-components/datetime-picker": "^16.0.1",
     "@angular/animations": "^16.0.0",

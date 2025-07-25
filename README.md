@@ -1,6 +1,13 @@
 # Boukii Admin Panel
 
+## Node version
+
+This project expects **Node.js 16**. The application has been tested with
+Node.js 16.20.2. Using other major versions may result in unexpected errors.
+
+When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
 Boukii Admin Panel is an Angular 16 application used to manage bookings, clients and courses for Boukii. The project is built on top of the Vex theme and integrates with Boukii's REST APIs.
+
 
 ## Setup
 
