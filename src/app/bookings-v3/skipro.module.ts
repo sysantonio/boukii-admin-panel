@@ -12,6 +12,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -31,6 +33,8 @@ import { SkiProWizardInlineComponent } from './components/skipro-wizard-inline/s
 import { SkiProClientePerfilInlineComponent } from './components/skipro-cliente-perfil-inline/skipro-cliente-perfil-inline.component';
 import { SkiProReservaDetallesComponent } from './components/skipro-reserva-detalles/skipro-reserva-detalles.component';
 import { SkiProCancelarReservaComponent } from './components/skipro-cancelar-reserva/skipro-cancelar-reserva.component';
+import { BookingDetailModalComponent } from './components/booking-detail-modal/booking-detail-modal.component';
+import { CancelBookingDialogComponent } from './components/cancel-booking-dialog/cancel-booking-dialog.component';
 
 // Services
 import { SkiProMockDataService } from './services/mock/skipro-mock-data.service';
@@ -44,7 +48,9 @@ import { MockDataService } from './services/mock/mock-data.service';
     SkiProWizardInlineComponent,
     SkiProClientePerfilInlineComponent,
     SkiProReservaDetallesComponent,
-    SkiProCancelarReservaComponent
+    SkiProCancelarReservaComponent,
+    BookingDetailModalComponent,
+    CancelBookingDialogComponent
   ],
   imports: [
     CommonModule,
@@ -61,6 +67,8 @@ import { MockDataService } from './services/mock/mock-data.service';
     MatTableModule,
     MatMenuModule,
     MatDividerModule,
+    MatDialogModule,
+    MatSnackBarModule,
     MatProgressSpinnerModule,
     MatTabsModule,
     MatTooltipModule,

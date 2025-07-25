@@ -515,6 +515,14 @@ export class SmartBookingServiceMock {
   }
 
   /**
+   * Cancel booking (mock implementation)
+   */
+  async cancelBooking(bookingId: string, reason: string): Promise<void> {
+    console.log('❌ [MOCK] Cancel booking', bookingId, reason);
+    return Promise.resolve();
+  }
+
+  /**
    * Limpiar todos los caches
    */
   clearAllCaches(): void {

@@ -1,7 +1,11 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { SkiProMockDataService } from '../../services/mock/skipro-mock-data.service';
 import { MockDataService } from '../../services/mock/mock-data.service';
+import { BookingDetailModalComponent } from '../booking-detail-modal/booking-detail-modal.component';
+import { CancelBookingDialogComponent } from '../cancel-booking-dialog/cancel-booking-dialog.component';
 import { 
   SkiProBooking, 
   SkiProKPIs, 
@@ -275,22 +279,7 @@ import {
       </app-skipro-cliente-perfil-inline>
     </div>
 
-    <!-- Modal Detalles Reserva -->
-    <div *ngIf="reservaDetalle" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <app-skipro-reserva-detalles
-        [reserva]="reservaDetalle"
-        (cerrar)="reservaDetalle = null">
-      </app-skipro-reserva-detalles>
-    </div>
-
-    <!-- Modal Cancelar Reserva -->
-    <div *ngIf="reservaParaCancelar" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <app-skipro-cancelar-reserva
-        [reserva]="reservaParaCancelar"
-        (cancelar)="confirmarCancelacion()"
-        (cerrar)="reservaParaCancelar = null">
-      </app-skipro-cancelar-reserva>
-    </div>
+    <!-- Modals handled via MatDialog -->
   `,
   styles: [`
     .mat-mdc-table {
@@ -305,9 +294,11 @@ import {
   `]
 })
 export class SkiProReservasListComponent implements OnInit {
-  
+
   private skipro = inject(SkiProMockDataService);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
   // Signals
   public reservas = signal<SkiProBooking[]>([]);
@@ -392,8 +383,10 @@ export class SkiProReservasListComponent implements OnInit {
   }
 
   verDetallesReserva(reserva: SkiProBooking) {
-    console.log('👁️ Ver detalles reserva:', reserva.id);
-    this.reservaDetalle = reserva;
+    this.dialog.open(BookingDetailModalComponent, {
+      data: reserva,
+      width: '400px'
+    });
   }
 
   editarReserva(reserva: SkiProBooking) {
@@ -420,8 +413,15 @@ export class SkiProReservasListComponent implements OnInit {
   }
 
   cancelarReserva(reserva: SkiProBooking) {
-    console.log('❌ Cancelar reserva:', reserva.id);
-    this.reservaParaCancelar = reserva;
+    const ref = this.dialog.open(CancelBookingDialogComponent, {
+      data: { id: reserva.id },
+      width: '400px'
+    });
+    ref.afterClosed().subscribe(ok => {
+      if (ok) {
+        this.cargarDatos();
+      }
+    });
   }
 
   formatearHora(fecha: Date): string {
@@ -445,6 +445,7 @@ export class SkiProReservasListComponent implements OnInit {
     this.mostrarWizard = true;
   }
 
+  // legacy
   async confirmarCancelacion() {
     if (!this.reservaParaCancelar) return;
     await this.skipro.cancelarReserva(this.reservaParaCancelar.id).toPromise();

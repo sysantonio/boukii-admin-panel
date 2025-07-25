@@ -307,6 +307,16 @@ export class SmartBookingService {
   }
 
   /**
+   * Cancel booking
+   */
+  async cancelBooking(bookingId: string, reason: string): Promise<void> {
+    await this.http.post(`${this.baseUrl}/${bookingId}/cancel`, {
+      reason: reason,
+      notifyClient: true
+    }).toPromise();
+  }
+
+  /**
    * Obtener métricas de reserva
    */
   getBookingMetrics(bookingId: number): Observable<any> {
