@@ -150,14 +150,23 @@
             </mat-checkbox>
           </div>
 
-          <div class="filter-container-column">
-            <span>{{ 'language' | translate | uppercase }}</span>
-            <mat-checkbox *ngFor="let lang of languages" color="primary"
-                          [checked]="selectedLanguages.includes(lang.id)"
-                          (change)="onLanguageChange(lang.id, $event.checked)">
-              {{ lang.code.toUpperCase() }}
-            </mat-checkbox>
-          </div>
+          <mat-form-field class="filter-container-column" appearance="outline">
+            <mat-select [placeholder]="'choose_langs' | translate" multiple
+                        (selectionChange)="onLanguagesSelect($event)" [value]="selectedLanguages">
+              <mat-select-trigger>
+                <mat-chip-list #chipList>
+                  <mat-chip *ngFor="let id of selectedLanguages" [removable]="true"
+                            (removed)="removeLanguage(id)">
+                    {{ getLanguageById(id) }}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </mat-select-trigger>
+              <mat-option *ngFor="let lang of languages" [value]="lang.id">
+                {{ lang.code.toUpperCase() }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
 

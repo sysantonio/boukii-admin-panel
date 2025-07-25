@@ -33,6 +33,7 @@ import {ConfirmUnmatchMonitorComponent} from './confirm-unmatch-monitor/confirm-
 import {firstValueFrom, Observable, Subject} from 'rxjs';
 import {map, startWith, takeUntil} from 'rxjs/operators';
 import {FormControl} from '@angular/forms';
+import { MatSelectChange } from '@angular/material/select';
 import {DateAdapter} from '@angular/material/core';
 import {Router} from '@angular/router';
 import {EditDateComponent} from './edit-date/edit-date.component';
@@ -2118,14 +2119,12 @@ export class TimelineComponent implements OnInit, OnDestroy {
     }
   }
 
-  onLanguageChange(langId: number, isChecked: boolean) {
-    if (isChecked) {
-      if (!this.selectedLanguages.includes(langId)) {
-        this.selectedLanguages.push(langId);
-      }
-    } else {
-      this.selectedLanguages = this.selectedLanguages.filter(id => id !== langId);
-    }
+  onLanguagesSelect(event: MatSelectChange) {
+    this.selectedLanguages = event.value;
+  }
+
+  removeLanguage(langId: number) {
+    this.selectedLanguages = this.selectedLanguages.filter(id => id !== langId);
   }
 
   areAllChecked() {

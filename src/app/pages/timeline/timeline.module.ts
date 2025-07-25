@@ -24,6 +24,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { MatChipsModule } from '@angular/material/chips';
 import { TimelineComponent } from './timeline.component';
 import { TimelineRoutingModule } from './timeline-routing.module';
 import { ComponentsCustomModule } from '../../components/components-custom.module';
@@ -77,7 +78,8 @@ import { EditDateComponent } from './edit-date/edit-date.component';
     MatDatepickerModule,
     ConfirmUnmatchMonitorModule,
     MatAutocompleteModule,
-    ScrollingModule
+    ScrollingModule,
+    MatChipsModule
   ]
 })
 export class TimelineModule {
