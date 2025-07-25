@@ -281,7 +281,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   async getLanguages() {
     try {
       const data: any = await this.crudService.get('/languages?&perPage=' + 99999).toPromise();
-      this.languages = data.data.data;
+      this.languages = data.data;
     } catch (error) {
     }
   }
@@ -289,7 +289,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   async getSports() {
     try {
       const data: any = await this.crudService.get('/sports?perPage=' + 99999).toPromise();
-      this.sportsReceived = data.data.data;
+      this.sportsReceived = data.data;
     } catch (error) {
     }
   }
@@ -298,7 +298,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
     try {
       const data: any = await this.crudService.get('/school-sports?school_id=' + this.activeSchool + '&perPage=' + 99999).toPromise();
       this.sports = this.sportsReceived.filter(sport =>
-        data.data.data.some(newSport => newSport.sport_id === sport.id)
+        data.data.some(newSport => newSport.sport_id === sport.id)
       );
       this.sports.forEach(sport => this.checkedSports.add(sport.id));
     } catch (error) {
@@ -308,7 +308,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   async getDegrees() {
     try {
       const data: any = await this.crudService.get('/degrees?school_id=' + this.activeSchool + '&perPage=' + 99999).toPromise();
-      this.degrees = data.data.data.sort((a, b) => a.degree_order - b.degree_order);
+      this.degrees = data.data.sort((a, b) => a.degree_order - b.degree_order);
       this.degrees.forEach((degree: any) => {
         degree.inactive_color = this.lightenColor(degree.color, 30);
       });

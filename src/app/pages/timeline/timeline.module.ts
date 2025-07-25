@@ -38,6 +38,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { IconComponent } from 'src/@vex/components/icon/app.component';
 import { EditDateComponent } from './edit-date/edit-date.component';
+import {MatLegacyChipsModule} from '@angular/material/legacy-chips';
 
 @NgModule({
   declarations: [TimelineComponent, EditDateComponent],
@@ -79,7 +80,8 @@ import { EditDateComponent } from './edit-date/edit-date.component';
     ConfirmUnmatchMonitorModule,
     MatAutocompleteModule,
     ScrollingModule,
-    MatChipsModule
+    MatChipsModule,
+    MatLegacyChipsModule
   ]
 })
 export class TimelineModule {
