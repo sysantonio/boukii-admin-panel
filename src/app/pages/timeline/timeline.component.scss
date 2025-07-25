@@ -67,7 +67,8 @@
 }
 
 .schedule-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 270px 1fr;
   height: calc(100vh - 200px);
   overflow-y: auto;
 }
