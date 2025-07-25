@@ -63,6 +63,7 @@
       </button>
     </form>
 
+    <div class="table-wrapper">
     <table mat-table [dataSource]="bookings" class="bookings-table">
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef> ID </th>
@@ -115,6 +116,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    </div>
 
   </vex-page-layout-content>
 </vex-page-layout>
