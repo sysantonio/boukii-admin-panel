@@ -67,6 +67,20 @@ export interface EnhancedBooking {
   pricing: BookingPricing;
   payments: PaymentRecord[];
   refunds: RefundRecord[];
+  /** Detalle de precios por concepto */
+  priceBreakdown: {
+    base: number;
+    extras: number;
+    tax: number;
+    total: number;
+  };
+  /** Historial de cambios de estado */
+  statusHistory: { status: string; date: string }[];
+  /** Datos agregados del cliente */
+  clientInsights: {
+    totalBookings: number;
+    lastBookingDate: Date | null;
+  };
   
   // Notas y comunicación
   notes: BookingNote[];
