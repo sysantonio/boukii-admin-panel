@@ -123,6 +123,20 @@ interface ApiResponse {
 
 ### 6. Gestión de Reservas
 
+Los nuevos servicios de la API V3 exponen endpoints adicionales para gestionar
+reservas con filtros y creación inteligente:
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `GET`  | `/bookings` | Listar reservas con filtros y paginación |
+| `GET`  | `/bookings/kpis` | Métricas resumidas de reservas |
+| `POST` | `/bookings` | Crear una reserva tradicional |
+| `POST` | `/bookings/smart-create` | Crear reserva con lógica inteligente |
+| `PATCH` | `/bookings/{id}` | Actualizar datos parciales de una reserva |
+| `POST` | `/bookings/{id}/cancel` | Cancelar una reserva existente |
+| `GET`  | `/clients/smart-search` | Búsqueda avanzada de clientes |
+| `POST` | `/pricing/calculate-dynamic` | Calcular precio dinámico |
+
 #### Crear log de reserva
 - **Endpoint**: `POST /booking-logs`
 - **Request**:
