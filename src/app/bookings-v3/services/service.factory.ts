@@ -1,6 +1,8 @@
 import { inject, InjectionToken } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
+const useReal = environment.useRealServices;
+
 import { SmartBookingService } from './smart-booking.service';
 import { SmartClientService } from './smart-client.service';
 import { ClientAnalyticsService } from './client-analytics.service';
@@ -26,45 +28,45 @@ export const PARTICIPANT_DETAILS_SERVICE = new InjectionToken<ParticipantDetails
 export const PRICING_CONFIRMATION_SERVICE = new InjectionToken<PricingConfirmationService>('PricingConfirmationService');
 
 export function smartBookingServiceFactory() {
-  return environment.useRealServices ?
-    inject(SmartBookingService) :
-    inject(SmartBookingServiceMock);
+  return useReal
+    ? inject(SmartBookingService)
+    : inject(SmartBookingServiceMock);
 }
 
 export function smartClientServiceFactory() {
-  return environment.useRealServices ?
-    inject(SmartClientService) :
-    inject(SmartClientServiceMock);
+  return useReal
+    ? inject(SmartClientService)
+    : inject(SmartClientServiceMock);
 }
 
 export function clientAnalyticsServiceFactory() {
-  return environment.useRealServices ?
-    inject(ClientAnalyticsService) :
-    inject(ClientAnalyticsServiceMock);
+  return useReal
+    ? inject(ClientAnalyticsService)
+    : inject(ClientAnalyticsServiceMock);
 }
 
 export function activitySelectionServiceFactory() {
-  return environment.useRealServices ?
-    inject(ActivitySelectionService) :
-    inject(ActivitySelectionServiceMock);
+  return useReal
+    ? inject(ActivitySelectionService)
+    : inject(ActivitySelectionServiceMock);
 }
 
 export function scheduleSelectionServiceFactory() {
-  return environment.useRealServices ?
-    inject(ScheduleSelectionService) :
-    inject(ScheduleSelectionServiceMock);
+  return useReal
+    ? inject(ScheduleSelectionService)
+    : inject(ScheduleSelectionServiceMock);
 }
 
 export function participantDetailsServiceFactory() {
-  return environment.useRealServices ?
-    inject(ParticipantDetailsService) :
-    inject(ParticipantDetailsServiceMock);
+  return useReal
+    ? inject(ParticipantDetailsService)
+    : inject(ParticipantDetailsServiceMock);
 }
 
 export function pricingConfirmationServiceFactory() {
-  return environment.useRealServices ?
-    inject(PricingConfirmationService) :
-    inject(PricingConfirmationServiceMock);
+  return useReal
+    ? inject(PricingConfirmationService)
+    : inject(PricingConfirmationServiceMock);
 }
 
 export const BOOKING_V3_PROVIDERS = [

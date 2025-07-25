@@ -11,5 +11,11 @@ export const environment = {
     storageBucket: "boukii-test.appspot.com",
     messagingSenderId: "80492512236",
     appId: "1:80492512236:web:bba5002b4c9ec6c2e776c9"
+  },
+  features: {
+    intelligentBooking: true,
+    realTimePricing: true,
+    conflictDetection: true,
+    aiRecommendations: true
   }
 };
