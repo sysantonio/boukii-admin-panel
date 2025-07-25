@@ -41,4 +41,11 @@ For a quick demo of the mock implementation see `src/app/bookings-v3/DEMO-SETUP.
 
 ---
 
+Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
 See `CLAUDE.md` for more development commands and `booking-system-v3-api-specification.md` for API details.
+
