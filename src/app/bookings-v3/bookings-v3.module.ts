@@ -44,13 +44,7 @@ import { ClientSelectionStepComponent } from './wizard/steps/client-selection/cl
 
 // Services Mock (para desarrollo)
 import { MockDataService } from './services/mock/mock-data.service';
-import { SmartBookingServiceMock } from './services/mock/smart-booking.service.mock';
-import { SmartClientServiceMock } from './services/mock/smart-client.service.mock';
-import { ClientAnalyticsServiceMock } from './services/mock/client-analytics.service.mock';
-import { ActivitySelectionServiceMock } from './services/mock/activity-selection.service.mock';
-import { ScheduleSelectionServiceMock } from './services/mock/schedule-selection.service.mock';
-import { ParticipantDetailsServiceMock } from './services/mock/participant-details.service.mock';
-import { PricingConfirmationServiceMock } from './services/mock/pricing-confirmation.service.mock';
+import { BOOKING_V3_PROVIDERS } from './services/service.factory';
 
 @NgModule({
   declarations: [
@@ -99,15 +93,8 @@ import { PricingConfirmationServiceMock } from './services/mock/pricing-confirma
     BookingsV3RoutingModule
   ],
   providers: [
-    // Mock Services para desarrollo
     MockDataService,
-    SmartBookingServiceMock,
-    SmartClientServiceMock,
-    ClientAnalyticsServiceMock,
-    ActivitySelectionServiceMock,
-    ScheduleSelectionServiceMock,
-    ParticipantDetailsServiceMock,
-    PricingConfirmationServiceMock
+    ...BOOKING_V3_PROVIDERS
   ]
 })
 export class BookingsV3Module { }
