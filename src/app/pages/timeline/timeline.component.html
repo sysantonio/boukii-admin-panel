@@ -175,7 +175,7 @@
         <div class="schedule-container"
              *ngIf="filteredMonitors && filteredMonitors.length && timelineView != 'month'">
           <div class="monitors-column">
-            <cdk-virtual-scroll-viewport itemSize="100" class="monitors-viewport">
+            <cdk-virtual-scroll-viewport #monitorsViewport itemSize="100" class="monitors-viewport">
               <ng-container *cdkVirtualFor="let monitor of filteredMonitors">
                 <div class="monitor">
                   <ng-container *ngIf="monitor.id">
@@ -289,7 +289,7 @@
               </div>
 
               <!--TASKS-->
-              <cdk-virtual-scroll-viewport itemSize="100" class="tasks-viewport" (scrolledIndexChange)="onTasksScroll($event)">
+              <cdk-virtual-scroll-viewport #tasksViewport itemSize="100" class="tasks-viewport" (scrolledIndexChange)="onTasksScroll($event)" (elementScrolled)="onTasksScrolled()">
                 <ng-container *cdkVirtualFor="let task of plannerTasks">
                   <!--DAY-->
                   <div *ngIf="timelineView == 'day'"
