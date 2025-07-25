@@ -21,7 +21,7 @@ import {
           <div class="flex items-center gap-3">
             <mat-icon class="text-2xl">{{ getStepIcon() }}</mat-icon>
             <div>
-              <h2 class="text-xl font-semibold">Nueva Reserva</h2>
+              <h2 class="text-xl font-semibold">{{ editMode ? 'Editar Reserva' : 'Nueva Reserva' }}</h2>
               <p class="text-sm text-secondary">{{ getStepDescription() }}</p>
             </div>
           </div>
@@ -338,6 +338,7 @@ export class SkiProWizardComponent implements OnInit {
     puntoEncuentro: ''
   });
   public procesandoReserva = signal(false);
+  public editMode = false;
 
   // Forms
   public nuevoClienteForm = {
@@ -368,6 +369,31 @@ export class SkiProWizardComponent implements OnInit {
       this.clientesDisponibles.set(clientes || []);
       this.tiposReserva.set(tipos || []);
       this.cursosDisponibles.set(cursos || []);
+
+      const clienteId = this.route.snapshot.queryParamMap.get('clienteId');
+      if (clienteId) {
+        const pre = clientes?.find(c => String(c.id) === clienteId);
+        if (pre) {
+          this.seleccionarCliente(pre);
+        }
+      }
+
+      const reservaId = this.route.snapshot.paramMap.get('reservaId');
+      if (reservaId) {
+        const reserva = await this.skipro.getReservaPorId(reservaId).toPromise();
+        if (reserva) {
+          const cli = clientes?.find(c => c.email === reserva.cliente.email);
+          const tipo = tipos?.find(t => t.nombre === reserva.tipo);
+          const curso = cursos?.find(c => c.nombre === reserva.reserva.nombre);
+          this.wizardState.update(state => ({
+            ...state,
+            cliente: cli || state.cliente,
+            tipoReserva: tipo,
+            cursoSeleccionado: curso
+          }));
+          this.editMode = true;
+        }
+      }
 
       console.log('🧙‍♂️ SkiPro Wizard loaded');
     } catch (error) {

@@ -390,6 +390,22 @@ export class SkiProMockDataService {
   }
 
   /**
+   * Obtener reserva por ID
+   */
+  getReservaPorId(id: string): Observable<SkiProBooking | null> {
+    const reserva = this.getMockReservas().find(r => r.id === id) || null;
+    return of(reserva).pipe(delay(200));
+  }
+
+  /**
+   * Cancelar reserva
+   */
+  cancelarReserva(id: string): Observable<boolean> {
+    console.log('❌ [SKIPRO] Cancelando reserva:', id);
+    return of(true).pipe(delay(500));
+  }
+
+  /**
    * Buscar clientes
    */
   buscarClientes(query: string): Observable<SkiProCliente[]> {

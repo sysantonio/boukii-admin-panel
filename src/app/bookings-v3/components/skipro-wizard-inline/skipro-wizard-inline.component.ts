@@ -742,6 +742,7 @@ import {
 })
 export class SkiProWizardInlineComponent implements OnInit {
 
+  @Input() clientePreseleccionado: SkiProCliente | null = null;
   @Output() cerrar = new EventEmitter<void>();
   @Output() reservaCreada = new EventEmitter<SkiProBooking>();
 
@@ -832,6 +833,13 @@ export class SkiProWizardInlineComponent implements OnInit {
 
       // Cargar datos V3 adicionales
       await this.cargarDatosV3();
+
+      if (this.clientePreseleccionado) {
+        const pre = clientes?.find(c => c.id === this.clientePreseleccionado!.id);
+        if (pre) {
+          this.seleccionarCliente(pre);
+        }
+      }
 
       console.log('🧙‍♂️ SkiPro Wizard Inline loaded');
     } catch (error) {
