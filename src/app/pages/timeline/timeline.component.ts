@@ -470,6 +470,17 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.monitorsViewport.scrollToOffset(offset);
   }
 
+  onMonitorsScrolled(): void {
+    const offset = this.monitorsViewport.measureScrollOffset();
+    this.tasksViewport.scrollToOffset(offset);
+  }
+
+  onMonitorsWheel(event: WheelEvent): void {
+    event.preventDefault();
+    const offset = this.tasksViewport.measureScrollOffset();
+    this.tasksViewport.scrollToOffset(offset + event.deltaY);
+  }
+
   normalizeToArray(data: any) {
     //Nwds sometimes as object sometimes as array
     if (Array.isArray(data)) {
