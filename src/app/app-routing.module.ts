@@ -42,6 +42,11 @@ const childrenRoutes: VexRoutes = [
         loadChildren: () => import('./pages/bookings-v2/bookings.module').then(m => m.BookingsModule),
         canActivate: [AuthGuard],
       },
+        {
+          path: "bookings-dashboard",
+          loadChildren: () => import("./pages/bookings-dashboard/bookings-dashboard.module").then(m => m.BookingsDashboardModule),
+          canActivate: [AuthGuard],
+        },
       {
         path: 'bookings-v3',
         loadChildren: () => import('./bookings-v3/bookings-v3.module').then(m => m.BookingsV3Module),
