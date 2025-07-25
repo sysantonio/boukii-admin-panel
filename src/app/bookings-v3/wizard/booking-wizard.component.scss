@@ -1,9 +1,10 @@
 // ============= VARIABLES Y MIXINS =============
 :root {
-  --wizard-primary: #6B46C1;
-  --wizard-primary-light: #8B5CF6;
-  --wizard-primary-dark: #553C9A;
-  --wizard-secondary: #10B981;
+  // Colors tuned to match design references in screenshots
+  --wizard-primary: #5e49db;
+  --wizard-primary-light: #7a6bf3;
+  --wizard-primary-dark: #4b39c1;
+  --wizard-secondary: #5996d3;
   --wizard-accent: #F59E0B;
   --wizard-error: #EF4444;
   --wizard-warning: #F59E0B;
@@ -592,6 +593,11 @@
 }
 
 // ============= RESPONSIVE =============
+@media (max-width: 1280px) {
+  .wizard-container {
+    max-width: 100%;
+  }
+}
 @media (max-width: 768px) {
   .booking-wizard-overlay {
     padding: 10px;

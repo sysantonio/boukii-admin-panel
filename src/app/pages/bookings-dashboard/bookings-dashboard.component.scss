@@ -7,7 +7,7 @@
   mat-card {
     text-align: center;
     padding: 12px;
-    background: #1e1e1e;
+    background: linear-gradient(135deg, #5e49db, #8478d1);
     color: #fff;
   }
 }
@@ -22,6 +22,16 @@
 
 .bookings-table {
   width: 100%;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+  .bookings-table {
+    min-width: 600px;
+  }
 }
 
 .actions {
