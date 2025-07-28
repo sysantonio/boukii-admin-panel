@@ -90,4 +90,10 @@ export class SidenavComponent implements OnInit {
   async getUser() {
     this.user = JSON.parse(localStorage.getItem('boukiiUser'));
   }
+
+  openSupport(): void {
+    // Implementar apertura de soporte - puede ser un modal, chat o redirección
+    console.log('Abrir soporte técnico');
+    // Ejemplo: window.open('https://support.boukii.com', '_blank');
+  }
 }

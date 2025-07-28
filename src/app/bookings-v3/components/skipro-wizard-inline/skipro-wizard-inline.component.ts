@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, Output, EventEmitter } from '@angular/core';
+import {Component, OnInit, inject, signal, Output, EventEmitter, Input} from '@angular/core';
 import { SkiProMockDataService } from '../../services/mock/skipro-mock-data.service';
 import { MockDataService } from '../../services/mock/mock-data.service';
 import {

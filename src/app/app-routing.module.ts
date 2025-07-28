@@ -49,12 +49,7 @@ const childrenRoutes: VexRoutes = [
         },
       {
         path: 'bookings-v3',
-        loadChildren: () => import('./bookings-v3/bookings-v3.module').then(m => m.BookingsV3Module),
-        canActivate: [AuthGuard],
-      },
-      {
-        path: 'skipro',
-        loadChildren: () => import('./bookings-v3/skipro.module').then(m => m.SkiProModule),
+        loadChildren: () => import('./pages/bookings-v3/bookings-v3.module').then(m => m.BookingsV3Module),
         canActivate: [AuthGuard],
       },
       {

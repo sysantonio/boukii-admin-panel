@@ -16,7 +16,7 @@ export class CancelBookingDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: { id: string },
     @Inject(SMART_BOOKING_SERVICE) private bookingService: SmartBookingService,
     private snackbar: MatSnackBar,
-    private dialogRef: MatDialogRef<CancelBookingDialogComponent>
+    public dialogRef: MatDialogRef<CancelBookingDialogComponent>
   ) {}
 
   async confirm() {

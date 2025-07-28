@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
 import {
   addDays,
   addMonths,
@@ -44,7 +44,8 @@ moment.locale('fr');
 @Component({
   selector: 'vex-timeline',
   templateUrl: './timeline.component.html',
-  styleUrls: ['./timeline.component.scss']
+  styleUrls: ['./timeline.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimelineComponent implements OnInit, OnDestroy {
 
@@ -137,6 +138,12 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   matchResults: { [monitorId: string]: boolean } = {};
 
+  // Caches para optimización
+  private parseTimeCache = new Map<string, Date>();
+  private hexToRgbACache = new Map<string, string>();
+  private sortedMonitorsCache: any[] = null;
+  private lastFilterHash: string = '';
+
   nullMonitor: any = { id: null };
   filterBookingUser: any;
   allBookingUsers: any[] = [];
@@ -146,7 +153,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   filteredMonitorsO: Observable<any[]>;
 
   constructor(private crudService: ApiCrudService, private dialog: MatDialog, public translateService: TranslateService,
-    private snackbar: MatSnackBar, private dateAdapter: DateAdapter<Date>, private router: Router) {
+    private snackbar: MatSnackBar, private dateAdapter: DateAdapter<Date>, private router: Router, private cdr: ChangeDetectorRef) {
     this.dateAdapter.setLocale(this.translateService.getDefaultLang());
     this.dateAdapter.getFirstDayOfWeek = () => { return 1; }
     this.mockLevels.forEach(level => {
@@ -416,7 +423,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   }
 
-  searchBookings(firstDate: string, lastDate: string) {
+  searchBookings(firstDate: string, lastDate: string, page:any = 1) {
     let params = '/admin/getPlanner?date_start=' + firstDate + '&date_end=' + lastDate + '&school_id=' + this.activeSchool + '&perPage=99999';
     if (this.selectedLanguages.length) {
       this.selectedLanguages.forEach(id => {
@@ -962,11 +969,19 @@ export class TimelineComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.filteredMonitors = this.filteredMonitors.sort((a: any, b: any) => {
-      if (a.id === null && b.id !== null) return -1;
-      if (b.id === null && a.id !== null) return 1;
-      return (a.first_name + a.last_name).localeCompare(b.first_name + b.last_name);
-    });
+    // Usar cache para ordenamiento solo si los monitores cambiaron
+    const currentFilterHash = JSON.stringify(this.filteredMonitors.map(m => m.id).sort());
+    if (this.lastFilterHash !== currentFilterHash || !this.sortedMonitorsCache) {
+      this.filteredMonitors = this.filteredMonitors.sort((a: any, b: any) => {
+        if (a.id === null && b.id !== null) return -1;
+        if (b.id === null && a.id !== null) return 1;
+        return (a.first_name + a.last_name).localeCompare(b.first_name + b.last_name);
+      });
+      this.sortedMonitorsCache = [...this.filteredMonitors];
+      this.lastFilterHash = currentFilterHash;
+    } else {
+      this.filteredMonitors = this.sortedMonitorsCache;
+    }
 
     const pixelsPerMinute = 150 / 60;
     const pixelsPerMinuteWeek = 300 / ((this.hoursRange.length - 1) * 60);
@@ -1173,9 +1188,15 @@ export class TimelineComponent implements OnInit, OnDestroy {
     const newTasks = [...filteredPlannerTasks, ...Object.values(groupedByDate).flat()];
     this.plannerTasks = append ? [...this.plannerTasks, ...newTasks] : newTasks;
     this.loading = false;
+    this.cdr.markForCheck(); // Trigger change detection with OnPush
   }
 
   hexToRgbA(hex: string, transparency = 1) {
+    const cacheKey = `${hex}-${transparency}`;
+    if (this.hexToRgbACache.has(cacheKey)) {
+      return this.hexToRgbACache.get(cacheKey);
+    }
+
     const rgb = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     if (!rgb) {
       return null;
@@ -1183,7 +1204,9 @@ export class TimelineComponent implements OnInit, OnDestroy {
     const r = parseInt(rgb[1], 16);
     const g = parseInt(rgb[2], 16);
     const b = parseInt(rgb[3], 16);
-    return `rgba(${r},${g},${b},${transparency})`;
+    const result = `rgba(${r},${g},${b},${transparency})`;
+    this.hexToRgbACache.set(cacheKey, result);
+    return result;
   }
 
   getMonthWeekInfo(dateString: any) {
@@ -1211,14 +1234,82 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
 
   parseTime(timeStr: string): Date {
+    if (this.parseTimeCache.has(timeStr)) {
+      return new Date(this.parseTimeCache.get(timeStr));
+    }
+
     const [hours, minutes] = timeStr.split(':').map(Number);
     const time = new Date();
     time.setHours(hours, minutes, 0, 0);
+    this.parseTimeCache.set(timeStr, new Date(time));
     return time;
   }
 
   formatTime(date: Date): string {
     return date.toTimeString().substring(0, 5);
+  }
+
+  // TrackBy functions para optimizar *ngFor
+  trackByMonitor(index: number, monitor: any): any {
+    return monitor.id || index;
+  }
+
+  trackByTask(index: number, task: any): any {
+    return task.booking_id || task.id || index;
+  }
+
+  trackByHour(index: number, hour: string): string {
+    return hour;
+  }
+
+  trackByDay(index: number, day: string): string {
+    return day;
+  }
+
+  trackBySport(index: number, sport: any): any {
+    return sport.id;
+  }
+
+  trackByLanguage(index: number, language: any): any {
+    return language.id;
+  }
+
+  // Método para limpiar caches cuando sea necesario
+  private clearCaches(): void {
+    this.parseTimeCache.clear();
+    this.hexToRgbACache.clear();
+    this.sortedMonitorsCache = null;
+    this.lastFilterHash = '';
+  }
+
+  // Detección inteligente de cambios para optimizar re-renders
+  private hasSignificantChange(newData: any, oldData: any): boolean {
+    if (!oldData || newData.length !== oldData.length) {
+      return true;
+    }
+
+    // Comparar checksums rápidos
+    const newChecksum = this.createDataChecksum(newData);
+    const oldChecksum = this.createDataChecksum(oldData);
+
+    return newChecksum !== oldChecksum;
+  }
+
+  private createDataChecksum(data: any[]): string {
+    return data.map(item => `${item.id}-${item.monitor_id}-${item.hour_start}-${item.hour_end}`).join('|');
+  }
+
+  // Método optimizado para actualizar solo elementos específicos
+  private updateSpecificTasks(updatedTasks: any[]): void {
+    updatedTasks.forEach(task => {
+      const existingIndex = this.plannerTasks.findIndex(t => t.booking_id === task.booking_id);
+      if (existingIndex >= 0) {
+        this.plannerTasks[existingIndex] = task;
+      } else {
+        this.plannerTasks.push(task);
+      }
+    });
+    this.cdr.markForCheck();
   }
 
   // LOGIC
@@ -2129,6 +2220,49 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   removeLanguage(langId: number) {
     this.selectedLanguages = this.selectedLanguages.filter(id => id !== langId);
+  }
+
+  onLanguageChange(langId: number, isChecked: boolean) {
+    if (isChecked) {
+      if (!this.selectedLanguages.includes(langId)) {
+        this.selectedLanguages.push(langId);
+      }
+    } else {
+      this.selectedLanguages = this.selectedLanguages.filter(id => id !== langId);
+    }
+  }
+
+  onLanguageSelectionChange() {
+    // This method is called when the mat-select value changes
+    // The selectedLanguages array is automatically updated by [(value)] binding
+  }
+
+  getCommonLanguages() {
+    // Define common languages that should appear first
+    const commonLanguageCodes = ['ES', 'EN', 'FR', 'DE', 'IT', 'PT', 'RU', 'CA'];
+    return this.languages.filter(lang => 
+      commonLanguageCodes.includes(lang.code.toUpperCase())
+    ).sort((a, b) => {
+      const aIndex = commonLanguageCodes.indexOf(a.code.toUpperCase());
+      const bIndex = commonLanguageCodes.indexOf(b.code.toUpperCase());
+      return aIndex - bIndex;
+    });
+  }
+
+  getOtherLanguages() {
+    const commonLanguageCodes = ['ES', 'EN', 'FR', 'DE', 'IT', 'PT', 'RU', 'CA'];
+    return this.languages.filter(lang => 
+      !commonLanguageCodes.includes(lang.code.toUpperCase())
+    ).sort((a, b) => a.code.localeCompare(b.code));
+  }
+
+  getLanguageCodeById(languageId: number): string {
+    const language = this.languages.find(lang => lang.id === languageId);
+    return language ? language.code.toUpperCase() : '';
+  }
+
+  trackById(index: number, id: number): number {
+    return id;
   }
 
   areAllChecked() {

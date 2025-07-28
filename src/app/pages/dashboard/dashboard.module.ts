@@ -22,6 +22,7 @@ import { WidgetSummaryMonitorsModule } from 'src/@vex/components/widgets/widget-
 import { WidgetSummaryTasksModule } from 'src/@vex/components/widgets/widget-summary-tasks/widget-summary-tasks.module';
 import { ComponentsModule } from 'src/@vex/components/components.module';
 import {TranslateModule} from '@ngx-translate/core';
+import { DashboardComponentsModule } from 'src/app/shared/components/dashboard-components.module';
 
 @NgModule({
   declarations: [DashboardAnalyticsComponent],
@@ -47,7 +48,8 @@ import {TranslateModule} from '@ngx-translate/core';
         WidgetSummaryMonitorsModule,
         WidgetSummaryTasksModule,
         ComponentsModule,
-        TranslateModule
+        TranslateModule,
+        DashboardComponentsModule
     ]
 })
 export class DashboardModule {

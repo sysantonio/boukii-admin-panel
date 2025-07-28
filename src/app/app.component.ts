@@ -197,20 +197,27 @@ export class AppComponent {
         children: [
           {
             type: "link",
-            label: "menu.home",
+            label: "Dashboard",
             route: "/home",
-            icon: "../assets/img/icons/home-2.png",
-            icon_active: "../assets/img/icons/home.svg",
+            icon: "mat:dashboard",
             routerLinkActiveOptions: { exact: true },
+            badge: { value: '3', bgClass: 'bg-warning', textClass: 'text-white' }
           },
           {
             type: "link",
-            label: "timeline.timeline",
-            route: "/timeline",
-            icon: "../assets/img/icons/planificador-2.png",
-            icon_active: "../assets/img/icons/planificador.png",
-
+            label: "Reservas",
+            route: "/bookings",
+            icon: "mat:event",
             routerLinkActiveOptions: { exact: true },
+            badge: { value: '11', bgClass: 'bg-primary', textClass: 'text-white' }
+          },
+          {
+            type: "link",
+            label: "Planificador",
+            route: "/timeline",
+            icon: "mat:calendar_today",
+            routerLinkActiveOptions: { exact: true },
+            badge: { value: '7', bgClass: 'bg-danger', textClass: 'text-white' }
           },
           /*          {
             type: 'link',
@@ -222,103 +229,104 @@ export class AppComponent {
           },*/
           {
             type: "link",
-            label: "bookings",
-            route: "/bookings",
-            icon: "../assets/img/icons/reservas-2.svg",
-            icon_active: "../assets/img/icons/reservas.svg",
+            label: "Instructores",
+            route: "/monitors",
+            icon: "mat:people",
             routerLinkActiveOptions: { exact: true },
+            badge: { value: '4', bgClass: 'bg-warning', textClass: 'text-white' }
           },
           {
             type: "link",
-            label: "courses.title",
+            label: "Cursos y Actividades",
             route: "/courses",
-            icon: "../assets/img/icons/cursos-2.svg",
-            icon_active: "../assets/img/icons/cursos.svg",
+            icon: "mat:school",
             routerLinkActiveOptions: { exact: true },
+            badge: { value: '5', bgClass: 'bg-success', textClass: 'text-white' }
           },
           {
             type: "link",
-            label: "menu.bonus",
+            label: "Alquiler de Material",
+            route: "/rental",
+            icon: "mat:sports",
+            routerLinkActiveOptions: { exact: true },
+            badge: { value: '6', bgClass: 'bg-warning', textClass: 'text-white' }
+          },
+          {
+            type: "link",
+            label: "Bonos y códigos",
             route: "/vouchers",
-            icon: "../assets/img/icons/bonos-2.svg",
-            icon_active: "../assets/img/icons/bonos.svg",
+            icon: "mat:card_giftcard",
             routerLinkActiveOptions: { exact: true },
+            badge: { value: '12', bgClass: 'bg-primary', textClass: 'text-white' }
           },
           {
             type: "link",
-            label: "menu.communication",
+            label: "Comunicación",
             route: "/mail",
-            icon: "../assets/img/icons/comunicacion-2.svg",
-            icon_active: "../assets/img/icons/comunicacion.svg",
+            icon: "mat:mail",
             routerLinkActiveOptions: { exact: true },
+            badge: { value: '7', bgClass: 'bg-danger', textClass: 'text-white' }
           },
           {
             type: "link",
-            label: "Chat",
-            route: "/communications",
-            icon: "../assets/img/icons/chat-2.svg",
-            icon_active: "../assets/img/icons/chat.svg",
+            label: "Pagos",
+            route: "/payments",
+            icon: "mat:payment",
             routerLinkActiveOptions: { exact: true },
+            badge: { value: '3', bgClass: 'bg-warning', textClass: 'text-white' }
           },
           {
             type: "link",
-            label: "menu.stats",
+            label: "Reportes",
             route: "/stats",
-            icon: "../assets/img/icons/stats-2.svg",
-            icon_active: "../assets/img/icons/stats.svg",
+            icon: "mat:bar_chart",
             routerLinkActiveOptions: { exact: true },
+            badge: { value: '1', bgClass: 'bg-success', textClass: 'text-white' }
           },
         ],
       },
       // Otra seccion
       {
         type: "subheading",
-        label: "menu.people",
+        label: "CLIENTES Y MONITORES",
         children: [
           {
             type: "link",
-            label: "menu.monitors",
+            label: "Monitores",
             route: "/monitors",
-            icon: "../assets/img/icons/monitores-3.svg",
-            icon_active: "../assets/img/icons/monitores-2.svg",
+            icon: "mat:supervisor_account",
             routerLinkActiveOptions: { exact: true },
+            badge: { value: '2', bgClass: 'bg-info', textClass: 'text-white' }
           },
           {
             type: "link",
-            label: "clients",
+            label: "Clientes",
             route: "/clients",
-            icon: "../assets/img/icons/clientes2.svg",
-            icon_active: "../assets/img/icons/clientes.svg",
+            icon: "mat:people",
             routerLinkActiveOptions: { exact: true },
+            badge: { value: '8', bgClass: 'bg-success', textClass: 'text-white' }
           },
           {
             type: "link",
-            label: "admins",
+            label: "Administradores",
             route: "/admins",
-            icon: "../assets/img/icons/admin.svg",
-            icon_active: "../assets/img/icons/Admins.svg",
+            icon: "mat:admin_panel_settings",
             routerLinkActiveOptions: { exact: true },
+            badge: { value: '2', bgClass: 'bg-info', textClass: 'text-white' }
           },
         ],
       },
       {
         type: "subheading",
-        label: "menu.config",
+        label: "CONFIGURACIONES",
         children: [
           {
             type: "link",
-            label: "Boukii Pay",
-            route: "https://login.pay.boukii.com/fr/",
-            icon: "../assets/img/icons/boukii_pay.svg",
-            routerLinkActiveOptions: { exact: true },
-          },
-          {
-            type: "link",
-            label: "settings",
+            label: "Ajustes",
             route: "/settings",
-            icon: "../assets/img/icons/reglajes-2.svg",
-            icon_active: "../assets/img/icons/reglages.svg",
+            icon: "mat:settings",
             routerLinkActiveOptions: { exact: true },
+            badge: { value: '1', bgClass: 'bg-warning', textClass: 'text-white' }
           },
         ],
       },

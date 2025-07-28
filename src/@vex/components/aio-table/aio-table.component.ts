@@ -59,6 +59,9 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 })
 export class AioTableComponent implements OnInit, AfterViewInit, OnChanges {
   private readonly destroyRef: DestroyRef = inject(DestroyRef);
+  
+  // Expose Math to template
+  Math = Math;
 
   layoutCtrl = new UntypedFormControl('boxed');
   subject$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);

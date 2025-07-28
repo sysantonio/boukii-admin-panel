@@ -67,10 +67,9 @@
 }
 
 .schedule-container {
-  display: grid;
-  grid-template-columns: 270px 1fr;
-  height: calc(100vh - 200px);
-  overflow-y: auto;
+  display: flex;
+  width: 100%;
+  min-width: max-content;
 }
 .monitors-column {
   flex-shrink: 0;
@@ -78,9 +77,11 @@
   display: flex;
   flex-direction: column;
   padding-top: 40px;
+  min-height: 0;
 }
 .monitor {
   height: 100px;
+  min-height: 100px;
   border-top: 1px solid #bbb;
   display: flex;
   align-items: center;
@@ -88,6 +89,7 @@
   gap: 8px;
   padding: 0px 24px 0px 2px;
   position: relative;
+  flex-shrink: 0;
 }
 .monitor-left {
   display: flex;
@@ -180,9 +182,12 @@
 .hours-container {
   flex-grow: 1;
   overflow-x: auto;
+  min-width: 0;
 }
 .hours-row {
   display: flex;
+  min-width: max-content;
+  width: max-content;
 }
 .hour {
   color: var(--is-light-theme, #121212) var(--is-dark-theme, #dee6ea);
@@ -192,6 +197,8 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  flex-shrink: 0;
+  border-left: 1px solid #bbb;
 }
 .day {
   min-width: 300px;
@@ -204,10 +211,12 @@
 .grid-container {
   min-width: max-content;
   position: relative;
+  width: max-content;
 }
 .grid-row {
   display: flex;
-  width: fit-content;
+  width: max-content;
+  min-width: max-content;
 }
 .grid-cell {
   border-left: 1px solid #bbb;
@@ -216,6 +225,7 @@
   width: 150px;
   height: 100px;
   position: relative;
+  flex-shrink: 0;
 }
 .grid-cell-last {
   border-left: 1px solid #bbb;
@@ -241,7 +251,6 @@
 .grid-row:last-child .grid-cell {
   border-bottom: none;
 }
-
 .grid-cell:last-child {
   border-right: none;
 }
@@ -568,6 +577,38 @@
 }
 .filter-container-column span {
   margin-bottom: 8px;
+}
+
+// Language filter specific styles
+.language-filter-field {
+  min-width: 200px;
+  max-width: 300px;
+  margin-bottom: 8px;
+  
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none; // Hide the subscript to save space
+  }
+}
+
+.selected-languages-tags {
+  margin-top: 8px;
+  
+  .language-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    
+    mat-chip {
+      font-size: 12px;
+      height: 24px;
+      
+      mat-icon {
+        font-size: 16px;
+        height: 16px;
+        width: 16px;
+      }
+    }
+  }
 }
 
 .bg-linear-no-match {

@@ -1,34 +1,46 @@
 // ============= BOOKING EDIT INTERFACES =============
 
+import {ClientPreferences, ClientRiskProfile} from './booking-wizard.interfaces';
+import {
+  BookingSource,
+  BookingStatus,
+  Certification,
+  ClientMetrics,
+  CommunicationPreferences, CourseType,
+  EmergencyContact, EquipmentBooking,
+  EquipmentNeed,
+  MonitorAvailability, PaymentRecord, RefundRecord
+} from './shared.interfaces';
+
 export interface SmartEditBooking {
   // Información principal
   bookingId: number;
   currentBooking: EnhancedBooking;
   originalBooking: EnhancedBooking; // Para comparar cambios
-  
+
   // Timeline y historial
   bookingTimeline: BookingTimelineEvent[];
   changeHistory: BookingChange[];
-  
+
   // Edición en tiempo real
   editableFields: EditableField[];
   realTimeValidation: ValidationResult[];
   conflictDetection: EditConflict[];
   impactAnalysis: ChangeImpactAnalysis;
-  
+
   // Quick Actions
   quickActions: QuickActionGroup[];
-  
+
   // Comunicación
   notificationSettings: NotificationSetting[];
   autoNotifyClient: boolean;
   notificationTemplates: NotificationTemplate[];
-  
+
   // Pricing
   priceAdjustments: PriceAdjustment[];
   refundCalculations: RefundCalculation[];
   additionalCharges: AdditionalCharge[];
-  
+
   // Estados
   isLoading: boolean;
   isDirty: boolean;
@@ -44,27 +56,27 @@ export interface EnhancedBooking {
   status: BookingStatus;
   createdAt: Date;
   updatedAt: Date;
-  
+
   // Cliente y contacto
   client: EnhancedClient;
   participants: EnhancedParticipant[];
-  
+
   // Curso y actividad
-  course: EnhancedCourse;
+  course: any;
   courseType: CourseType;
-  
+
   // Fechas y horarios
-  bookingDates: BookingDate[];
+  bookingDates: any[];
   duration: number;
   timezone: string;
-  
+
   // Monitor y recursos
   monitor: EnhancedMonitor | null;
   location: Location;
   equipment: EquipmentBooking[];
-  
+
   // Pricing y pagos
-  pricing: BookingPricing;
+  pricing: any;
   payments: PaymentRecord[];
   refunds: RefundRecord[];
   /** Detalle de precios por concepto */
@@ -81,21 +93,21 @@ export interface EnhancedBooking {
     totalBookings: number;
     lastBookingDate: Date | null;
   };
-  
+
   // Notas y comunicación
-  notes: BookingNote[];
+  notes: any[];
   internalNotes: string;
   clientNotes: string;
-  
+
   // Metadata
   source: BookingSource;
   tags: string[];
   priority: 'low' | 'normal' | 'high' | 'urgent';
   assignedTo: number | null; // Staff member
-  
+
   // Métricas
   metrics: BookingMetrics;
-  satisfaction: SatisfactionRecord | null;
+  satisfaction: any | null;
 }
 
 export interface BookingTimelineEvent {
@@ -142,7 +154,7 @@ export interface EditableField {
   validationRules: ValidationRule[];
   dependsOn: string[]; // Otros campos que afectan este
   affects: string[]; // Campos que este afecta
-  changeImpact: FieldChangeImpact;
+  changeImpact: any;
 }
 
 export enum FieldType {
@@ -166,8 +178,8 @@ export interface ValidationResult {
   fieldName: string;
   isValid: boolean;
   errors: FieldError[];
-  warnings: FieldWarning[];
-  suggestions: FieldSuggestion[];
+  warnings: any[];
+  suggestions: any[];
 }
 
 export interface FieldError {
@@ -213,7 +225,7 @@ export interface ConflictResolution {
   title: string;
   description: string;
   action: () => Promise<void>;
-  impact: ResolutionImpact;
+  impact: any;
   automatic: boolean;
   requiresConfirmation: boolean;
 }
@@ -269,7 +281,7 @@ export interface QuickAction {
 }
 
 // Tipos específicos de Quick Actions
-export interface RescheduleOptions {
+/*export interface RescheduleOptions {
   availableSlots: AvailableSlot[];
   suggestedSlots: SuggestedSlot[];
   conflictingBookings: ConflictingBooking[];
@@ -294,7 +306,7 @@ export interface AddParticipantOptions {
   ageRestrictions: AgeRestriction[];
   equipmentAvailability: EquipmentAvailability[];
   groupDiscountImpact: DiscountImpact;
-}
+}*/
 
 // ============= NOTIFICACIONES =============
 export interface NotificationSetting {
@@ -447,7 +459,7 @@ export interface EnhancedParticipant {
   specialRequests: string[];
   medicalConditions: string[];
   emergencyContact: EmergencyContact;
-  waiverStatus: WaiverStatus;
+  waiverStatus: any;
   equipmentNeeds: EquipmentNeed[];
   insuranceOptIn: boolean;
 }

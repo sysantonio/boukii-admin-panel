@@ -3,9 +3,7 @@
 </ng-template>
 
 <ng-template #toolbarRef>
-  <vex-toolbar [hasShadow]="toolbarShadowEnabled$ | async"
-               [mobileQuery]="!(isDesktop$ | async)"
-               class="vex-toolbar"></vex-toolbar>
+  <vex-toolbar-enhanced class="vex-toolbar-enhanced"></vex-toolbar-enhanced>
 </ng-template>
 
 <ng-template #footerRef>

@@ -49,3 +49,7 @@ Thumbs.db
 *.wmv
 
 package-lock.json
+
+/screenshots/*
+
+/DISENO

@@ -2,7 +2,21 @@
   "permissions": {
     "allow": [
       "Bash(npx ng build:*)",
-      "Bash(ng build:*)"
+      "Bash(ng build:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm start)",
+      "Bash(git checkout:*)",
+      "Bash(npm run lint)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run start2:*)",
+      "Bash(ng serve:*)",
+      "Bash(./node_modules/.bin/ng build:*)",
+      "Bash(rm:*)",
+      "Bash(node:*)",
+      "Bash(cp:*)",
+      "Bash(timeout 20s npm start)",
+      "Bash(timeout 15s npx ng serve)",
+      "Bash(timeout 15s npx ng serve vex)"
     ],
     "deny": []
   }

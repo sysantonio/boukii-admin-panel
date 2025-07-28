@@ -14,7 +14,7 @@ import {environment} from '../../../environments/environment';
 })
 export class SmartBookingService {
   private http = inject(HttpClient);
-  private baseUrl = `${environment.baseUrl}/v2/bookings`;
+  private baseUrl = `${environment.baseUrl}/v3/bookings`;
 
   // Cache de datos frecuentemente usados
   private coursesCache$ = new BehaviorSubject<any[]>([]);
@@ -434,6 +434,186 @@ export class SmartBookingService {
       clearInterval(interval);
       delete (window as any)[`booking_${bookingId}_interval`];
     }
+  }
+
+  // ============= SKIPRO SPECIFIC METHODS =============
+
+  /**
+   * Obtener dashboard de Skipro con KPIs y datos principales
+   */
+  getSkiProDashboard(): Observable<any> {
+    return this.http.get<any>(`${environment.baseUrl}/v3/skipro/dashboard`).pipe(
+      map(response => response.data),
+      shareReplay(1),
+      catchError(error => {
+        console.error('Error loading Skipro dashboard:', error);
+        return [];
+      })
+    );
+  }
+
+  /**
+   * Obtener lista de reservas optimizada para interfaz Skipro
+   */
+  getSkiProBookings(filters?: {
+    tipo?: 'Todas' | 'Cursos' | 'Actividades' | 'Material';
+    estado?: string;
+    busqueda?: string;
+    fechaDesde?: Date;
+    fechaHasta?: Date;
+  }): Observable<any> {
+    const params = new URLSearchParams();
+
+    if (filters?.tipo && filters.tipo !== 'Todas') {
+      params.set('type', this.mapSkiProTypeToApi(filters.tipo));
+    }
+    if (filters?.estado) params.set('status', filters.estado);
+    if (filters?.busqueda) params.set('search', filters.busqueda);
+    if (filters?.fechaDesde) params.set('dateFrom', filters.fechaDesde.toISOString());
+    if (filters?.fechaHasta) params.set('dateTo', filters.fechaHasta.toISOString());
+
+    return this.http.get<any>(`${environment.baseUrl}/v3/skipro/bookings?${params}`).pipe(
+      map(response => response.data),
+      shareReplay(1)
+    );
+  }
+
+  /**
+   * Validar paso del wizard Skipro
+   */
+/*  validateSkiProWizardStep(step: number, data: any, previousSteps: any[] = []): Observable<any> {
+    return this.http.post<any>(`${environment.baseUrl}/v3/skipro/wizard/validate-step`, {
+      step,
+      data,
+      previousSteps
+    }).pipe(
+      map(response => response.data),
+      catchError(error => {
+        console.error('Error validating wizard step:', error);
+        return {
+          valid: false,
+          errors: ['Error de validación'],
+          warnings: [],
+          suggestions: []
+        };
+      })
+    );
+  }*/
+
+  /**
+   * Crear reserva usando el formato Skipro
+   */
+  createSkiProBooking(wizardState: any): Observable<any> {
+    const bookingData = this.mapSkiProWizardToBooking(wizardState);
+
+    return this.http.post<any>(`${this.baseUrl}/smart-create`, {
+      ...bookingData,
+      metadata: {
+        ...bookingData.metadata,
+        source: 'skipro-wizard',
+        version: '3.0'
+      }
+    }).pipe(
+      map(response => response.data),
+      catchError(error => {
+        console.error('Error creating Skipro booking:', error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Obtener clientes con formato optimizado para Skipro
+   */
+  getSkiProClients(busqueda?: string): Observable<any[]> {
+    const params = new URLSearchParams();
+    if (busqueda) params.set('search', busqueda);
+    params.set('include', 'activeBookings,analytics');
+
+    return this.http.get<any>(`${environment.baseUrl}/v3/clients?${params}`).pipe(
+      map(response => response.data.clients),
+      shareReplay(1)
+    );
+  }
+
+  /**
+   * Obtener perfil completo de cliente para Skipro
+   */
+  getSkiProClientProfile(clientId: number): Observable<any> {
+    return this.http.get<any>(`${environment.baseUrl}/v3/clients/${clientId}`).pipe(
+      map(response => response.data),
+      shareReplay(1)
+    );
+  }
+
+  /**
+   * Crear nuevo cliente desde Skipro
+   */
+  createSkiProClient(clientData: any): Observable<any> {
+    return this.http.post<any>(`${environment.baseUrl}/v3/clients`, {
+      ...clientData,
+      source: 'skipro-wizard'
+    }).pipe(
+      map(response => response.data)
+    );
+  }
+
+  // ============= HELPER METHODS =============
+
+  private mapSkiProTypeToApi(tipo: string): string {
+    const mapping: Record<string, string> = {
+      'Cursos': 'course',
+      'Actividades': 'activity',
+      'Material': 'material'
+    };
+    return mapping[tipo] || 'course';
+  }
+
+  private mapSkiProWizardToBooking(wizardState: any): any {
+    return {
+      client: wizardState.cliente ? {
+        id: wizardState.cliente.id
+      } : {
+        data: wizardState.nuevoClienteData
+      },
+      course: {
+        id: wizardState.cursoSeleccionado?.id,
+        type: this.mapSkiProTypeToApi(wizardState.tipoReserva?.nombre || 'Cursos')
+      },
+      schedule: {
+        dates: wizardState.configuracion?.fechasSeleccionadas?.map((d: Date) => d.toISOString()) || [],
+        participants: wizardState.configuracion?.participantes || 1,
+        notes: wizardState.configuracion?.notasAdicionales
+      },
+      participants: [{
+        firstName: wizardState.cliente?.nombre || wizardState.nuevoClienteData?.nombre,
+        lastName: wizardState.cliente?.apellido || wizardState.nuevoClienteData?.apellido,
+        age: this.calculateAge(wizardState.cliente?.fechaRegistro),
+        level: wizardState.cliente?.nivel || 'Principiante'
+      }],
+      pricing: {
+        basePrice: wizardState.cursoSeleccionado?.precio || 0,
+        discounts: [],
+        totalPrice: wizardState.resumen?.total || 0
+      },
+      metadata: {
+        source: 'skipro-wizard',
+        puntoEncuentro: wizardState.configuracion?.puntoEncuentro,
+        createdVia: 'skipro-v3'
+      }
+    };
+  }
+
+  private calculateAge(birthDate?: Date): number {
+    if (!birthDate) return 25; // Default age
+    const today = new Date();
+    const birth = new Date(birthDate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    return Math.max(age, 0);
   }
 
   // ============= ERROR HANDLING =============

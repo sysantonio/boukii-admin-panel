@@ -1,186 +1,407 @@
-import { Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import moment from 'moment';
-import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
-import { defaultChartOptions } from 'src/@vex/utils/default-chart-options';
-import { Order, tableSalesData } from 'src/app/static-data/table-sales-data';
-import { ApiCrudService } from 'src/service/crud.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
+
+// Servicios
+import { DashboardService } from 'src/app/shared/services/dashboard.service';
+
+// Interfaces
+import {
+  WelcomeBannerData,
+  WeatherData,
+  TodayBookingsData,
+  MetricCardConfig,
+  TodayBooking,
+  SalesChannelData,
+  DailySessionsData
+} from 'src/app/shared/interfaces/dashboard.interfaces';
 
 @Component({
   selector: 'vex-dashboard-analytics',
   templateUrl: './dashboard-analytics.component.html',
   styleUrls: ['./dashboard-analytics.component.scss']
 })
-export class DashboardAnalyticsComponent implements OnInit {
+export class DashboardAnalyticsComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
 
-  tableColumns: TableColumn<any>[] = [
-    {
-      label: 'ID',
-      property: 'id',
-      type: 'text'
-    },
+  // Datos para los componentes
+  welcomeData?: WelcomeBannerData;
+  weatherData?: WeatherData;
+  todayBookingsData?: TodayBookingsData;
 
-    {
-      label: this.TranslateService.instant('type'),
-      property: 'type',
-      type: 'booking_users_image'
-    },
-    { label: this.TranslateService.instant('course'), property: 'booking_users', type: 'booking_users' },
-    { label: this.TranslateService.instant('client'), property: 'client_main', type: 'client' },
+  // Configuraciones para las métricas
+  privateCourseMetric: MetricCardConfig = {
+    title: 'Cursos Privados',
+    value: 0,
+    change: '',
+    changeType: 'neutral',
+    icon: 'person',
+    color: 'primary'
+  };
 
-  ];
+  collectiveCourseMetric: MetricCardConfig = {
+    title: 'Cursos Colectivos',
+    value: 0,
+    change: '',
+    changeType: 'neutral',
+    icon: 'group',
+    color: 'info'
+  };
 
-  userSessionsSeries: ApexAxisChartSeries = [
-    {
-      name: this.TranslateService.instant('users'),
-      data: [10, 50, 26, 50, 38, 60, 50, 25, 61, 80, 40, 60]
-    },
-    {
-      name: this.TranslateService.instant('Sessions'),
-      data: [5, 21, 42, 70, 41, 20, 35, 50, 10, 15, 30, 50]
-    }
-  ];
+  activeBookingsMetric: MetricCardConfig = {
+    title: 'Reservas Activas',
+    value: 0,
+    change: '',
+    changeType: 'neutral',
+    icon: 'event',
+    color: 'info'
+  };
 
-  salesSeries: ApexAxisChartSeries = [
-    {
-      name: this.TranslateService.instant('Sales'),
-      data: [28, 40, 36, 0, 52, 38, 60, 55, 99, 54, 38, 87]
-    }
-  ];
+  dailySalesMetric: MetricCardConfig = {
+    title: 'Ventas del Día',
+    value: 0,
+    change: '',
+    changeType: 'neutral',
+    icon: 'euro',
+    color: 'danger'
+  };
 
-  pageViewsSeries: ApexAxisChartSeries = [
-    {
-      name: this.TranslateService.instant('Page Views'),
-      data: [405, 800, 200, 600, 105, 788, 600, 204]
-    }
-  ];
+  // Datos y configuraciones para gráficos
+  salesChannelSeries: any[] = [];
+  salesChannelOptions: any = {};
+  dailySessionsSeries: any[] = [];
+  dailySessionsOptions: any = {};
 
-  uniqueUsersSeries: ApexAxisChartSeries = [
-    {
-      name: this.TranslateService.instant('Unique Users'),
-      data: [356, 806, 600, 754, 432, 854, 555, 1004]
-    }
-  ];
-
-  uniqueUsersOptions = defaultChartOptions({
-    chart: {
-      type: 'area',
-      height: 100
-    },
-    colors: ['#ff9800']
-  });
-
-  user: any;
-  blockages = [];
-  meteo = [];
-  dispoPrivate = 0;
-  dispoCol = 0;
-  bookings = 0;
-  bookingList = [];
-
-  date = moment();
-  constructor(private crudService: ApiCrudService, private TranslateService: TranslateService) {
-    this.user = JSON.parse(localStorage.getItem('boukiiUser'));
+  constructor(private dashboardService: DashboardService) {
+    this.initializeChartOptions();
   }
 
   ngOnInit(): void {
-    this.getData();
+    this.loadDashboardData();
   }
 
-  getData() {
-    this.getBlockages();
-    this.getCourses();
-    this.getBookings();
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  emitDate(event: any) {
-    this.date = moment(event);
-    this.getData();
+  // ============= DATA LOADING =============
+
+  private loadDashboardData(): void {
+    // Decidir si usar APIs reales o datos mock
+    const useRealApis = true; // Cambiar a true para usar APIs reales
+
+    if (useRealApis) {
+      this.loadRealDashboardData();
+    } else {
+      this.loadMockDashboardData();
+    }
   }
 
-  getBlockages() {
-    this.crudService.list('/school-colors', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id)
-      .subscribe((data) => {
-        this.blockages = data.data.length;
-      })
-  }
+  private loadRealDashboardData(): void {
+    console.log('Cargando datos del dashboard con APIs reales...');
 
-  getCourses() {
-    this.crudService.list('/admin/courses', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&date_start=' + this.date.format('YYYY-MM-DD') + '&course_type=1')
-      .subscribe((data) => {
-        this.dispoCol = data.data.reduce((accumulator, currentObject) => {
-          return accumulator + currentObject.total_available_places;
-        }, 0);
-
-      })
-    this.crudService.list('/admin/courses', 1, 10000, 'desc', 'id', '&school_id=' + this.user.schools[0].id + '&date_start=' + this.date.format('YYYY-MM-DD') + '&course_type=2')
-      .subscribe((data) => {
-        this.dispoPrivate = data.data.reduce((accumulator, currentObject) => {
-          return accumulator + currentObject.total_available_places;
-        }, 0);
-
-      })
-  }
-
-  getBookings() {
-    this.bookingList = [];
-    this.crudService.list('/booking-users', 1, 10000, 'desc', 'id',
-      '&school_id=' + this.user.schools[0].id + '&date=' + this.date.format('YYYY-MM-DD'), '', null, null, ['client'])
-      .subscribe((data) => {
-        this.bookings = data.data.length;
-
-        let bookingIds = new Set();
-        data.data.forEach(item => {
-          if (item.booking_id !== undefined && item.booking_id !== null) {
-            bookingIds.add(item.booking_id);
-          }
-        });
-
-        // Si necesitas el resultado como un array
-        let uniqueBookingIds = Array.from(bookingIds);
-
-        uniqueBookingIds.forEach(element => {
-          this.crudService.get('/bookings/' + element, ['clientMain', 'bookingUsers.course'])
-            .subscribe((bo) => {
-              this.bookingList = this.bookingList.concat(bo.data);
-            })
-        });
-      })
-  }
-
-  getPaidBookings() {
-    return this.bookingList.filter((b) => !b.paid).length;
-  }
-
-  getPrivateNoAssigned() {
-
-    let ret = 0;
-    this.bookingList.forEach(element => {
-
-      element.booking_users.forEach(bu => {
-        if (bu.course.course_type === 2 && bu.monitor_id === null) {
-          ret = ret + 1;
-
+    // Cargar datos del banner de bienvenida con API real
+    this.dashboardService.getRealWelcomeBannerData()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: data => {
+          this.welcomeData = data;
+          console.log('Welcome data loaded:', data);
+        },
+        error: error => {
+          console.error('Error loading welcome data:', error);
+          // Fallback a datos mock
+          this.dashboardService.getWelcomeBannerData()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(data => this.welcomeData = data);
         }
       });
-    });
 
-    return ret;
-  }
-
-  getColNoAssigned() {
-
-    let ret = 0;
-    this.bookingList.forEach(element => {
-
-      element.booking_users.forEach(bu => {
-        if (bu.course.course_type === 1 && bu.monitor_id === null) {
-          ret = ret + 1;
-
+    // Cargar métricas con API real
+    this.dashboardService.getRealMetrics()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: metrics => {
+          this.updateMetrics(metrics);
+          console.log('Real metrics loaded:', metrics);
+        },
+        error: error => {
+          console.error('Error loading real metrics:', error);
+          // Fallback a datos mock
+          this.dashboardService.getMetrics()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(metrics => this.updateMetrics(metrics));
         }
       });
-    });
 
-    return ret;
+    // Cargar dashboard completo con APIs reales (para gráficos)
+    this.dashboardService.getDashboardDataWithRealApis()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: dashboardData => {
+          // Actualizar gráficos con datos reales
+          this.updateSalesChannelChart(dashboardData.salesChannels);
+          this.updateDailySessionsChart(dashboardData.dailySessions);
+          console.log('Real dashboard data loaded:', dashboardData);
+        },
+        error: error => {
+          console.error('Error loading real dashboard data:', error);
+          // Fallback a datos mock para gráficos
+          this.loadMockChartsData();
+        }
+      });
+
+    // Mantener datos mock para componentes que aún no tienen API
+    this.dashboardService.getWeatherData()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        this.weatherData = data;
+      });
+
+    this.dashboardService.getTodayBookings()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        this.todayBookingsData = data;
+      });
+  }
+
+  private loadMockDashboardData(): void {
+    console.log('Cargando datos del dashboard con datos mock...');
+
+    // Cargar datos del banner de bienvenida
+    this.dashboardService.getWelcomeBannerData()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        this.welcomeData = data;
+      });
+
+    // Cargar métricas
+    this.dashboardService.getMetrics()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(metrics => {
+        this.updateMetrics(metrics);
+      });
+
+    // Cargar datos meteorológicos
+    this.dashboardService.getWeatherData()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        this.weatherData = data;
+      });
+
+    // Cargar reservas de hoy
+    this.dashboardService.getTodayBookings()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        this.todayBookingsData = data;
+      });
+
+    // Cargar datos de ventas por canal
+    this.dashboardService.getSalesChannelData()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        this.updateSalesChannelChart(data);
+      });
+
+    // Cargar datos de sesiones diarias
+    this.dashboardService.getDailySessionsData()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        this.updateDailySessionsChart(data);
+      });
+  }
+
+  private loadMockChartsData(): void {
+    // Cargar datos de ventas por canal
+    this.dashboardService.getSalesChannelData()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        this.updateSalesChannelChart(data);
+      });
+
+    // Cargar datos de sesiones diarias
+    this.dashboardService.getDailySessionsData()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        this.updateDailySessionsChart(data);
+      });
+  }
+
+  // ============= METRIC UPDATES =============
+
+  private updateMetrics(metrics: any): void {
+    this.privateCourseMetric = {
+      title: 'Cursos Privados',
+      value: metrics.privateCourses.value,
+      change: metrics.privateCourses.change,
+      changeType: metrics.privateCourses.changeType,
+      icon: 'person',
+      color: 'primary'
+    };
+
+    this.collectiveCourseMetric = {
+      title: 'Cursos Colectivos',
+      value: metrics.collectiveCourses.value,
+      change: metrics.collectiveCourses.change,
+      changeType: metrics.collectiveCourses.changeType,
+      icon: 'group',
+      color: 'info'
+    };
+
+    this.activeBookingsMetric = {
+      title: 'Reservas Activas',
+      value: metrics.activeBookings.value,
+      change: metrics.activeBookings.change,
+      changeType: metrics.activeBookings.changeType,
+      icon: 'event',
+      color: 'info'
+    };
+
+    this.dailySalesMetric = {
+      title: 'Ventas del Día',
+      value: `€${metrics.dailySales.value}`,
+      change: metrics.dailySales.change,
+      changeType: metrics.dailySales.changeType,
+      icon: 'euro',
+      color: 'danger'
+    };
+  }
+
+  // ============= CHART CONFIGURATIONS =============
+
+  private initializeChartOptions(): void {
+    // Configuración del gráfico de ventas por canal
+    this.salesChannelOptions = {
+      chart: {
+        type: 'line',
+        height: 300,
+        toolbar: {
+          show: false
+        }
+      },
+      stroke: {
+        width: 3,
+        curve: 'smooth'
+      },
+      colors: ['#ef4444', '#3b82f6', '#10b981'],
+      markers: {
+        size: 6,
+        hover: {
+          size: 8
+        }
+      },
+      xaxis: {
+        categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul']
+      },
+      yaxis: {
+        title: {
+          text: 'Ventas (€k)'
+        }
+      },
+      legend: {
+        position: 'top'
+      },
+      grid: {
+        borderColor: '#e5e7eb'
+      }
+    };
+
+    // Configuración del gráfico de sesiones diarias
+    this.dailySessionsOptions = {
+      chart: {
+        type: 'bar',
+        height: 300,
+        toolbar: {
+          show: false
+        }
+      },
+      colors: ['#10b981'],
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          columnWidth: '60%'
+        }
+      },
+      xaxis: {
+        categories: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
+      },
+      yaxis: {
+        title: {
+          text: 'Sesiones'
+        }
+      },
+      grid: {
+        borderColor: '#e5e7eb'
+      }
+    };
+  }
+
+  private updateSalesChannelChart(data: SalesChannelData): void {
+    this.salesChannelSeries = [
+      {
+        name: 'Objetivo',
+        data: data.objective
+      },
+      {
+        name: 'Ventas Admin',
+        data: data.admin
+      },
+      {
+        name: 'Ventas Online',
+        data: data.online
+      }
+    ];
+
+    // Actualizar categorías
+    this.salesChannelOptions = {
+      ...this.salesChannelOptions,
+      xaxis: {
+        categories: data.months
+      }
+    };
+  }
+
+  private updateDailySessionsChart(data: DailySessionsData): void {
+    this.dailySessionsSeries = [
+      {
+        name: 'Sesiones',
+        data: data.sessions
+      }
+    ];
+
+    // Actualizar categorías
+    this.dailySessionsOptions = {
+      ...this.dailySessionsOptions,
+      xaxis: {
+        categories: data.days
+      }
+    };
+  }
+
+  // ============= EVENT HANDLERS =============
+
+  onViewBooking(booking: TodayBooking): void {
+    console.log('Ver reserva:', booking);
+    // Implementar navegación o modal de detalles
+  }
+
+  onEditBooking(booking: TodayBooking): void {
+    console.log('Editar reserva:', booking);
+    // Implementar navegación a edición
+  }
+
+  onCancelBooking(booking: TodayBooking): void {
+    console.log('Cancelar reserva:', booking);
+    // Implementar confirmación y cancelación
+  }
+
+  onCreateBooking(): void {
+    console.log('Crear nueva reserva');
+    // Implementar navegación a creación
+  }
+
+  onOpenFullAgenda(): void {
+    console.log('Abrir agenda completa');
+    // Implementar navegación al timeline/agenda
   }
 }

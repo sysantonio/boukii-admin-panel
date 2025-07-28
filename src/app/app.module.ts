@@ -6,7 +6,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { VexModule } from '../@vex/vex.module';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { CustomLayoutModule } from './custom-layout/custom-layout.module';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ComponentsModule } from 'src/@vex/components/components.module';
 import { AuthService } from 'src/service/auth.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -26,7 +25,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-    declarations: [AppComponent, DashboardComponent, PreviewModalComponent, CurrencyFormatterPipe, PercentageFormatterPipe, NumberFormatterPipe, DateRangeFormatterPipe],
+    declarations: [AppComponent, PreviewModalComponent, CurrencyFormatterPipe, PercentageFormatterPipe, NumberFormatterPipe, DateRangeFormatterPipe],
     imports: [
         BrowserModule,
         AppRoutingModule,
