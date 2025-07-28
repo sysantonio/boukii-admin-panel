@@ -11,6 +11,11 @@ import { V5LayoutComponent } from './layout/v5-layout.component';
 import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { ApiV5Service } from './core/services/api-v5.service';
+import { SeasonContextService } from './core/services/season-context.service';
+import { AuthV5Service } from './core/services/auth-v5.service';
+import { NotificationService } from './core/services/notification.service';
+import { LoadingService } from './core/services/loading.service';
 
 @NgModule({
   declarations: [
@@ -28,6 +33,13 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     MatListModule,
     MatButtonModule,
     V5RoutingModule
+  ],
+  providers: [
+    ApiV5Service,
+    SeasonContextService,
+    AuthV5Service,
+    NotificationService,
+    LoadingService
   ]
 })
 export class V5Module {}
