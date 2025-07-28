@@ -1,0 +1,18 @@
+import { Injectable } from '@angular/core';
+import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { SeasonContextService } from '../services/season-context.service';
+
+@Injectable({ providedIn: 'root' })
+export class SeasonContextGuard implements CanActivate {
+  constructor(private seasonContext: SeasonContextService, private router: Router) {}
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    // TODO: ensure season is selected
+    const seasonSelected = true;
+    if (!seasonSelected) {
+      this.router.navigate(['/seasons']);
+      return false;
+    }
+    return true;
+  }
+}
