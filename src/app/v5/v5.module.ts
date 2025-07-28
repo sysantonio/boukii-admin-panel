@@ -8,10 +8,17 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { V5RoutingModule } from './v5-routing.module';
 import { V5LayoutComponent } from './layout/v5-layout.component';
-import { WelcomeComponent } from './components/welcome/welcome.component';
+import { WelcomeComponent } from './pages/welcome/welcome.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @NgModule({
-  declarations: [V5LayoutComponent, WelcomeComponent],
+  declarations: [
+    V5LayoutComponent,
+    WelcomeComponent,
+    NavbarComponent,
+    SidebarComponent
+  ],
   imports: [
     CommonModule,
     RouterModule,
