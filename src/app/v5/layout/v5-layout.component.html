@@ -1,17 +1,10 @@
 <mat-sidenav-container class="v5-container">
   <mat-sidenav #sidenav mode="side" opened class="v5-sidenav">
-    <mat-nav-list>
-      <a mat-list-item routerLink="/v5" (click)="sidenav.close()">Home</a>
-    </mat-nav-list>
+    <app-sidebar (navigate)="sidenav.close()"></app-sidebar>
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button mat-icon-button (click)="sidenav.toggle()">
-        <mat-icon>menu</mat-icon>
-      </button>
-      <span>Boukii v5</span>
-    </mat-toolbar>
+    <app-navbar (menuToggle)="sidenav.toggle()"></app-navbar>
 
     <div class="v5-content">
       <router-outlet></router-outlet>
