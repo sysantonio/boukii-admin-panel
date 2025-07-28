@@ -1,7 +1,9 @@
+@import "../../../styles/v5/variables";
+
 .v5-container {
   height: 100vh;
 }
 
 .v5-content {
-  padding: 16px;
+  padding: $v5-spacing-md;
 }

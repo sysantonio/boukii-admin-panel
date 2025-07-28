@@ -7,6 +7,9 @@
 // Nuevo sistema de diseño Boukii
 @import "./styles/dashboard-theme";
 @import "./styles/sidenav-enhanced";
+// Estilos globales para la versión 5
+@import "./styles/v5/variables";
+@import "./styles/v5/base";
 
 @font-face {
   font-family: "Dinamit";
