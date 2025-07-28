@@ -134,6 +134,10 @@ const routes: Routes = [
   {
     path: 'recover-password/:token',
     loadChildren: () => import('./pages/recover-password/recover-password.module').then(m => m.RecoverPasswordModule),
+  },
+  {
+    path: 'v5',
+    loadChildren: () => import('./v5/v5.module').then(m => m.V5Module)
   }
 ];
 
