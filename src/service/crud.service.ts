@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { ApiResponse } from 'src/app/interface/api-response';
+import { ApiResponse } from 'src/app/v5/core/models/api-response.interface';
 
 @Injectable({
   providedIn: 'root'
