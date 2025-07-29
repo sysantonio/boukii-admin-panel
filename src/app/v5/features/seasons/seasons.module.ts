@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SharedModule } from '../../shared/shared.module';
 
 import { SeasonsRoutingModule } from './seasons-routing.module';
 import { SeasonListComponent } from './pages/season-list/season-list.component';
@@ -21,7 +22,8 @@ import { SeasonEffects } from './state/season.effects';
     CommonModule,
     SeasonsRoutingModule,
     StoreModule.forFeature(seasonFeatureKey, seasonReducer),
-    EffectsModule.forFeature([SeasonEffects])
+    EffectsModule.forFeature([SeasonEffects]),
+    SharedModule
   ]
 })
 export class SeasonsModule { }
