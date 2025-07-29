@@ -6,6 +6,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 import { V5RoutingModule } from './v5-routing.module';
 import { V5LayoutComponent } from './layout/v5-layout.component';
 import { WelcomeComponent } from './pages/welcome/welcome.component';
@@ -36,6 +38,8 @@ import { SeasonsModule } from './features/seasons/seasons.module';
     MatIconModule,
     MatListModule,
     MatButtonModule,
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
     V5RoutingModule,
     SeasonsModule
   ],

@@ -30,6 +30,8 @@
     "@kolkov/angular-editor": "^3.0.0-beta.0",
     "@material-design-icons/svg": "^0.14.3",
     "@ngneat/until-destroy": "~9.2.3",
+    "@ngrx/effects": "^16.0.0",
+    "@ngrx/store": "^16.0.0",
     "@ngx-loading-bar/core": "^6.0.2",
     "@ngx-loading-bar/router": "^6.0.2",
     "@ngx-translate/core": "^15.0.0",
@@ -39,6 +41,7 @@
     "angularx-qrcode": "^17.0.0",
     "apexcharts": "~3.44.0",
     "date-fns": "~2.30.0",
+    "express": "^4.18.4",
     "file-saver": "^2.0.5",
     "highlight.js": "~11.9.0",
     "jspdf": "^2.5.1",
@@ -58,8 +61,7 @@
     "tinymce": "^7.5.1",
     "tslib": "^2.3.0",
     "xlsx": "^0.18.5",
-    "zone.js": "~0.13.0",
-    "express": "^4.18.4"
+    "zone.js": "~0.13.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.0.2",
