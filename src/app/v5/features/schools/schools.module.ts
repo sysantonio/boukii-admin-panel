@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 
 import { SchoolsRoutingModule } from './schools-routing.module';
@@ -24,6 +25,7 @@ import { SeasonSettingsFormComponent } from './components/season-settings-form/s
   imports: [
     CommonModule,
     SchoolsRoutingModule,
+    ReactiveFormsModule,
     SharedModule
   ]
 })
