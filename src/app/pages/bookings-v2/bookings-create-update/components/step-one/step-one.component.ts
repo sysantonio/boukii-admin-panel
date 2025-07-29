@@ -2,7 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable, debounceTime, map, skip, startWith } from "rxjs";
 import { ApiCrudService } from "src/service/crud.service";
-import { ApiResponse } from "src/app/interface/api-response";
+import { ApiResponse } from "src/app/v5/core/models/api-response.interface";
 import { MatDialog } from '@angular/material/dialog';
 import { UtilsService } from '../../../../../../service/utils.service';
 import { switchMap } from 'rxjs/operators';

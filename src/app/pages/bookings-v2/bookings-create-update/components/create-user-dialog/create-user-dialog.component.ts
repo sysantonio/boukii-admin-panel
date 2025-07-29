@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable } from "rxjs";
-import { ApiResponse } from "src/app/interface/api-response";
+import { ApiResponse } from "src/app/v5/core/models/api-response.interface";
 import { ApiCrudService } from "src/service/crud.service";
 import { LangService } from "src/service/langService";
 
