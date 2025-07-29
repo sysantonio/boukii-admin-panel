@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 
 import { SeasonsRoutingModule } from './seasons-routing.module';
@@ -23,6 +24,7 @@ import { SeasonEffects } from './state/season.effects';
     SeasonsRoutingModule,
     StoreModule.forFeature(seasonFeatureKey, seasonReducer),
     EffectsModule.forFeature([SeasonEffects]),
+    ReactiveFormsModule,
     SharedModule
   ]
 })

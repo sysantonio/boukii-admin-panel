@@ -1,1 +1,4 @@
-<p>season-form works!</p>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <vex-form-field label="Name" [control]="form.get('name')"></vex-form-field>
+  <button type="submit" [disabled]="form.invalid">Save</button>
+</form>
