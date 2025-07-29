@@ -8,7 +8,12 @@ const routes: Routes = [
     path: '',
     component: V5LayoutComponent,
     children: [
-      { path: '', component: WelcomeComponent }
+      { path: '', component: WelcomeComponent },
+      {
+        path: 'seasons',
+        loadChildren: () =>
+          import('./features/seasons/seasons.module').then(m => m.SeasonsModule)
+      }
     ]
   }
 ];

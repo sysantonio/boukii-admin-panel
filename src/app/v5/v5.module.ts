@@ -19,6 +19,7 @@ import { SeasonContextService } from './core/services/season-context.service';
 import { AuthV5Service } from './core/services/auth-v5.service';
 import { NotificationService } from './core/services/notification.service';
 import { LoadingService } from './core/services/loading.service';
+import { SeasonsModule } from './features/seasons/seasons.module';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { LoadingService } from './core/services/loading.service';
     MatIconModule,
     MatListModule,
     MatButtonModule,
-    V5RoutingModule
+    V5RoutingModule,
+    SeasonsModule
   ],
   providers: [
     ApiV5Service,
