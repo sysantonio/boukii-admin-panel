@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SharedModule } from '../../shared/shared.module';
 
 import { SchoolsRoutingModule } from './schools-routing.module';
 import { SchoolDashboardComponent } from './pages/school-dashboard/school-dashboard.component';
@@ -22,7 +23,8 @@ import { SeasonSettingsFormComponent } from './components/season-settings-form/s
   ],
   imports: [
     CommonModule,
-    SchoolsRoutingModule
+    SchoolsRoutingModule,
+    SharedModule
   ]
 })
 export class SchoolsModule { }
