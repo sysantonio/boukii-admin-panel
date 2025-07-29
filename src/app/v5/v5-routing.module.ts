@@ -13,6 +13,11 @@ const routes: Routes = [
         path: 'seasons',
         loadChildren: () =>
           import('./features/seasons/seasons.module').then(m => m.SeasonsModule)
+      },
+      {
+        path: 'schools',
+        loadChildren: () =>
+          import('./features/schools/schools.module').then(m => m.SchoolsModule)
       }
     ]
   }
