@@ -22,6 +22,7 @@ import { AuthV5Service } from './core/services/auth-v5.service';
 import { NotificationService } from './core/services/notification.service';
 import { LoadingService } from './core/services/loading.service';
 import { SeasonsModule } from './features/seasons/seasons.module';
+import { SchoolsModule } from './features/schools/schools.module';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { SeasonsModule } from './features/seasons/seasons.module';
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     V5RoutingModule,
-    SeasonsModule
+    SeasonsModule,
+    SchoolsModule
   ],
   providers: [
     ApiV5Service,
