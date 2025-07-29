@@ -21,8 +21,6 @@ import { SeasonContextService } from './core/services/season-context.service';
 import { AuthV5Service } from './core/services/auth-v5.service';
 import { NotificationService } from './core/services/notification.service';
 import { LoadingService } from './core/services/loading.service';
-import { SeasonsModule } from './features/seasons/seasons.module';
-import { SchoolsModule } from './features/schools/schools.module';
 
 @NgModule({
   declarations: [
@@ -41,9 +39,7 @@ import { SchoolsModule } from './features/schools/schools.module';
     MatButtonModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
-    V5RoutingModule,
-    SeasonsModule,
-    SchoolsModule
+    V5RoutingModule
   ],
   providers: [
     ApiV5Service,

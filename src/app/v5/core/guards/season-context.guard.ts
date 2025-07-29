@@ -7,10 +7,10 @@ export class SeasonContextGuard implements CanActivate {
   constructor(private seasonContext: SeasonContextService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    // TODO: ensure season is selected
-    const seasonSelected = true;
+    const seasonSelected = !!this.seasonContext.getCurrentSeason();
     if (!seasonSelected) {
-      this.router.navigate(['/seasons']);
+      this.seasonContext.promptSeasonSelection();
+      this.router.navigate(['/v5/seasons']);
       return false;
     }
     return true;
