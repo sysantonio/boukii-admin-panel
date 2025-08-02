@@ -7,21 +7,21 @@ import { AuthGuard } from './auth.guard';
 const childrenRoutes: VexRoutes = [
   {
     path: 'home',
-    redirectTo: '/home'
+    redirectTo: '/v5'
   },
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: '/home'
+    redirectTo: '/v5'
   },
   {
     path: '',
     children: [
-      {
-        path: 'home',
-        loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
-        canActivate: [AuthGuard],
-      },
+      // {
+      //   path: 'home',
+      //   loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
+      //   canActivate: [AuthGuard],
+      // },
       {
         path: 'timeline',
         loadChildren: () => import('./pages/timeline/timeline.module').then(m => m.TimelineModule),
