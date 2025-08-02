@@ -108,14 +108,14 @@ export class SeasonContextService {
     const testSeason: Season = {
       id: 1,
       name: 'Temporada 2024-2025',
-      year: 2025,
+      year: '2025',
       start_date: '2024-12-01',
       end_date: '2025-04-30',
       is_active: true,
       is_closed: false,
       is_historical: false,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      school_id: 1,
+      created_at: new Date().toISOString()
     };
     
     this.availableSeasonsSubject.next([testSeason]);
