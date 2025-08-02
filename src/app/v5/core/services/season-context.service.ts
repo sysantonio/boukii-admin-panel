@@ -1,23 +1,34 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Season } from '../models/season.interface';
-import { ApiV5Service } from './api-v5.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiV5Response } from '../models/api-response.interface';
+import { ApiV5Service } from './api-v5.service';
 
 @Injectable({ providedIn: 'root' })
 export class SeasonContextService {
   private currentSeasonSubject = new BehaviorSubject<Season | null>(null);
   private availableSeasonsSubject = new BehaviorSubject<Season[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
+  private apiV5Service?: ApiV5Service;
 
   readonly currentSeason$ = this.currentSeasonSubject.asObservable();
   readonly availableSeasons$ = this.availableSeasonsSubject.asObservable();
   readonly seasons$ = this.availableSeasonsSubject.asObservable(); // Alias for compatibility
   readonly loading$ = this.loadingSubject.asObservable();
 
-  constructor(private apiV5: ApiV5Service, private snackBar: MatSnackBar) {
-    this.initializeSeasonContext();
+  constructor(private injector: Injector, private snackBar: MatSnackBar) {
+    // Initialize with test season immediately to avoid circular dependency
+    this.createTestSeason();
+    // Defer API initialization
+    setTimeout(() => this.initializeSeasonContext(), 0);
+  }
+
+  private get apiV5(): ApiV5Service {
+    if (!this.apiV5Service) {
+      this.apiV5Service = this.injector.get(ApiV5Service);
+    }
+    return this.apiV5Service;
   }
 
   setCurrentSeason(seasonOrId: Season | number): void {
@@ -119,6 +130,10 @@ export class SeasonContextService {
     };
     
     this.availableSeasonsSubject.next([testSeason]);
+    this.currentSeasonSubject.next(testSeason);
+    
+    // Store in localStorage for consistency
+    localStorage.setItem('boukii_current_season', JSON.stringify(testSeason));
   }
 
   private async initializeCurrentSeason(): Promise<void> {
