@@ -8,6 +8,6 @@ import { AbstractControl } from '@angular/forms';
 })
 export class FormFieldComponent {
   @Input() label = '';
-  @Input() control: AbstractControl | null = null;
+  @Input() control: any = null;
   @Input() type = 'text';
 }

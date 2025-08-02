@@ -1,11 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { V5RoutingModule } from './v5-routing.module';
@@ -21,7 +29,8 @@ import { SeasonContextService } from './core/services/season-context.service';
 import { AuthV5Service } from './core/services/auth-v5.service';
 import { NotificationService } from './core/services/notification.service';
 import { LoadingService } from './core/services/loading.service';
-
+import { DashboardService } from './core/services/dashboard.service';
+import {SharedModule} from './shared/shared.module';
 @NgModule({
   declarations: [
     V5LayoutComponent,
@@ -32,14 +41,23 @@ import { LoadingService } from './core/services/loading.service';
   imports: [
     CommonModule,
     RouterModule,
+    FormsModule,
     MatSidenavModule,
     MatToolbarModule,
     MatIconModule,
     MatListModule,
     MatButtonModule,
-    StoreModule.forRoot({}),
+    MatFormFieldModule,
+    MatInputModule,
+    MatMenuModule,
+    MatDividerModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule,
+    TranslateModule,
+    //StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
-    V5RoutingModule
+    V5RoutingModule,
+    SharedModule
   ],
   providers: [
     ApiV5Service,
@@ -47,6 +65,7 @@ import { LoadingService } from './core/services/loading.service';
     AuthV5Service,
     NotificationService,
     LoadingService,
+    DashboardService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthV5Interceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }
   ]

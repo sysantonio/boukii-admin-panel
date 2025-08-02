@@ -1,2 +1,456 @@
-<h1>Welcome to Boukii v5</h1>
-<p>This is the new Angular 16+ frontend.</p>
+<div class="dashboard-container" [class.loading]="loading">
+  <!-- Welcome Header -->
+  <div class="dashboard-header">
+    <div class="welcome-section">
+      <div class="greeting">
+        <h1 class="welcome-title">
+          {{ 'DASHBOARD.GREETING' | translate:{ name: currentUser?.name || 'Usuario' } }} 👋
+        </h1>
+        <p class="welcome-subtitle">
+          {{ 'DASHBOARD.WELCOME_MESSAGE' | translate:{ school: currentUser?.school?.name || 'Escuela de Esquí' } }}
+        </p>
+      </div>
+      
+      <div class="user-info">
+        <div class="user-details" *ngIf="currentUser">
+          <div class="user-avatar" *ngIf="currentUser.avatar">
+            <img [src]="currentUser.avatar" [alt]="currentUser.name" class="avatar-image">
+          </div>
+          <div class="user-data">
+            <span class="user-role">{{ currentUser.role }}</span>
+            <span class="last-login" *ngIf="currentUser.lastLogin">
+              {{ 'DASHBOARD.LAST_LOGIN' | translate }}:
+              {{ currentUser.lastLogin | date:'short':'es-ES' }}
+            </span>
+          </div>
+        </div>
+        
+        <div class="season-info" *ngIf="currentSeason">
+          <div class="season-badge">
+            <mat-icon>event</mat-icon>
+            <span>{{ currentSeason.name }} {{ currentSeason.year }}</span>
+          </div>
+        </div>
+
+        <!-- Weather Info -->
+        <div class="weather-info" *ngIf="weatherData && !loadingWeather">
+          <div class="weather-badge">
+            <mat-icon>{{ getWeatherIcon(weatherData.condition) }}</mat-icon>
+            <span>{{ weatherTemperature }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button mat-icon-button (click)="refreshDashboard()" [disabled]="loading" 
+              [matTooltip]="'DASHBOARD.REFRESH_TOOLTIP' | translate">
+        <mat-icon [class.rotating]="loading">refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Critical Alerts -->
+  <div class="alerts-section" *ngIf="hasAlerts">
+    <div class="alert-card" *ngFor="let alert of criticalAlerts" [class]="'alert-' + alert.type">
+      <div class="alert-content">
+        <div class="alert-header">
+          <mat-icon class="alert-icon">
+            {{ alert.type === 'critical' ? 'error' : alert.type === 'warning' ? 'warning' : 'info' }}
+          </mat-icon>
+          <h3 class="alert-title">{{ alert.title }}</h3>
+          <span class="alert-time">{{ formatTimeAgo(alert.timestamp) }}</span>
+        </div>
+        <p class="alert-message">{{ alert.message }}</p>
+        <div class="alert-actions" *ngIf="alert.actionUrl">
+          <button mat-button (click)="navigateToAlert(alert)" class="alert-action-btn">
+            {{ alert.actionLabel || ('DASHBOARD.ALERTS.VIEW_DETAILS' | translate) }}
+          </button>
+          <button mat-icon-button (click)="dismissAlert(alert.id)" class="alert-dismiss">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions-section">
+    <h2 class="section-title">{{ 'DASHBOARD.QUICK_ACTIONS.TITLE' | translate }}</h2>
+    <div class="quick-actions-grid">
+      <button 
+        class="quick-action-card" 
+        *ngFor="let action of availableActions" 
+        (click)="navigateToQuickAction(action)"
+        [class]="'action-' + action.color"
+      >
+        <div class="action-icon">
+          <mat-icon>{{ action.icon }}</mat-icon>
+        </div>
+        <span class="action-label">{{ action.labelKey | translate }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Overview -->
+  <div class="stats-section">
+    <h2 class="section-title">{{ 'DASHBOARD.STATS.ACTIVITY_SUMMARY' | translate }}</h2>
+    
+    <!-- Loading Skeleton -->
+    <div class="stats-loading" *ngIf="loadingStats">
+      <div class="stat-card-skeleton" *ngFor="let i of [1,2,3,4,5,6,7,8]"></div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid" *ngIf="!loadingStats && dashboardStats">
+      <!-- Booking Stats -->
+      <div class="stat-card bookings-card">
+        <div class="stat-header">
+          <mat-icon class="stat-icon">event_note</mat-icon>
+          <h3 class="stat-title">{{ 'DASHBOARD.STATS.BOOKINGS.TITLE' | translate }}</h3>
+        </div>
+        <div class="stat-content">
+          <div class="stat-main">
+            <span class="stat-number">{{ dashboardStats.bookings.total }}</span>
+            <span class="stat-label">{{ 'DASHBOARD.STATS.BOOKINGS.TOTAL' | translate }}</span>
+          </div>
+          <div class="stat-details">
+            <div class="stat-item">
+              <span class="stat-value">{{ dashboardStats.bookings.pending }}</span>
+              <span class="stat-sublabel">{{ 'DASHBOARD.STATS.BOOKINGS.PENDING' | translate }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{{ dashboardStats.bookings.confirmed }}</span>
+              <span class="stat-sublabel">{{ 'DASHBOARD.STATS.BOOKINGS.CONFIRMED' | translate }}</span>
+            </div>
+          </div>
+          <div class="stat-growth positive" *ngIf="dashboardStats.bookings.weeklyGrowth > 0">
+            <mat-icon>trending_up</mat-icon>
+            <span>{{ formatPercentage(dashboardStats.bookings.weeklyGrowth) }} {{ 'DASHBOARD.STATS.THIS_WEEK' | translate }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clients Stats -->
+      <div class="stat-card clients-card">
+        <div class="stat-header">
+          <mat-icon class="stat-icon">people</mat-icon>
+          <h3 class="stat-title">{{ 'DASHBOARD.STATS.CLIENTS.TITLE' | translate }}</h3>
+        </div>
+        <div class="stat-content">
+          <div class="stat-main">
+            <span class="stat-number">{{ dashboardStats.clients.total }}</span>
+            <span class="stat-label">{{ 'DASHBOARD.STATS.CLIENTS.TOTAL' | translate }}</span>
+          </div>
+          <div class="stat-details">
+            <div class="stat-item">
+              <span class="stat-value">{{ dashboardStats.clients.active }}</span>
+              <span class="stat-sublabel">{{ 'DASHBOARD.STATS.CLIENTS.ACTIVE' | translate }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{{ dashboardStats.clients.newThisMonth }}</span>
+              <span class="stat-sublabel">{{ 'DASHBOARD.STATS.CLIENTS.NEW' | translate }}</span>
+            </div>
+          </div>
+          <div class="stat-highlight">
+            <mat-icon>star</mat-icon>
+            <span>{{ dashboardStats.clients.vipClients }} VIP</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue Stats -->
+      <div class="stat-card revenue-card">
+        <div class="stat-header">
+          <mat-icon class="stat-icon">euro</mat-icon>
+          <h3 class="stat-title">{{ 'DASHBOARD.STATS.REVENUE.TITLE' | translate }}</h3>
+        </div>
+        <div class="stat-content">
+          <div class="stat-main">
+            <span class="stat-number">{{ formatCurrency(dashboardStats.revenue.thisMonth) }}</span>
+            <span class="stat-label">{{ 'DASHBOARD.STATS.REVENUE.THIS_MONTH' | translate }}</span>
+          </div>
+          <div class="stat-details">
+            <div class="stat-item">
+              <span class="stat-value">{{ formatCurrency(dashboardStats.revenue.lastMonth) }}</span>
+              <span class="stat-sublabel">{{ 'DASHBOARD.STATS.REVENUE.LAST_MONTH' | translate }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{{ formatCurrency(dashboardStats.revenue.pending) }}</span>
+              <span class="stat-sublabel">{{ 'DASHBOARD.STATS.REVENUE.PENDING' | translate }}</span>
+            </div>
+          </div>
+          <div class="stat-growth positive" *ngIf="dashboardStats.revenue.growth > 0">
+            <mat-icon>trending_up</mat-icon>
+            <span>{{ formatPercentage(dashboardStats.revenue.growth) }} {{ 'DASHBOARD.STATS.GROWTH' | translate }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Courses Stats -->
+      <div class="stat-card courses-card">
+        <div class="stat-header">
+          <mat-icon class="stat-icon">school</mat-icon>
+          <h3 class="stat-title">{{ 'DASHBOARD.STATS.COURSES.TITLE' | translate }}</h3>
+        </div>
+        <div class="stat-content">
+          <div class="stat-main">
+            <span class="stat-number">{{ dashboardStats.courses.active }}</span>
+            <span class="stat-label">{{ 'DASHBOARD.STATS.COURSES.ACTIVE' | translate }}</span>
+          </div>
+          <div class="stat-details">
+            <div class="stat-item">
+              <span class="stat-value">{{ dashboardStats.courses.upcoming }}</span>
+              <span class="stat-sublabel">{{ 'DASHBOARD.STATS.COURSES.UPCOMING' | translate }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{{ dashboardStats.courses.completedThisWeek }}</span>
+              <span class="stat-sublabel">{{ 'DASHBOARD.STATS.COURSES.COMPLETED' | translate }}</span>
+            </div>
+          </div>
+          <div class="stat-highlight" *ngIf="dashboardStats.courses.averageRating > 0">
+            <mat-icon>star</mat-icon>
+            <span>{{ dashboardStats.courses.averageRating | number:'1.1-1' }} {{ 'DASHBOARD.STATS.COURSES.RATING' | translate }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monitor Stats -->
+      <div class="stat-card monitors-card" *ngIf="monitorStats">
+        <div class="stat-header">
+          <mat-icon class="stat-icon">people_alt</mat-icon>
+          <h3 class="stat-title">{{ 'DASHBOARD.STATS.MONITORS.TITLE' | translate }}</h3>
+        </div>
+        <div class="stat-content">
+          <div class="stat-main">
+            <span class="stat-number">{{ monitorStats.active }}</span>
+            <span class="stat-label">{{ 'DASHBOARD.STATS.MONITORS.ACTIVE' | translate }}</span>
+          </div>
+          <div class="stat-details">
+            <div class="stat-item">
+              <span class="stat-value">{{ monitorStats.available }}</span>
+              <span class="stat-sublabel">{{ 'DASHBOARD.STATS.MONITORS.AVAILABLE' | translate }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{{ monitorStats.onLeave }}</span>
+              <span class="stat-sublabel">{{ 'DASHBOARD.STATS.MONITORS.ON_LEAVE' | translate }}</span>
+            </div>
+          </div>
+          <div class="stat-highlight" *ngIf="monitorStats.averageRating > 0">
+            <mat-icon>star</mat-icon>
+            <span>{{ monitorStats.averageRating | number:'1.1-1' }} {{ 'DASHBOARD.STATS.MONITORS.RATING' | translate }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Today's Activity -->
+      <div class="stat-card today-card">
+        <div class="stat-header">
+          <mat-icon class="stat-icon">today</mat-icon>
+          <h3 class="stat-title">{{ 'DASHBOARD.STATS.TODAY.TITLE' | translate }}</h3>
+        </div>
+        <div class="stat-content">
+          <div class="stat-main">
+            <span class="stat-number">{{ dashboardStats.bookings.todayCount }}</span>
+            <span class="stat-label">{{ 'DASHBOARD.STATS.TODAY.BOOKINGS' | translate }}</span>
+          </div>
+          <div class="today-summary">
+            <div class="stat-item">
+              <span class="stat-value">{{ formatCurrency(todayRevenue) }}</span>
+              <span class="stat-sublabel">{{ 'DASHBOARD.STATS.TODAY.REVENUE' | translate }}</span>
+            </div>
+          </div>
+          <div class="today-status" [class]="dashboardStats.bookings.todayCount > 5 ? 'status-active' : 'status-quiet'">
+            <p class="today-text">
+              {{ dashboardStats.bookings.todayCount > 5 ? 
+                 ('DASHBOARD.STATS.TODAY.BUSY_DAY' | translate) : 
+                 ('DASHBOARD.STATS.TODAY.QUIET_DAY' | translate) }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weather Card -->
+      <div class="stat-card weather-card" *ngIf="weatherData && !loadingWeather">
+        <div class="stat-header">
+          <mat-icon class="stat-icon">{{ getWeatherIcon(weatherData.condition) }}</mat-icon>
+          <h3 class="stat-title">{{ 'DASHBOARD.WEATHER.TITLE' | translate }}</h3>
+        </div>
+        <div class="stat-content">
+          <div class="stat-main">
+            <span class="stat-number">{{ weatherData.temperature | number:'1.0-0' }}°</span>
+            <span class="stat-label">{{ weatherData.location }}</span>
+          </div>
+          <div class="weather-details">
+            <div class="weather-item">
+              <mat-icon>air</mat-icon>
+              <span>{{ weatherData.windSpeed }} km/h</span>
+            </div>
+            <div class="weather-item">
+              <mat-icon>opacity</mat-icon>
+              <span>{{ weatherData.humidity }}%</span>
+            </div>
+            <div class="weather-item">
+              <mat-icon>visibility</mat-icon>
+              <span>{{ weatherData.visibility }} km</span>
+            </div>
+          </div>
+          <div class="weather-update">
+            <small>
+              {{ 'DASHBOARD.WEATHER.UPDATED' | translate }}: 
+              {{ weatherData.lastUpdated | date:'short':'es-ES' }}
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Additional Stats Section for Sales Channels and Sessions -->
+  <div class="additional-stats-section" *ngIf="dashboardStats">
+    <div class="section-row">
+      <h2 class="section-title">{{ 'DASHBOARD.ANALYTICS.TITLE' | translate }}</h2>
+    </div>
+
+    <div class="analytics-grid">
+      <!-- Sales Channels -->
+      <div class="analytics-card sales-channels" *ngIf="dashboardStats.salesChannels">
+        <div class="card-header">
+          <h3>{{ 'DASHBOARD.ANALYTICS.SALES_CHANNELS' | translate }}</h3>
+        </div>
+        <div class="card-content">
+          <div class="channel-item" *ngFor="let channel of dashboardStats.salesChannels">
+            <div class="channel-info">
+              <span class="channel-name">{{ channel.channel }}</span>
+              <span class="channel-bookings">{{ channel.bookings }} {{ 'DASHBOARD.ANALYTICS.BOOKINGS' | translate }}</span>
+            </div>
+            <div class="channel-stats">
+              <span class="channel-revenue">{{ formatCurrency(channel.revenue) }}</span>
+              <span class="channel-percentage">{{ channel.percentage }}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily Sessions -->
+      <div class="analytics-card daily-sessions" *ngIf="dashboardStats.dailySessions">
+        <div class="card-header">
+          <h3>{{ 'DASHBOARD.ANALYTICS.DAILY_SESSIONS' | translate }}</h3>
+        </div>
+        <div class="card-content">
+          <div class="session-item" *ngFor="let session of dashboardStats.dailySessions.slice(-5)">
+            <div class="session-date">
+              {{ session.date | date:'shortDate':'es-ES' }}
+            </div>
+            <div class="session-stats">
+              <div class="session-slot">
+                <span class="slot-label">{{ 'DASHBOARD.ANALYTICS.MORNING' | translate }}</span>
+                <span class="slot-count">{{ session.morningSlots }}</span>
+              </div>
+              <div class="session-slot">
+                <span class="slot-label">{{ 'DASHBOARD.ANALYTICS.AFTERNOON' | translate }}</span>
+                <span class="slot-count">{{ session.afternoonSlots }}</span>
+              </div>
+              <div class="session-occupancy">
+                <span class="occupancy-percentage">{{ session.occupancy }}% {{ 'DASHBOARD.ANALYTICS.OCCUPANCY' | translate }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Today's Reservations -->
+      <div class="analytics-card today-reservations" *ngIf="dashboardStats.todayReservations">
+        <div class="card-header">
+          <h3>{{ 'DASHBOARD.ANALYTICS.TODAY_RESERVATIONS' | translate }}</h3>
+        </div>
+        <div class="card-content">
+          <div class="reservation-item" *ngFor="let reservation of dashboardStats.todayReservations">
+            <div class="reservation-time">
+              {{ reservation.startTime }} - {{ reservation.endTime }}
+            </div>
+            <div class="reservation-info">
+              <span class="client-name">{{ reservation.clientName }}</span>
+              <span class="course-type">{{ reservation.courseType }}</span>
+              <span class="monitor-name" *ngIf="reservation.monitorName">
+                {{ 'DASHBOARD.ANALYTICS.MONITOR' | translate }}: {{ reservation.monitorName }}
+              </span>
+            </div>
+            <div class="reservation-status">
+              <span class="status-badge" [class]="'status-' + reservation.status">
+                {{ ('DASHBOARD.ANALYTICS.STATUS.' + reservation.status.toUpperCase()) | translate }}
+              </span>
+              <span class="payment-badge" [class]="'payment-' + reservation.paymentStatus">
+                {{ ('DASHBOARD.ANALYTICS.PAYMENT.' + reservation.paymentStatus.toUpperCase()) | translate }}
+              </span>
+            </div>
+          </div>
+          
+          <div class="empty-state" *ngIf="dashboardStats.todayReservations.length === 0">
+            <mat-icon>event_busy</mat-icon>
+            <p>{{ 'DASHBOARD.ANALYTICS.NO_RESERVATIONS_TODAY' | translate }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="activity-section">
+    <div class="section-header">
+      <h2 class="section-title">{{ 'DASHBOARD.ACTIVITY.RECENT_TITLE' | translate }}</h2>
+      <button mat-button routerLink="/v5/reports" class="view-all-btn">
+        {{ 'DASHBOARD.ACTIVITY.VIEW_ALL' | translate }}
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+
+    <!-- Loading Skeleton -->
+    <div class="activity-loading" *ngIf="loadingActivity">
+      <div class="activity-item-skeleton" *ngFor="let i of [1,2,3,4,5]"></div>
+    </div>
+
+    <!-- Activity List -->
+    <div class="activity-list" *ngIf="!loadingActivity">
+      <div class="activity-item" *ngFor="let activity of recentActivity">
+        <div class="activity-icon" [class]="getStatusColor(activity.status)">
+          <mat-icon>{{ getActivityIcon(activity.type) }}</mat-icon>
+        </div>
+        <div class="activity-content">
+          <h4 class="activity-title">{{ activity.title }}</h4>
+          <p class="activity-description">{{ activity.description }}</p>
+          <span class="activity-time">{{ formatTimeAgo(activity.timestamp) }}</span>
+        </div>
+        <div class="activity-status" [class]="'status-' + activity.status">
+          <div class="status-dot"></div>
+        </div>
+        <button mat-icon-button *ngIf="activity.actionUrl" (click)="navigateToActivityDetail(activity.actionUrl)"
+                [matTooltip]="'DASHBOARD.ACTIVITY.VIEW_DETAILS' | translate">
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="activity-empty" *ngIf="!loadingActivity && recentActivity.length === 0">
+      <mat-icon>timeline</mat-icon>
+      <p>{{ 'DASHBOARD.ACTIVITY.NO_RECENT_ACTIVITY' | translate }}</p>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-state" *ngIf="hasError">
+    <mat-icon>error_outline</mat-icon>
+    <h3>{{ 'DASHBOARD.ERRORS.GENERAL_ERROR' | translate }}</h3>
+    <p>{{ errorMessage }}</p>
+    <button mat-raised-button color="primary" (click)="refreshDashboard()">
+      {{ 'DASHBOARD.ERRORS.RETRY' | translate }}
+    </button>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" *ngIf="loading">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>{{ 'DASHBOARD.LOADING' | translate }}</p>
+  </div>
+</div>

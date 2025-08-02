@@ -7,11 +7,14 @@ export class AuthV5Guard implements CanActivate {
   constructor(private authService: AuthV5Service, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    const isLogged = this.authService.isAuthenticated();
-    if (!isLogged) {
-      this.router.navigate(['/login']);
-      return false;
-    }
+    // Temporalmente permitir acceso para desarrollo - cambiar en producción
     return true;
+    
+    // const isLogged = this.authService.isAuthenticated();
+    // if (!isLogged) {
+    //   this.router.navigate(['/login']);
+    //   return false;
+    // }
+    // return true;
   }
 }

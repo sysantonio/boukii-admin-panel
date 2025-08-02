@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import * as SeasonActions from './season.actions';
 import { SeasonService } from '../services/season.service';
-import { SeasonContextService } from '../../core/services/season-context.service';
+import {SeasonContextService} from '../../../core/services/season-context.service';
 
 @Injectable()
 export class SeasonEffects {

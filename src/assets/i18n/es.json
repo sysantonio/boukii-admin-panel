@@ -48,6 +48,144 @@
   "course_private": "Curso privado",
   "no_disponible": "No disponible",
   "paid_block": "Bloqueo pagado",
+  
+  "DASHBOARD": {
+    "GREETING": "¡Hola, {{name}}!",
+    "WELCOME_MESSAGE": "Bienvenido al panel de administración de {{school}}",
+    "LAST_LOGIN": "Último acceso",
+    "LOADING": "Cargando dashboard...",
+    "REFRESH_TOOLTIP": "Actualizar dashboard",
+    
+    "QUICK_ACTIONS": {
+      "TITLE": "Acciones Rápidas",
+      "NEW_BOOKING": "Nueva Reserva",
+      "NEW_CLIENT": "Nuevo Cliente",
+      "NEW_COURSE": "Nuevo Curso",
+      "PLANNER": "Planificador",
+      "REPORTS": "Reportes",
+      "MONITORS": "Monitores"
+    },
+    
+    "STATS": {
+      "ACTIVITY_SUMMARY": "Resumen de Actividad",
+      "THIS_WEEK": "esta semana",
+      "GROWTH": "crecimiento",
+      
+      "BOOKINGS": {
+        "TITLE": "Reservas",
+        "TOTAL": "Total",
+        "PENDING": "Pendientes",
+        "CONFIRMED": "Confirmadas",
+        "CANCELLED": "Canceladas"
+      },
+      
+      "CLIENTS": {
+        "TITLE": "Clientes",
+        "TOTAL": "Total",
+        "ACTIVE": "Activos",
+        "NEW": "Nuevos"
+      },
+      
+      "REVENUE": {
+        "TITLE": "Ingresos",
+        "THIS_MONTH": "Este mes",
+        "LAST_MONTH": "Mes anterior",
+        "PENDING": "Pendientes"
+      },
+      
+      "COURSES": {
+        "TITLE": "Cursos",
+        "ACTIVE": "Activos",
+        "UPCOMING": "Próximos",
+        "COMPLETED": "Completados",
+        "RATING": "valoración"
+      },
+      
+      "MONITORS": {
+        "TITLE": "Monitores",
+        "ACTIVE": "Activos",
+        "AVAILABLE": "Disponibles",
+        "ON_LEAVE": "De baja",
+        "RATING": "valoración"
+      },
+      
+      "TODAY": {
+        "TITLE": "Hoy",
+        "BOOKINGS": "Reservas",
+        "REVENUE": "Ingresos",
+        "BUSY_DAY": "Día activo",
+        "QUIET_DAY": "Día tranquilo"
+      }
+    },
+    
+    "WEATHER": {
+      "TITLE": "Clima",
+      "UPDATED": "Actualizado"
+    },
+    
+    "ANALYTICS": {
+      "TITLE": "Análisis Detallado",
+      "SALES_CHANNELS": "Canales de Venta",
+      "DAILY_SESSIONS": "Sesiones Diarias",
+      "TODAY_RESERVATIONS": "Reservas de Hoy",
+      "BOOKINGS": "reservas",
+      "MORNING": "Mañana",
+      "AFTERNOON": "Tarde",
+      "OCCUPANCY": "ocupación",
+      "MONITOR": "Monitor",
+      "NO_RESERVATIONS_TODAY": "No hay reservas para hoy",
+      
+      "STATUS": {
+        "CONFIRMED": "Confirmada",
+        "PENDING": "Pendiente",
+        "CANCELLED": "Cancelada"
+      },
+      
+      "PAYMENT": {
+        "PAID": "Pagado",
+        "PENDING": "Pendiente",
+        "OVERDUE": "Vencido"
+      }
+    },
+    
+    "ACTIVITY": {
+      "RECENT_TITLE": "Actividad Reciente",
+      "VIEW_ALL": "Ver todo",
+      "VIEW_DETAILS": "Ver detalles",
+      "NO_RECENT_ACTIVITY": "No hay actividad reciente"
+    },
+    
+    "ALERTS": {
+      "VIEW_DETAILS": "Ver detalles"
+    },
+    
+    "TIME": {
+      "JUST_NOW": "Ahora mismo",
+      "MINUTES_AGO": "Hace {{minutes}} min",
+      "HOURS_AGO": "Hace {{hours}}h",
+      "DAYS_AGO": "Hace {{days}}d"
+    },
+    
+    "MESSAGES": {
+      "REFRESHING": "Actualizando dashboard...",
+      "REFRESH_SUCCESS": "Dashboard actualizado correctamente",
+      "ALERT_DISMISSED": "Alerta descartada"
+    },
+    
+    "ERRORS": {
+      "GENERAL_ERROR": "Error cargando dashboard",
+      "USER_LOAD_FAILED": "Error cargando datos del usuario",
+      "SEASON_LOAD_FAILED": "Error cargando temporada",
+      "STATS_LOAD_FAILED": "Error cargando estadísticas",
+      "REFRESH_FAILED": "Error actualizando dashboard",
+      "ALERT_DISMISS_FAILED": "Error descartando alerta",
+      "RETRY": "Reintentar"
+    },
+    
+    "WARNINGS": {
+      "NO_SEASON_SELECTED": "No hay temporada seleccionada"
+    }
+  },
   "ispaid": "Pagado",
   "paid": "Pagado",
   "no_paid": "No pagado",

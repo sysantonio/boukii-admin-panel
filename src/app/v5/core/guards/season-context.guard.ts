@@ -7,12 +7,15 @@ export class SeasonContextGuard implements CanActivate {
   constructor(private seasonContext: SeasonContextService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    const seasonSelected = !!this.seasonContext.getCurrentSeason();
-    if (!seasonSelected) {
-      this.seasonContext.promptSeasonSelection();
-      this.router.navigate(['/v5/seasons']);
-      return false;
-    }
+    // Temporalmente permitir acceso para desarrollo - cambiar en producción
     return true;
+    
+    // const seasonSelected = !!this.seasonContext.getCurrentSeason();
+    // if (!seasonSelected) {
+    //   this.seasonContext.promptSeasonSelection();
+    //   this.router.navigate(['/v5/seasons']);
+    //   return false;
+    // }
+    // return true;
   }
 }

@@ -6,6 +6,7 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
 import { ErrorMessageComponent } from './components/error-message/error-message.component';
 import { DataTableComponent } from './components/data-table/data-table.component';
 import { FormFieldComponent } from './forms/form-field.component';
+import {NotificationBadgeComponent} from './components/notification-badge/notification-badge.component';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { FormFieldComponent } from './forms/form-field.component';
     LoadingSpinnerComponent,
     ErrorMessageComponent,
     DataTableComponent,
-    FormFieldComponent
+    FormFieldComponent,
+    NotificationBadgeComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +26,8 @@ import { FormFieldComponent } from './forms/form-field.component';
     LoadingSpinnerComponent,
     ErrorMessageComponent,
     DataTableComponent,
-    FormFieldComponent
+    FormFieldComponent,
+    NotificationBadgeComponent
   ]
 })
 export class SharedModule {}

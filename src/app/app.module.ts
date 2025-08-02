@@ -18,6 +18,7 @@ import { CurrencyFormatterPipe } from './pipes/currency-formatter.pipe';
 import { PercentageFormatterPipe } from './pipes/percentage-formatter.pipe';
 import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
 import { DateRangeFormatterPipe } from './pipes/date-range-formatter.pipe';
+import {StoreModule} from '@ngrx/store';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -43,7 +44,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         CustomLayoutModule,
         ComponentsModule,
         MatDialogModule,
-        ComponentsCustomModule
+        ComponentsCustomModule,
+        StoreModule.forRoot({}) // 👈 Si no tienes reducers globales, pasa un objeto vacío
     ],
     providers: [AuthService, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
     bootstrap: [AppComponent]

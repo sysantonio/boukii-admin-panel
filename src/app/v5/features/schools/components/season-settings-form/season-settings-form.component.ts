@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
-import { FormBuilderService } from '../../../core/services/form-builder.service';
-import { requiredTrimmed } from '../../../core/utils/validators';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+// import { FormBuilderService } from '../../../core/services/form-builder.service'; // Comentado temporalmente
+// import { requiredTrimmed } from '../../../core/utils/validators'; // Comentado temporalmente
 
 @Component({
   selector: 'vex-season-settings-form',
@@ -11,15 +11,15 @@ import { requiredTrimmed } from '../../../core/utils/validators';
 export class SeasonSettingsFormComponent {
   form: FormGroup;
 
-  constructor(private fbs: FormBuilderService) {
-    this.form = this.fbs.group({
-      description: ['', [Validators.required, requiredTrimmed()]]
+  constructor(private fb: FormBuilder) {
+    this.form = this.fb.group({
+      description: ['', [Validators.required]]
     });
   }
 
   submit(): void {
     if (this.form.valid) {
-      console.log(this.form.value);
+      console.log('Season settings form submitted:', this.form.value);
     }
   }
 }

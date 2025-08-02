@@ -30,6 +30,23 @@ export class NotificationService {
     this.show('warning', message, duration);
   }
 
+  // Alias methods for consistency with component usage
+  showSuccess(message: string): void {
+    this.success(message);
+  }
+
+  showError(message: string, duration?: number): void {
+    this.error(message, duration);
+  }
+
+  showWarning(message: string): void {
+    this.warning(message);
+  }
+
+  showInfo(message: string): void {
+    this.info(message);
+  }
+
   private show(type: Notification['type'], message: string, duration: number) {
     const list = this.notificationsSubject.value;
     this.notificationsSubject.next([...list, { type, message }]);

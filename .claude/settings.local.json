@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "allow": [
       "Bash(npx ng build:*)",
@@ -16,7 +17,22 @@
       "Bash(cp:*)",
       "Bash(timeout 20s npm start)",
       "Bash(timeout 15s npx ng serve)",
-      "Bash(timeout 15s npx ng serve vex)"
+      "Bash(timeout 15s npx ng serve vex)",
+      "Bash(ng generate module:*)",
+      "Bash(ng generate service:*)",
+      "Bash(npm install:*)",
+      "Bash(mkdir:*)",
+      "Bash(touch:*)",
+      "Bash(find:*)",
+      "Bash(mv:*)",
+      "Bash(timeout 10 npm start)",
+      "Bash(ls:*)",
+      "Bash(npx ng:*)",
+      "Bash(sed:*)",
+      "Bash(timeout 30s npx ng build --configuration=development)",
+      "Bash(timeout 60s npx ng build --configuration=development)",
+      "Bash(grep:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }

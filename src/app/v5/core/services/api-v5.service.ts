@@ -7,9 +7,10 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, shareReplay } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../environments/environment';
 import { SeasonContextService } from './season-context.service';
 import { NotificationService } from './notification.service';
+import { ApiV5Response } from '../models/api-response.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ApiV5Service {
@@ -35,24 +36,59 @@ export class ApiV5Service {
     return headers.set('X-Client-Version', 'boukii-admin-v5.0');
   }
 
-  get<T>(endpoint: string, params?: HttpParams): Observable<T> {
+  get<T>(endpoint: string, params?: any): Observable<ApiV5Response<T>> {
     return this.http
-      .get<T>(`${this.baseUrlV5}/${endpoint}`, {
+      .get<ApiV5Response<T>>(`${this.baseUrlV5}/${endpoint}`, {
         headers: this.getHeaders(),
         params: this.addSeasonParam(params),
       })
       .pipe(catchError((e) => this.handleError(e)), shareReplay(1));
   }
 
-  post<T>(endpoint: string, body: any): Observable<T> {
+  post<T>(endpoint: string, body: any): Observable<ApiV5Response<T>> {
     const enrichedBody = {
       ...body,
       season_id: this.seasonContext.getCurrentSeasonId(),
     };
 
     return this.http
-      .post<T>(`${this.baseUrlV5}/${endpoint}`, enrichedBody, {
+      .post<ApiV5Response<T>>(`${this.baseUrlV5}/${endpoint}`, enrichedBody, {
         headers: this.getHeaders(),
+      })
+      .pipe(catchError((e) => this.handleError(e)));
+  }
+
+  put<T>(endpoint: string, body: any): Observable<ApiV5Response<T>> {
+    const enrichedBody = {
+      ...body,
+      season_id: this.seasonContext.getCurrentSeasonId(),
+    };
+
+    return this.http
+      .put<ApiV5Response<T>>(`${this.baseUrlV5}/${endpoint}`, enrichedBody, {
+        headers: this.getHeaders(),
+      })
+      .pipe(catchError((e) => this.handleError(e)));
+  }
+
+  patch<T>(endpoint: string, body: any): Observable<ApiV5Response<T>> {
+    const enrichedBody = {
+      ...body,
+      season_id: this.seasonContext.getCurrentSeasonId(),
+    };
+
+    return this.http
+      .patch<ApiV5Response<T>>(`${this.baseUrlV5}/${endpoint}`, enrichedBody, {
+        headers: this.getHeaders(),
+      })
+      .pipe(catchError((e) => this.handleError(e)));
+  }
+
+  delete<T>(endpoint: string, params?: any): Observable<ApiV5Response<T>> {
+    return this.http
+      .delete<ApiV5Response<T>>(`${this.baseUrlV5}/${endpoint}`, {
+        headers: this.getHeaders(),
+        params: this.addSeasonParam(params),
       })
       .pipe(catchError((e) => this.handleError(e)));
   }

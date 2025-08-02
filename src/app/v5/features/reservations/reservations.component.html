@@ -1,0 +1,228 @@
+<div class="reservations-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="page-title-section">
+      <h1 class="page-title">Reservas</h1>
+      <p class="page-subtitle">Gestiona todas las reservas de cursos, actividades y material</p>
+    </div>
+    
+    <div class="page-actions">
+      <div class="action-badges">
+        <div class="reservas-count-badge">
+          <mat-icon>event_note</mat-icon>
+          <span>{{ reservationStats.total }} reservas</span>
+        </div>
+        <div class="pending-count-badge">
+          <mat-icon>schedule</mat-icon>
+          <span>{{ reservationStats.pending }} pendientes</span>
+        </div>
+      </div>
+      <button class="new-reservation-btn" (click)="openNewReservationModal()">
+        <mat-icon>add</mat-icon>
+        Nueva reserva
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-content">
+        <p class="stat-label">Cursos</p>
+        <p class="stat-value">{{ typeStats.courses }}</p>
+      </div>
+      <div class="stat-icon">
+        <mat-icon>school</mat-icon>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <p class="stat-label">Actividades</p>
+        <p class="stat-value">{{ typeStats.activities }}</p>
+      </div>
+      <div class="stat-icon">
+        <mat-icon>sports</mat-icon>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <p class="stat-label">Material</p>
+        <p class="stat-value">{{ typeStats.equipment }}</p>
+      </div>
+      <div class="stat-icon">
+        <mat-icon>inventory</mat-icon>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <p class="stat-label">Confirmadas</p>
+        <p class="stat-value">{{ reservationStats.confirmed }}</p>
+      </div>
+      <div class="stat-icon confirmed">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <p class="stat-label">Pagadas</p>
+        <p class="stat-value">{{ reservationStats.paid }}</p>
+      </div>
+      <div class="stat-icon paid">
+        <mat-icon>euro</mat-icon>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <p class="stat-label">Canceladas</p>
+        <p class="stat-value">{{ reservationStats.cancelled }}</p>
+      </div>
+      <div class="stat-icon cancelled">
+        <mat-icon>cancel</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Card -->
+  <div class="main-content-card">
+    <!-- Filter Buttons -->
+    <div class="filter-tabs-header">
+      <div class="filter-buttons">
+        <button class="filter-btn" [class.active]="selectedFilter === 'all'" (click)="setFilter('all')">
+          <mat-icon>event_note</mat-icon>
+          <span>Todas</span>
+        </button>
+        <button class="filter-btn" [class.active]="selectedFilter === 'course'" (click)="setFilter('course')">
+          <mat-icon>school</mat-icon>
+          <span>Cursos</span>
+        </button>
+        <button class="filter-btn" [class.active]="selectedFilter === 'activity'" (click)="setFilter('activity')">
+          <mat-icon>sports</mat-icon>
+          <span>Actividades</span>
+        </button>
+        <button class="filter-btn" [class.active]="selectedFilter === 'equipment'" (click)="setFilter('equipment')">
+          <mat-icon>inventory</mat-icon>
+          <span>Material</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="search-filters">
+      <div class="search-field">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input type="text" placeholder="Buscar reservas..." [(ngModel)]="searchTerm" class="search-input">
+      </div>
+
+      <div class="filter-selects">
+        <div class="select-wrapper">
+          <mat-icon class="select-icon">filter_list</mat-icon>
+          <select [(ngModel)]="statusFilter" class="filter-select">
+            <option value="">Todos los estados</option>
+            <option value="confirmed">Confirmado</option>
+            <option value="pending">Pendiente</option>
+            <option value="cancelled">Cancelado</option>
+            <option value="paid">Pagado</option>
+          </select>
+        </div>
+
+        <div class="select-wrapper">
+          <mat-icon class="select-icon">event</mat-icon>
+          <select [(ngModel)]="dateFilter" class="filter-select">
+            <option value="">Todas las fechas</option>
+            <option value="today">Hoy</option>
+            <option value="week">Esta semana</option>
+            <option value="month">Este mes</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Content -->
+    <div class="table-content">
+      <div class="table-wrapper">
+        <table class="reservations-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Tipo</th>
+              <th>Reserva</th>
+              <th>Fechas</th>
+              <th>Estado</th>
+              <th>Precio</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let reservation of filteredReservations" class="table-row" (click)="onRowClick(reservation)">
+              <td class="id-cell">
+                <div class="client-avatar-wrapper">
+                  <img [src]="reservation.client.avatar" [alt]="reservation.client.name" class="client-avatar">
+                </div>
+                <span class="reservation-id">{{ reservation.id }}</span>
+              </td>
+              <td class="client-cell">
+                <div class="client-name">{{ reservation.client.name }}</div>
+                <div class="client-email">{{ reservation.client.email }}</div>
+              </td>
+              <td class="type-cell">
+                <div class="type-badge type-{{ reservation.type }}">
+                  <mat-icon>{{ getTypeIcon(reservation.type) }}</mat-icon>
+                  <span>{{ getTypeLabel(reservation.type) }}</span>
+                </div>
+              </td>
+              <td class="reservation-cell">
+                <div class="reservation-name">{{ reservation.name }}</div>
+                <div class="reservation-details">{{ reservation.description }}</div>
+              </td>
+              <td class="dates-cell">
+                <div class="reservation-date">{{ reservation.date }}</div>
+                <div class="reservation-time">{{ reservation.time }}</div>
+              </td>
+              <td class="status-cell">
+                <div class="status-badge status-{{ reservation.status }}">
+                  {{ getStatusLabel(reservation.status) }}
+                </div>
+              </td>
+              <td class="price-cell">
+                <div class="price">{{ reservation.price }}€</div>
+                <div class="participants" *ngIf="reservation.participants">{{ reservation.participants }} personas</div>
+              </td>
+              <td class="actions-cell">
+                <button class="action-btn" [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
+                  <mat-icon>more_horiz</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="viewReservation(reservation)">
+                    <mat-icon>visibility</mat-icon>
+                    Ver detalles
+                  </button>
+                  <button mat-menu-item (click)="editReservation(reservation)">
+                    <mat-icon>edit</mat-icon>
+                    Editar
+                  </button>
+                  <button mat-menu-item (click)="cancelReservation(reservation)">
+                    <mat-icon>cancel</mat-icon>
+                    Cancelar
+                  </button>
+                </mat-menu>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- New Reservation Modal -->
+<app-new-reservation-modal
+  [isOpen]="showNewReservationModal"
+  (modalClosed)="onNewReservationModalClosed()"
+  (reservationCreated)="onReservationCreated($event)">
+</app-new-reservation-modal>

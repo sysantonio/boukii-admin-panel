@@ -1,11 +1,108 @@
-<mat-toolbar color="primary">
-  <button mat-icon-button (click)="menuToggle.emit()">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span class="app-title">Boukii v5</span>
-  <span class="spacer"></span>
-  <button mat-button>
-    <mat-icon>logout</mat-icon>
-    Logout
-  </button>
-</mat-toolbar>
+<div class="topbar">
+  <!-- Search -->
+  <div class="search-container">
+    <div class="search-wrapper">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input 
+        type="text" 
+        placeholder="Buscar reservas, instructores, cursos..." 
+        class="search-input"
+        [(ngModel)]="searchTerm"
+        (input)="onSearch($event)"
+      >
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <!-- Language Selector -->
+    <button class="control-btn language-btn" [matMenuTriggerFor]="languageMenu">
+      <mat-icon class="globe-icon">language</mat-icon>
+      <span class="language-code">ES</span>
+      <mat-icon class="chevron-icon">keyboard_arrow_down</mat-icon>
+    </button>
+    
+    <mat-menu #languageMenu="matMenu" class="language-dropdown">
+      <button mat-menu-item (click)="setLanguage('es')">
+        <span class="flag">🇪🇸</span>
+        Español
+      </button>
+      <button mat-menu-item (click)="setLanguage('en')">
+        <span class="flag">🇺🇸</span>
+        English  
+      </button>
+      <button mat-menu-item (click)="setLanguage('fr')">
+        <span class="flag">🇫🇷</span>
+        Français
+      </button>
+    </mat-menu>
+
+    <!-- Dark Mode Toggle -->
+    <button class="control-btn toggle-btn" (click)="toggleDarkMode()">
+      <mat-icon>{{ darkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+
+    <!-- Notifications -->
+    <button class="control-btn notifications-btn" [matMenuTriggerFor]="notificationsMenu">
+      <mat-icon>notifications</mat-icon>
+      <div class="notification-badge" *ngIf="notificationCount > 0">
+        {{ notificationCount > 99 ? '99+' : notificationCount }}
+      </div>
+    </button>
+    
+    <mat-menu #notificationsMenu="matMenu" class="notifications-dropdown">
+      <div class="notifications-header">
+        <span class="notifications-title">Notificaciones</span>
+        <button mat-button class="mark-read-btn">Marcar todas como leídas</button>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="notifications-list">
+        <button mat-menu-item *ngFor="let notification of recentNotifications" class="notification-item">
+          <div class="notification-content">
+            <p class="notification-title">{{ notification.title }}</p>
+            <p class="notification-message">{{ notification.message }}</p>
+            <span class="notification-time">{{ notification.time }}</span>
+          </div>
+        </button>
+      </div>
+    </mat-menu>
+
+    <!-- User Menu -->
+    <button class="user-menu-btn" [matMenuTriggerFor]="userMenu" *ngIf="currentUser">
+      <div class="user-avatar">
+        <img [src]="currentUser.avatar" [alt]="currentUser.name" class="avatar-image">
+      </div>
+      <div class="user-info">
+        <p class="user-name">{{ currentUser.name }}</p>
+        <p class="user-role">{{ currentUser.role }}</p>
+      </div>
+      <mat-icon class="chevron-icon">keyboard_arrow_down</mat-icon>
+    </button>
+    
+    <mat-menu #userMenu="matMenu" class="user-dropdown">
+      <div class="user-menu-header" *ngIf="currentUser">
+        <div class="user-avatar-large">
+          <img [src]="currentUser.avatar" [alt]="currentUser.name" class="avatar-image">
+        </div>
+        <div class="user-details">
+          <p class="user-name">{{ currentUser.name }}</p>
+          <p class="user-email">{{ currentUser.email }}</p>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="goToProfile()">
+        <mat-icon>person</mat-icon>
+        <span>Perfil</span>
+      </button>
+      <button mat-menu-item (click)="goToNotifications()">
+        <mat-icon>notifications</mat-icon>
+        <span>Notificaciones</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()" class="logout-item">
+        <mat-icon>logout</mat-icon>
+        <span>Cerrar Sesión</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>
