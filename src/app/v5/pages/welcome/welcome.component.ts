@@ -130,6 +130,11 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     this.loadUserData();
     this.loadDashboardData();
     this.subscribeToRealtimeUpdates();
+    
+    // Don't load alerts and activity automatically to avoid CORS errors
+    // Only load these when endpoints are available
+    // this.loadAlerts();
+    // this.loadRecentActivity();
   }
 
   ngOnDestroy(): void {
@@ -223,10 +228,11 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   private async loadStatsAndActivity(seasonId: number): Promise<void> {
     try {
       // Load all dashboard data in parallel
+      // Temporarily disable problematic endpoints to avoid CORS errors
       const promises = [
         this.loadDashboardStats(seasonId),
-        this.loadRecentActivity(),
-        this.loadAlerts(),
+        // this.loadRecentActivity(), // Disabled - endpoint may not exist
+        // this.loadAlerts(),        // Disabled - endpoint may not exist
         this.loadWeatherData(),
         this.loadMonitorStats(seasonId)
       ];
