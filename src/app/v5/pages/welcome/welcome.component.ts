@@ -525,6 +525,10 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     this.router.navigate([actionUrl]);
   }
 
+  navigateToRoute(route: string): void {
+    this.router.navigate([route]);
+  }
+
   // ==================== NEW TEMPLATE METHODS ====================
 
   get recentSessions() {

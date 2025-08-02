@@ -13,15 +13,15 @@
         
         <!-- Quick Actions -->
         <div class="quick-actions">
-          <button class="action-btn primary" (click)="navigateToQuickAction({route: '/v5/bookings'})">
+          <button class="action-btn primary" (click)="navigateToRoute('/v5/bookings')">
             <mat-icon>event_note</mat-icon>
             Ver Reservas
           </button>
-          <button class="action-btn secondary">
+          <button class="action-btn secondary" (click)="navigateToRoute('/v5/bookings/new')">
             <mat-icon>add</mat-icon>
             Nueva Reserva
           </button>
-          <button class="action-btn secondary">
+          <button class="action-btn secondary" (click)="navigateToRoute('/v5/courses')">
             <mat-icon>school</mat-icon>
             Gestionar Cursos
           </button>
