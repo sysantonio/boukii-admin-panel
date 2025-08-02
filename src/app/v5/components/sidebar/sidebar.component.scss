@@ -107,10 +107,14 @@
     
     &.active {
       background: #1a1a1a;
-      color: white;
+      color: white !important;
       
       .nav-icon {
-        color: white;
+        color: white !important;
+      }
+      
+      .nav-text {
+        color: white !important;
       }
     }
     

@@ -32,7 +32,8 @@
       "Bash(timeout 30s npx ng build --configuration=development)",
       "Bash(timeout 60s npx ng build --configuration=development)",
       "Bash(grep:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }

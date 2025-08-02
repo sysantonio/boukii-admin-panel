@@ -524,4 +524,83 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   navigateToActivityDetail(actionUrl: string): void {
     this.router.navigate([actionUrl]);
   }
+
+  // ==================== NEW TEMPLATE METHODS ====================
+
+  get recentSessions() {
+    return this.dashboardStats?.dailySessions?.slice(-7) || [];
+  }
+
+  get displayReservations() {
+    return this.dashboardStats?.todayReservations?.slice(0, 8) || [];
+  }
+
+  getWeatherConditionText(condition: string): string {
+    const conditions = {
+      'sunny': 'Soleado',
+      'partly-cloudy': 'Parcialmente nublado',
+      'cloudy': 'Nublado',
+      'rainy': 'Lluvioso',
+      'snowy': 'Nevando',
+      'stormy': 'Tormentoso'
+    };
+    return conditions[condition as keyof typeof conditions] || 'Soleado';
+  }
+
+  getDayName(index: number): string {
+    const days = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+    return days[index] || 'Lun';
+  }
+
+  getReservationTypeClass(courseType: string): string {
+    if (courseType.toLowerCase().includes('privado')) return 'private';
+    if (courseType.toLowerCase().includes('colectivo')) return 'collective';
+    return 'collective';
+  }
+
+  getReservationTypeLabel(courseType: string): string {
+    if (courseType.toLowerCase().includes('privado')) return 'Privado';
+    return 'Colectivo';
+  }
+
+  getClientInitials(name: string): string {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  }
+
+  getClientEmail(name: string): string {
+    const cleanName = name.toLowerCase().replace(/\s+/g, '.');
+    return `${cleanName}@email.com`;
+  }
+
+  getStatusLabel(status: string): string {
+    const labels = {
+      'confirmed': 'Confirmada',
+      'pending': 'Pendiente',
+      'cancelled': 'Cancelada'
+    };
+    return labels[status as keyof typeof labels] || status;
+  }
+
+  getReservationPrice(courseType: string): number {
+    const prices = {
+      'Principiante': 85,
+      'Intermedio': 45,
+      'Avanzado': 95,
+      'Snowboard': 110,
+      'Privado': 150,
+      'Freestyle': 110,
+      'Paralelo': 55,
+      'Fondo': 40,
+      'Competición': 150
+    };
+    
+    // Find matching price based on course type
+    for (const [key, price] of Object.entries(prices)) {
+      if (courseType.includes(key)) {
+        return price;
+      }
+    }
+    
+    return 85; // Default price
+  }
 }
