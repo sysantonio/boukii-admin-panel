@@ -4,7 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { VexModule } from '../@vex/vex.module';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CustomLayoutModule } from './custom-layout/custom-layout.module';
 import { ComponentsModule } from 'src/@vex/components/components.module';
 import { AuthService } from 'src/service/auth.service';
@@ -47,7 +47,10 @@ export function HttpLoaderFactory(http: HttpClient) {
         ComponentsCustomModule,
         StoreModule.forRoot({}) // 👈 Si no tienes reducers globales, pasa un objeto vacío
     ],
-    providers: [AuthService, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
+    providers: [
+        AuthService, 
+        { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

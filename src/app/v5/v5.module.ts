@@ -18,7 +18,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { V5RoutingModule } from './v5-routing.module';
 import { V5LayoutComponent } from './layout/v5-layout.component';
-import { WelcomeComponent } from './pages/welcome/welcome.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -30,11 +30,12 @@ import { AuthV5Service } from './core/services/auth-v5.service';
 import { NotificationService } from './core/services/notification.service';
 import { LoadingService } from './core/services/loading.service';
 import { DashboardService } from './core/services/dashboard.service';
+import { TokenV5Service } from './core/services/token-v5.service';
 import {SharedModule} from './shared/shared.module';
 @NgModule({
   declarations: [
     V5LayoutComponent,
-    WelcomeComponent,
+    DashboardComponent,
     NavbarComponent,
     SidebarComponent
   ],
@@ -63,6 +64,7 @@ import {SharedModule} from './shared/shared.module';
     ApiV5Service,
     SeasonContextService,
     AuthV5Service,
+    TokenV5Service,
     NotificationService,
     LoadingService,
     DashboardService,

@@ -1,9 +1,11 @@
 export const environment = {
   production: false,
   useRealServices: true,
+  // API Configuration
+  baseUrl: 'http://api-boukii.test/api',
+  apiUrl: 'http://api-boukii.test/api',
   // Your web app's Firebase configuration
   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  baseUrl: 'http://api-boukii.test/api',
   firebaseConfig: {
     apiKey: "AIzaSyAVqgEm3-_sMPLqxySQpyHKEfLtQ1_7pHI",
     authDomain: "boukii-test.firebaseapp.com",

@@ -1,193 +1,1009 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { tap, map } from 'rxjs/operators';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Observable, BehaviorSubject, throwError, of } from 'rxjs';
+import { map, catchError, tap, finalize, switchMap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
-import { SeasonContextService } from './season-context.service';
-import { Season } from '../models/season.interface';
+import { TokenV5Service, LoginResponse, UserContext } from './token-v5.service';
+import { ApiV5Service, ApiV5Response } from './api-v5.service';
 
-export interface LoginResponse {
-  success: boolean;
-  data: {
-    token: string;
-    user: any;
-    active_season?: Season;
-  };
-  message: string;
-  timestamp: string;
+export interface LoginRequest {
+  email: string;
+  password: string;
+  school_id: number;
+  season_id: number;
+  remember_me?: boolean;
 }
 
-@Injectable({ providedIn: 'root' })
+export interface InitialLoginRequest {
+  email: string;
+  password: string;
+  school_id: number;
+  remember_me?: boolean;
+}
+
+export interface CheckUserRequest {
+  email: string;
+  password: string;
+  remember_me?: boolean;
+}
+
+export interface CheckUserResponse {
+  user: UserContext;
+  schools: SchoolInfo[];
+  requires_school_selection: boolean;
+  temp_token?: string;
+}
+
+export interface SchoolSelectionRequest {
+  school_id: number;
+  remember_me?: boolean;
+}
+
+export interface SchoolInfo {
+  id: number;
+  name: string;
+  slug: string;
+  logo?: string;
+  logo_url?: string; // Backward compatibility
+  address?: string;
+  active?: boolean;
+  user_role?: string;
+  can_administer?: boolean;
+}
+
+export interface SeasonSelectionRequest {
+  season_id?: number;
+  create_new_season?: boolean;
+  new_season_data?: {
+    name: string;
+    start_date: string;
+    end_date: string;
+  };
+}
+
+export interface SeasonInfo {
+  id: number;
+  name: string;
+  start_date: string;
+  end_date: string;
+  is_active: boolean;
+  is_current?: boolean;
+  is_historical?: boolean;
+}
+
+export interface InitialLoginResponse {
+  access_token: string;
+  token_type: string;
+  expires_at: string;
+  requires_season_selection: boolean;
+  available_seasons: SeasonInfo[];
+  current_season?: SeasonInfo;
+  user: TokenV5Service['getCurrentUser'] extends () => infer T ? T : any;
+  school: TokenV5Service['getCurrentSchool'] extends () => infer T ? T : any;
+}
+
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+  error_code?: string;
+}
+
+export interface AuthState {
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  user: UserContext | null;
+  error: string | null;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthV5Service {
-  private tokenKey = 'boukiiUserToken';
-  private userKey = 'boukiiUser';
+  private readonly apiUrl = `${environment.apiUrl}/v5/auth`;
 
-  private tokenSubject = new BehaviorSubject<string | null>(
-    localStorage.getItem(this.tokenKey)
+  private authStateSubject = new BehaviorSubject<AuthState>({
+    isAuthenticated: false,
+    isLoading: false,
+    user: null,
+    error: null
+  });
+
+  public authState$ = this.authStateSubject.asObservable();
+
+  // Observable específico para el usuario actual (requerido por componentes)
+  public currentUser$ = this.authStateSubject.pipe(
+    map(state => state.user)
   );
-  readonly token$ = this.tokenSubject.asObservable();
-
-  private userSubject = new BehaviorSubject<any | null>(this.getStoredUser());
-  readonly user$ = this.userSubject.asObservable();
-  readonly currentUser$ = this.userSubject.asObservable();
-
-  readonly isAuthenticated$ = this.token$.pipe(map((t) => !!t));
 
   constructor(
     private http: HttpClient,
-    private seasonContext: SeasonContextService
-  ) {}
-
-  login(credentials: { email: string; password: string }): Observable<LoginResponse> {
-    return this.http
-      .post<LoginResponse>(`${environment.baseUrl}/v5/auth/login`, credentials)
-      .pipe(
-        tap((res) => {
-          if (res.success && res.data) {
-            localStorage.setItem(this.tokenKey, res.data.token);
-            this.tokenSubject.next(res.data.token);
-
-            if (res.data.user) {
-              localStorage.setItem(this.userKey, JSON.stringify(res.data.user));
-              this.userSubject.next(res.data.user);
-            }
-
-            if (res.data.active_season) {
-              this.seasonContext.setCurrentSeason(res.data.active_season);
-            }
-          }
-        })
-      );
+    private tokenService: TokenV5Service,
+    private router: Router,
+    private apiV5Service: ApiV5Service
+  ) {
+    this.initializeAuthState();
   }
 
-  logout(): Observable<any> {
-    // Clear local storage and subjects immediately
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem(this.userKey);
-    this.tokenSubject.next(null);
-    this.userSubject.next(null);
-    this.seasonContext.clearCurrentSeason();
-    
-    // Return observable for consistency (even though we don't need to wait for server response)
-    return new Observable(observer => {
-      observer.next({ success: true });
-      observer.complete();
+  /**
+   * Inicializar estado de autenticación desde localStorage
+   */
+  private initializeAuthState(): void {
+    const hasValidToken = this.tokenService.hasValidToken();
+    const user = this.tokenService.getCurrentUser();
+
+    this.updateAuthState({
+      isAuthenticated: hasValidToken && !!user,
+      isLoading: false,
+      user: user,
+      error: null
+    });
+
+    console.log('🔐 Auth state initialized:', {
+      isAuthenticated: hasValidToken && !!user,
+      user: user?.email,
+      hasToken: !!this.tokenService.getToken()
     });
   }
 
-  getToken(): string | null {
-    return this.tokenSubject.value;
-  }
+  /**
+   * Realizar login
+   */
+  login(credentials: LoginRequest): Observable<LoginResponse> {
+    this.updateAuthState({ ...this.getCurrentState(), isLoading: true, error: null });
 
-  isAuthenticated(): boolean {
-    return !!this.tokenSubject.value;
-  }
-
-  hasPermission(permission: string): boolean {
-    const user = this.userSubject.value as any;
-    return Array.isArray(user?.permissions) && user.permissions.includes(permission);
-  }
-
-  checkSeasonPermissions(seasonId: number): Observable<any> {
-    return this.http.get(`${environment.baseUrl}/v5/auth/permissions?season_id=${seasonId}`);
-  }
-
-  switchSeason(seasonId: number): Observable<any> {
-    return this.http.post(`${environment.baseUrl}/v5/auth/season/switch`, { season_id: seasonId })
+    return this.http.post<ApiResponse<LoginResponse>>(`${this.apiUrl}/login`, credentials)
       .pipe(
-        tap((res: any) => {
-          if (res.success) {
-            this.seasonContext.setCurrentSeasonId(seasonId);
+        map(response => {
+          if (!response.success) {
+            throw new Error(response.message || 'Login failed');
+          }
+          return response.data;
+        }),
+        tap(loginData => {
+          // Guardar datos del login
+          this.tokenService.saveLoginData(loginData);
+
+          // Actualizar estado de autenticación
+          this.updateAuthState({
+            isAuthenticated: true,
+            isLoading: false,
+            user: loginData.user,
+            error: null
+          });
+
+          console.log('✅ Login successful:', {
+            user: loginData.user.email,
+            school: loginData.school.name,
+            season: loginData.season.name
+          });
+        }),
+        catchError(error => {
+          const errorMessage = this.extractErrorMessage(error);
+
+          this.updateAuthState({
+            isAuthenticated: false,
+            isLoading: false,
+            user: null,
+            error: errorMessage
+          });
+
+          console.error('❌ Login failed:', errorMessage, error);
+          return throwError(() => new Error(errorMessage));
+        }),
+        finalize(() => {
+          // Asegurar que loading se desactive
+          const currentState = this.getCurrentState();
+          if (currentState.isLoading) {
+            this.updateAuthState({ ...currentState, isLoading: false });
           }
         })
       );
   }
 
-  refreshToken(): Observable<any> {
-    const token = this.getToken();
+  /**
+   * Realizar logout
+   */
+  logout(navigateToLogin = true): Observable<void> {
+    this.updateAuthState({ ...this.getCurrentState(), isLoading: true });
+
+    const token = this.tokenService.getToken();
+
     if (!token) {
-      throw new Error('No token available');
+      // Si no hay token, solo limpiar datos locales
+      this.performLocalLogout(navigateToLogin);
+      return of(void 0);
+    }
+
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/logout`, {})
+      .pipe(
+        tap(() => {
+          console.log('✅ Server logout successful');
+        }),
+        catchError(error => {
+          console.warn('⚠ Server logout failed, proceeding with local logout:', error);
+          return of({ success: true }); // Continuar con logout local
+        }),
+        tap(() => {
+          this.performLocalLogout(navigateToLogin);
+        }),
+        map(() => void 0)
+      );
+  }
+
+  /**
+   * Logout local (limpiar datos sin llamar al servidor)
+   */
+  private performLocalLogout(navigateToLogin = true): void {
+    this.tokenService.clearAll();
+
+    this.updateAuthState({
+      isAuthenticated: false,
+      isLoading: false,
+      user: null,
+      error: null
+    });
+
+    if (navigateToLogin) {
+      this.router.navigate(['/v5/auth/login']);
+    }
+
+    console.log('✅ Local logout completed');
+  }
+
+  /**
+   * Obtener información del usuario actual desde el servidor
+   */
+  getCurrentUserInfo(): Observable<UserContext> {
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/me`)
+      .pipe(
+        map(response => {
+          if (!response.success) {
+            throw new Error(response.message || 'Failed to fetch user info');
+          }
+          return response.data.user;
+        }),
+        tap(user => {
+          // Actualizar datos del usuario en el servicio de tokens
+          this.tokenService.updateUserData(user);
+
+          // Actualizar estado de autenticación
+          this.updateAuthState({
+            ...this.getCurrentState(),
+            user: user
+          });
+        }),
+        catchError(error => {
+          console.error('❌ Failed to fetch user info:', error);
+
+          // Si el token no es válido, hacer logout
+          if (error.status === 401) {
+            this.performLocalLogout();
+          }
+
+          return throwError(() => error);
+        })
+      );
+  }
+
+  /**
+   * Verificar si el usuario está autenticado
+   */
+  isAuthenticated(): boolean {
+    return this.getCurrentState().isAuthenticated;
+  }
+
+  /**
+   * Verificar si se está cargando
+   */
+  isLoading(): boolean {
+    return this.getCurrentState().isLoading;
+  }
+
+  /**
+   * Obtener usuario actual
+   */
+  getCurrentUser(): UserContext | null {
+    return this.getCurrentState().user;
+  }
+
+  /**
+   * Obtener escuela actual
+   */
+  getCurrentSchool() {
+    return this.tokenService.getCurrentSchool();
+  }
+
+  /**
+   * Obtener temporada actual
+   */
+  getCurrentSeason() {
+    return this.tokenService.getCurrentSeason();
+  }
+
+  /**
+   * Obtener error actual
+   */
+  getCurrentError(): string | null {
+    return this.getCurrentState().error;
+  }
+
+  /**
+   * Limpiar errores
+   */
+  clearError(): void {
+    this.updateAuthState({ ...this.getCurrentState(), error: null });
+  }
+
+  /**
+   * Verificar permisos del usuario
+   */
+  hasPermission(permission: string): boolean {
+    return this.tokenService.hasPermission(permission);
+  }
+
+  /**
+   * Verificar múltiples permisos
+   */
+  hasAnyPermission(permissions: string[]): boolean {
+    return this.tokenService.hasAnyPermission(permissions);
+  }
+
+  /**
+   * Verificar rol del usuario
+   */
+  hasRole(role: string): boolean {
+    return this.tokenService.hasRole(role);
+  }
+
+  /**
+   * Verificar múltiples roles
+   */
+  hasAnyRole(roles: string[]): boolean {
+    return this.tokenService.hasAnyRole(roles);
+  }
+
+  /**
+   * Refrescar token si está próximo a expirar
+   */
+  refreshTokenIfNeeded(): Observable<boolean> {
+    if (!this.tokenService.hasValidToken()) {
+      console.log('🔄 Token invalid, logout required');
+      this.performLocalLogout();
+      return of(false);
+    }
+
+    const tokenInfo = this.tokenService.getTokenExpirationInfo();
+    if (!tokenInfo) {
+      return of(false);
+    }
+
+    // Si faltan menos de 30 minutos, refrescar obteniendo nueva info del usuario
+    if (tokenInfo.minutes_remaining < 30) {
+      console.log('🔄 Token expires soon, refreshing user info');
+      return this.getCurrentUserInfo().pipe(
+        map(() => true),
+        catchError(() => {
+          this.performLocalLogout();
+          return of(false);
+        })
+      );
+    }
+
+    return of(true);
+  }
+
+  /**
+   * Verificar credenciales del usuario y determinar si necesita seleccionar escuela
+   */
+  checkUser(credentials: CheckUserRequest): Observable<CheckUserResponse> {
+    this.updateAuthState({ ...this.getCurrentState(), isLoading: true, error: null });
+
+    return this.http.post<ApiResponse<CheckUserResponse>>(`${this.apiUrl}/check-user`, credentials)
+      .pipe(
+        map(response => {
+          if (!response.success) {
+            throw new Error(response.message || 'Authentication failed');
+          }
+          return response.data;
+        }),
+        tap(data => {
+          console.log('🔍 DEBUG: Received data from checkUser API:', JSON.stringify(data, null, 2));
+          
+          // Lógica simplificada: solo verificar número de escuelas
+          if (data.requires_school_selection && data.schools && data.schools.length > 1) {
+            // Usuario multi-escuela - guardar token temporal y escuelas disponibles
+            if (data.temp_token) {
+              console.log('💾 Saving temp token for multi-school user');
+              this.tokenService.setTempToken(data.temp_token);
+            }
+            
+            // Guardar escuelas disponibles
+            localStorage.setItem('v5_temp_schools', JSON.stringify(data.schools));
+
+            this.updateAuthState({
+              isAuthenticated: false, // No autenticado hasta seleccionar escuela
+              isLoading: false,
+              user: data.user,
+              error: null
+            });
+
+            console.log('✅ Multi-school user detected:', {
+              user: data.user.email,
+              schoolCount: data.schools.length,
+              requiresSelection: true
+            });
+          } else if (!data.requires_school_selection && data.schools && data.schools.length === 1) {
+            // Usuario single-escuela - guardar token temporal para auto-selección
+            console.log('✅ Single school user - preparing for auto-selection:', {
+              user: data.user.email,
+              school: data.schools[0].name
+            });
+
+            if (data.temp_token) {
+              console.log('💾 Saving temp token for single school user');
+              this.tokenService.setTempToken(data.temp_token);
+            }
+
+            this.updateAuthState({
+              isAuthenticated: false, // Aún necesita completar login con escuela
+              isLoading: false,
+              user: data.user,
+              error: null
+            });
+          } else {
+            console.error('❌ No schools found for user');
+            throw new Error('User has no associated schools');
+          }
+        }),
+        catchError(error => {
+          const errorMessage = this.extractErrorMessage(error);
+
+          this.updateAuthState({
+            isAuthenticated: false,
+            isLoading: false,
+            user: null,
+            error: errorMessage
+          });
+
+          console.error('❌ Check user failed:', errorMessage, error);
+          return throwError(() => new Error(errorMessage));
+        }),
+        finalize(() => {
+          const currentState = this.getCurrentState();
+          if (currentState.isLoading) {
+            this.updateAuthState({ ...currentState, isLoading: false });
+          }
+        })
+      );
+  }
+
+  /**
+   * Seleccionar escuela para completar el login
+   * ✅ Enhanced with automatic season detection and selection
+   */
+  selectSchool(schoolData: SchoolSelectionRequest): Observable<LoginResponse> {
+    console.log('🔄 AuthV5Service.selectSchool called with:', schoolData);
+    console.log('🔍 Current token info:', {
+      hasToken: !!this.tokenService.getToken(),
+      hasTempToken: !!this.tokenService.getTempToken(),
+      currentToken: !!this.tokenService.getCurrentToken()
+    });
+
+    this.updateAuthState({ ...this.getCurrentState(), isLoading: true, error: null });
+
+    // Crear headers con Authorization manual
+    const token = this.tokenService.getCurrentToken();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    console.log('🔐 Manually adding Authorization header:', token ? `Bearer ${token.substring(0, 10)}...` : 'NO TOKEN');
+
+    return this.http.post<ApiResponse<LoginResponse>>(`${this.apiUrl}/select-school`, schoolData, { headers })
+      .pipe(
+        switchMap(response => {
+          console.log('✅ SelectSchool API response:', response);
+          if (!response.success) {
+            throw new Error(response.message || 'School selection failed');
+          }
+          
+          const loginData = response.data;
+          
+          // ✅ NEW: Check if we have season data, if not, try automatic selection
+          if (!loginData.season && loginData.school) {
+            console.log('🔍 No season in response, attempting automatic season selection...');
+            return this.autoSelectSeason(loginData);
+          }
+          
+          return of(loginData);
+        }),
+        tap(loginData => {
+          // Guardar datos completos del login con escuela (y temporada si está disponible)
+          this.tokenService.saveLoginData(loginData);
+
+          // Limpiar token temporal y datos relacionados
+          this.tokenService.clearTempToken();
+          localStorage.removeItem('v5_temp_schools');
+
+          // Actualizar estado de autenticación
+          this.updateAuthState({
+            isAuthenticated: true,
+            isLoading: false,
+            user: loginData.user,
+            error: null
+          });
+
+          console.log('✅ School selection successful:', {
+            user: loginData.user?.email,
+            school: loginData.school?.name,
+            season: loginData.season?.name || 'No season selected'
+          });
+        }),
+        catchError(error => {
+          const errorMessage = this.extractErrorMessage(error);
+
+          this.updateAuthState({
+            ...this.getCurrentState(),
+            isLoading: false,
+            error: errorMessage
+          });
+
+          console.error('❌ School selection failed:', errorMessage, error);
+          return throwError(() => new Error(errorMessage));
+        }),
+        finalize(() => {
+          const currentState = this.getCurrentState();
+          if (currentState.isLoading) {
+            this.updateAuthState({ ...currentState, isLoading: false });
+          }
+        })
+      );
+  }
+
+  /**
+   * ✅ NEW: Automatic season selection after school selection
+   */
+  private autoSelectSeason(partialLoginData: LoginResponse): Observable<LoginResponse> {
+    console.log('🔄 Attempting automatic season selection...');
+    
+    // First, check if there's a current active season via /v5/seasons/current
+    const token = this.tokenService.getCurrentToken();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      'X-School-ID': partialLoginData.school?.id.toString() || ''
+    });
+
+    return this.http.get<ApiV5Response<SeasonInfo>>(`${environment.apiUrl}/v5/seasons/current`, { headers })
+      .pipe(
+        switchMap(seasonResponse => {
+          if (seasonResponse.success && seasonResponse.data) {
+            console.log('✅ Found current active season:', seasonResponse.data.name);
+            
+            // Enhance the login data with the found season
+            const enhancedLoginData: LoginResponse = {
+              ...partialLoginData,
+              season: {
+                id: seasonResponse.data.id,
+                name: seasonResponse.data.name,
+                start_date: seasonResponse.data.start_date,
+                end_date: seasonResponse.data.end_date,
+                is_active: seasonResponse.data.is_active,
+                is_current: true
+              }
+            };
+            
+            return of(enhancedLoginData);
+          } else {
+            // No current season found, try to get available seasons and pick the best one
+            console.log('⚠️ No current active season, checking available seasons...');
+            return this.selectBestAvailableSeason(partialLoginData);
+          }
+        }),
+        catchError(error => {
+          console.log('⚠️ Error getting current season, falling back to available seasons:', error.message);
+          return this.selectBestAvailableSeason(partialLoginData);
+        })
+      );
+  }
+
+  /**
+   * ✅ NEW: Select the best available season from all seasons
+   */
+  private selectBestAvailableSeason(partialLoginData: LoginResponse): Observable<LoginResponse> {
+    console.log('🔄 Selecting best available season from all seasons...');
+    
+    const token = this.tokenService.getCurrentToken();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+      'X-School-ID': partialLoginData.school?.id.toString() || ''
+    });
+
+    return this.http.get<ApiV5Response<SeasonInfo[]>>(`${environment.apiUrl}/v5/seasons`, { headers })
+      .pipe(
+        map(seasonsResponse => {
+          if (!seasonsResponse.success || !seasonsResponse.data || seasonsResponse.data.length === 0) {
+            console.log('⚠️ No seasons available - proceeding without season selection');
+            return partialLoginData; // Return as is, user will need to create a season
+          }
+
+          const seasons = seasonsResponse.data;
+          console.log(`🔍 Found ${seasons.length} available seasons:`, seasons.map(s => ({ id: s.id, name: s.name, is_active: s.is_active })));
+
+          // Season selection logic (prioritized):
+          // 1. Find explicitly active season
+          let bestSeason = seasons.find(s => s.is_active);
+          
+          if (!bestSeason) {
+            // 2. Find season that covers current date
+            const today = new Date();
+            bestSeason = seasons.find(s => {
+              const startDate = new Date(s.start_date);
+              const endDate = new Date(s.end_date);
+              return today >= startDate && today <= endDate;
+            });
+          }
+          
+          if (!bestSeason && seasons.length === 1) {
+            // 3. If only one season exists, use it
+            bestSeason = seasons[0];
+          }
+          
+          if (!bestSeason) {
+            // 4. Use the most recent season (latest start_date)
+            bestSeason = [...seasons].sort((a, b) => 
+              new Date(b.start_date).getTime() - new Date(a.start_date).getTime()
+            )[0];
+          }
+
+          if (bestSeason) {
+            console.log('✅ Auto-selected season:', bestSeason.name);
+            
+            const enhancedLoginData: LoginResponse = {
+              ...partialLoginData,
+              season: {
+                id: bestSeason.id,
+                name: bestSeason.name,
+                start_date: bestSeason.start_date,
+                end_date: bestSeason.end_date,
+                is_active: bestSeason.is_active,
+                is_current: true
+              }
+            };
+            
+            return enhancedLoginData;
+          } else {
+            console.log('⚠️ Could not determine best season - proceeding without season');
+            return partialLoginData;
+          }
+        }),
+        catchError(error => {
+          console.error('❌ Error fetching seasons for auto-selection:', error);
+          console.log('⚠️ Proceeding without automatic season selection');
+          return of(partialLoginData); // Continue without season
+        })
+      );
+  }
+
+  /**
+   * Login inicial sin selección de temporada
+   */
+  initialLogin(credentials: InitialLoginRequest): Observable<InitialLoginResponse> {
+    this.updateAuthState({ ...this.getCurrentState(), isLoading: true, error: null });
+
+    return this.http.post<ApiResponse<InitialLoginResponse>>(`${this.apiUrl}/initial-login`, credentials)
+      .pipe(
+        map(response => {
+          if (!response.success) {
+            throw new Error(response.message || 'Login failed');
+          }
+          return response.data;
+        }),
+        tap(loginData => {
+          // Guardar datos del login inicial (sin temporada)
+          this.tokenService.savePartialLoginData(loginData);
+
+          // Actualizar estado de autenticación
+          this.updateAuthState({
+            isAuthenticated: true,
+            isLoading: false,
+            user: loginData.user,
+            error: null
+          });
+
+          console.log('✅ Initial login successful:', {
+            user: loginData.user.email,
+            school: loginData.school.name,
+            requiresSeasonSelection: loginData.requires_season_selection
+          });
+        }),
+        catchError(error => {
+          const errorMessage = this.extractErrorMessage(error);
+
+          this.updateAuthState({
+            isAuthenticated: false,
+            isLoading: false,
+            user: null,
+            error: errorMessage
+          });
+
+          console.error('❌ Initial login failed:', errorMessage, error);
+          return throwError(() => new Error(errorMessage));
+        }),
+        finalize(() => {
+          // Asegurar que loading se desactive
+          const currentState = this.getCurrentState();
+          if (currentState.isLoading) {
+            this.updateAuthState({ ...currentState, isLoading: false });
+          }
+        })
+      );
+  }
+
+  /**
+   * Seleccionar temporada después del login inicial
+   */
+  selectSeason(seasonData: SeasonSelectionRequest): Observable<LoginResponse> {
+    this.updateAuthState({ ...this.getCurrentState(), isLoading: true, error: null });
+
+    // Check if we need to create a new season first
+    if (seasonData.create_new_season && seasonData.new_season_data) {
+      console.log('🔄 Creating new season first, then selecting it');
+      return this.createAndSelectSeason(seasonData);
+    }
+
+    // Regular season selection
+    return this.performSeasonSelection(seasonData);
+  }
+
+  private createAndSelectSeason(seasonData: SeasonSelectionRequest): Observable<LoginResponse> {
+    console.log('🔄 AuthV5Service.createAndSelectSeason - Using ApiV5Service for season creation');
+    console.log('🔍 New season data:', seasonData.new_season_data);
+    
+    // ✅ Use ApiV5Service instead of direct HttpClient to ensure proper context injection
+    return this.apiV5Service.post<any>('seasons', seasonData.new_season_data)
+      .pipe(
+        switchMap((createResponse: ApiV5Response<any>) => {
+          if (!createResponse.success) {
+            throw new Error(createResponse.message || 'Failed to create season');
+          }
+
+          console.log('✅ Season created successfully via ApiV5Service:', createResponse.data);
+
+          // Now select the newly created season
+          const selectData: SeasonSelectionRequest = {
+            season_id: createResponse.data.id
+          };
+
+          return this.performSeasonSelection(selectData);
+        })
+      );
+  }
+
+  private performSeasonSelection(seasonData: SeasonSelectionRequest): Observable<LoginResponse> {
+    const currentToken = this.tokenService.getCurrentToken();
+    console.log('🔍 performSeasonSelection - currentToken:', currentToken ? currentToken.substring(0, 10) + '...' : 'null');
+
+    const headers = {
+      'Authorization': `Bearer ${currentToken}`,
+      'Content-Type': 'application/json'
+    };
+
+    console.log('🔍 performSeasonSelection - seasonData:', seasonData);
+
+    return this.http.post<ApiResponse<LoginResponse>>(`${this.apiUrl}/select-season`, seasonData, { headers })
+      .pipe(
+        map(response => {
+          if (!response.success) {
+            throw new Error(response.message || 'Season selection failed');
+          }
+          return response.data;
+        }),
+        tap(loginData => {
+          // Guardar datos completos del login con temporada
+          this.tokenService.saveLoginData(loginData);
+
+          // Actualizar estado de autenticación
+          this.updateAuthState({
+            isAuthenticated: true,
+            isLoading: false,
+            user: loginData.user,
+            error: null
+          });
+
+          console.log('✅ Season selection successful:', {
+            user: loginData.user.email,
+            school: loginData.school.name,
+            season: loginData.season.name
+          });
+        }),
+        catchError(error => {
+          console.error('❌ Season selection failed - Full error:', error);
+          console.error('❌ Error status:', error.status);
+          console.error('❌ Error body:', error.error);
+
+          // Agregar información específica del error 422
+          if (error.status === 422) {
+            console.error('❌ Validation Error (422):', {
+              message: error.error?.message,
+              errors: error.error?.errors,
+              data: error.error?.data
+            });
+          }
+
+          const errorMessage = this.extractErrorMessage(error);
+
+          this.updateAuthState({
+            ...this.getCurrentState(),
+            isLoading: false,
+            error: errorMessage
+          });
+
+          return throwError(() => new Error(errorMessage));
+        }),
+        finalize(() => {
+          // Asegurar que loading se desactive
+          const currentState = this.getCurrentState();
+          if (currentState.isLoading) {
+            this.updateAuthState({ ...currentState, isLoading: false });
+          }
+        })
+      );
+  }
+
+  /**
+   * Obtener temporadas disponibles para la escuela actual
+   */
+  getAvailableSeasons(): Observable<SeasonInfo[]> {
+    console.log('🔄 AuthV5Service: getAvailableSeasons() called');
+    const currentToken = this.tokenService.getCurrentToken();
+    
+    console.log('🔍 AuthV5Service: Token check:', {
+      hasToken: !!currentToken,
+      tokenPreview: currentToken ? currentToken.substring(0, 10) + '...' : 'NO TOKEN'
+    });
+    
+    if (!currentToken) {
+      console.warn('⚠️ AuthV5Service: No token available for getAvailableSeasons');
+      return throwError(() => new Error('No authentication token available'));
     }
     
-    return this.http.post(`${environment.baseUrl}/v5/auth/refresh`, {});
-  }
-
-  getCurrentUser(): any {
-    return this.userSubject.value;
-  }
-
-  updateUserProfile(data: any): Observable<any> {
-    return this.http.put(`${environment.baseUrl}/v5/auth/profile`, data)
+    const headers = {
+      'Authorization': `Bearer ${currentToken}`,
+      'Content-Type': 'application/json'
+    };
+    
+    const url = `${environment.apiUrl}/v5/seasons`;
+    console.log('🌐 AuthV5Service: Making request to:', url, 'with headers:', headers);
+    
+    return this.http.get<ApiResponse<SeasonInfo[]>>(url, { headers })
       .pipe(
-        tap((res: any) => {
-          if (res.success && res.data.user) {
-            localStorage.setItem(this.userKey, JSON.stringify(res.data.user));
-            this.userSubject.next(res.data.user);
+        map(response => {
+          console.log('📊 AuthV5Service: Received response:', response);
+          if (!response.success) {
+            throw new Error(response.message || 'Failed to fetch seasons');
           }
+          console.log('✅ AuthV5Service: Returning seasons data:', response.data);
+          return response.data;
+        }),
+        catchError(error => {
+          console.error('❌ AuthV5Service: Failed to fetch available seasons:', error);
+          console.error('❌ AuthV5Service: Error details:', {
+            status: error.status,
+            statusText: error.statusText,
+            message: error.message,
+            error: error.error
+          });
+          return throwError(() => error);
         })
       );
   }
 
-  logUserAction(action: string, metadata?: any): void {
+  /**
+   * Registrar acción del usuario para analytics
+   */
+  logUserAction(action: string, payload?: any): Observable<void> {
     const user = this.getCurrentUser();
+    const school = this.tokenService.getCurrentSchool();
+    const season = this.tokenService.getCurrentSeason();
+
+    if (!user) {
+      console.warn('Cannot log user action: no authenticated user');
+      return of(void 0);
+    }
+
     const logData = {
       action,
-      userId: user?.id,
-      userName: user?.name,
+      payload: payload || {},
+      user_id: user.id,
+      user_email: user.email,
+      school_id: school?.id,
+      school_name: school?.name,
+      season_id: season?.id,
+      season_name: season?.name,
       timestamp: new Date().toISOString(),
-      metadata: metadata || {}
+      user_agent: navigator.userAgent,
+      url: window.location.href
     };
-    
-    // Log to console for now (could send to analytics service later)
-    console.log('[User Action]', logData);
-    
-    // Could also send to backend analytics endpoint
-    // this.http.post(`${environment.baseUrl}/v5/analytics/user-actions`, logData).subscribe();
+
+    return this.http.post<ApiResponse<any>>(`${environment.apiUrl}/v5/user/logs`, logData)
+      .pipe(
+        tap(() => {
+          console.log('📊 User action logged:', action, payload);
+        }),
+        catchError(error => {
+          // Log de forma silenciosa - no mostrar errores al usuario
+          console.warn('Failed to log user action:', error);
+          return of(void 0);
+        }),
+        map(() => void 0)
+      );
   }
 
-  private getStoredUser(): any | null {
-    const stored = localStorage.getItem(this.userKey);
-    try {
-      const user = stored ? JSON.parse(stored) : null;
+  /**
+   * Obtener datos temporales para selección de escuela
+   */
+  getTempUserData(): { user: UserContext, schools: SchoolInfo[] } | null {
+    const currentUser = this.getCurrentUser();
+    const tempToken = this.tokenService.getTempToken();
+
+    // Si hay un token temporal, significa que hay datos temporales disponibles
+    if (tempToken && currentUser) {
+      // Get schools from stored auth response
+      const storedSchools = localStorage.getItem('v5_temp_schools');
+      let schools: SchoolInfo[] = [];
       
-      // If no user is stored, provide a realistic test user
-      if (!user) {
-        const testUser = {
-          id: 1,
-          name: 'María González',
-          first_name: 'María',
-          last_name: 'González',
-          email: 'maria.gonzalez@boukii.com',
-          role: {
-            name: 'Administrador'
-          },
-          role_name: 'Administrador',
-          last_login_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          school: {
-            id: 1,
-            name: 'Escuela de Esquí Sierra Nevada',
-            location: 'Sierra Nevada, Granada'
-          },
-          permissions: [
-            'bookings.create',
-            'clients.create', 
-            'courses.create',
-            'monitors.view',
-            'reports.view',
-            'planner.view'
-          ],
-          avatar_url: 'https://images.unsplash.com/photo-1494790108755-2616b612b647?w=40&h=40&fit=crop&crop=face'
-        };
-        
-        // Store the test user for consistency
-        localStorage.setItem(this.userKey, JSON.stringify(testUser));
-        return testUser;
+      if (storedSchools) {
+        try {
+          schools = JSON.parse(storedSchools);
+        } catch (error) {
+          console.warn('Failed to parse stored schools:', error);
+        }
       }
-      
-      return user;
-    } catch {
-      return null;
+
+      return {
+        user: currentUser,
+        schools: schools
+      };
+    }
+
+    return null;
+  }
+
+  /**
+   * Métodos de utilidad
+   */
+  private getCurrentState(): AuthState {
+    return this.authStateSubject.value;
+  }
+
+  private updateAuthState(newState: Partial<AuthState>): void {
+    const currentState = this.getCurrentState();
+    this.authStateSubject.next({ ...currentState, ...newState });
+  }
+
+  private extractErrorMessage(error: HttpErrorResponse): string {
+    if (error.error?.message) {
+      return error.error.message;
+    }
+
+    switch (error.status) {
+      case 401:
+        return 'Invalid credentials or session expired';
+      case 403:
+        return 'Access denied. Check your permissions.';
+      case 422:
+        return 'Invalid data provided. Please check your input.';
+      case 500:
+        return 'Server error. Please try again later.';
+      case 0:
+        return 'Connection error. Please check your internet connection.';
+      default:
+        return `An error occurred (${error.status}). Please try again.`;
     }
   }
 }

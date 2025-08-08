@@ -27,11 +27,11 @@ const childrenRoutes: VexRoutes = [
         loadChildren: () => import('./pages/timeline/timeline.module').then(m => m.TimelineModule),
         canActivate: [AuthGuard],
       },
-            {
-              path: 'calendar',
-              loadChildren: () => import('./pages/calendar/calendar.module').then(m => m.CalendarMonitorModule),
-              canActivate: [AuthGuard],
-            },
+      {
+        path: 'calendar',
+        loadChildren: () => import('./pages/calendar/calendar.module').then(m => m.CalendarMonitorModule),
+        canActivate: [AuthGuard],
+      },
       {
         path: 'bookings-old',
         loadChildren: () => import('./pages/bookings/bookings.module').then(m => m.BookingsModule),
@@ -42,11 +42,11 @@ const childrenRoutes: VexRoutes = [
         loadChildren: () => import('./pages/bookings-v2/bookings.module').then(m => m.BookingsModule),
         canActivate: [AuthGuard],
       },
-        {
-          path: "bookings-dashboard",
-          loadChildren: () => import("./pages/bookings-dashboard/bookings-dashboard.module").then(m => m.BookingsDashboardModule),
-          canActivate: [AuthGuard],
-        },
+      {
+        path: "bookings-dashboard",
+        loadChildren: () => import("./pages/bookings-dashboard/bookings-dashboard.module").then(m => m.BookingsDashboardModule),
+        canActivate: [AuthGuard],
+      },
       {
         path: 'bookings-v3',
         loadChildren: () => import('./pages/bookings-v3/bookings-v3.module').then(m => m.BookingsV3Module),

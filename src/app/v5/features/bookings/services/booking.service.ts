@@ -136,17 +136,11 @@ export class BookingService {
     
     // Date filters
     if (filters.date_from) {
-      const dateStr = filters.date_from instanceof Date 
-        ? filters.date_from.toISOString().split('T')[0]
-        : filters.date_from;
-      httpParams = httpParams.set('date_from', dateStr);
+      httpParams = httpParams.set('date_from', filters.date_from);
     }
     
     if (filters.date_to) {
-      const dateStr = filters.date_to instanceof Date 
-        ? filters.date_to.toISOString().split('T')[0]
-        : filters.date_to;
-      httpParams = httpParams.set('date_to', dateStr);
+      httpParams = httpParams.set('date_to', filters.date_to);
     }
     
     // Other filters
@@ -267,10 +261,12 @@ export class BookingService {
   // ==================== BOOKING ACTIONS ====================
 
   sendBookingConfirmation(id: number): Observable<void> {
-    return this.api.post<void>(`v5/notifications/`, {
+    return this.api.post(`v5/notifications/`, {
       type: 'booking_confirmation',
       booking_id: id
-    });
+    }).pipe(
+      map(() => undefined) // Transform to void
+    );
   }
 
   cancelBooking(id: number, reason?: string): Observable<Booking> {
@@ -349,7 +345,9 @@ export class BookingService {
 
   exportBookings(bookingIds?: number[]): Observable<Blob> {
     const params = bookingIds ? { booking_ids: bookingIds } : {};
-    return this.api.post<Blob>('export/bookings', params);
+    return this.api.post('export/bookings', params).pipe(
+      map(response => response.data) // Extract the blob from ApiV5Response
+    );
   }
 
   // ==================== VALIDATION ====================

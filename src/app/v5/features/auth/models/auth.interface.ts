@@ -7,24 +7,45 @@ export interface LoginCredentials {
 
 export interface AuthUser {
   id: number;
+  name: string;
   email: string;
-  first_name: string;
-  last_name: string;
   role: string;
   permissions: string[];
-  avatar?: string;
-  last_login?: string;
+}
+
+export interface SchoolContext {
+  id: number;
+  name: string;
+  slug: string;
+  logo?: string;
+}
+
+export interface Season {
+  id: number;
+  name: string;
+  year: number;
+  is_current: boolean;
 }
 
 export interface LoginResponse {
   success: boolean;
   data: {
-    token: string;
     user: AuthUser;
-    active_season?: any;
+    school: SchoolContext;
+    season: Season;
+    token: string;
+    expires_at?: string;
+    context?: any;
   };
   message: string;
   timestamp: string;
+  // Para compatibilidad con respuestas donde faltan campos
+  user?: AuthUser;
+  school?: SchoolContext;
+  season?: Season;
+  token?: string;
+  access_token?: string; // Fallback
+  expires_at?: string;
   available_seasons?: any[];
 }
 

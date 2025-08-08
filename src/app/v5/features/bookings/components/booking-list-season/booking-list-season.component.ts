@@ -41,8 +41,8 @@ export interface BookingFilters {
   location_id?: number;
   payment_status?: PaymentStatus;
   date_range?: string;
-  date_from?: Date;
-  date_to?: Date;
+  date_from?: string; // Changed to string to match API expectation
+  date_to?: string; // Changed to string to match API expectation
   min_amount?: number;
   max_amount?: number;
   participants_range?: string;
@@ -345,29 +345,31 @@ export class BookingListSeasonComponent implements OnInit, OnDestroy {
       filters.course_group_id = parseInt(formValue.course_group_id);
     }
 
-    // Date range handling
+    // Date range handling - convert dates to ISO strings for API
     if (formValue.date_range === 'custom') {
       if (formValue.date_from) {
-        filters.date_from = new Date(formValue.date_from);
+        const date = new Date(formValue.date_from);
+        filters.date_from = date.toISOString().split('T')[0]; // YYYY-MM-DD format
       }
       if (formValue.date_to) {
-        filters.date_to = new Date(formValue.date_to);
+        const date = new Date(formValue.date_to);
+        filters.date_to = date.toISOString().split('T')[0]; // YYYY-MM-DD format
       }
     } else if (formValue.date_range) {
       // Handle predefined date ranges
       const today = new Date();
       switch (formValue.date_range) {
         case 'today':
-          filters.date_from = new Date(today);
-          filters.date_to = new Date(today);
+          filters.date_from = today.toISOString().split('T')[0];
+          filters.date_to = today.toISOString().split('T')[0];
           break;
         case 'this_week':
           const weekStart = new Date(today);
           weekStart.setDate(today.getDate() - today.getDay());
           const weekEnd = new Date(weekStart);
           weekEnd.setDate(weekStart.getDate() + 6);
-          filters.date_from = weekStart;
-          filters.date_to = weekEnd;
+          filters.date_from = weekStart.toISOString().split('T')[0];
+          filters.date_to = weekEnd.toISOString().split('T')[0];
           break;
         // Add more predefined ranges as needed
       }

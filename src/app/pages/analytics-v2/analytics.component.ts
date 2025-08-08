@@ -1592,7 +1592,6 @@ export class AnalyticsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.apiService.get('/admin/finance/season-dashboard/export', [], exportFilters).subscribe({
       next: (response) => {
-        debugger;
         console.log('✅ Export successful:', response);
         if (response.data?.download_url) {
           window.open(response.data.download_url, '_blank');

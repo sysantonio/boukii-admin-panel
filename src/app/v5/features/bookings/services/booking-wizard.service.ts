@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { map, catchError, finalize } from 'rxjs/operators';
 import { ApiV5Service } from '../../../core/services/api-v5.service';
 import { SeasonContextService } from '../../../core/services/season-context.service';
@@ -352,11 +352,8 @@ export class BookingWizardService {
       }),
       catchError(error => {
         this.logger.warn('Failed to save booking draft', error);
-        // Don't throw error for draft saving failures
-        return new Observable(observer => {
-          observer.next();
-          observer.complete();
-        });
+        // Don't throw error for draft saving failures - return empty observable that completes
+        return of(undefined);
       })
     );
   }

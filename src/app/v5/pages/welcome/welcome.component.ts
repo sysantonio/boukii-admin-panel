@@ -3,10 +3,11 @@ import { Router } from '@angular/router';
 import { Observable, Subject, combineLatest, of } from 'rxjs';
 import { takeUntil, catchError, finalize } from 'rxjs/operators';
 import { SeasonContextService } from '../../core/services/season-context.service';
-import { AuthV5Service } from '../../core/services/auth-v5.service';
+import { AuthV5Service, SeasonInfo, InitialLoginResponse } from '../../core/services/auth-v5.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { DashboardService, DashboardStats, RecentActivity, AlertItem, WeatherData, MonitorStats } from '../../core/services/dashboard.service';
 import { TranslateService } from '@ngx-translate/core';
+import { PermissionsV5Service } from '../../core/services/permissions-v5.service';
 
 interface CurrentUser {
   id: number;
@@ -44,6 +45,11 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   currentUser: CurrentUser | null = null;
   currentSeason: any = null;
 
+  // Season selection
+  showSeasonSelector = false;
+  availableSeasons: SeasonInfo[] = [];
+  requiresSeasonSelection = false;
+
   // Dashboard data
   dashboardStats: DashboardStats | null = null;
   recentActivity: RecentActivity[] = [];
@@ -61,6 +67,10 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   // Error states
   hasError = false;
   errorMessage = '';
+  
+  // Permission states
+  hasSeasonAccess = true;
+  hasAnyPermissions = true;
 
   // Quick actions with permissions
   quickActions: QuickAction[] = [
@@ -119,22 +129,70 @@ export class WelcomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private seasonContext: SeasonContextService,
+    public seasonContext: SeasonContextService,
     private authService: AuthV5Service,
     private dashboardService: DashboardService,
     private notifications: NotificationService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private permissionsService: PermissionsV5Service
   ) {}
 
   ngOnInit(): void {
-    this.loadUserData();
-    this.loadDashboardData();
-    this.subscribeToRealtimeUpdates();
-    
-    // Don't load alerts and activity automatically to avoid CORS errors
-    // Only load these when endpoints are available
-    // this.loadAlerts();
-    // this.loadRecentActivity();
+    // Initialize in proper sequence to avoid race conditions
+    this.initializeComponent();
+  }
+  
+  private async initializeComponent(): Promise<void> {
+    try {
+      console.log('🔄 WelcomeComponent: Starting initialization...');
+      
+      // 1. First verify user is properly authenticated
+      if (!this.authService.isAuthenticated()) {
+        console.error('❌ WelcomeComponent: User not authenticated, redirecting to login');
+        this.router.navigate(['/v5/auth/login']);
+        return;
+      }
+      
+      // 2. Verify we have a valid token
+      if (!this.authService.getCurrentUser()) {
+        console.error('❌ WelcomeComponent: No user context available');
+        this.router.navigate(['/v5/auth/login']);
+        return;
+      }
+      
+      console.log('✅ WelcomeComponent: User authentication verified');
+      
+      // 3. Load user data 
+      this.loadUserData();
+      
+      // 4. Explicitly initialize SeasonContextService now that user is authenticated
+      console.log('🔄 WelcomeComponent: Initializing SeasonContextService...');
+      await this.seasonContext.initialize();
+      
+      // 5. Check season selection status after seasons are loaded
+      await this.checkSeasonSelectionStatus();
+      
+      // 6. Load dashboard data if we have a valid season
+      this.loadDashboardData();
+      
+      // 7. Subscribe to realtime updates
+      this.subscribeToRealtimeUpdates();
+      
+      // 8. Subscribe to permission updates
+      this.subscribeToPermissionUpdates();
+      
+      // 9. Load additional data only if we have a season (avoid errors)
+      if (this.currentSeason) {
+        this.loadAlerts();
+        this.loadRecentActivity();
+      }
+      
+      console.log('✅ WelcomeComponent: Initialization completed');
+      
+    } catch (error) {
+      console.error('❌ WelcomeComponent: Error initializing:', error);
+      this.handleLoadingError(error);
+    }
   }
 
   ngOnDestroy(): void {
@@ -146,22 +204,23 @@ export class WelcomeComponent implements OnInit, OnDestroy {
 
   private loadUserData(): void {
     this.loadingUser = true;
-    
+
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (user) => {
           if (user) {
+            const school = this.authService.getCurrentSchool();
             this.currentUser = {
               id: user.id,
-              name: user.name || `${user.first_name} ${user.last_name}`.trim(),
+              name: user.name || 'Usuario',
               email: user.email,
-              role: user.role?.name || user.role_name || 'Usuario',
-              lastLogin: new Date(user.last_login_at || user.updated_at),
+              role: user.role || 'Usuario',
+              lastLogin: new Date(user.last_login_at || Date.now()),
               school: {
-                id: user.school?.id || 0,
-                name: user.school?.name || 'Escuela de Esquí',
-                location: user.school?.location
+                id: school?.id || 0,
+                name: school?.name || 'Escuela de Esquí',
+                location: school?.slug
               },
               permissions: user.permissions || [],
               avatar: user.avatar_url
@@ -192,31 +251,59 @@ export class WelcomeComponent implements OnInit, OnDestroy {
       return;
     }
 
+    const permissions = this.permissionsService.getCurrentPermissions();
+    if (!permissions) {
+      this.availableActions = [];
+      return;
+    }
+
     this.availableActions = this.quickActions.filter(action => {
+      // If no permission specified, show it
       if (!action.permission) return true;
-      return this.currentUser!.permissions.includes(action.permission);
+      
+      // Check specific permissions based on route
+      switch (action.route) {
+        case '/v5/bookings':
+          return permissions.canManageBookings;
+        case '/v5/clients':
+          return permissions.canManageClients;
+        case '/v5/planner':
+          return permissions.canViewPlanner;
+        case '/v5/courses':
+          return permissions.canManageCourses;
+        case '/v5/reports':
+          return permissions.canViewReports;
+        case '/v5/monitors':
+          return permissions.canManageMonitors;
+        default:
+          // Fallback to checking user permissions directly
+          return this.currentUser!.permissions.includes(action.permission);
+      }
     });
   }
 
   // ==================== DASHBOARD DATA LOADING ====================
 
   private loadDashboardData(): void {
+    console.log('📊 Loading dashboard data...');
     this.loading = true;
-    
-    // Load current season first
+
+    // Subscribe to season changes for dashboard updates
     this.seasonContext.currentSeason$
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (season) => {
+          console.log('📊 Dashboard received season update:', season?.name || 'None');
           this.currentSeason = season;
           if (season) {
             this.loadStatsAndActivity(season.id);
           } else {
-            this.handleNoSeasonSelected();
+            // Don't call handleNoSeasonSelected here - it's already handled in checkSeasonSelectionStatus
+            this.loading = false;
           }
         },
         error: (error) => {
-          console.error('Error loading season:', error);
+          console.error('Error in dashboard season subscription:', error);
           this.notifications.showError(
             this.translate.instant('DASHBOARD.ERRORS.SEASON_LOAD_FAILED')
           );
@@ -228,11 +315,10 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   private async loadStatsAndActivity(seasonId: number): Promise<void> {
     try {
       // Load all dashboard data in parallel
-      // Temporarily disable problematic endpoints to avoid CORS errors
       const promises = [
         this.loadDashboardStats(seasonId),
-        // this.loadRecentActivity(), // Disabled - endpoint may not exist
-        // this.loadAlerts(),        // Disabled - endpoint may not exist
+        this.loadRecentActivity(), // Now enabled - endpoints implemented
+        this.loadAlerts(),         // Now enabled - endpoints implemented
         this.loadWeatherData(),
         this.loadMonitorStats(seasonId)
       ];
@@ -249,10 +335,10 @@ export class WelcomeComponent implements OnInit, OnDestroy {
 
   private async loadDashboardStats(seasonId: number): Promise<void> {
     this.loadingStats = true;
-    
+
     try {
       this.dashboardStats = await this.dashboardService.loadDashboardData(seasonId);
-      
+
       this.authService.logUserAction('dashboard_stats_loaded', {
         seasonId,
         totalBookings: this.dashboardStats.bookings.total,
@@ -271,7 +357,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
 
   private async loadRecentActivity(): Promise<void> {
     this.loadingActivity = true;
-    
+
     try {
       this.recentActivity = await this.dashboardService.getRecentActivity(10);
     } catch (error) {
@@ -285,7 +371,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   private async loadAlerts(): Promise<void> {
     try {
       this.criticalAlerts = await this.dashboardService.getActiveAlerts();
-      
+
       // Show critical alerts as notifications
       this.criticalAlerts
         .filter(alert => alert.type === 'critical')
@@ -301,7 +387,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
 
   private async loadWeatherData(): Promise<void> {
     this.loadingWeather = true;
-    
+
     try {
       this.weatherData = await this.dashboardService.getWeatherData();
     } catch (error) {
@@ -319,6 +405,34 @@ export class WelcomeComponent implements OnInit, OnDestroy {
       console.error('Error loading monitor stats:', error);
       this.monitorStats = null;
     }
+  }
+
+  // ==================== PERMISSION UPDATES ====================
+
+  private subscribeToPermissionUpdates(): void {
+    this.permissionsService.permissions$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(permissions => {
+        if (permissions) {
+          this.hasSeasonAccess = permissions.seasonAccess;
+          this.hasAnyPermissions = this.permissionsService.hasAnySeasonalPermissions();
+          
+          console.log('🔐 Permissions updated:', {
+            seasonAccess: this.hasSeasonAccess,
+            hasAnyPermissions: this.hasAnyPermissions
+          });
+          
+          // Update available quick actions based on permissions
+          this.filterQuickActionsByPermissions();
+          
+          // Show warning if user has no seasonal permissions
+          if (!this.hasAnyPermissions && this.hasSeasonAccess) {
+            this.notifications.showWarning(
+              'Tienes acceso limitado a esta temporada. Contacta con tu administrador para obtener más permisos.'
+            );
+          }
+        }
+      });
   }
 
   // ==================== REALTIME UPDATES ====================
@@ -378,9 +492,9 @@ export class WelcomeComponent implements OnInit, OnDestroy {
   async dismissAlert(alertId: string): Promise<void> {
     try {
       await this.dashboardService.dismissAlert(alertId);
-      
+
       this.authService.logUserAction('alert_dismissed', { alertId });
-      
+
       this.notifications.showSuccess(
         this.translate.instant('DASHBOARD.MESSAGES.ALERT_DISMISSED')
       );
@@ -395,14 +509,14 @@ export class WelcomeComponent implements OnInit, OnDestroy {
 
   async refreshDashboard(): Promise<void> {
     this.authService.logUserAction('dashboard_refreshed');
-    
+
     this.notifications.showInfo(
       this.translate.instant('DASHBOARD.MESSAGES.REFRESHING')
     );
 
     try {
       await this.loadDashboardData();
-      
+
       this.notifications.showSuccess(
         this.translate.instant('DASHBOARD.MESSAGES.REFRESH_SUCCESS')
       );
@@ -490,12 +604,102 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     this.loadingWeather = false;
   }
 
+  private async checkSeasonSelectionStatus(): Promise<void> {
+    try {
+      console.log('🔍 Checking season selection status...');
+      
+      // Check if we have stored season selection requirements from initial login
+      const storedSeasonData = localStorage.getItem('v5_season_selection_required');
+      if (storedSeasonData) {
+        const seasonData: InitialLoginResponse = JSON.parse(storedSeasonData);
+        if (seasonData.requires_season_selection && seasonData.available_seasons) {
+          console.log('📋 Using stored season selection data');
+          this.requiresSeasonSelection = true;
+          this.availableSeasons = seasonData.available_seasons;
+          this.showSeasonSelector = true;
+          return;
+        }
+      }
+
+      // Use SeasonContextService as single source of truth
+      const currentSeason = this.seasonContext.getCurrentSeason();
+      const availableSeasons = this.seasonContext.getAvailableSeasons();
+
+      console.log('📊 Season context status:', {
+        currentSeason: currentSeason?.name || 'None',
+        availableSeasons: availableSeasons.length
+      });
+
+      if (currentSeason) {
+        // We have a valid season, don't show selector
+        console.log('✅ Current season found, hiding selector');
+        this.showSeasonSelector = false;
+        this.requiresSeasonSelection = false;
+        return;
+      }
+
+      // No current season - check if we have available seasons
+      if (availableSeasons.length > 0) {
+        console.log('📋 No current season but seasons available, showing selector');
+        this.availableSeasons = availableSeasons as SeasonInfo[];
+        this.requiresSeasonSelection = true;
+        this.showSeasonSelector = true;
+      } else {
+        console.log('⚠️ No seasons available, will show create season option');
+        this.handleNoSeasonsAvailable();
+      }
+
+    } catch (error) {
+      console.error('Error checking season selection status:', error);
+      this.handleLoadingError(error);
+    }
+  }
+
+  private async loadAvailableSeasons(): Promise<void> {
+    try {
+      // Use SeasonContextService as single source of truth for seasons
+      const seasons = await this.seasonContext.reloadAvailableSeasons().toPromise() || [];
+      this.availableSeasons = seasons as SeasonInfo[]; // Cast to maintain component interface
+      
+      if (this.availableSeasons.length > 0) {
+        this.requiresSeasonSelection = true;
+        this.showSeasonSelector = true;
+        console.log('🔄 Available seasons loaded, showing selector');
+      } else {
+        this.handleNoSeasonsAvailable();
+      }
+    } catch (error) {
+      console.error('❌ Error loading available seasons:', error);
+      this.handleNoSeasonsAvailable();
+    }
+  }
+
   private handleNoSeasonSelected(): void {
-    this.notifications.showWarning(
-      this.translate.instant('DASHBOARD.WARNINGS.NO_SEASON_SELECTED')
+    // Load available seasons from SeasonContextService
+    this.seasonContext.availableSeasons$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(seasons => {
+        this.availableSeasons = seasons as SeasonInfo[]; // Cast to maintain component interface
+        if (seasons.length > 0) {
+          this.requiresSeasonSelection = true;
+          this.showSeasonSelector = true;
+        } else {
+          this.handleNoSeasonsAvailable();
+        }
+      });
+
+    this.loading = false;
+  }
+
+  private handleNoSeasonsAvailable(): void {
+    this.requiresSeasonSelection = true;
+    this.availableSeasons = [];
+    this.showSeasonSelector = true;
+
+    this.notifications.showInfo(
+      'No hay temporadas disponibles. Debes crear una nueva temporada para continuar.'
     );
-    
-    // Could redirect to season selection or show season selector
+
     this.loading = false;
   }
 
@@ -533,6 +737,58 @@ export class WelcomeComponent implements OnInit, OnDestroy {
 
   navigateToRoute(route: string): void {
     this.router.navigate([route]);
+  }
+
+  // ==================== SEASON SELECTION HANDLERS ===================
+
+  onSeasonSelected(season: SeasonInfo): void {
+    console.log('✅ Season selected from modal:', season.name);
+
+    // Clear stored season selection data
+    localStorage.removeItem('v5_season_selection_required');
+
+    // Hide selector
+    this.showSeasonSelector = false;
+    this.requiresSeasonSelection = false;
+
+    // Update SeasonContextService - this will trigger the dashboard update
+    this.seasonContext.setCurrentSeason(season as any);
+
+    this.notifications.showSuccess(
+      `Temporada "${season.name}" seleccionada correctamente`
+    );
+  }
+
+  onNewSeasonCreated(season: SeasonInfo): void {
+    console.log('✅ New season created from modal:', season.name);
+
+    // Clear stored season selection data
+    localStorage.removeItem('v5_season_selection_required');
+
+    // Hide selector
+    this.showSeasonSelector = false;
+    this.requiresSeasonSelection = false;
+
+    // Update SeasonContextService - this will trigger the dashboard update
+    // Also reload available seasons to include the new one
+    this.seasonContext.setCurrentSeason(season as any);
+    this.seasonContext.reloadAvailableSeasons().subscribe();
+
+    this.notifications.showSuccess(
+      `Temporada "${season.name}" creada y seleccionada correctamente`
+    );
+  }
+
+  onSeasonSelectorCancelled(): void {
+    console.log('🔄 Season selector cancelled');
+
+    // For now, just hide the selector but don't load data
+    // In a real app, you might want to redirect to login or show an error
+    this.showSeasonSelector = false;
+
+    this.notifications.showWarning(
+      'Es necesario seleccionar una temporada para usar el dashboard'
+    );
   }
 
   // ==================== NEW TEMPLATE METHODS ====================
@@ -603,14 +859,23 @@ export class WelcomeComponent implements OnInit, OnDestroy {
       'Fondo': 40,
       'Competición': 150
     };
-    
+
     // Find matching price based on course type
     for (const [key, price] of Object.entries(prices)) {
       if (courseType.includes(key)) {
         return price;
       }
     }
-    
+
     return 85; // Default price
+  }
+
+  getTodayDate(): string {
+    const today = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      day: 'numeric',
+      month: 'short'
+    };
+    return `Hoy ${today.toLocaleDateString('es-ES', options)}`;
   }
 }

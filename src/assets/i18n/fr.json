@@ -59,6 +59,144 @@
   "blocks": "Blocages",
   "paid_blocks": "Blocages payantes",
   "no_paid_block": "Blocage impayé",
+  
+  "DASHBOARD": {
+    "GREETING": "Bonjour, {{name}}!",
+    "WELCOME_MESSAGE": "Bienvenue au panneau d'administration de {{school}}",
+    "LAST_LOGIN": "Dernière connexion",
+    "LOADING": "Chargement du tableau de bord...",
+    "REFRESH_TOOLTIP": "Actualiser le tableau de bord",
+    
+    "QUICK_ACTIONS": {
+      "TITLE": "Actions Rapides",
+      "NEW_BOOKING": "Nouvelle Réservation",
+      "NEW_CLIENT": "Nouveau Client",
+      "NEW_COURSE": "Nouveau Cours",
+      "PLANNER": "Planificateur",
+      "REPORTS": "Rapports",
+      "MONITORS": "Moniteurs"
+    },
+    
+    "STATS": {
+      "ACTIVITY_SUMMARY": "Résumé d'Activité",
+      "THIS_WEEK": "cette semaine",
+      "GROWTH": "croissance",
+      
+      "BOOKINGS": {
+        "TITLE": "Réservations",
+        "TOTAL": "Total",
+        "PENDING": "En attente",
+        "CONFIRMED": "Confirmées",
+        "CANCELLED": "Annulées"
+      },
+      
+      "CLIENTS": {
+        "TITLE": "Clients",
+        "TOTAL": "Total",
+        "ACTIVE": "Actifs",
+        "NEW": "Nouveaux"
+      },
+      
+      "REVENUE": {
+        "TITLE": "Revenus",
+        "THIS_MONTH": "Ce mois",
+        "LAST_MONTH": "Mois dernier",
+        "PENDING": "En attente"
+      },
+      
+      "COURSES": {
+        "TITLE": "Cours",
+        "ACTIVE": "Actifs",
+        "UPCOMING": "À venir",
+        "COMPLETED": "Terminés",
+        "RATING": "note"
+      },
+      
+      "MONITORS": {
+        "TITLE": "Moniteurs",
+        "ACTIVE": "Actifs",
+        "AVAILABLE": "Disponibles",
+        "ON_LEAVE": "En congé",
+        "RATING": "note"
+      },
+      
+      "TODAY": {
+        "TITLE": "Aujourd'hui",
+        "BOOKINGS": "Réservations",
+        "REVENUE": "Revenus",
+        "BUSY_DAY": "Journée chargée",
+        "QUIET_DAY": "Journée calme"
+      }
+    },
+    
+    "WEATHER": {
+      "TITLE": "Météo",
+      "UPDATED": "Mis à jour"
+    },
+    
+    "ANALYTICS": {
+      "TITLE": "Analyses Détaillées",
+      "SALES_CHANNELS": "Canaux de Vente",
+      "DAILY_SESSIONS": "Sessions Quotidiennes",
+      "TODAY_RESERVATIONS": "Réservations d'Aujourd'hui",
+      "BOOKINGS": "réservations",
+      "MORNING": "Matin",
+      "AFTERNOON": "Après-midi",
+      "OCCUPANCY": "occupation",
+      "MONITOR": "Moniteur",
+      "NO_RESERVATIONS_TODAY": "Aucune réservation aujourd'hui",
+      
+      "STATUS": {
+        "CONFIRMED": "Confirmée",
+        "PENDING": "En attente",
+        "CANCELLED": "Annulée"
+      },
+      
+      "PAYMENT": {
+        "PAID": "Payé",
+        "PENDING": "En attente",
+        "OVERDUE": "En retard"
+      }
+    },
+    
+    "ACTIVITY": {
+      "RECENT_TITLE": "Activité Récente",
+      "VIEW_ALL": "Voir tout",
+      "VIEW_DETAILS": "Voir les détails",
+      "NO_RECENT_ACTIVITY": "Aucune activité récente"
+    },
+    
+    "ALERTS": {
+      "VIEW_DETAILS": "Voir les détails"
+    },
+    
+    "TIME": {
+      "JUST_NOW": "À l'instant",
+      "MINUTES_AGO": "Il y a {{minutes}} minutes",
+      "HOURS_AGO": "Il y a {{hours}} heures",
+      "DAYS_AGO": "Il y a {{days}} jours"
+    },
+    
+    "MESSAGES": {
+      "REFRESHING": "Actualisation du tableau de bord...",
+      "REFRESH_SUCCESS": "Tableau de bord actualisé avec succès",
+      "ALERT_DISMISSED": "Alerte ignorée"
+    },
+    
+    "ERRORS": {
+      "GENERAL_ERROR": "Erreur lors du chargement du tableau de bord",
+      "USER_LOAD_FAILED": "Erreur lors du chargement des données utilisateur",
+      "SEASON_LOAD_FAILED": "Erreur lors du chargement de la saison",
+      "STATS_LOAD_FAILED": "Erreur lors du chargement des statistiques",
+      "REFRESH_FAILED": "Erreur lors de l'actualisation du tableau de bord",
+      "ALERT_DISMISS_FAILED": "Erreur lors de l'ignorement de l'alerte",
+      "RETRY": "Réessayer"
+    },
+    
+    "WARNINGS": {
+      "NO_SEASON_SELECTED": "Aucune saison sélectionnée"
+    }
+  },
   "city": "Ville",
   "sport": "Sport",
   "sport_evolution": "Evolution du sport",

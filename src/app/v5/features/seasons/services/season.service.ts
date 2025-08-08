@@ -11,7 +11,7 @@ export interface CreateSeasonRequest {
   name: string;
   start_date: string;
   end_date: string;
-  school_id: number;
+  // school_id is automatically added by ApiV5Service
 }
 
 export interface CloneSeasonRequest {
@@ -35,10 +35,10 @@ export class SeasonService {
 
   /**
    * Get all seasons for current school
+   * School context is automatically handled by ApiV5Service and AuthV5Interceptor
    */
-  getSeasons(schoolId?: number): Observable<Season[]> {
-    const params = schoolId ? { school_id: schoolId } : undefined;
-    return this.apiV5.get<Season[]>('seasons', params).pipe(
+  getSeasons(): Observable<Season[]> {
+    return this.apiV5.get<Season[]>('seasons').pipe(
       map((response: ApiV5Response<Season[]>) => {
         if (response.success) {
           const seasons = response.data;
@@ -74,9 +74,10 @@ export class SeasonService {
 
   /**
    * Get current active season for school
+   * School context is automatically handled by ApiV5Service and AuthV5Interceptor
    */
-  getCurrentSeason(schoolId: number): Observable<Season> {
-    return this.apiV5.get<Season>(`seasons/current`, { school_id: schoolId }).pipe(
+  getCurrentSeason(): Observable<Season> {
+    return this.apiV5.get<Season>(`seasons/current`).pipe(
       map((response: ApiV5Response<Season>) => {
         if (response.success) {
           return response.data;
@@ -94,9 +95,12 @@ export class SeasonService {
    * Create new season
    */
   createSeason(seasonData: CreateSeasonRequest): Observable<Season> {
+    console.log('🔄 SeasonService.createSeason called with:', seasonData);
+    
     return this.apiV5.post<Season>('seasons', seasonData).pipe(
       map((response: ApiV5Response<Season>) => {
         if (response.success) {
+          console.log('✅ SeasonService: Season created successfully:', response.data);
           return response.data;
         }
         throw new Error('Failed to create season');
@@ -106,6 +110,7 @@ export class SeasonService {
         this.refreshSeasons();
       }),
       catchError(error => {
+        console.error('❌ SeasonService: Error creating season:', error);
         this.notification.error('Error al crear la temporada');
         throw error;
       })

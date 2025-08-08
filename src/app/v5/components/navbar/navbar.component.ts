@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthV5Service } from '../../core/services/auth-v5.service';
+import { SeasonContextService } from '../../core/services/season-context.service';
 
 interface User {
   name: string;
@@ -27,16 +28,19 @@ interface Notification {
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   @Output() menuToggle = new EventEmitter<void>();
-  
+
   private destroy$ = new Subject<void>();
 
   searchTerm = '';
   darkMode = false;
-  
+
   currentUser: User | null = null;
+  currentSeason: any = null;
+  availableSeasons: any[] = [];
+  isLoadingSeasons = false;
 
   notificationCount = 3;
-  
+
   recentNotifications: Notification[] = [
     {
       id: '1',
@@ -47,7 +51,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       type: 'info'
     },
     {
-      id: '2', 
+      id: '2',
       title: 'Pago pendiente',
       message: 'Carlos Ruiz tiene un pago pendiente por €75',
       time: 'Hace 15 min',
@@ -66,12 +70,25 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private authService: AuthV5Service
+    private authService: AuthV5Service,
+    private seasonContext: SeasonContextService
   ) {}
 
   ngOnInit(): void {
+    console.log('🚀 NavbarComponent initialized');
     this.loadUserPreferences();
     this.loadUserData();
+    this.loadSeasonData();
+
+    // Check if user is authenticated, if not redirect to login
+    this.checkAuthenticationAndRedirect();
+
+    // Debug: Check authentication status
+    setTimeout(() => {
+      console.log('🔍 Debug - Current user in navbar:', this.currentUser);
+      console.log('🔍 Debug - Current season in navbar:', this.currentSeason);
+      console.log('🔍 Debug - Auth service authenticated:', this.authService.isAuthenticated());
+    }, 1000);
   }
 
   ngOnDestroy(): void {
@@ -80,25 +97,46 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   private loadUserData(): void {
+    // Subscribe to user data from AuthV5Service
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (user) => {
           if (user) {
             this.currentUser = {
-              name: user.name || `${user.first_name} ${user.last_name}`.trim() || 'Usuario',
+              name: user.name || `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Usuario',
               email: user.email || 'no-email@boukii.com',
-              role: user.role?.name || user.role_name || 'Usuario',
-              avatar: user.avatar_url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face'
+              role: this.formatUserRole(user.role) || 'Usuario',
+              avatar: user.avatar_url || this.getDefaultAvatar()
             };
-            
+            console.log('🔄 User data loaded in navbar:', this.currentUser);
+          } else {
+            console.log('🔄 No user data available in navbar - checking if should logout');
+            this.currentUser = null;
+            this.checkAuthenticationAndRedirect();
           }
         },
         error: (error) => {
-          console.error('Error loading user data in navbar:', error);
+          console.error('❌ Error loading user data in navbar:', error);
           this.currentUser = null;
+          this.checkAuthenticationAndRedirect();
         }
       });
+  }
+
+  private formatUserRole(role: string): string {
+    const roleMap: { [key: string]: string } = {
+      'school_admin': 'Administrador de Escuela',
+      'superadmin': 'Super Administrador',
+      'instructor': 'Instructor',
+      'staff': 'Personal',
+      'student': 'Estudiante'
+    };
+    return roleMap[role] || role;
+  }
+
+  private getDefaultAvatar(): string {
+    return 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face';
   }
 
   onSearch(event: Event): void {
@@ -124,25 +162,97 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   goToProfile(): void {
+    console.log('🔄 Navigating to profile');
     this.router.navigate(['/v5/profile']);
   }
 
   goToNotifications(): void {
+    console.log('🔄 Navigating to notifications');
     this.router.navigate(['/v5/notifications']);
+  }
+
+  // Método de debug para verificar el menú
+  onUserMenuClick(): void {
+    console.log('🔄 User menu clicked - Current user:', this.currentUser);
+  }
+
+  // Método para mostrar información del usuario
+  showUserInfo(): void {
+    if (this.currentUser) {
+      console.log('👤 User info:', {
+        name: this.currentUser.name,
+        email: this.currentUser.email,
+        role: this.currentUser.role,
+        avatar: this.currentUser.avatar
+      });
+    }
   }
 
   logout(): void {
     this.authService.logout().subscribe({
       next: () => {
-        console.log('Logout successful');
-        this.router.navigate(['/login']);
+        console.log('✅ Logout successful');
+        this.router.navigate(['/v5/auth/login']);
       },
       error: (error) => {
-        console.error('Error during logout:', error);
+        console.error('❌ Error during logout:', error);
         // Still navigate to login even if there's an error
-        this.router.navigate(['/login']);
+        this.router.navigate(['/v5/auth/login']);
       }
     });
+  }
+
+  private checkAuthenticationAndRedirect(): void {
+    if (!this.authService.isAuthenticated()) {
+      console.log('🔄 User not authenticated, redirecting to login');
+      this.router.navigate(['/v5/auth/login']);
+    }
+  }
+
+  private loadSeasonData(): void {
+    // Subscribe to current season changes
+    this.seasonContext.currentSeason$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (season) => {
+          this.currentSeason = season;
+        },
+        error: (error) => {
+          console.error('❌ Error loading season data in navbar:', error);
+          this.currentSeason = null;
+        }
+      });
+
+    // Subscribe to available seasons
+    this.seasonContext.availableSeasons$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (seasons) => {
+          this.availableSeasons = seasons || [];
+        },
+        error: (error) => {
+          console.error('❌ Error loading available seasons in navbar:', error);
+          this.availableSeasons = [];
+        }
+      });
+  }
+
+  getSeasonStatusClass(season?: any): string {
+    const targetSeason = season || this.currentSeason;
+    if (!targetSeason) return '';
+    
+    if (targetSeason.is_current) return 'current';
+    if (targetSeason.is_historical) return 'historical';
+    return 'active';
+  }
+
+  getSeasonStatusText(season?: any): string {
+    const targetSeason = season || this.currentSeason;
+    if (!targetSeason) return 'Sin temporada';
+    
+    if (targetSeason.is_current) return 'Actual';
+    if (targetSeason.is_historical) return 'Histórica';
+    return 'Activa';
   }
 
   private loadUserPreferences(): void {
@@ -154,5 +264,76 @@ export class NavbarComponent implements OnInit, OnDestroy {
         document.body.classList.add('dark-theme');
       }
     }
+  }
+
+  /**
+   * Load available seasons when season selector is opened
+   */
+  onSeasonMenuOpen(): void {
+    if (this.availableSeasons.length === 0 && !this.isLoadingSeasons) {
+      this.loadAvailableSeasons();
+    }
+  }
+
+  /**
+   * Load available seasons from the API
+   */
+  private loadAvailableSeasons(): void {
+    this.isLoadingSeasons = true;
+    
+    this.seasonContext.reloadAvailableSeasons()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (seasons) => {
+          this.availableSeasons = seasons;
+          this.isLoadingSeasons = false;
+          console.log('✅ Available seasons loaded for selection:', seasons.length);
+        },
+        error: (error) => {
+          console.error('❌ Error loading available seasons:', error);
+          this.isLoadingSeasons = false;
+        }
+      });
+  }
+
+  /**
+   * Change to a different season
+   */
+  selectSeason(season: any): void {
+    if (!season || season.id === this.currentSeason?.id) {
+      return;
+    }
+
+    console.log('🔄 Changing season from', this.currentSeason?.name, 'to', season.name);
+    
+    this.seasonContext.changeSeason(season.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          console.log('✅ Season changed successfully to:', season.name);
+          // The currentSeason will be updated automatically via the subscription
+        },
+        error: (error) => {
+          console.error('❌ Error changing season:', error);
+          // TODO: Show error message to user
+        }
+      });
+  }
+
+  /**
+   * Check if a season is currently selected
+   */
+  isSeasonSelected(season: any): boolean {
+    return season?.id === this.currentSeason?.id;
+  }
+
+  /**
+   * Open dialog to create a new season
+   */
+  openCreateSeasonDialog(): void {
+    console.log('🔄 Opening create season dialog');
+    // TODO: Implement season creation dialog
+    // For now, just navigate to season management or show a placeholder
+    this.router.navigate(['/v5/seasons/create']);
   }
 }

@@ -1,4 +1,5 @@
 {
+  "achieve_all_goals": "Achieve all the goals of this course to earn the medal.",
   "add...": "Add...",
   "add": "Add",
   "calendar": "Calendar",
@@ -53,6 +54,144 @@
   "blocks": "Locks",
   "paid_blocks": "Paid locks",
   "no_paid_block": "Unpaid lock",
+  
+  "DASHBOARD": {
+    "GREETING": "Hello, {{name}}!",
+    "WELCOME_MESSAGE": "Welcome to {{school}} administration panel",
+    "LAST_LOGIN": "Last login",
+    "LOADING": "Loading dashboard...",
+    "REFRESH_TOOLTIP": "Refresh dashboard",
+    
+    "QUICK_ACTIONS": {
+      "TITLE": "Quick Actions",
+      "NEW_BOOKING": "New Booking",
+      "NEW_CLIENT": "New Client",
+      "NEW_COURSE": "New Course",
+      "PLANNER": "Planner",
+      "REPORTS": "Reports",
+      "MONITORS": "Monitors"
+    },
+    
+    "STATS": {
+      "ACTIVITY_SUMMARY": "Activity Summary",
+      "THIS_WEEK": "this week",
+      "GROWTH": "growth",
+      
+      "BOOKINGS": {
+        "TITLE": "Bookings",
+        "TOTAL": "Total",
+        "PENDING": "Pending",
+        "CONFIRMED": "Confirmed",
+        "CANCELLED": "Cancelled"
+      },
+      
+      "CLIENTS": {
+        "TITLE": "Clients",
+        "TOTAL": "Total",
+        "ACTIVE": "Active",
+        "NEW": "New"
+      },
+      
+      "REVENUE": {
+        "TITLE": "Revenue",
+        "THIS_MONTH": "This month",
+        "LAST_MONTH": "Last month",
+        "PENDING": "Pending"
+      },
+      
+      "COURSES": {
+        "TITLE": "Courses",
+        "ACTIVE": "Active",
+        "UPCOMING": "Upcoming",
+        "COMPLETED": "Completed",
+        "RATING": "rating"
+      },
+      
+      "MONITORS": {
+        "TITLE": "Monitors",
+        "ACTIVE": "Active",
+        "AVAILABLE": "Available",
+        "ON_LEAVE": "On Leave",
+        "RATING": "rating"
+      },
+      
+      "TODAY": {
+        "TITLE": "Today",
+        "BOOKINGS": "Bookings",
+        "REVENUE": "Revenue",
+        "BUSY_DAY": "Busy day",
+        "QUIET_DAY": "Quiet day"
+      }
+    },
+    
+    "WEATHER": {
+      "TITLE": "Weather",
+      "UPDATED": "Updated"
+    },
+    
+    "ANALYTICS": {
+      "TITLE": "Detailed Analytics",
+      "SALES_CHANNELS": "Sales Channels",
+      "DAILY_SESSIONS": "Daily Sessions",
+      "TODAY_RESERVATIONS": "Today's Reservations",
+      "BOOKINGS": "bookings",
+      "MORNING": "Morning",
+      "AFTERNOON": "Afternoon",
+      "OCCUPANCY": "occupancy",
+      "MONITOR": "Monitor",
+      "NO_RESERVATIONS_TODAY": "No reservations for today",
+      
+      "STATUS": {
+        "CONFIRMED": "Confirmed",
+        "PENDING": "Pending",
+        "CANCELLED": "Cancelled"
+      },
+      
+      "PAYMENT": {
+        "PAID": "Paid",
+        "PENDING": "Pending",
+        "OVERDUE": "Overdue"
+      }
+    },
+    
+    "ACTIVITY": {
+      "RECENT_TITLE": "Recent Activity",
+      "VIEW_ALL": "View all",
+      "VIEW_DETAILS": "View details",
+      "NO_RECENT_ACTIVITY": "No recent activity"
+    },
+    
+    "ALERTS": {
+      "VIEW_DETAILS": "View details"
+    },
+    
+    "TIME": {
+      "JUST_NOW": "Just now",
+      "MINUTES_AGO": "{{minutes}} minutes ago",
+      "HOURS_AGO": "{{hours}} hours ago",
+      "DAYS_AGO": "{{days}} days ago"
+    },
+    
+    "MESSAGES": {
+      "REFRESHING": "Refreshing dashboard...",
+      "REFRESH_SUCCESS": "Dashboard refreshed successfully",
+      "ALERT_DISMISSED": "Alert dismissed"
+    },
+    
+    "ERRORS": {
+      "GENERAL_ERROR": "Error loading dashboard",
+      "USER_LOAD_FAILED": "Error loading user data",
+      "SEASON_LOAD_FAILED": "Error loading season",
+      "STATS_LOAD_FAILED": "Error loading statistics",
+      "REFRESH_FAILED": "Error refreshing dashboard",
+      "ALERT_DISMISS_FAILED": "Error dismissing alert",
+      "RETRY": "Retry"
+    },
+    
+    "WARNINGS": {
+      "NO_SEASON_SELECTED": "No season selected"
+    }
+  },
   "city": "City",
   "sport": "Sport",
   "sport_evolution": "Sports evolution",

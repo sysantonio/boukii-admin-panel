@@ -9,106 +9,217 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, shareReplay } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { SeasonContextService } from './season-context.service';
+import { TokenV5Service } from './token-v5.service';
 import { NotificationService } from './notification.service';
 import { ApiV5Response } from '../models/api-response.interface';
 
+// Re-export for use in other services
+export { ApiV5Response } from '../models/api-response.interface';
+
 @Injectable({ providedIn: 'root' })
 export class ApiV5Service {
-  private baseUrlV5 = `${environment.baseUrl}/admin_v3`;
+  private baseUrlV5 = `${environment.apiUrl}/v5`;
 
   constructor(
     private http: HttpClient,
     private seasonContext: SeasonContextService,
+    private tokenService: TokenV5Service,
     private notification: NotificationService
   ) {}
 
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('boukiiUserToken');
-    const seasonId = this.seasonContext.getCurrentSeasonId();
+    console.log('🔍 ApiV5Service.getHeaders() - DEPRECATED: This service should rely on AuthV5Interceptor for headers');
+    
+    // ✅ Use TokenV5Service instead of localStorage directly
+    const token = this.tokenService.getCurrentToken();
+    const currentSchool = this.tokenService.getCurrentSchool();
+    const currentSeason = this.tokenService.getCurrentSeason();
 
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);
+      console.log('🔐 ApiV5Service: Added Authorization header (token available)');
+    } else {
+      console.warn('⚠️ ApiV5Service: No token available for API call');
     }
-    if (seasonId !== null) {
-      headers = headers.set('X-Season-Id', String(seasonId));
+    
+    // ✅ Add school context if available
+    if (currentSchool) {
+      headers = headers.set('X-School-ID', String(currentSchool.id));
+      console.log('🏫 ApiV5Service: Added X-School-ID header:', currentSchool.id);
+    } else {
+      console.warn('⚠️ ApiV5Service: No school context available');
     }
+    
+    // ✅ Add season context if available
+    if (currentSeason) {
+      headers = headers.set('X-Season-ID', String(currentSeason.id));
+      console.log('🗓 ApiV5Service: Added X-Season-ID header:', currentSeason.id);
+    } else {
+      console.warn('⚠️ ApiV5Service: No season context available');
+    }
+    
     return headers.set('X-Client-Version', 'boukii-admin-v5.0');
   }
 
   get<T>(endpoint: string, params?: any): Observable<ApiV5Response<T>> {
+    console.log(`🔄 ApiV5Service.get(${endpoint}) - Headers handled by AuthV5Interceptor`);
     return this.http
       .get<ApiV5Response<T>>(`${this.baseUrlV5}/${endpoint}`, {
-        headers: this.getHeaders(),
-        params: this.addSeasonParam(params),
+        params: this.addSeasonParam(params, endpoint),
       })
       .pipe(catchError((e) => this.handleError(e)), shareReplay(1));
   }
 
   post<T>(endpoint: string, body: any): Observable<ApiV5Response<T>> {
-    const enrichedBody = {
-      ...body,
-      season_id: this.seasonContext.getCurrentSeasonId(),
-    };
+    // Don't add season_id to auth endpoints
+    const authEndpoints = ['auth/me', 'auth/login', 'auth/logout', 'auth/check-user', 'auth/select-school', 'auth/select-season'];
+    const shouldAddSeasonId = !authEndpoints.some(ep => endpoint.includes(ep));
+    
+    console.log(`🔄 ApiV5Service.post(${endpoint}):`, {
+      shouldAddSeasonId,
+      hasSchoolContext: !!this.tokenService.getCurrentSchool(),
+      hasSeasonContext: !!this.tokenService.getCurrentSeason()
+    });
+    
+    // ✅ Add school_id to body when needed (ensures backend has school context)
+    const currentSchool = this.tokenService.getCurrentSchool();
+    let enrichedBody = { ...body };
+    
+    if (shouldAddSeasonId && currentSchool) {
+      enrichedBody.school_id = currentSchool.id;
+      console.log('🏫 ApiV5Service: Added school_id to request body:', currentSchool.id);
+      
+      // Also add season_id if available
+      const currentSeason = this.tokenService.getCurrentSeason();
+      if (currentSeason) {
+        enrichedBody.season_id = currentSeason.id;
+        console.log('🗓 ApiV5Service: Added season_id to request body:', currentSeason.id);
+      }
+    }
 
     return this.http
-      .post<ApiV5Response<T>>(`${this.baseUrlV5}/${endpoint}`, enrichedBody, {
-        headers: this.getHeaders(),
-      })
+      .post<ApiV5Response<T>>(`${this.baseUrlV5}/${endpoint}`, enrichedBody)
       .pipe(catchError((e) => this.handleError(e)));
   }
 
   put<T>(endpoint: string, body: any): Observable<ApiV5Response<T>> {
-    const enrichedBody = {
-      ...body,
-      season_id: this.seasonContext.getCurrentSeasonId(),
-    };
+    console.log(`🔄 ApiV5Service.put(${endpoint})`);
+    
+    // ✅ Add school_id and season_id to body when needed
+    const currentSchool = this.tokenService.getCurrentSchool();
+    const currentSeason = this.tokenService.getCurrentSeason();
+    let enrichedBody = { ...body };
+    
+    if (currentSchool) {
+      enrichedBody.school_id = currentSchool.id;
+      console.log('🏫 ApiV5Service: Added school_id to PUT body:', currentSchool.id);
+    }
+    
+    if (currentSeason) {
+      enrichedBody.season_id = currentSeason.id;
+      console.log('🗓 ApiV5Service: Added season_id to PUT body:', currentSeason.id);
+    }
 
     return this.http
-      .put<ApiV5Response<T>>(`${this.baseUrlV5}/${endpoint}`, enrichedBody, {
-        headers: this.getHeaders(),
-      })
+      .put<ApiV5Response<T>>(`${this.baseUrlV5}/${endpoint}`, enrichedBody)
       .pipe(catchError((e) => this.handleError(e)));
   }
 
   patch<T>(endpoint: string, body: any): Observable<ApiV5Response<T>> {
-    const enrichedBody = {
-      ...body,
-      season_id: this.seasonContext.getCurrentSeasonId(),
-    };
+    console.log(`🔄 ApiV5Service.patch(${endpoint})`);
+    
+    // ✅ Add school_id and season_id to body when needed
+    const currentSchool = this.tokenService.getCurrentSchool();
+    const currentSeason = this.tokenService.getCurrentSeason();
+    let enrichedBody = { ...body };
+    
+    if (currentSchool) {
+      enrichedBody.school_id = currentSchool.id;
+      console.log('🏫 ApiV5Service: Added school_id to PATCH body:', currentSchool.id);
+    }
+    
+    if (currentSeason) {
+      enrichedBody.season_id = currentSeason.id;
+      console.log('🗓 ApiV5Service: Added season_id to PATCH body:', currentSeason.id);
+    }
 
     return this.http
-      .patch<ApiV5Response<T>>(`${this.baseUrlV5}/${endpoint}`, enrichedBody, {
-        headers: this.getHeaders(),
-      })
+      .patch<ApiV5Response<T>>(`${this.baseUrlV5}/${endpoint}`, enrichedBody)
       .pipe(catchError((e) => this.handleError(e)));
   }
 
   delete<T>(endpoint: string, params?: any): Observable<ApiV5Response<T>> {
+    console.log(`🔄 ApiV5Service.delete(${endpoint}) - Headers handled by AuthV5Interceptor`);
     return this.http
       .delete<ApiV5Response<T>>(`${this.baseUrlV5}/${endpoint}`, {
-        headers: this.getHeaders(),
-        params: this.addSeasonParam(params),
+        params: this.addSeasonParam(params, endpoint),
       })
       .pipe(catchError((e) => this.handleError(e)));
   }
 
-  private addSeasonParam(params?: HttpParams): HttpParams {
-    const seasonId = this.seasonContext.getCurrentSeasonId();
+  // Test endpoint to verify authentication
+  testAuth(): Observable<ApiV5Response<any>> {
+    console.log('[ApiV5Service] Testing authentication...');
+    return this.get('auth/me').pipe(
+      catchError((error) => {
+        console.error('[ApiV5Service] Auth test failed:', error);
+        return throwError(error);
+      })
+    );
+  }
+
+  private addSeasonParam(params?: HttpParams, endpoint?: string): HttpParams {
+    // Don't add season_id to authentication endpoints
+    const authEndpoints = ['auth/me', 'auth/login', 'auth/logout', 'auth/check-user', 'auth/select-school', 'auth/select-season'];
+    const alertEndpoints = ['dashboard/alerts', 'dashboard/recent-activity'];
+    
+    if (endpoint && [...authEndpoints, ...alertEndpoints].some(ep => endpoint.includes(ep))) {
+      return params || new HttpParams();
+    }
+    
+    // ✅ Use TokenV5Service for consistency
+    const currentSchool = this.tokenService.getCurrentSchool();
+    const currentSeason = this.tokenService.getCurrentSeason();
+    
     if (!params) {
       params = new HttpParams();
     }
-    if (seasonId !== null) {
-      params = params.set('season_id', seasonId.toString());
+    
+    if (currentSchool) {
+      params = params.set('school_id', currentSchool.id.toString());
+      console.log('🏫 ApiV5Service: Added school_id to query params:', currentSchool.id);
     }
+    
+    if (currentSeason) {
+      params = params.set('season_id', currentSeason.id.toString());
+      console.log('🗓 ApiV5Service: Added season_id to query params:', currentSeason.id);
+    }
+    
     return params;
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
+    console.error('ApiV5Service Error:', {
+      status: error.status,
+      message: error.message,
+      url: error.url,
+      error: error.error
+    });
+
     if (error.status === 422 && (error as any).error?.season_required) {
       this.seasonContext.promptSeasonSelection();
+    } else if (error.status === 0) {
+      this.notification.error('Error de conexión - Verificar que el servidor esté corriendo en api-boukii.test');
+    } else if (error.status === 404) {
+      this.notification.error('Endpoint no encontrado - Verificar rutas de la API');
+    } else if (error.status >= 500) {
+      this.notification.error('Error del servidor - Verificar logs de Laravel');
+    } else {
+      this.notification.error(`Error ${error.status}: ${error.message}`);
     }
-    this.notification.error('Error al comunicarse con el servidor');
+    
     return throwError(() => error);
   }
 }

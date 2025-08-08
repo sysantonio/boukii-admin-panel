@@ -157,6 +157,15 @@ export class SidebarComponent implements OnInit {
   }
 
   isActive(route: string): boolean {
+    // Special case for dashboard - match both /v5 and /v5/dashboard (includes legacy /v5/welcome)
+    if (route === '/v5') {
+      return this.router.url === '/v5' || 
+             this.router.url === '/v5/dashboard' ||
+             this.router.url.startsWith('/v5/dashboard') ||
+             this.router.url === '/v5/welcome' ||
+             this.router.url.startsWith('/v5/welcome');
+    }
+    
     return this.router.url === route || 
            (route !== '/v5' && this.router.url.startsWith(route));
   }
